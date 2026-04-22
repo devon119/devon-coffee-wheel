@@ -2983,7 +2983,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                     //          時間         溫度                                            火力%                            風門%
                     charge:     { t: 0,              temp: profile.chargeTemp,                   fire: existingFire ? existingFire.charge.fire     : 90, damper: existingFire ? existingFire.charge.damper     : 40 },
                     turnPoint:  { t: 1.5,            temp: 90,                                   fire: existingFire ? existingFire.turnPoint.fire  : 65, damper: existingFire ? existingFire.turnPoint.damper  : 50 },
-                    dryEnd:     { t: totalMin * 0.5, temp: 150,                                  fire: existingFire ? existingFire.dryEnd.fire     : 50, damper: existingFire ? existingFire.dryEnd.damper     : 70 },
+                    dryEnd:     { t: totalMin * 0.45, temp: 150,                                  fire: existingFire ? existingFire.dryEnd.fire     : 50, damper: existingFire ? existingFire.dryEnd.damper     : 70 },
                     firstCrack: { t: totalMin * 0.78,temp: 196,                                  fire: existingFire ? existingFire.firstCrack.fire : 35, damper: existingFire ? existingFire.firstCrack.damper : 85 },
                     drop:       { t: totalMin,       temp: (profile.btLow + profile.btHigh) / 2, fire: existingFire ? existingFire.drop.fire       : 0,  damper: existingFire ? existingFire.drop.damper       : 100 }
                 };
@@ -3014,7 +3014,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 _roastPlanState.anchors = {
                     charge:     { t: 0,              temp: profile.chargeTemp,                   fire: 90, damper: 40 },
                     turnPoint:  { t: 1.5,            temp: 90,                                   fire: 65, damper: 50 },
-                    dryEnd:     { t: totalMin * 0.5, temp: 150,                                  fire: 50, damper: 70 },
+                    dryEnd:     { t: totalMin * 0.45, temp: 150,                                  fire: 50, damper: 70 },
                     firstCrack: { t: totalMin * 0.78,temp: 196,                                  fire: 35, damper: 85 },
                     drop:       { t: totalMin,       temp: (profile.btLow + profile.btHigh) / 2, fire: 0,  damper: 100 }
                 };
@@ -3379,18 +3379,20 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 };
 
                 // Flick 檢測：各段 RoR 應該依序遞減（charge→TP 除外，因為是 bean cooling）
-                const postTpRoRs = [rorMai, rorDev].filter(r => !isNaN(r));
-                const dryingSegRoR = rorDry;
-                const allPostCharge = [dryingSegRoR, rorMai, rorDev].filter(r => !isNaN(r));
+                const allPostCharge = [rorDry, rorMai, rorDev].filter(r => !isNaN(r));
                 let flickWarning = '';
+                const phaseLabels = ['Drying', 'Maillard', 'Development'];
                 for (let i = 1; i < allPostCharge.length; i++) {
                     if (allPostCharge[i] > allPostCharge[i - 1]) {
-                        const phaseName = ['Drying', 'Maillard', 'Dev'][i];
-                        flickWarning = `<span style="color:#c62828; font-weight:bold;">⚠️ ${phaseName} RoR (${allPostCharge[i]}) > 前段 — Scott Rao 原則：RoR 應始終遞減（flick 警訊）</span>`;
+                        const cur = phaseLabels[i], prev = phaseLabels[i - 1];
+                        let fixTip = '';
+                        if (cur === 'Maillard') fixTip = ' — 建議：① 提早 YP（拉 💨乾燥結束 slider 往左）② 降 TP 溫（拉 🔽回溫點溫度）';
+                        else if (cur === 'Development') fixTip = ' — 建議：一爆後降火（拉 🔥 火力到更低），或縮短下豆時間';
+                        flickWarning = `<span style="color:#c62828; font-weight:bold;">⚠️ ${cur} avg RoR (${allPostCharge[i]}) > ${prev} (${allPostCharge[i-1]}) — 違反 always-declining（flick/baked 警訊）${fixTip}</span>`;
                         break;
                     }
                 }
-                if (!flickWarning) flickWarning = '<span style="color:#2e7d32;">✓ RoR 依序遞減（符合 always-declining 原則）</span>';
+                if (!flickWarning) flickWarning = '<span style="color:#2e7d32;">✓ RoR 依序遞減（符合 Scott Rao always-declining 原則）</span>';
 
                 const statsEl = document.getElementById('roast-curve-stats');
                 if (statsEl) {
