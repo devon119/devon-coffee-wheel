@@ -180,6 +180,22 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             #wheel-hint { font-size: 10px; padding: 5px 10px; bottom: 8px; }
             #share-bar { flex-wrap: wrap; }
             .share-btn { font-size: 9px; padding: 4px 8px; }
+
+            /* 🔥 烘焙計畫 Modal：手機版改窄 margin、小字、grid 變單欄 */
+            #roast-plan-modal { padding: 8px !important; }
+            #roast-plan-modal > div { margin: 8px auto !important; padding: 14px !important; border-radius: 12px !important; max-width: 100% !important; }
+            #roast-plan-content > div[style*="grid-template-columns: 1fr 1fr"] { grid-template-columns: 1fr !important; }
+            #roast-plan-content input[type="range"] { min-width: 0; }
+            #roast-plan-content table { font-size: 10px; }
+            #roast-plan-content table th, #roast-plan-content table td { padding: 2px 4px !important; }
+            #roast-curve-chart { height: 220px !important; }
+
+            /* 📊 XLSX 預覽 Modal：手機橫向捲動 + 小字 */
+            #xlsx-preview-modal { padding: 6px !important; }
+            #xlsx-preview-modal > div { margin: 6px auto !important; padding: 12px !important; border-radius: 10px !important; max-width: 100% !important; }
+            .xlsx-preview-table { font-size: 9px; }
+            .xlsx-preview-table th, .xlsx-preview-table td { padding: 2px 3px; min-width: 30px; }
+            .xlsx-preview-summary { font-size: 10px; padding: 8px 10px; }
         }
         #preset-bar { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 12px 0; }
         .preset-btn { background: #fff; color: var(--accent-purple); border: 1px dashed var(--accent-purple); padding: 5px 11px; border-radius: 16px; font-size: 10px; font-weight: bold; cursor: pointer; transition: 0.15s; }
@@ -3057,7 +3073,9 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 const dropTime = anchors.drop.t;
                 const step = 0.5;
                 const times = [];
-                for (let t = 0; t <= dropTime + 0.01; t += step) times.push(+t.toFixed(2));
+                // 表格至少延伸到 16 分（方便長烘或 drop 後冷卻階段記錄）
+                const maxTime = Math.max(16, dropTime);
+                for (let t = 0; t <= maxTime + 0.01; t += step) times.push(+t.toFixed(2));
 
                 const allPts = [anchors.charge, anchors.turnPoint, anchors.dryEnd, anchors.firstCrack, anchors.drop]
                     .slice().sort((a, b) => a.t - b.t);
@@ -3071,6 +3089,8 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 ].sort((a, b) => a.t - b.t);
 
                 function bt(t) {
+                    // drop 之後：計畫已結束（冷卻），不給預計值
+                    if (t > allPts[allPts.length - 1].t + 0.01) return '';
                     if (t <= allPts[0].t) return Math.round(allPts[0].temp);
                     if (t >= allPts[allPts.length - 1].t) return Math.round(allPts[allPts.length - 1].temp);
                     for (let i = 0; i < allPts.length - 1; i++) {
@@ -3082,6 +3102,8 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                     return '';
                 }
                 function fireDamper(t) {
+                    // drop 之後：計畫結束（冷卻階段）、不給預計火風
+                    if (t > allPts[allPts.length - 1].t + 0.01) return { fire: null, damper: null };
                     let f = null, d = null;
                     for (const ev of allFireEvents) {
                         if (ev.t <= t + 0.01) { if (typeof ev.fire === 'number') f = ev.fire; if (typeof ev.damper === 'number') d = ev.damper; }
@@ -3204,7 +3226,9 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 const dropTime = anchors.drop.t;
                 const step = 0.5;
                 const times = [];
-                for (let t = 0; t <= dropTime + 0.01; t += step) times.push(+t.toFixed(2));
+                // 表格至少延伸到 16 分（方便長烘或 drop 後冷卻階段記錄）
+                const maxTime = Math.max(16, dropTime);
+                for (let t = 0; t <= maxTime + 0.01; t += step) times.push(+t.toFixed(2));
 
                 // 排序所有錨點 + 自訂點
                 const allPts = [anchors.charge, anchors.turnPoint, anchors.dryEnd, anchors.firstCrack, anchors.drop]
@@ -3219,6 +3243,8 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 ].sort((a, b) => a.t - b.t);
 
                 function bt(t) {
+                    // drop 之後：計畫已結束（冷卻），不給預計值
+                    if (t > allPts[allPts.length - 1].t + 0.01) return '';
                     if (t <= allPts[0].t) return Math.round(allPts[0].temp);
                     if (t >= allPts[allPts.length - 1].t) return Math.round(allPts[allPts.length - 1].temp);
                     for (let i = 0; i < allPts.length - 1; i++) {
@@ -3230,6 +3256,8 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                     return null;
                 }
                 function fireDamper(t) {
+                    // drop 之後：計畫結束（冷卻階段）、不給預計火風
+                    if (t > allPts[allPts.length - 1].t + 0.01) return { fire: null, damper: null };
                     let f = null, d = null;
                     for (const ev of allFireEvents) {
                         if (ev.t <= t + 0.01) { if (typeof ev.fire === 'number') f = ev.fire; if (typeof ev.damper === 'number') d = ev.damper; }
@@ -3424,7 +3452,9 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 const dropTime = anchors.drop.t;
                 const step = 0.5;  // 30 秒 = 0.5 分
                 const times = [];
-                for (let t = 0; t <= dropTime + 0.01; t += step) times.push(+t.toFixed(2));
+                // 表格至少延伸到 16 分（方便長烘或 drop 後冷卻階段記錄）
+                const maxTime = Math.max(16, dropTime);
+                for (let t = 0; t <= maxTime + 0.01; t += step) times.push(+t.toFixed(2));
 
                 // 排序所有錨點 + 自訂點
                 const allPts = [anchors.charge, anchors.turnPoint, anchors.dryEnd, anchors.firstCrack, anchors.drop]
@@ -3440,6 +3470,8 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
 
                 // BT 線性插值
                 function bt(t) {
+                    // drop 之後：計畫已結束（冷卻），不給預計值
+                    if (t > allPts[allPts.length - 1].t + 0.01) return '';
                     if (t <= allPts[0].t) return Math.round(allPts[0].temp);
                     if (t >= allPts[allPts.length - 1].t) return Math.round(allPts[allPts.length - 1].temp);
                     for (let i = 0; i < allPts.length - 1; i++) {
@@ -3452,6 +3484,8 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 }
                 // 火力/風門：階梯式（用最近一次 ≤ 當前時間的事件）
                 function fireDamper(t) {
+                    // drop 之後：計畫結束（冷卻階段）、不給預計火風
+                    if (t > allPts[allPts.length - 1].t + 0.01) return { fire: null, damper: null };
                     let f = null, d = null;
                     for (const ev of allFireEvents) {
                         if (ev.t <= t + 0.01) { if (typeof ev.fire === 'number') f = ev.fire; if (typeof ev.damper === 'number') d = ev.damper; }
