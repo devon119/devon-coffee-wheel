@@ -1419,6 +1419,34 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 }
             }
 
+            // --- Stage: BatchSize (豆重：熱質量效應) ---
+            function _rs_stageBatch(s) {
+                const g = parseFloat(s.cfg.batchG);
+                if (!g || isNaN(g)) return;
+                if (g >= 400) _rs_adj(s, 'Batch', 'charge', +3, `大批量 ${g}g：熱質量高，入豆溫 +3°C 補蓄熱`);
+                else if (g <= 150) _rs_adj(s, 'Batch', 'charge', -3, `小批量 ${g}g：熱質量低，入豆溫 -3°C 避免瞬間過熱`);
+            }
+            // --- Stage: Ambient (室溫：散熱效應) ---
+            function _rs_stageAmbient(s) {
+                const t = parseFloat(s.cfg.ambientC);
+                if (!t || isNaN(t)) return;
+                if (t < 18) _rs_adj(s, 'Ambient', 'charge', +2, `室溫 ${t}°C 偏冷：入豆溫 +2°C 補散熱損失`);
+                else if (t > 28) _rs_adj(s, 'Ambient', 'charge', -2, `室溫 ${t}°C 偏熱：入豆溫 -2°C 防過熱`);
+            }
+            // --- Stage: Density (密度：熱穿透時間) ---
+            function _rs_stageDensity(s) {
+                const d = parseFloat(s.cfg.densityGL);
+                if (!d || isNaN(d)) return;
+                if (d >= 750) _rs_adj(s, 'Density', 'drying', +15, `高密度 ${d}g/L：Drying +15s 讓水分均勻排出`);
+                else if (d <= 650) _rs_adj(s, 'Density', 'drying', -15, `低密度 ${d}g/L：Drying -15s 避免過乾 baked`);
+            }
+            // --- Stage: Moisture (含水率：脫水時間) ---
+            function _rs_stageMoisture(s) {
+                const m = parseFloat(s.cfg.moisturePct);
+                if (!m || isNaN(m)) return;
+                if (m > 11.5) _rs_adj(s, 'Moisture', 'drying', +20, `含水率 ${m}% 偏高（新豆/雨季）：Drying +20s 充分脫水`);
+                else if (m < 9.5) _rs_adj(s, 'Moisture', 'drying', -20, `含水率 ${m}% 偏低（老豆/乾季）：Drying -20s 防 baked`);
+            }
             // --- Stage: Finalize (確保範圍合理：low <= high) ---
             function _rs_stageFinalize(s) {
                 if (s.devLow > s.devHigh - 1) s.devLow = Math.max(5, s.devHigh - 2);
@@ -1430,6 +1458,10 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 _rs_stageVariety(s);
                 _rs_stageProcessing(s);
                 _rs_stageAltitude(s);
+                _rs_stageBatch(s);
+                _rs_stageAmbient(s);
+                _rs_stageDensity(s);
+                _rs_stageMoisture(s);
                 _rs_stageFinalize(s);
                 return s;
             };
@@ -2792,22 +2824,40 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                     return;
                 }
                 const ctx = _aiBuildLocalCtx();
-                const profile = computeRoastProfile(ctx);
-                // 初始化設計器錨點：依本地演算法推出的基準值
-                const totalMin = (profile.totalMinLow + profile.totalMinHigh) / 2;
                 _roastPlanState = {
-                    ctx, profile,
-                    // Anchor points (minutes, °C)
-                    anchors: {
-                        charge: { t: 0, temp: profile.chargeTemp },
-                        turnPoint: { t: 1.5, temp: 95 },
-                        dryEnd: { t: totalMin * 0.5, temp: 150 },
-                        firstCrack: { t: totalMin * 0.78, temp: 196 },
-                        drop: { t: totalMin, temp: (profile.btLow + profile.btHigh) / 2 }
-                    }
+                    ctx,
+                    // 實測參數（選填）— 填了會即時影響目標參數與錨點
+                    measurements: { batchG: '', ambientC: '', densityGL: '', moisturePct: '' },
+                    profile: null,
+                    anchors: null
                 };
+                _rpRecomputeProfile();
                 document.getElementById('roast-plan-modal').style.display = 'block';
                 _rpRender();
+            };
+
+            // 依 ctx + measurements 重新跑演算法，並把錨點 reset 為新基準
+            function _rpRecomputeProfile() {
+                const { ctx, measurements } = _roastPlanState;
+                const fullCfg = { ...ctx, ...measurements };
+                const profile = computeRoastProfile(fullCfg);
+                const totalMin = (profile.totalMinLow + profile.totalMinHigh) / 2;
+                _roastPlanState.profile = profile;
+                _roastPlanState.anchors = {
+                    charge: { t: 0, temp: profile.chargeTemp },
+                    turnPoint: { t: 1.5, temp: 95 },
+                    dryEnd: { t: totalMin * 0.5, temp: 150 },
+                    firstCrack: { t: totalMin * 0.78, temp: 196 },
+                    drop: { t: totalMin, temp: (profile.btLow + profile.btHigh) / 2 }
+                };
+            }
+
+            window.updateRoastMeasurement = function(field, value) {
+                if (!_roastPlanState) return;
+                _roastPlanState.measurements[field] = value;
+                _rpRecomputeProfile();
+                // 只重繪 dynamic 區塊，保留 input 焦點（避免打數字時每鍵重建 DOM 搶走游標）
+                _rpRenderDynamic();
             };
 
             window.closeRoastPlan = function() {
@@ -2827,7 +2877,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                     firstCrack: { t: totalMin * 0.78, temp: 196 },
                     drop: { t: totalMin, temp: (profile.btLow + profile.btHigh) / 2 }
                 };
-                _rpRender();
+                _rpRenderDynamic();
             };
 
             window.updateRoastAnchor = function(which, field, value) {
@@ -2838,22 +2888,62 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 _rpRenderChartAndStats();
             };
 
+            // 完整渲染（開啟 modal 時呼叫一次）
             function _rpRender() {
                 if (!_roastPlanState) return;
-                const { ctx, profile, anchors } = _roastPlanState;
-                // Plan Sheet（A 部分）
+                const { ctx } = _roastPlanState;
+                const m = _roastPlanState.measurements;
+                const html = `
+                    <!-- 豆子資訊（static）-->
+                    <div style="padding: 12px 14px; background: #efebe9; border-radius: 10px; margin-bottom: 12px;">
+                        <div style="font-size: 15px; font-weight: bold; color: #3e2723;">${_rpEscape(ctx.country)} · ${_rpEscape(ctx.variety)}</div>
+                        <div style="font-size: 11px; color: #5d4037; margin-top: 2px;">${_rpEscape(ctx.proc)} · ${_rpEscape(ctx.roastLabel)} · 海拔 ${ctx.alt}</div>
+                    </div>
+
+                    <!-- 📏 實測參數（static，不隨 input 改動重繪，避免打字時失焦）-->
+                    <div style="padding: 12px 14px; background: #f3e5f5; border: 1px solid #ce93d8; border-radius: 10px; margin-bottom: 14px;">
+                        <div style="font-size: 12px; font-weight: bold; color: #6a1b9a; margin-bottom: 8px;">📏 實測參數 <span style="font-size:10px; color:#888; font-weight:normal;">（選填、填了立刻影響目標與曲線）</span></div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 11px;">
+                            <label style="display:flex; flex-direction:column; gap:3px;"><span style="color:#555;">⚖️ 豆重 (g) <span style="color:#888;">典型 200-300</span></span>
+                                <input type="number" value="${m.batchG}" placeholder="例 250" oninput="updateRoastMeasurement('batchG', this.value)" style="padding: 5px; border-radius: 5px; border: 1px solid #ccc;">
+                            </label>
+                            <label style="display:flex; flex-direction:column; gap:3px;"><span style="color:#555;">🌡️ 室溫 (°C) <span style="color:#888;">典型 20-25</span></span>
+                                <input type="number" value="${m.ambientC}" placeholder="例 22" oninput="updateRoastMeasurement('ambientC', this.value)" style="padding: 5px; border-radius: 5px; border: 1px solid #ccc;">
+                            </label>
+                            <label style="display:flex; flex-direction:column; gap:3px;"><span style="color:#555;">⚖️ 豆密度 (g/L) <span style="color:#888;">典型 650-800</span></span>
+                                <input type="number" value="${m.densityGL}" placeholder="例 720" oninput="updateRoastMeasurement('densityGL', this.value)" style="padding: 5px; border-radius: 5px; border: 1px solid #ccc;">
+                            </label>
+                            <label style="display:flex; flex-direction:column; gap:3px;"><span style="color:#555;">💧 含水率 (%) <span style="color:#888;">典型 10-12</span></span>
+                                <input type="number" step="0.1" value="${m.moisturePct}" placeholder="例 10.8" oninput="updateRoastMeasurement('moisturePct', this.value)" style="padding: 5px; border-radius: 5px; border: 1px solid #ccc;">
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- 動態區塊：實測參數改變時只重繪這裡，不動上面 input -->
+                    <div id="rp-dynamic-block"></div>
+
+                    <div style="display: flex; gap: 8px; margin-top: 16px;">
+                        <button onclick="resetRoastPlanAnchors()" style="flex: 1; padding: 10px; background: #eee; color: #555; border: none; border-radius: 8px; font-size: 12px; cursor: pointer;">🔄 重設錨點</button>
+                        <button onclick="window.print()" style="flex: 1; padding: 10px; background: #607d8b; color: #fff; border: none; border-radius: 8px; font-size: 12px; cursor: pointer;">🖨️ 列印 / 截圖</button>
+                        <button onclick="closeRoastPlan()" style="flex: 1; padding: 10px; background: #5d4037; color: #fff; border: none; border-radius: 8px; font-size: 12px; cursor: pointer;">關閉</button>
+                    </div>
+                `;
+                document.getElementById('roast-plan-content').innerHTML = html;
+                _rpRenderDynamic();
+            }
+
+            // 動態區塊重繪（measurement 改變 / 錨點重設時呼叫）— 不碰 measurement inputs
+            function _rpRenderDynamic() {
+                if (!_roastPlanState) return;
+                const { profile, anchors } = _roastPlanState;
                 const reasons = profile.adjustments.length > 0
                     ? profile.adjustments.map(a => `<li><b>[${a.stage}]</b> ${_rpEscape(a.reason)}</li>`).join('')
                     : '<li>本次配置無特殊調整，使用焙度基線參數。</li>';
                 const warn = profile.base.warn ? `<div style="padding: 10px 12px; background: #ffebee; border: 1px solid #ef5350; border-radius: 8px; margin: 10px 0; font-size: 12px; color: #c62828;">⚠️ ${_rpEscape(profile.base.warn)}</div>` : '';
 
-                const html = `
-                    <!-- 豆子資訊 -->
-                    <div style="padding: 12px 14px; background: #efebe9; border-radius: 10px; margin-bottom: 14px;">
-                        <div style="font-size: 15px; font-weight: bold; color: #3e2723;">${_rpEscape(ctx.country)} · ${_rpEscape(ctx.variety)}</div>
-                        <div style="font-size: 11px; color: #5d4037; margin-top: 2px;">${_rpEscape(ctx.proc)} · ${_rpEscape(ctx.roastLabel)} · 海拔 ${ctx.alt}</div>
-                    </div>
-
+                const block = document.getElementById('rp-dynamic-block');
+                if (!block) return;
+                block.innerHTML = `
                     <!-- 目標參數 -->
                     <div style="padding: 14px; background: #fff8e1; border: 2px solid #ffca28; border-radius: 12px; margin-bottom: 14px;">
                         <div style="font-size: 13px; font-weight: bold; color: #e65100; margin-bottom: 10px;">🎯 演算法推算目標參數</div>
@@ -2869,9 +2959,8 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
 
                     ${warn}
 
-                    <!-- 為何這組 -->
                     <details open style="padding: 10px 12px; background: #e8f5e9; border-radius: 10px; margin-bottom: 14px;">
-                        <summary style="cursor: pointer; font-size: 12px; font-weight: bold; color: #2e7d32; user-select: none;">💡 為何這組參數？</summary>
+                        <summary style="cursor: pointer; font-size: 12px; font-weight: bold; color: #2e7d32; user-select: none;">💡 為何這組參數？（含實測參數影響）</summary>
                         <ul style="margin: 6px 0 0 16px; padding: 0; font-size: 11px; line-height: 1.7; color: #444;">${reasons}</ul>
                     </details>
 
@@ -2889,15 +2978,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                         <div id="roast-curve-chart" style="width: 100%; height: 280px; background: #fafafa; border-radius: 10px; border: 1px solid #ddd;"></div>
                         <div id="roast-curve-stats" style="margin-top: 10px; padding: 10px; background: #f4f7ff; border-radius: 8px; font-size: 11px; color: #555; line-height: 1.8;"></div>
                     </div>
-
-                    <div style="display: flex; gap: 8px; margin-top: 16px;">
-                        <button onclick="resetRoastPlanAnchors()" style="flex: 1; padding: 10px; background: #eee; color: #555; border: none; border-radius: 8px; font-size: 12px; cursor: pointer;">🔄 重設為演算法預設</button>
-                        <button onclick="window.print()" style="flex: 1; padding: 10px; background: #607d8b; color: #fff; border: none; border-radius: 8px; font-size: 12px; cursor: pointer;">🖨️ 列印 / 截圖</button>
-                        <button onclick="closeRoastPlan()" style="flex: 1; padding: 10px; background: #5d4037; color: #fff; border: none; border-radius: 8px; font-size: 12px; cursor: pointer;">關閉</button>
-                    </div>
                 `;
-                document.getElementById('roast-plan-content').innerHTML = html;
-                // setTimeout 讓 DOM 先 mount 再初始化 chart
                 setTimeout(_rpRenderChartAndStats, 50);
             }
 
