@@ -207,6 +207,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 <button class="preset-btn" onclick="applyPreset('kenyaAA')">🍋 肯亞 AA</button>
                 <button class="preset-btn" onclick="applyPreset('anaerobic')">🍷 厭氧</button>
                 <button class="preset-btn" id="blind-btn" onclick="toggleBlindMode()" style="background:#fff3e0; color:#e65100; border-color:#e65100;">🎲 盲測練習</button>
+                <button class="preset-btn" onclick="startFlashcard()" style="background:#e3f2fd; color:#1565c0; border-color:#1565c0;">🎴 學習卡</button>
             </div>
             <div class="config-grid">
                 <div class="config-group">
@@ -444,6 +445,20 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
 
     <div class="ui-controls">
         <button class="btn-action" onclick="resetView()" aria-label="全域清空並還原視圖">🔄 全域清空還原</button>
+    </div>
+
+    <!-- 🎴 學習卡 Modal -->
+    <div id="flashcard-modal" style="display:none; position:fixed; inset:0; z-index:2000; background:rgba(0,0,0,0.75); backdrop-filter: blur(4px); overflow-y: auto; padding: 20px; box-sizing: border-box;">
+        <div id="flashcard-panel" style="max-width: 560px; margin: 40px auto; background:#fff; border-radius: 20px; padding: 24px; box-shadow: 0 20px 80px rgba(0,0,0,0.4);">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid #eee;">
+                <div>
+                    <span style="font-size: 18px; font-weight: bold; color: #1565c0;">🎴 學習卡</span>
+                    <span id="fc-progress" style="font-size: 11px; color: #888; margin-left: 8px;"></span>
+                </div>
+                <button onclick="exitFlashcard()" style="background:none; border:none; font-size: 20px; color: #888; cursor:pointer;" aria-label="退出學習卡">✕</button>
+            </div>
+            <div id="fc-content"></div>
+        </div>
     </div>
 
     <div id="viewport"><div id="main" role="img" aria-label="SCAA 咖啡風味輪，點扇形可加入已品嚐標籤"></div></div>
@@ -2543,6 +2558,198 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
 
             // --- 🎲 盲測模式 ---
             let blindMode = false;
+            // ============================================================
+            // 🎴 學習卡模式（間隔重複）
+            // ============================================================
+            // 4 選 1 題型：顯示風味描述 → 猜風味名；帶 SRS、記錄答對率
+            const FC_KEY = 'COFFEE_FLASHCARD_STATS';
+            let _fcAllLeaves = null;
+            let _fcState = null;
+
+            function _fcFlattenLeaves() {
+                if (_fcAllLeaves) return _fcAllLeaves;
+                const out = [];
+                function walk(nodes, l1) {
+                    for (const n of nodes) {
+                        if (n.children && n.children.length) {
+                            walk(n.children, l1 || n.name);
+                        } else if (/^\d+\./.test(n.name)) {
+                            out.push({
+                                name: n.name,
+                                desc: n.desc || '',
+                                ref: n.ref || '',
+                                color: (n.itemStyle && n.itemStyle.color) || '#999',
+                                categoryL1: l1 || ''
+                            });
+                        }
+                    }
+                }
+                walk(rawData, null);
+                _fcAllLeaves = out;
+                return out;
+            }
+
+            function _fcLoadStats() { try { return JSON.parse(localStorage.getItem(FC_KEY) || '{}'); } catch(e) { return {}; } }
+            function _fcSaveStats(s) { try { localStorage.setItem(FC_KEY, JSON.stringify(s)); } catch(e) {} }
+
+            // 依 SRS 挑出下一題：優先 nextDue 到期的、其次錯誤率高的、其次沒見過的
+            function _fcPickNextCard(stats, excludeNames) {
+                const leaves = _fcFlattenLeaves();
+                const now = Date.now();
+                const candidates = leaves.filter(l => !excludeNames.has(l.name));
+                // 計算每片的「該出現分數」
+                const scored = candidates.map(l => {
+                    const st = stats[l.name];
+                    let priority;
+                    if (!st) priority = 100;  // 沒見過 → 高優先
+                    else if (st.nextDue && st.nextDue <= now) priority = 80 + Math.random() * 10;
+                    else {
+                        const acc = st.shown > 0 ? st.correct / st.shown : 0.5;
+                        priority = 30 + (1 - acc) * 50 + Math.random() * 10;
+                    }
+                    return { leaf: l, priority };
+                });
+                scored.sort((a, b) => b.priority - a.priority);
+                // 從 top 20 隨機抽（避免總是同樣順序）
+                const topK = scored.slice(0, Math.min(20, scored.length));
+                return topK[Math.floor(Math.random() * topK.length)].leaf;
+            }
+
+            // 從同 L1 類別挑 3 個干擾選項
+            function _fcPickDistractors(correctLeaf, count = 3) {
+                const leaves = _fcFlattenLeaves();
+                const sameCategory = leaves.filter(l => l.categoryL1 === correctLeaf.categoryL1 && l.name !== correctLeaf.name);
+                const pool = sameCategory.length >= count ? sameCategory : leaves.filter(l => l.name !== correctLeaf.name);
+                // 洗牌取前 count
+                const shuffled = [...pool].sort(() => Math.random() - 0.5);
+                return shuffled.slice(0, count);
+            }
+
+            window.startFlashcard = function() {
+                _fcState = {
+                    stats: _fcLoadStats(),
+                    sessionAnswered: 0,
+                    sessionCorrect: 0,
+                    seenThisSession: new Set(),
+                    currentLeaf: null,
+                    currentOptions: []
+                };
+                document.getElementById('flashcard-modal').style.display = 'block';
+                _fcNextQuestion();
+            };
+
+            window.exitFlashcard = function() {
+                if (_fcState) _fcSaveStats(_fcState.stats);
+                document.getElementById('flashcard-modal').style.display = 'none';
+                _fcState = null;
+            };
+
+            function _fcNextQuestion() {
+                if (!_fcState) return;
+                // 避免一個 session 重複出題（若已見完所有葉才重置）
+                if (_fcState.seenThisSession.size >= _fcFlattenLeaves().length) {
+                    _fcState.seenThisSession.clear();
+                }
+                const leaf = _fcPickNextCard(_fcState.stats, _fcState.seenThisSession);
+                _fcState.currentLeaf = leaf;
+                _fcState.seenThisSession.add(leaf.name);
+                const distractors = _fcPickDistractors(leaf, 3);
+                const options = [leaf, ...distractors].sort(() => Math.random() - 0.5);
+                _fcState.currentOptions = options;
+                _fcRender('question');
+            }
+
+            function _fcHandleAnswer(chosenName) {
+                if (!_fcState || !_fcState.currentLeaf) return;
+                const correctName = _fcState.currentLeaf.name;
+                const isCorrect = chosenName === correctName;
+                _fcState.sessionAnswered++;
+                if (isCorrect) _fcState.sessionCorrect++;
+                // 更新 SRS
+                const st = _fcState.stats[correctName] || { shown: 0, correct: 0, streak: 0, lastShown: null, nextDue: null };
+                st.shown++;
+                if (isCorrect) {
+                    st.correct++;
+                    st.streak = (st.streak || 0) + 1;
+                    // 間隔：1 → 3 → 7 → 14 → 30 天（最多 30）
+                    const intervals = [1, 3, 7, 14, 30];
+                    const days = intervals[Math.min(st.streak - 1, intervals.length - 1)];
+                    st.nextDue = Date.now() + days * 86400000;
+                } else {
+                    st.streak = 0;
+                    st.nextDue = Date.now() + 86400000;  // 答錯 → 明天再見
+                }
+                st.lastShown = Date.now();
+                _fcState.stats[correctName] = st;
+                _fcSaveStats(_fcState.stats);
+                _fcRender('reveal', isCorrect, chosenName);
+            }
+
+            function _fcFormatProgress() {
+                if (!_fcState) return '';
+                const acc = _fcState.sessionAnswered > 0 ? Math.round(_fcState.sessionCorrect / _fcState.sessionAnswered * 100) : 0;
+                return `第 ${_fcState.sessionAnswered + 1} 題 · 本次正確 ${_fcState.sessionCorrect}/${_fcState.sessionAnswered}${_fcState.sessionAnswered ? ` (${acc}%)` : ''}`;
+            }
+
+            function _fcEscape(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+
+            function _fcRender(phase, isCorrect, chosenName) {
+                const progEl = document.getElementById('fc-progress');
+                const contentEl = document.getElementById('fc-content');
+                progEl.innerText = _fcFormatProgress();
+                const leaf = _fcState.currentLeaf;
+
+                if (phase === 'question') {
+                    const opts = _fcState.currentOptions.map((o, i) => `
+                        <button onclick="_fcAnswer('${o.name.replace(/'/g, "\\'")}')" style="width:100%; text-align:left; padding: 12px 14px; margin-bottom: 8px; background:#f5f5f5; border: 2px solid #ddd; border-radius: 10px; font-size: 14px; cursor:pointer; transition: 0.15s;" onmouseover="this.style.background='#e3f2fd'; this.style.borderColor='#1976d2'" onmouseout="this.style.background='#f5f5f5'; this.style.borderColor='#ddd'">
+                            <b style="color: #1565c0;">${String.fromCharCode(65 + i)}.</b> ${_fcEscape(o.name)}
+                        </button>
+                    `).join('');
+                    contentEl.innerHTML = `
+                        <p style="color: #555; margin: 0 0 8px 0; font-size: 12px;">🍃 以下描述對應哪個風味？</p>
+                        <div style="padding: 14px 16px; background: #fffde7; border-left: 4px solid #fbc02d; border-radius: 8px; font-size: 14px; line-height: 1.7; color: #3e2723; margin-bottom: 16px;">
+                            「${_fcEscape(leaf.desc)}」
+                            ${leaf.ref ? `<div style="font-size: 11px; color: #888; margin-top: 8px;">📌 參考：${_fcEscape(leaf.ref)}</div>` : ''}
+                        </div>
+                        ${opts}
+                    `;
+                } else if (phase === 'reveal') {
+                    const st = _fcState.stats[leaf.name];
+                    const acc = st && st.shown ? Math.round(st.correct / st.shown * 100) : 0;
+                    const dueText = st && st.nextDue ? `${Math.max(1, Math.round((st.nextDue - Date.now()) / 86400000))} 天後` : '—';
+                    const resultColor = isCorrect ? '#2e7d32' : '#c62828';
+                    const resultBg = isCorrect ? '#e8f5e9' : '#ffebee';
+                    const resultIcon = isCorrect ? '✅ 正確！' : `❌ 錯了，正確答案是：${leaf.name}`;
+                    contentEl.innerHTML = `
+                        <div style="padding: 12px 14px; background: ${resultBg}; border: 2px solid ${resultColor}; border-radius: 10px; margin-bottom: 14px;">
+                            <strong style="color: ${resultColor}; font-size: 15px;">${_fcEscape(resultIcon)}</strong>
+                            ${!isCorrect ? `<div style="font-size: 12px; color: #555; margin-top: 6px;">你選了：${_fcEscape(chosenName)}</div>` : ''}
+                        </div>
+                        <div style="padding: 14px; border: 1px solid #eee; border-radius: 10px; background: #fff;">
+                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                                <div style="width: 40px; height: 40px; border-radius: 8px; background: ${leaf.color}; flex-shrink: 0; border: 1px solid rgba(0,0,0,0.1);"></div>
+                                <div>
+                                    <b style="font-size: 16px;">${_fcEscape(leaf.name)}</b>
+                                    <div style="font-size: 11px; color: #666;">屬於「${_fcEscape(leaf.categoryL1)}」</div>
+                                </div>
+                            </div>
+                            <p style="font-size: 12px; line-height: 1.7; color: #444; margin: 8px 0;">${_fcEscape(leaf.desc)}</p>
+                            ${leaf.ref ? `<p style="font-size: 11px; color: #888; margin: 4px 0;">📌 現實參考：${_fcEscape(leaf.ref)}</p>` : ''}
+                        </div>
+                        <div style="font-size: 11px; color: #777; margin-top: 10px; padding: 8px; background: #f5f5f5; border-radius: 6px;">
+                            📊 這片你答對過 ${st.correct}/${st.shown} 次 (${acc}%) · 下次複習：${dueText}
+                        </div>
+                        <div style="display: flex; gap: 8px; margin-top: 14px;">
+                            <button onclick="_fcNext()" style="flex: 2; padding: 12px; background: #1565c0; color: #fff; border: none; border-radius: 10px; font-size: 14px; font-weight: bold; cursor: pointer;">下一題 →</button>
+                            <button onclick="exitFlashcard()" style="flex: 1; padding: 12px; background: #eee; color: #555; border: none; border-radius: 10px; font-size: 13px; cursor: pointer;">結束</button>
+                        </div>
+                    `;
+                }
+            }
+
+            window._fcAnswer = _fcHandleAnswer;
+            window._fcNext = _fcNextQuestion;
+
             window.toggleBlindMode = function() {
                 const btn = document.getElementById('blind-btn');
                 const box = document.getElementById('expected-tags-box');
