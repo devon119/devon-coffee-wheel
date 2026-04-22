@@ -3256,8 +3256,8 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
 
             function _rpRenderChartAndStats() {
                 if (!_roastPlanState) return;
-                const { anchors } = _roastPlanState;
-                const points = [
+                const { anchors, customEvents } = _roastPlanState;
+                const btPoints = [
                     [anchors.charge.t, anchors.charge.temp],
                     [anchors.turnPoint.t, anchors.turnPoint.temp],
                     [anchors.dryEnd.t, anchors.dryEnd.temp],
@@ -3265,24 +3265,77 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                     [anchors.drop.t, anchors.drop.temp]
                 ].sort((a, b) => a[0] - b[0]);
 
+                // 📈 RoR 曲線：用相鄰錨點算 °C/min，放在段落中點
+                // 第一段（charge→turnPoint）RoR 通常是負的（bean 吸熱下降）
+                const rorPoints = [];
+                for (let i = 1; i < btPoints.length; i++) {
+                    const dt = btPoints[i][0] - btPoints[i-1][0];
+                    const dT = btPoints[i][1] - btPoints[i-1][1];
+                    if (dt <= 0) continue;
+                    const ror = Math.round((dT / dt) * 10) / 10;
+                    const midT = (btPoints[i][0] + btPoints[i-1][0]) / 2;
+                    rorPoints.push([midT, ror]);
+                }
+
+                // 自訂火風調整點的 BT 插值位置（顯示成圖上橘色菱形）
+                function _interp(t) {
+                    for (let i = 0; i < btPoints.length - 1; i++) {
+                        if (t >= btPoints[i][0] && t <= btPoints[i+1][0]) {
+                            const r = (t - btPoints[i][0]) / (btPoints[i+1][0] - btPoints[i][0] || 1);
+                            return btPoints[i][1] + r * (btPoints[i+1][1] - btPoints[i][1]);
+                        }
+                    }
+                    return null;
+                }
+                const customMarkers = (customEvents || [])
+                    .map(ev => {
+                        const bt = _interp(ev.t);
+                        if (bt === null) return null;
+                        return { name: `🔥${ev.fire}% 💨${ev.damper}%`, value: [ev.t, bt], ev };
+                    })
+                    .filter(Boolean);
+
                 const chartDom = document.getElementById('roast-curve-chart');
                 if (!chartDom) return;
                 if (_roastChart) { try { _roastChart.dispose(); } catch(e) {} }
                 _roastChart = echarts.init(chartDom);
                 _roastChart.setOption({
                     animation: false,
-                    tooltip: { trigger: 'axis', formatter: (p) => p.map(x => `${x.seriesName}：${x.value[0].toFixed(1)} 分 / ${x.value[1]}°C`).join('<br>') },
-                    grid: { left: 40, right: 10, top: 20, bottom: 30 },
+                    tooltip: {
+                        trigger: 'axis',
+                        formatter: (params) => {
+                            const t = params[0].value[0];
+                            return params.map(p => {
+                                const unit = p.seriesName === 'RoR (°C/min)' ? '°C/min' : '°C';
+                                return `<span style="color:${p.color};">●</span> ${p.seriesName}：${p.value[1]} ${unit}`;
+                            }).join('<br>') + `<br><small>時間：${t.toFixed(1)} 分</small>`;
+                        }
+                    },
+                    legend: { top: 0, right: 10, textStyle: { fontSize: 10 }, data: ['BT 曲線', 'RoR (°C/min)', '🎛️ 自訂調整'] },
+                    grid: { left: 45, right: 45, top: 30, bottom: 30 },
                     xAxis: { type: 'value', name: '時間 (分)', min: 0, max: Math.ceil(anchors.drop.t) + 1, axisLabel: { fontSize: 10 } },
-                    yAxis: { type: 'value', name: '溫度 °C', min: 80, max: 260, axisLabel: { fontSize: 10 } },
+                    yAxis: [
+                        { type: 'value', name: '°C', min: 80, max: 260, axisLabel: { fontSize: 10 }, splitLine: { lineStyle: { color: '#eee' } } },
+                        { type: 'value', name: 'RoR', min: -5, max: 40, axisLabel: { fontSize: 10, formatter: '{value}' }, splitLine: { show: false } }
+                    ],
                     series: [
                         {
-                            name: 'BT 曲線', type: 'line', smooth: true, symbol: 'circle', symbolSize: 8,
-                            data: points, lineStyle: { color: '#d32f2f', width: 3 }, itemStyle: { color: '#d32f2f' },
+                            name: 'BT 曲線', type: 'line', smooth: true, symbol: 'circle', symbolSize: 9, yAxisIndex: 0,
+                            data: btPoints, lineStyle: { color: '#d32f2f', width: 3 }, itemStyle: { color: '#d32f2f' },
                             markLine: {
                                 silent: true,
-                                data: [{ yAxis: 196, label: { formatter: '一爆 ~196°C', position: 'end', fontSize: 10, color: '#f57c00' }, lineStyle: { type: 'dashed', color: '#f57c00' } }]
+                                data: [{ yAxis: 196, label: { formatter: '一爆 ~196°C', position: 'insideEndTop', fontSize: 9, color: '#f57c00' }, lineStyle: { type: 'dashed', color: '#f57c00' } }]
                             }
+                        },
+                        {
+                            name: 'RoR (°C/min)', type: 'line', smooth: true, symbol: 'diamond', symbolSize: 7, yAxisIndex: 1,
+                            data: rorPoints, lineStyle: { color: '#0288d1', width: 2, type: 'dashed' }, itemStyle: { color: '#0288d1' }
+                        },
+                        // 自訂調整點（橘色菱形）顯示在 BT 軸
+                        {
+                            name: '🎛️ 自訂調整', type: 'scatter', yAxisIndex: 0, symbol: 'diamond', symbolSize: 14,
+                            data: customMarkers, itemStyle: { color: '#ff9800', borderColor: '#e65100', borderWidth: 1.5 },
+                            label: { show: true, position: 'top', fontSize: 9, color: '#e65100', formatter: (p) => p.data.name }
                         }
                     ]
                 });
