@@ -3286,16 +3286,20 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 });
                 header.height = 22;
 
+                // 直接對每欄 getCell 設 style，確保空字串也會畫格線
                 function styleRow(row, bgColor, fontColor, isBold) {
-                    row.eachCell({ includeEmpty: true }, (cell, colNumber) => {
-                        if (colNumber > totalCols) return;
+                    const borderStyle = { style: 'thin', color: { argb: 'FF999999' } };
+                    for (let c = 1; c <= totalCols; c++) {
+                        const cell = row.getCell(c);
                         cell.font = { bold: !!isBold, size: 10, color: { argb: fontColor || 'FF3E2723' } };
                         cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: bgColor } };
-                        cell.alignment = { horizontal: 'center', vertical: 'middle' };
-                        cell.border = { top:{style:'thin', color:{argb:'FFBDBDBD'}}, left:{style:'thin', color:{argb:'FFBDBDBD'}}, bottom:{style:'thin', color:{argb:'FFBDBDBD'}}, right:{style:'thin', color:{argb:'FFBDBDBD'}} };
-                    });
-                    row.getCell(1).font = { bold: true, size: 10, color: { argb: 'FF3E2723' } };
-                    row.getCell(1).alignment = { horizontal: 'left', vertical: 'middle' };
+                        cell.alignment = { horizontal: 'center', vertical: 'middle', wrapText: false };
+                        cell.border = { top: borderStyle, left: borderStyle, bottom: borderStyle, right: borderStyle };
+                    }
+                    // 第一欄（label）特殊處理
+                    const first = row.getCell(1);
+                    first.font = { bold: true, size: 10, color: { argb: 'FF3E2723' } };
+                    first.alignment = { horizontal: 'left', vertical: 'middle' };
                 }
 
                 // === 預計行（已填、有底色）===
