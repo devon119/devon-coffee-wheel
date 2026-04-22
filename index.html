@@ -2953,6 +2953,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
 
             // 依 ctx + measurements 重新跑演算法，並把錨點 reset 為新基準
             // 密度/含水率沒填 → 使用依豆子特性推算的預設值
+            // 火力/風門：按烘豆標準做法給預設（charge 強火小風 → drop 無火全開）
             function _rpRecomputeProfile() {
                 const { ctx, measurements } = _roastPlanState;
                 const densityUsed = measurements.densityGL !== '' ? measurements.densityGL : _rpDefaultDensity(ctx);
@@ -2974,12 +2975,15 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 const profile = computeRoastProfile(fullCfg);
                 const totalMin = (profile.totalMinLow + profile.totalMinHigh) / 2;
                 _roastPlanState.profile = profile;
+                // 保留原 anchors 的 fire/damper（使用者手動調過的），只 reset 時間/溫度
+                const existingFire = (_roastPlanState.anchors && _roastPlanState.anchors.charge) ? _roastPlanState.anchors : null;
                 _roastPlanState.anchors = {
-                    charge: { t: 0, temp: profile.chargeTemp },
-                    turnPoint: { t: 1.5, temp: 95 },
-                    dryEnd: { t: totalMin * 0.5, temp: 150 },
-                    firstCrack: { t: totalMin * 0.78, temp: 196 },
-                    drop: { t: totalMin, temp: (profile.btLow + profile.btHigh) / 2 }
+                    //          時間         溫度                                            火力%                            風門%
+                    charge:     { t: 0,              temp: profile.chargeTemp,                   fire: existingFire ? existingFire.charge.fire     : 90, damper: existingFire ? existingFire.charge.damper     : 40 },
+                    turnPoint:  { t: 1.5,            temp: 95,                                   fire: existingFire ? existingFire.turnPoint.fire  : 65, damper: existingFire ? existingFire.turnPoint.damper  : 50 },
+                    dryEnd:     { t: totalMin * 0.5, temp: 150,                                  fire: existingFire ? existingFire.dryEnd.fire     : 50, damper: existingFire ? existingFire.dryEnd.damper     : 70 },
+                    firstCrack: { t: totalMin * 0.78,temp: 196,                                  fire: existingFire ? existingFire.firstCrack.fire : 35, damper: existingFire ? existingFire.firstCrack.damper : 85 },
+                    drop:       { t: totalMin,       temp: (profile.btLow + profile.btHigh) / 2, fire: existingFire ? existingFire.drop.fire       : 0,  damper: existingFire ? existingFire.drop.damper       : 100 }
                 };
             }
 
@@ -3006,11 +3010,11 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 const { profile } = _roastPlanState;
                 const totalMin = (profile.totalMinLow + profile.totalMinHigh) / 2;
                 _roastPlanState.anchors = {
-                    charge: { t: 0, temp: profile.chargeTemp },
-                    turnPoint: { t: 1.5, temp: 95 },
-                    dryEnd: { t: totalMin * 0.5, temp: 150 },
-                    firstCrack: { t: totalMin * 0.78, temp: 196 },
-                    drop: { t: totalMin, temp: (profile.btLow + profile.btHigh) / 2 }
+                    charge:     { t: 0,              temp: profile.chargeTemp,                   fire: 90, damper: 40 },
+                    turnPoint:  { t: 1.5,            temp: 95,                                   fire: 65, damper: 50 },
+                    dryEnd:     { t: totalMin * 0.5, temp: 150,                                  fire: 50, damper: 70 },
+                    firstCrack: { t: totalMin * 0.78,temp: 196,                                  fire: 35, damper: 85 },
+                    drop:       { t: totalMin,       temp: (profile.btLow + profile.btHigh) / 2, fire: 0,  damper: 100 }
                 };
                 _rpRenderDynamic();
             };
@@ -3143,6 +3147,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                         <div style="font-size: 14px; font-weight: bold; color: #5d4037; margin-bottom: 10px;">📈 曲線設計器 <span style="font-size:10px; font-weight:normal; color:#888;">（拖 slider 微調各階段）</span></div>
 
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px 12px; font-size: 11px; margin-bottom: 12px;">
+                            ${_rpAnchorRow('charge', '🚪 入豆 Charge', anchors.charge, { tMin: 0, tMax: 0.5, tStep: 0.1, tempMin: 160, tempMax: 230 })}
                             ${_rpAnchorRow('turnPoint', '🔽 Turn Point 回溫點', anchors.turnPoint, { tMin: 0.5, tMax: 3, tStep: 0.1, tempMin: 80, tempMax: 110 })}
                             ${_rpAnchorRow('dryEnd', '💨 乾燥結束', anchors.dryEnd, { tMin: 3, tMax: 8, tStep: 0.1, tempMin: 140, tempMax: 165 })}
                             ${_rpAnchorRow('firstCrack', '💥 一爆時點', anchors.firstCrack, { tMin: 6, tMax: 14, tStep: 0.1, tempMin: 190, tempMax: 205 })}
@@ -3157,16 +3162,28 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             }
 
             function _rpAnchorRow(key, label, anc, opts) {
+                // 預設 fire/damper 為 0，若缺值時給預設避免 NaN
+                const fire = typeof anc.fire === 'number' ? anc.fire : 50;
+                const damper = typeof anc.damper === 'number' ? anc.damper : 50;
                 return `
-                    <div>
-                        <label style="display:block; color: #666; font-weight: bold; margin-bottom: 2px;">${label}</label>
-                        <div style="display: flex; gap: 4px; align-items: center;">
-                            <input type="range" min="${opts.tMin}" max="${opts.tMax}" step="${opts.tStep}" value="${anc.t}" oninput="updateRoastAnchor('${key}', 't', this.value); this.nextElementSibling.innerText = parseFloat(this.value).toFixed(1) + ' 分';" style="flex:1;">
-                            <span style="font-weight:bold; color:#5d4037; min-width: 40px; font-size: 10px;">${anc.t.toFixed(1)} 分</span>
-                        </div>
-                        <div style="display: flex; gap: 4px; align-items: center; margin-top: 2px;">
-                            <input type="range" min="${opts.tempMin}" max="${opts.tempMax}" step="1" value="${anc.temp}" oninput="updateRoastAnchor('${key}', 'temp', this.value); this.nextElementSibling.innerText = this.value + '°C';" style="flex:1;">
-                            <span style="font-weight:bold; color:#5d4037; min-width: 40px; font-size: 10px;">${anc.temp}°C</span>
+                    <div style="padding: 8px; background: #fafafa; border-radius: 6px; border: 1px solid #e0e0e0;">
+                        <label style="display:block; color: #5d4037; font-weight: bold; margin-bottom: 4px; font-size: 11px;">${label}</label>
+                        <div style="display: grid; grid-template-columns: auto 1fr auto; gap: 4px 6px; align-items: center; font-size: 10px;">
+                            <span style="color:#888;">⏱ 時間</span>
+                            <input type="range" min="${opts.tMin}" max="${opts.tMax}" step="${opts.tStep}" value="${anc.t}" oninput="updateRoastAnchor('${key}', 't', this.value); this.nextElementSibling.innerText = parseFloat(this.value).toFixed(1) + '分';" style="width:100%;">
+                            <span style="font-weight:bold; color:#5d4037; min-width: 36px; text-align:right;">${anc.t.toFixed(1)}分</span>
+
+                            <span style="color:#888;">🌡️ 溫</span>
+                            <input type="range" min="${opts.tempMin}" max="${opts.tempMax}" step="1" value="${anc.temp}" oninput="updateRoastAnchor('${key}', 'temp', this.value); this.nextElementSibling.innerText = this.value + '°C';" style="width:100%;">
+                            <span style="font-weight:bold; color:#5d4037; min-width: 36px; text-align:right;">${Math.round(anc.temp)}°C</span>
+
+                            <span style="color:#d32f2f;">🔥 火</span>
+                            <input type="range" min="0" max="100" step="5" value="${fire}" oninput="updateRoastAnchor('${key}', 'fire', this.value); this.nextElementSibling.innerText = this.value + '%';" style="width:100%; accent-color: #d32f2f;">
+                            <span style="font-weight:bold; color:#d32f2f; min-width: 36px; text-align:right;">${fire}%</span>
+
+                            <span style="color:#0288d1;">💨 風</span>
+                            <input type="range" min="0" max="100" step="5" value="${damper}" oninput="updateRoastAnchor('${key}', 'damper', this.value); this.nextElementSibling.innerText = this.value + '%';" style="width:100%; accent-color: #0288d1;">
+                            <span style="font-weight:bold; color:#0288d1; min-width: 36px; text-align:right;">${damper}%</span>
                         </div>
                     </div>
                 `;
@@ -3224,10 +3241,40 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
 
                 const statsEl = document.getElementById('roast-curve-stats');
                 if (statsEl) {
+                    // 火力 / 風門操作表（每個關鍵時點的設定）
+                    const phaseNames = { charge: '入豆', turnPoint: '回溫', dryEnd: '乾燥末', firstCrack: '一爆', drop: '下豆' };
+                    const opRows = ['charge','turnPoint','dryEnd','firstCrack','drop'].map(k => {
+                        const a = anchors[k];
+                        const fire = typeof a.fire === 'number' ? a.fire : '-';
+                        const damp = typeof a.damper === 'number' ? a.damper : '-';
+                        return `<tr>
+                            <td style="padding:2px 6px;">${phaseNames[k]}</td>
+                            <td style="padding:2px 6px; text-align:right; color:#5d4037;">${a.t.toFixed(1)}分</td>
+                            <td style="padding:2px 6px; text-align:right; color:#5d4037;">${Math.round(a.temp)}°C</td>
+                            <td style="padding:2px 6px; text-align:right; color:#d32f2f; font-weight:bold;">🔥 ${fire}%</td>
+                            <td style="padding:2px 6px; text-align:right; color:#0288d1; font-weight:bold;">💨 ${damp}%</td>
+                        </tr>`;
+                    }).join('');
+
                     statsEl.innerHTML = `
                         <b>📊 階段占比：</b>Drying <b>${dryingPct}%</b>・Maillard <b>${maillardPct}%</b>・Development <b>${devPct}%</b>${devWarn}<br>
                         <b>📈 平均 RoR：</b>Drying ~${rorDry}°C/min・Maillard ~${rorMai}°C/min・Dev ~${rorDev}°C/min<br>
-                        <b>⏱️ 總時間：</b>${totalMin.toFixed(1)} 分｜<b>下豆溫：</b>${anchors.drop.temp}°C
+                        <b>⏱️ 總時間：</b>${totalMin.toFixed(1)} 分｜<b>下豆溫：</b>${Math.round(anchors.drop.temp)}°C
+                        <div style="margin-top: 10px; padding-top: 8px; border-top: 1px solid #c5cae9;">
+                            <b style="color: #3e2723;">🎛️ 火力/風門操作表（烘豆時照這張開）</b>
+                            <table style="width:100%; margin-top:4px; font-size:11px; border-collapse: collapse;">
+                                <thead>
+                                    <tr style="background:#e8eaf6;">
+                                        <th style="padding:3px 6px; text-align:left; font-size:10px;">階段</th>
+                                        <th style="padding:3px 6px; text-align:right; font-size:10px;">時間</th>
+                                        <th style="padding:3px 6px; text-align:right; font-size:10px;">BT</th>
+                                        <th style="padding:3px 6px; text-align:right; font-size:10px;">🔥 火</th>
+                                        <th style="padding:3px 6px; text-align:right; font-size:10px;">💨 風</th>
+                                    </tr>
+                                </thead>
+                                <tbody>${opRows}</tbody>
+                            </table>
+                        </div>
                     `;
                 }
             }
