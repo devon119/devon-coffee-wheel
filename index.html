@@ -3008,6 +3008,115 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 _roastPlanState = null;
             };
 
+            // 📥 匯出 CSV（Excel 打得開）— 30 秒一格、預計填好、實際空白給使用者手動填
+            window.exportRoastPlanCSV = function() {
+                if (!_roastPlanState) return;
+                const { anchors, customEvents, ctx, profile, measurements } = _roastPlanState;
+                const dropTime = anchors.drop.t;
+                const step = 0.5;  // 30 秒 = 0.5 分
+                const times = [];
+                for (let t = 0; t <= dropTime + 0.01; t += step) times.push(+t.toFixed(2));
+
+                // 排序所有錨點 + 自訂點
+                const allPts = [anchors.charge, anchors.turnPoint, anchors.dryEnd, anchors.firstCrack, anchors.drop]
+                    .slice().sort((a, b) => a.t - b.t);
+                const allFireEvents = [
+                    { t: anchors.charge.t,     fire: anchors.charge.fire,     damper: anchors.charge.damper },
+                    { t: anchors.turnPoint.t,  fire: anchors.turnPoint.fire,  damper: anchors.turnPoint.damper },
+                    { t: anchors.dryEnd.t,     fire: anchors.dryEnd.fire,     damper: anchors.dryEnd.damper },
+                    { t: anchors.firstCrack.t, fire: anchors.firstCrack.fire, damper: anchors.firstCrack.damper },
+                    { t: anchors.drop.t,       fire: anchors.drop.fire,       damper: anchors.drop.damper },
+                    ...(customEvents || []).map(ev => ({ t: ev.t, fire: ev.fire, damper: ev.damper }))
+                ].sort((a, b) => a.t - b.t);
+
+                // BT 線性插值
+                function bt(t) {
+                    if (t <= allPts[0].t) return Math.round(allPts[0].temp);
+                    if (t >= allPts[allPts.length - 1].t) return Math.round(allPts[allPts.length - 1].temp);
+                    for (let i = 0; i < allPts.length - 1; i++) {
+                        if (t >= allPts[i].t && t <= allPts[i + 1].t) {
+                            const r = (t - allPts[i].t) / (allPts[i + 1].t - allPts[i].t || 1);
+                            return Math.round(allPts[i].temp + r * (allPts[i + 1].temp - allPts[i].temp));
+                        }
+                    }
+                    return '';
+                }
+                // 火力/風門：階梯式（用最近一次 ≤ 當前時間的事件）
+                function fireDamper(t) {
+                    let f = null, d = null;
+                    for (const ev of allFireEvents) {
+                        if (ev.t <= t + 0.01) { if (typeof ev.fire === 'number') f = ev.fire; if (typeof ev.damper === 'number') d = ev.damper; }
+                    }
+                    return { fire: f, damper: d };
+                }
+
+                function fmtT(min) {
+                    const m = Math.floor(min), s = Math.round((min - m) * 60);
+                    return `${m}:${String(s).padStart(2, '0')}`;
+                }
+
+                // CSV escape
+                const esc = (v) => {
+                    const s = v === null || v === undefined ? '' : String(v);
+                    if (s.includes(',') || s.includes('"') || s.includes('\n')) return `"${s.replace(/"/g, '""')}"`;
+                    return s;
+                };
+
+                // 標頭區塊（配方摘要）
+                const title = `烘豆計畫表 - ${ctx.country} · ${ctx.variety} · ${ctx.roastLabel}`;
+                const now = new Date();
+                const dateStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+
+                const summary = [
+                    [title],
+                    [`產生日期：${dateStr}`],
+                    [`機器: ${measurements.machineKg || '-'} kg / 豆重: ${measurements.batchG} g / 室溫: ${measurements.ambientC || '-'} °C / 密度: ${measurements.densityGL || (_roastPlanState.defaultsUsed && _roastPlanState.defaultsUsed.densityValue) || '-'} g/L / 含水: ${measurements.moisturePct || (_roastPlanState.defaultsUsed && _roastPlanState.defaultsUsed.moistureValue) || '-'} %`],
+                    [`目標: 入豆溫 ${profile.chargeTemp}°C · BT ${profile.btLow}-${profile.btHigh}°C · Dev ${profile.devLow}-${profile.devHigh}% · 總時 ${profile.totalMinLow}-${profile.totalMinHigh} 分`],
+                    []
+                ];
+
+                // 資料表
+                const header = ['時間 (分:秒)', ...times.map(t => fmtT(t))];
+                const planBT = ['預計 BT (°C)', ...times.map(t => bt(t))];
+                const planFire = ['預計 🔥 火力 (%)', ...times.map(t => { const x = fireDamper(t); return x.fire !== null ? x.fire : ''; })];
+                const planDamper = ['預計 💨 風門 (%)', ...times.map(t => { const x = fireDamper(t); return x.damper !== null ? x.damper : ''; })];
+                const blank = ['', ...times.map(() => '')];
+                const actualBT = ['實際 BT (°C)', ...times.map(() => '')];
+                const actualFire = ['實際 🔥 火力 (%)', ...times.map(() => '')];
+                const actualDamper = ['實際 💨 風門 (%)', ...times.map(() => '')];
+                const actualRoR = ['實際 RoR (°C/min)', ...times.map(() => '')];
+                const notes = ['備註 / 現象', ...times.map(() => '')];
+
+                const rows = [
+                    ...summary,
+                    header,
+                    planBT,
+                    planFire,
+                    planDamper,
+                    blank,
+                    ['── 以下留白，烘豆當下手寫記錄 ──'],
+                    actualBT,
+                    actualFire,
+                    actualDamper,
+                    actualRoR,
+                    notes
+                ];
+
+                const csv = rows.map(r => r.map(esc).join(',')).join('\r\n');
+                // UTF-8 BOM 讓 Excel 正確讀中文
+                const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8;' });
+                const url = URL.createObjectURL(blob);
+                const safeName = `${ctx.country}_${ctx.variety}_${ctx.roastLabel}`.replace(/[\\/:*?"<>|]/g, '');
+                const filename = `烘豆計畫_${safeName}_${dateStr}.csv`;
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = filename;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                setTimeout(() => URL.revokeObjectURL(url), 1000);
+            };
+
             window.resetRoastPlanAnchors = function() {
                 if (!_roastPlanState) return;
                 const { profile } = _roastPlanState;
@@ -3081,7 +3190,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
 
                     <div style="display: flex; gap: 8px; margin-top: 16px;">
                         <button onclick="resetRoastPlanAnchors()" style="flex: 1; padding: 10px; background: #eee; color: #555; border: none; border-radius: 8px; font-size: 12px; cursor: pointer;">🔄 重設錨點</button>
-                        <button onclick="window.print()" style="flex: 1; padding: 10px; background: #607d8b; color: #fff; border: none; border-radius: 8px; font-size: 12px; cursor: pointer;">🖨️ 列印 / 截圖</button>
+                        <button onclick="exportRoastPlanCSV()" style="flex: 2; padding: 10px; background: #2e7d32; color: #fff; border: none; border-radius: 8px; font-size: 12px; font-weight: bold; cursor: pointer;">📥 匯出 Excel 計畫表</button>
                         <button onclick="closeRoastPlan()" style="flex: 1; padding: 10px; background: #5d4037; color: #fff; border: none; border-radius: 8px; font-size: 12px; cursor: pointer;">關閉</button>
                     </div>
                 `;
