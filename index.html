@@ -2977,6 +2977,8 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 _roastPlanState.profile = profile;
                 // 保留原 anchors 的 fire/damper（使用者手動調過的），只 reset 時間/溫度
                 const existingFire = (_roastPlanState.anchors && _roastPlanState.anchors.charge) ? _roastPlanState.anchors : null;
+                // customEvents：保留使用者加的中間調整點
+                if (!_roastPlanState.customEvents) _roastPlanState.customEvents = [];
                 _roastPlanState.anchors = {
                     //          時間         溫度                                            火力%                            風門%
                     charge:     { t: 0,              temp: profile.chargeTemp,                   fire: existingFire ? existingFire.charge.fire     : 90, damper: existingFire ? existingFire.charge.damper     : 40 },
@@ -3147,12 +3149,15 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                         <div style="font-size: 14px; font-weight: bold; color: #5d4037; margin-bottom: 10px;">📈 曲線設計器 <span style="font-size:10px; font-weight:normal; color:#888;">（拖 slider 微調各階段）</span></div>
 
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px 12px; font-size: 11px; margin-bottom: 12px;">
-                            ${_rpAnchorRow('charge', '🚪 入豆 Charge', anchors.charge, { tMin: 0, tMax: 0.5, tStep: 0.1, tempMin: 160, tempMax: 230 })}
-                            ${_rpAnchorRow('turnPoint', '🔽 Turn Point 回溫點', anchors.turnPoint, { tMin: 0.5, tMax: 3, tStep: 0.1, tempMin: 80, tempMax: 110 })}
-                            ${_rpAnchorRow('dryEnd', '💨 乾燥結束', anchors.dryEnd, { tMin: 3, tMax: 8, tStep: 0.1, tempMin: 140, tempMax: 165 })}
-                            ${_rpAnchorRow('firstCrack', '💥 一爆時點', anchors.firstCrack, { tMin: 6, tMax: 14, tStep: 0.1, tempMin: 190, tempMax: 205 })}
-                            ${_rpAnchorRow('drop', '🎯 下豆時溫', anchors.drop, { tMin: 8, tMax: 20, tStep: 0.1, tempMin: 180, tempMax: 250 })}
+                            ${_rpAnchorRow('charge', '🚪 入豆 Charge', anchors.charge, { tMin: 0, tMax: 0.5, tStep: 0.1, tempMin: 100, tempMax: 230 })}
+                            ${_rpAnchorRow('turnPoint', '🔽 Turn Point 回溫點', anchors.turnPoint, { tMin: 0.5, tMax: 4, tStep: 0.1, tempMin: 60, tempMax: 120 })}
+                            ${_rpAnchorRow('dryEnd', '💨 乾燥結束', anchors.dryEnd, { tMin: 3, tMax: 10, tStep: 0.1, tempMin: 120, tempMax: 170 })}
+                            ${_rpAnchorRow('firstCrack', '💥 一爆時點', anchors.firstCrack, { tMin: 6, tMax: 18, tStep: 0.1, tempMin: 180, tempMax: 210 })}
+                            ${_rpAnchorRow('drop', '🎯 下豆時溫', anchors.drop, { tMin: 8, tMax: 25, tStep: 0.1, tempMin: 160, tempMax: 260 })}
                         </div>
+
+                        <!-- 🎛️ 自訂火風調整點（可在任意時點插入）-->
+                        ${_rpCustomEventsBlock()}
 
                         <div id="roast-curve-chart" style="width: 100%; height: 280px; background: #fafafa; border-radius: 10px; border: 1px solid #ddd;"></div>
                         <div id="roast-curve-stats" style="margin-top: 10px; padding: 10px; background: #f4f7ff; border-radius: 8px; font-size: 11px; color: #555; line-height: 1.8;"></div>
@@ -3160,6 +3165,66 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 `;
                 setTimeout(_rpRenderChartAndStats, 50);
             }
+
+            // 自訂火風調整點 UI block
+            function _rpCustomEventsBlock() {
+                const { customEvents, anchors } = _roastPlanState;
+                const totalMin = anchors.drop.t;
+                const rows = customEvents.map((ev, i) => `
+                    <div style="padding: 6px 8px; background: #fff8e1; border-radius: 6px; border: 1px solid #ffca28; margin-bottom: 5px;">
+                        <div style="display: grid; grid-template-columns: auto 1fr auto auto; gap: 4px 6px; align-items: center; font-size: 10px;">
+                            <span style="color:#888;">⏱</span>
+                            <input type="range" min="0.2" max="${totalMin.toFixed(1)}" step="0.1" value="${ev.t}" oninput="updateCustomEvent(${i}, 't', this.value); this.nextElementSibling.innerText = parseFloat(this.value).toFixed(1) + '分';">
+                            <span style="font-weight:bold; color:#5d4037; min-width: 36px; text-align:right;">${ev.t.toFixed(1)}分</span>
+                            <button onclick="removeCustomEvent(${i})" title="刪除此調整點" style="background:#ffebee; color:#c62828; border:1px solid #ef5350; border-radius:4px; padding:2px 6px; font-size:10px; cursor:pointer;">✕</button>
+
+                            <span style="color:#d32f2f;">🔥</span>
+                            <input type="range" min="0" max="100" step="5" value="${ev.fire}" oninput="updateCustomEvent(${i}, 'fire', this.value); this.nextElementSibling.innerText = this.value + '%';" style="accent-color: #d32f2f;">
+                            <span style="font-weight:bold; color:#d32f2f; min-width: 36px; text-align:right;">${ev.fire}%</span>
+                            <span></span>
+
+                            <span style="color:#0288d1;">💨</span>
+                            <input type="range" min="0" max="100" step="5" value="${ev.damper}" oninput="updateCustomEvent(${i}, 'damper', this.value); this.nextElementSibling.innerText = this.value + '%';" style="accent-color: #0288d1;">
+                            <span style="font-weight:bold; color:#0288d1; min-width: 36px; text-align:right;">${ev.damper}%</span>
+                            <span></span>
+                        </div>
+                    </div>
+                `).join('');
+                return `
+                    <div style="margin-top: 10px; padding: 10px; background: #fffbf0; border-radius: 8px; border: 1px dashed #ff9800;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 6px;">
+                            <span style="font-size: 11px; font-weight: bold; color: #e65100;">🎛️ 自訂中間調整點 <span style="font-size: 9px; color:#888; font-weight:normal;">（非錨點的任意時刻加一筆火/風調整）</span></span>
+                            <button onclick="addCustomEvent()" style="background: #ff9800; color: #fff; border: none; border-radius: 6px; padding: 4px 10px; font-size: 11px; font-weight: bold; cursor: pointer;">+ 新增調整點</button>
+                        </div>
+                        ${customEvents.length === 0 ? '<div style="font-size:10px; color:#888; padding:4px 0;">尚無自訂點。若烘豆途中（例如 5:30 想降火或 8:00 想開風門）要另外記一筆，按上面「新增調整點」。</div>' : rows}
+                    </div>
+                `;
+            }
+
+            window.addCustomEvent = function() {
+                if (!_roastPlanState) return;
+                const { anchors, customEvents } = _roastPlanState;
+                // 預設插在曲線中段
+                const totalMin = anchors.drop.t;
+                const defaultT = Math.max(2, totalMin * 0.5);
+                customEvents.push({ t: defaultT, fire: 50, damper: 60 });
+                _rpRenderDynamic();
+            };
+
+            window.removeCustomEvent = function(idx) {
+                if (!_roastPlanState) return;
+                _roastPlanState.customEvents.splice(idx, 1);
+                _rpRenderDynamic();
+            };
+
+            window.updateCustomEvent = function(idx, field, value) {
+                if (!_roastPlanState) return;
+                const v = parseFloat(value);
+                if (isNaN(v)) return;
+                _roastPlanState.customEvents[idx][field] = v;
+                // 時間排序操作表也要重算
+                _rpRenderChartAndStats();
+            };
 
             function _rpAnchorRow(key, label, anc, opts) {
                 // 預設 fire/damper 為 0，若缺值時給預設避免 NaN
@@ -3241,20 +3306,40 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
 
                 const statsEl = document.getElementById('roast-curve-stats');
                 if (statsEl) {
-                    // 火力 / 風門操作表（每個關鍵時點的設定）
-                    const phaseNames = { charge: '入豆', turnPoint: '回溫', dryEnd: '乾燥末', firstCrack: '一爆', drop: '下豆' };
-                    const opRows = ['charge','turnPoint','dryEnd','firstCrack','drop'].map(k => {
-                        const a = anchors[k];
-                        const fire = typeof a.fire === 'number' ? a.fire : '-';
-                        const damp = typeof a.damper === 'number' ? a.damper : '-';
-                        return `<tr>
-                            <td style="padding:2px 6px;">${phaseNames[k]}</td>
-                            <td style="padding:2px 6px; text-align:right; color:#5d4037;">${a.t.toFixed(1)}分</td>
-                            <td style="padding:2px 6px; text-align:right; color:#5d4037;">${Math.round(a.temp)}°C</td>
-                            <td style="padding:2px 6px; text-align:right; color:#d32f2f; font-weight:bold;">🔥 ${fire}%</td>
-                            <td style="padding:2px 6px; text-align:right; color:#0288d1; font-weight:bold;">💨 ${damp}%</td>
-                        </tr>`;
-                    }).join('');
+                    // 火力 / 風門操作表（合併主錨點 + 自訂中間點，按時間排序）
+                    const phaseNames = { charge: '🚪 入豆', turnPoint: '🔽 回溫', dryEnd: '💨 乾燥末', firstCrack: '💥 一爆', drop: '🎯 下豆' };
+                    // 線性插值估算某時點的 BT（用 anchors 當參考點）
+                    const sortedAnchors = ['charge','turnPoint','dryEnd','firstCrack','drop']
+                        .map(k => ({ ...anchors[k], phase: k })).sort((a,b) => a.t - b.t);
+                    function _interpTemp(t) {
+                        for (let i = 0; i < sortedAnchors.length - 1; i++) {
+                            if (t >= sortedAnchors[i].t && t <= sortedAnchors[i+1].t) {
+                                const ratio = (t - sortedAnchors[i].t) / (sortedAnchors[i+1].t - sortedAnchors[i].t || 1);
+                                return Math.round(sortedAnchors[i].temp + ratio * (sortedAnchors[i+1].temp - sortedAnchors[i].temp));
+                            }
+                        }
+                        return '—';
+                    }
+                    const allEvents = [
+                        ...['charge','turnPoint','dryEnd','firstCrack','drop'].map(k => ({
+                            t: anchors[k].t, temp: Math.round(anchors[k].temp),
+                            fire: typeof anchors[k].fire === 'number' ? anchors[k].fire : '-',
+                            damper: typeof anchors[k].damper === 'number' ? anchors[k].damper : '-',
+                            label: phaseNames[k], kind: 'anchor'
+                        })),
+                        ...(_roastPlanState.customEvents || []).map(ev => ({
+                            t: ev.t, temp: _interpTemp(ev.t),
+                            fire: ev.fire, damper: ev.damper,
+                            label: '🎛️ 自訂', kind: 'custom'
+                        }))
+                    ].sort((a, b) => a.t - b.t);
+                    const opRows = allEvents.map(e => `<tr${e.kind === 'custom' ? ' style="background:#fffbf0;"' : ''}>
+                        <td style="padding:2px 6px;">${e.label}</td>
+                        <td style="padding:2px 6px; text-align:right; color:#5d4037;">${e.t.toFixed(1)}分</td>
+                        <td style="padding:2px 6px; text-align:right; color:#5d4037;">${e.temp}°C</td>
+                        <td style="padding:2px 6px; text-align:right; color:#d32f2f; font-weight:bold;">🔥 ${e.fire}%</td>
+                        <td style="padding:2px 6px; text-align:right; color:#0288d1; font-weight:bold;">💨 ${e.damper}%</td>
+                    </tr>`).join('');
 
                     statsEl.innerHTML = `
                         <b>📊 階段占比：</b>Drying <b>${dryingPct}%</b>・Maillard <b>${maillardPct}%</b>・Development <b>${devPct}%</b>${devWarn}<br>
