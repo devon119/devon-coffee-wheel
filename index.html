@@ -3357,6 +3357,36 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 const devWarn = (devPct < profile.devLow || devPct > profile.devHigh)
                     ? `<span style="color:#c62828;"> ⚠️ 目標區間 ${profile.devLow}-${profile.devHigh}%</span>` : ' ✓';
 
+                // 🎯 Scott Rao / Rob Hoos 理想值對照
+                // 時間比例：TP ~8-15%、YP ~40-55%、FC ~70-80% of total
+                // RoR 目標：Drying 14-18、Maillard 9-12、Dev 4-6（且應始終遞減 = no flick）
+                const idealTP = { min: totalMin * 0.08, max: totalMin * 0.15 };
+                const idealYP = { min: totalMin * 0.40, max: totalMin * 0.55 };
+                const idealFC = { min: totalMin * 0.70, max: totalMin * 0.80 };
+                const idealRoRDry = { min: 14, max: 22, sweet: '14-18' };
+                const idealRoRMai = { min: 8, max: 14, sweet: '9-12' };
+                const idealRoRDev = { min: 3, max: 7, sweet: '4-6' };
+
+                const check = (actual, ideal, tol = 0) => {
+                    if (actual >= ideal.min - tol && actual <= ideal.max + tol) return '<span style="color:#2e7d32;">✓</span>';
+                    if (actual < ideal.min - tol) return '<span style="color:#c62828;">⚠️ 偏低</span>';
+                    return '<span style="color:#c62828;">⚠️ 偏高</span>';
+                };
+
+                // Flick 檢測：各段 RoR 應該依序遞減（charge→TP 除外，因為是 bean cooling）
+                const postTpRoRs = [rorMai, rorDev].filter(r => !isNaN(r));
+                const dryingSegRoR = rorDry;
+                const allPostCharge = [dryingSegRoR, rorMai, rorDev].filter(r => !isNaN(r));
+                let flickWarning = '';
+                for (let i = 1; i < allPostCharge.length; i++) {
+                    if (allPostCharge[i] > allPostCharge[i - 1]) {
+                        const phaseName = ['Drying', 'Maillard', 'Dev'][i];
+                        flickWarning = `<span style="color:#c62828; font-weight:bold;">⚠️ ${phaseName} RoR (${allPostCharge[i]}) > 前段 — Scott Rao 原則：RoR 應始終遞減（flick 警訊）</span>`;
+                        break;
+                    }
+                }
+                if (!flickWarning) flickWarning = '<span style="color:#2e7d32;">✓ RoR 依序遞減（符合 always-declining 原則）</span>';
+
                 const statsEl = document.getElementById('roast-curve-stats');
                 if (statsEl) {
                     // 火力 / 風門操作表（合併主錨點 + 自訂中間點，按時間排序）
@@ -3398,6 +3428,34 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                         <b>📊 階段占比：</b>Drying <b>${dryingPct}%</b>・Maillard <b>${maillardPct}%</b>・Development <b>${devPct}%</b>${devWarn}<br>
                         <b>📈 平均 RoR：</b>Drying ~${rorDry}°C/min・Maillard ~${rorMai}°C/min・Dev ~${rorDev}°C/min<br>
                         <b>⏱️ 總時間：</b>${totalMin.toFixed(1)} 分｜<b>下豆溫：</b>${Math.round(anchors.drop.temp)}°C
+
+                        <!-- 🎯 Scott Rao / Rob Hoos 理想值對照 -->
+                        <div style="margin-top: 12px; padding: 10px 12px; background: #fffde7; border-left: 4px solid #fbc02d; border-radius: 6px;">
+                            <b style="color: #e65100;">🎯 專業參考值對照 <span style="font-size:10px; color:#888; font-weight:normal;">(Scott Rao, Rob Hoos 公式)</span></b>
+                            <table style="width:100%; margin-top:6px; font-size:11px; border-collapse: collapse;">
+                                <thead>
+                                    <tr style="background:#fff8e1; color:#5d4037;">
+                                        <th style="padding:3px 6px; text-align:left; font-size:10px;">項目</th>
+                                        <th style="padding:3px 6px; text-align:center; font-size:10px;">理想值</th>
+                                        <th style="padding:3px 6px; text-align:center; font-size:10px;">你的計畫</th>
+                                        <th style="padding:3px 6px; text-align:center; font-size:10px;">狀態</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td style="padding:2px 6px;">🔽 Turn Point</td><td style="text-align:center;">${idealTP.min.toFixed(1)}-${idealTP.max.toFixed(1)} 分</td><td style="text-align:center;">${anchors.turnPoint.t.toFixed(1)} 分</td><td style="text-align:center;">${check(anchors.turnPoint.t, idealTP, 0.1)}</td></tr>
+                                    <tr><td style="padding:2px 6px;">💨 轉黃點 (Yellowing)</td><td style="text-align:center;">${idealYP.min.toFixed(1)}-${idealYP.max.toFixed(1)} 分</td><td style="text-align:center;">${anchors.dryEnd.t.toFixed(1)} 分</td><td style="text-align:center;">${check(anchors.dryEnd.t, idealYP, 0.2)}</td></tr>
+                                    <tr><td style="padding:2px 6px;">💥 一爆時點</td><td style="text-align:center;">${idealFC.min.toFixed(1)}-${idealFC.max.toFixed(1)} 分</td><td style="text-align:center;">${anchors.firstCrack.t.toFixed(1)} 分</td><td style="text-align:center;">${check(anchors.firstCrack.t, idealFC, 0.3)}</td></tr>
+                                    <tr style="background:#fafafa;"><td style="padding:2px 6px;">📈 Drying RoR (°C/min)</td><td style="text-align:center;">${idealRoRDry.sweet}</td><td style="text-align:center;">${rorDry}</td><td style="text-align:center;">${check(rorDry, idealRoRDry, 1)}</td></tr>
+                                    <tr style="background:#fafafa;"><td style="padding:2px 6px;">📈 Maillard RoR</td><td style="text-align:center;">${idealRoRMai.sweet}</td><td style="text-align:center;">${rorMai}</td><td style="text-align:center;">${check(rorMai, idealRoRMai, 1)}</td></tr>
+                                    <tr style="background:#fafafa;"><td style="padding:2px 6px;">📉 Development RoR</td><td style="text-align:center;">${idealRoRDev.sweet}</td><td style="text-align:center;">${rorDev}</td><td style="text-align:center;">${check(rorDev, idealRoRDev, 0.5)}</td></tr>
+                                </tbody>
+                            </table>
+                            <div style="margin-top:8px; padding:6px 8px; background:#fff; border-radius:4px; font-size:11px; line-height:1.6;">
+                                ${flickWarning}
+                            </div>
+                            <p style="font-size: 9px; color: #888; margin: 6px 0 0 0;">💡 小機/極淺焙可適度偏離；太偏離可能 baked（RoR 太平）或 scorching（RoR 太陡）。</p>
+                        </div>
+
                         <div style="margin-top: 10px; padding-top: 8px; border-top: 1px solid #c5cae9;">
                             <b style="color: #3e2723;">🎛️ 火力/風門操作表（烘豆時照這張開）</b>
                             <table style="width:100%; margin-top:4px; font-size:11px; border-collapse: collapse;">
