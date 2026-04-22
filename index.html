@@ -1419,6 +1419,25 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 }
             }
 
+            // --- Stage: MachineSize (機器絕對尺寸：熱質量基線) ---
+            // baseline 假設 5-15kg 商用機，家用 1-3kg 需要大幅降低入豆溫
+            function _rs_stageMachineSize(s) {
+                const kg = parseFloat(s.cfg.machineKg);
+                if (!kg || isNaN(kg) || kg <= 0) return;
+                if (kg < 0.5) {
+                    _rs_adj(s, 'MachineSize', 'charge', -10, `超小型機 ${kg}kg（氣流/熱風）：熱質量極小，入豆溫 -10°C 防瞬熱`);
+                } else if (kg < 1.5) {
+                    _rs_adj(s, 'MachineSize', 'charge', -7, `小型家用機 ${kg}kg（Hottop/Bullet 級）：熱質量小，入豆溫 -7°C`);
+                } else if (kg < 3) {
+                    _rs_adj(s, 'MachineSize', 'charge', -4, `中小型機 ${kg}kg：入豆溫 -4°C 補小機特性`);
+                } else if (kg < 5) {
+                    _rs_adj(s, 'MachineSize', 'charge', -2, `小商用機 ${kg}kg：入豆溫 -2°C`);
+                } else if (kg > 15) {
+                    _rs_adj(s, 'MachineSize', 'charge', +3, `大型商用機 ${kg}kg：熱質量巨大、入豆溫 +3°C 補蓄熱`);
+                }
+                // 5-15kg 為基準（Probat/Diedrich L5-L12），不調整
+            }
+
             // --- Stage: MachineLoad (裝填率 = 豆重/機器容量，比絕對豆重更關鍵) ---
             function _rs_stageMachineLoad(s) {
                 const g = parseFloat(s.cfg.batchG);
@@ -1483,6 +1502,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 _rs_stageVariety(s);
                 _rs_stageProcessing(s);
                 _rs_stageAltitude(s);
+                _rs_stageMachineSize(s);
                 _rs_stageMachineLoad(s);
                 _rs_stageAmbient(s);
                 _rs_stageDensity(s);
