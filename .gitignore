@@ -1,0 +1,16 @@
+# OS / Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Scratch
+*.log
+*.tmp
+_*.py
+_*.js
+_scratch_*
+
+# Secrets (保險起見 — 雖然目前沒用到)
+.env
+*.key
