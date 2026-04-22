@@ -1419,12 +1419,37 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 }
             }
 
-            // --- Stage: BatchSize (豆重：熱質量效應) ---
-            function _rs_stageBatch(s) {
+            // --- Stage: MachineLoad (裝填率 = 豆重/機器容量，比絕對豆重更關鍵) ---
+            function _rs_stageMachineLoad(s) {
                 const g = parseFloat(s.cfg.batchG);
+                const kg = parseFloat(s.cfg.machineKg);
                 if (!g || isNaN(g)) return;
-                if (g >= 400) _rs_adj(s, 'Batch', 'charge', +3, `大批量 ${g}g：熱質量高，入豆溫 +3°C 補蓄熱`);
-                else if (g <= 150) _rs_adj(s, 'Batch', 'charge', -3, `小批量 ${g}g：熱質量低，入豆溫 -3°C 避免瞬間過熱`);
+
+                // 若填了機器容量 → 用裝填率（更精準）
+                if (kg && !isNaN(kg) && kg > 0) {
+                    const capacityG = kg * 1000;
+                    const ratio = g / capacityG;
+                    const pct = Math.round(ratio * 100);
+                    if (ratio > 0.95) {
+                        _rs_adj(s, 'MachineLoad', 'charge', +7, `⚠️ 超滿載 ${pct}% (${g}g/${kg}kg 機)：熱質量壓力極大、建議降批量；若堅持 charge +7°C、Drying 延長 30s`);
+                        _rs_adj(s, 'MachineLoad', 'drying', +30, '超滿載需延長 Drying 讓熱穿透');
+                    } else if (ratio > 0.80) {
+                        _rs_adj(s, 'MachineLoad', 'charge', +5, `滿載 ${pct}% (${g}g/${kg}kg 機)：熱質量壓力大、入豆溫 +5°C`);
+                    } else if (ratio >= 0.50) {
+                        // 50-80% 理想區間，不調整
+                    } else if (ratio >= 0.30) {
+                        _rs_adj(s, 'MachineLoad', 'charge', -2, `偏低載 ${pct}% (${g}g/${kg}kg 機)：機器熱質量相對大、入豆溫 -2°C`);
+                    } else if (ratio >= 0.15) {
+                        _rs_adj(s, 'MachineLoad', 'charge', -5, `低載 ${pct}% (${g}g/${kg}kg 機)：易過熱、入豆溫 -5°C、RoR 注意後段會掉`);
+                        _rs_adj(s, 'MachineLoad', 'drying', -15, '低載 Drying 縮短 15s 避免 baked');
+                    } else {
+                        _rs_adj(s, 'MachineLoad', 'charge', -8, `⚠️ 極低載 ${pct}% (${g}g/${kg}kg 機)：強烈建議換小機或加批量；若堅持 charge -8°C`);
+                    }
+                } else {
+                    // 沒填機器容量 → fallback 絕對豆重判斷（精度較低）
+                    if (g >= 400) _rs_adj(s, 'Batch', 'charge', +3, `大批量 ${g}g：熱質量高，入豆溫 +3°C 補蓄熱（填機器容量可更精準）`);
+                    else if (g <= 150) _rs_adj(s, 'Batch', 'charge', -3, `小批量 ${g}g：熱質量低，入豆溫 -3°C（填機器容量可更精準）`);
+                }
             }
             // --- Stage: Ambient (室溫：散熱效應) ---
             function _rs_stageAmbient(s) {
@@ -1458,7 +1483,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 _rs_stageVariety(s);
                 _rs_stageProcessing(s);
                 _rs_stageAltitude(s);
-                _rs_stageBatch(s);
+                _rs_stageMachineLoad(s);
                 _rs_stageAmbient(s);
                 _rs_stageDensity(s);
                 _rs_stageMoisture(s);
@@ -2893,10 +2918,11 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                     return;
                 }
                 const ctx = _aiBuildLocalCtx();
+                // 機器容量從 localStorage 還原（你的烘豆機不會變）
+                const savedMachineKg = localStorage.getItem('COFFEE_ROASTER_MACHINE_KG') || '';
                 _roastPlanState = {
                     ctx,
-                    // 實測參數（選填）— 填了會即時影響目標參數與錨點
-                    measurements: { batchG: '', ambientC: '', densityGL: '', moisturePct: '' },
+                    measurements: { batchG: '', ambientC: '', densityGL: '', moisturePct: '', machineKg: savedMachineKg },
                     profile: null,
                     anchors: null
                 };
@@ -2920,6 +2946,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 const fullCfg = {
                     ...ctx,
                     batchG: measurements.batchG,
+                    machineKg: measurements.machineKg,
                     ambientC: measurements.ambientC,
                     densityGL: densityUsed,
                     moisturePct: moistureUsed
@@ -2939,6 +2966,10 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             window.updateRoastMeasurement = function(field, value) {
                 if (!_roastPlanState) return;
                 _roastPlanState.measurements[field] = value;
+                // 機器容量持久化（只填一次就記住）
+                if (field === 'machineKg' && value !== '') {
+                    localStorage.setItem('COFFEE_ROASTER_MACHINE_KG', value);
+                }
                 _rpRecomputeProfile();
                 // 只重繪 dynamic 區塊，保留 input 焦點（避免打數字時每鍵重建 DOM 搶走游標）
                 _rpRenderDynamic();
@@ -2986,11 +3017,22 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
 
                     <!-- 📏 實測參數（static，不隨 input 改動重繪，避免打字時失焦）-->
                     <div style="padding: 12px 14px; background: #f3e5f5; border: 1px solid #ce93d8; border-radius: 10px; margin-bottom: 14px;">
-                        <div style="font-size: 12px; font-weight: bold; color: #6a1b9a; margin-bottom: 8px;">📏 實測參數 <span style="font-size:10px; color:#888; font-weight:normal;">（密度/含水率未填會用豆子特性估算；室溫可自動帶入）</span></div>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 11px;">
-                            <label style="display:flex; flex-direction:column; gap:3px;"><span style="color:#555;">⚖️ 豆重 (g) <span style="color:#c62828; font-weight:bold;">* 必填</span></span>
+                        <div style="font-size: 12px; font-weight: bold; color: #6a1b9a; margin-bottom: 8px;">📏 實測參數 <span style="font-size:10px; color:#888; font-weight:normal;">（機器容量會自動記住下次帶入）</span></div>
+
+                        <!-- 機器 + 豆重（同一列、一起判裝填率）-->
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 11px; margin-bottom: 8px; padding: 8px; background: #fff; border-radius: 6px; border: 1px dashed #9c27b0;">
+                            <label style="display:flex; flex-direction:column; gap:3px;">
+                                <span style="color:#555;">🔥 烘豆機容量 (kg) <span style="color:#888;">記住一次就好</span></span>
+                                <input type="number" step="0.5" value="${m.machineKg}" placeholder="例 1 / 3 / 12" oninput="updateRoastMeasurement('machineKg', this.value)" style="padding: 5px; border-radius: 5px; border: 1px solid #ccc;">
+                            </label>
+                            <label style="display:flex; flex-direction:column; gap:3px;">
+                                <span style="color:#555;">⚖️ 本次豆重 (g) <span style="color:#c62828; font-weight:bold;">* 必填</span></span>
                                 <input type="number" value="${m.batchG}" placeholder="例 250（沒填曲線不算）" oninput="updateRoastMeasurement('batchG', this.value)" style="padding: 5px; border-radius: 5px; border: ${m.batchG === '' ? '2px solid #ef5350' : '1px solid #ccc'}; background: ${m.batchG === '' ? '#ffebee' : '#fff'};" autofocus>
                             </label>
+                        </div>
+
+                        <!-- 其他三項 -->
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 11px;">
                             <label style="display:flex; flex-direction:column; gap:3px;">
                                 <span style="color:#555; display:flex; align-items:center; gap:4px;">🌡️ 室溫 (°C)
                                     <button id="ambient-fetch-btn" type="button" onclick="fetchAmbientTemp()" style="font-size:9px; padding:1px 6px; background:#1976d2; color:#fff; border:none; border-radius:4px; cursor:pointer;">📍 自動帶入</button>
@@ -3003,6 +3045,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                             <label style="display:flex; flex-direction:column; gap:3px;"><span style="color:#555;">💧 含水率 (%) <span style="color:#888;">留空→估算</span></span>
                                 <input type="number" step="0.1" value="${m.moisturePct}" placeholder="自動估算 ${_rpDefaultMoisture(ctx)} %" oninput="updateRoastMeasurement('moisturePct', this.value)" style="padding: 5px; border-radius: 5px; border: 1px solid #ccc;">
                             </label>
+                            <div style="grid-column: span 1;"></div>
                         </div>
                     </div>
 
