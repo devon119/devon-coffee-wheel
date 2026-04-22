@@ -3200,20 +3200,52 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                     console.warn('Chart image embed failed:', e);
                 }
 
-                // === 產生 + 下載 ===
+                // === 產生 + 透過「另存新檔」對話框讓使用者決定 ===
                 const buf = await wb.xlsx.writeBuffer();
-                const blob = new Blob([buf], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-                const url = URL.createObjectURL(blob);
                 const safeName = `${ctx.country}_${ctx.variety}_${ctx.roastLabel}`.replace(/[\\/:*?"<>|]/g, '');
-                const link = document.createElement('a');
-                link.href = url;
-                link.download = `烘豆計畫_${safeName}_${dateStr}.xlsx`;
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                setTimeout(() => URL.revokeObjectURL(url), 1000);
+                const suggestedName = `烘豆計畫_${safeName}_${dateStr}.xlsx`;
 
-                if (btn) { btn.innerText = '✅ 已匯出！'; setTimeout(() => { btn.innerText = origLabel; btn.disabled = false; }, 1800); }
+                const xlsxMime = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+                let result = 'fallback';
+                if (window.showSaveFilePicker) {
+                    try {
+                        const handle = await window.showSaveFilePicker({
+                            suggestedName,
+                            types: [{ description: 'Excel 活頁簿 (.xlsx)', accept: { [xlsxMime]: ['.xlsx'] } }]
+                        });
+                        const writable = await handle.createWritable();
+                        await writable.write(buf);
+                        await writable.close();
+                        result = 'saved';
+                    } catch (err) {
+                        if (err && err.name === 'AbortError') {
+                            result = 'cancelled';
+                        } else {
+                            console.warn('showSaveFilePicker 失敗，改走傳統下載', err);
+                            result = 'fallback';
+                        }
+                    }
+                }
+
+                if (result === 'fallback') {
+                    // 瀏覽器不支援 File System Access API（Firefox/Safari/手機）→ 傳統下載
+                    const blob = new Blob([buf], { type: xlsxMime });
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = suggestedName;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    setTimeout(() => URL.revokeObjectURL(url), 1000);
+                    result = 'downloaded';
+                }
+
+                if (btn) {
+                    const msg = result === 'saved' ? '✅ 已另存' : result === 'cancelled' ? '取消未存' : '✅ 已下載';
+                    btn.innerText = msg;
+                    setTimeout(() => { btn.innerText = origLabel; btn.disabled = false; }, 1800);
+                }
             };
 
             // 📥 匯出 CSV（Excel 打得開）— 30 秒一格、預計填好、實際空白給使用者手動填
