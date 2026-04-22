@@ -98,6 +98,32 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
         #btn-fullscreen { right: 20px; top: 20px; background: #37474f; padding: 12px 16px; font-size: 16px; }
         :fullscreen #btn-fullscreen { background: #c62828; }
 
+        /* 📊 XLSX 預覽表格樣式 */
+        .xlsx-preview-table { width: 100%; border-collapse: collapse; font-size: 11px; margin-bottom: 10px; }
+        .xlsx-preview-table th, .xlsx-preview-table td { border: 1px solid #999; padding: 4px 6px; text-align: center; min-width: 38px; }
+        .xlsx-preview-table th.label { text-align: left; background: #5d4037; color: #fff; }
+        .xlsx-preview-table th.time { background: #6d4c41; color: #fff; font-weight: bold; }
+        .xlsx-preview-table td.label { text-align: left; font-weight: bold; background: #efebe9; color: #3e2723; }
+        .xlsx-preview-table td.plan-bt { background: #fff3e0; }
+        .xlsx-preview-table td.plan-fire { background: #ffebee; }
+        .xlsx-preview-table td.plan-damper { background: #e3f2fd; }
+        .xlsx-preview-table td.actual { background: #fff; }
+        .xlsx-preview-table td[contenteditable="true"]:focus { outline: 2px solid #4caf50; background: #e8f5e9; }
+        .xlsx-preview-summary { padding: 10px 14px; background: #efebe9; border-left: 4px solid #5d4037; margin-bottom: 10px; font-size: 12px; line-height: 1.7; }
+        .xlsx-preview-separator { font-style: italic; color: #888; text-align: center; padding: 8px; background: #fafafa; border: 1px dashed #ccc; margin: 8px 0; font-size: 11px; }
+
+        /* 🖨️ 列印時：只印預覽模態的內容 */
+        @media print {
+            body * { visibility: hidden; }
+            #xlsx-preview-modal, #xlsx-preview-modal * { visibility: visible; }
+            #xlsx-preview-modal { position: absolute; left: 0; top: 0; background: #fff !important; padding: 0 !important; inset: auto !important; z-index: 0 !important; }
+            #xlsx-preview-modal > div { box-shadow: none !important; border-radius: 0 !important; padding: 0 !important; margin: 0 !important; max-width: none !important; }
+            .no-print { display: none !important; }
+            .xlsx-preview-table { font-size: 9px; page-break-inside: auto; }
+            .xlsx-preview-table td, .xlsx-preview-table th { padding: 2px 3px; }
+            @page { size: landscape; margin: 1cm; }
+        }
+
         .overlay-panel {
             position: fixed; top: 80px; left: 20px; width: 540px; max-width: 95vw;
             max-height: 85vh; background: var(--panel-bg); border-radius: 24px;
@@ -446,6 +472,22 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
 
     <div class="ui-controls">
         <button class="btn-action" onclick="resetView()" aria-label="全域清空並還原視圖">🔄 全域清空還原</button>
+    </div>
+
+    <!-- 📊 XLSX 預覽 Modal（Excel 樣的可編輯表格）-->
+    <div id="xlsx-preview-modal" style="display:none; position:fixed; inset:0; z-index:2100; background:rgba(0,0,0,0.75); backdrop-filter: blur(4px); overflow-y: auto; padding: 15px; box-sizing: border-box;">
+        <div style="max-width: 1400px; margin: 10px auto; background:#fff; border-radius: 16px; padding: 20px; box-shadow: 0 20px 80px rgba(0,0,0,0.5);">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 2px solid #5d4037;" class="no-print">
+                <span style="font-size: 16px; font-weight: bold; color: #3e2723;">📊 烘豆計畫表 <span style="font-size:11px; color:#888; font-weight:normal;">（可直接在表格點擊 / 打字編輯「實際」列、之後列印或存 XLSX）</span></span>
+                <button onclick="closeXLSXPreview()" style="background:none; border:none; font-size: 20px; color: #888; cursor:pointer;">✕</button>
+            </div>
+            <div id="xlsx-preview-content"></div>
+            <div class="no-print" style="display: flex; gap: 8px; margin-top: 14px; padding-top: 10px; border-top: 1px solid #ddd;">
+                <button onclick="window.print()" style="flex: 1; padding: 10px; background: #607d8b; color: #fff; border: none; border-radius: 8px; font-size: 12px; cursor: pointer; font-weight: bold;">🖨️ 列印本頁</button>
+                <button onclick="downloadXLSXFromPreview()" style="flex: 1; padding: 10px; background: #2e7d32; color: #fff; border: none; border-radius: 8px; font-size: 12px; cursor: pointer; font-weight: bold;">💾 存成 XLSX</button>
+                <button onclick="closeXLSXPreview()" style="flex: 1; padding: 10px; background: #eee; color: #555; border: none; border-radius: 8px; font-size: 12px; cursor: pointer;">關閉</button>
+            </div>
+        </div>
     </div>
 
     <!-- 📋 烘焙計畫 Modal -->
@@ -3008,6 +3050,123 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 _roastPlanState = null;
             };
 
+            // 📊 打開「計畫表預覽」— 可編輯、可列印、可存 XLSX
+            window.openXLSXPreview = function() {
+                if (!_roastPlanState) return;
+                const { anchors, customEvents, ctx, profile, measurements } = _roastPlanState;
+                const dropTime = anchors.drop.t;
+                const step = 0.5;
+                const times = [];
+                for (let t = 0; t <= dropTime + 0.01; t += step) times.push(+t.toFixed(2));
+
+                const allPts = [anchors.charge, anchors.turnPoint, anchors.dryEnd, anchors.firstCrack, anchors.drop]
+                    .slice().sort((a, b) => a.t - b.t);
+                const allFireEvents = [
+                    { t: anchors.charge.t,     fire: anchors.charge.fire,     damper: anchors.charge.damper },
+                    { t: anchors.turnPoint.t,  fire: anchors.turnPoint.fire,  damper: anchors.turnPoint.damper },
+                    { t: anchors.dryEnd.t,     fire: anchors.dryEnd.fire,     damper: anchors.dryEnd.damper },
+                    { t: anchors.firstCrack.t, fire: anchors.firstCrack.fire, damper: anchors.firstCrack.damper },
+                    { t: anchors.drop.t,       fire: anchors.drop.fire,       damper: anchors.drop.damper },
+                    ...(customEvents || []).map(ev => ({ t: ev.t, fire: ev.fire, damper: ev.damper }))
+                ].sort((a, b) => a.t - b.t);
+
+                function bt(t) {
+                    if (t <= allPts[0].t) return Math.round(allPts[0].temp);
+                    if (t >= allPts[allPts.length - 1].t) return Math.round(allPts[allPts.length - 1].temp);
+                    for (let i = 0; i < allPts.length - 1; i++) {
+                        if (t >= allPts[i].t && t <= allPts[i + 1].t) {
+                            const r = (t - allPts[i].t) / (allPts[i + 1].t - allPts[i].t || 1);
+                            return Math.round(allPts[i].temp + r * (allPts[i + 1].temp - allPts[i].temp));
+                        }
+                    }
+                    return '';
+                }
+                function fireDamper(t) {
+                    let f = null, d = null;
+                    for (const ev of allFireEvents) {
+                        if (ev.t <= t + 0.01) { if (typeof ev.fire === 'number') f = ev.fire; if (typeof ev.damper === 'number') d = ev.damper; }
+                    }
+                    return { fire: f, damper: d };
+                }
+                function fmtT(min) {
+                    const m = Math.floor(min), s = Math.round((min - m) * 60);
+                    return `${m}:${String(s).padStart(2, '0')}`;
+                }
+                const esc = (v) => String(v === null || v === undefined ? '' : v).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+                const now = new Date();
+                const dateStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+                const densUsed = measurements.densityGL || (_roastPlanState.defaultsUsed && _roastPlanState.defaultsUsed.densityValue) || '-';
+                const moistUsed = measurements.moisturePct || (_roastPlanState.defaultsUsed && _roastPlanState.defaultsUsed.moistureValue) || '-';
+
+                const timeHeaders = times.map(t => `<th class="time">${fmtT(t)}</th>`).join('');
+                const planBTCells = times.map(t => `<td class="plan-bt">${bt(t)}</td>`).join('');
+                const planFireCells = times.map(t => { const x = fireDamper(t); return `<td class="plan-fire">${x.fire !== null ? x.fire : ''}</td>`; }).join('');
+                const planDamperCells = times.map(t => { const x = fireDamper(t); return `<td class="plan-damper">${x.damper !== null ? x.damper : ''}</td>`; }).join('');
+                const emptyEditable = times.map(() => `<td class="actual" contenteditable="true"></td>`).join('');
+
+                let chartImgHtml = '';
+                try {
+                    if (_roastChart && typeof _roastChart.getDataURL === 'function') {
+                        const url = _roastChart.getDataURL({ type: 'png', pixelRatio: 2, backgroundColor: '#ffffff' });
+                        chartImgHtml = `<div style="margin-top: 16px; padding-top: 10px; border-top: 2px solid #5d4037;"><div style="font-weight: bold; color: #3e2723; margin-bottom: 6px;">📈 預計烘焙曲線（BT + RoR + 自訂調整點）</div><img src="${url}" style="max-width: 100%; border: 1px solid #ccc; border-radius: 4px;"></div>`;
+                    }
+                } catch (e) {}
+
+                const html = `
+                    <div class="xlsx-preview-summary">
+                        <div style="font-size: 15px; font-weight: bold; color: #3e2723;">☕ 烘豆計畫表 · ${esc(ctx.country)} · ${esc(ctx.variety)} · ${esc(ctx.roastLabel)}</div>
+                        <div>📅 ${dateStr} · 🔥 機器 ${esc(measurements.machineKg || '-')} kg · ⚖️ 豆重 ${esc(measurements.batchG)} g · 🌡️ 室溫 ${esc(measurements.ambientC || '-')}°C</div>
+                        <div>⚖️ 密度 ${esc(densUsed)} g/L · 💧 含水 ${esc(moistUsed)}%</div>
+                        <div>🎯 目標：入豆 ${profile.chargeTemp}°C · BT 終溫 ${profile.btLow}-${profile.btHigh}°C · Dev ${profile.devLow}-${profile.devHigh}% · 總時 ${profile.totalMinLow}-${profile.totalMinHigh} 分</div>
+                    </div>
+                    <div style="overflow-x: auto;">
+                        <table class="xlsx-preview-table">
+                            <thead>
+                                <tr><th class="label">時間 (分:秒)</th>${timeHeaders}</tr>
+                            </thead>
+                            <tbody>
+                                <tr><td class="label">預計 BT (°C)</td>${planBTCells}</tr>
+                                <tr><td class="label">預計 🔥 火力 (%)</td>${planFireCells}</tr>
+                                <tr><td class="label">預計 💨 風門 (%)</td>${planDamperCells}</tr>
+                                <tr><td colspan="${times.length + 1}" class="xlsx-preview-separator">── 以下點擊格子可直接打字，烘豆當下記錄實際值 ──</td></tr>
+                                <tr><td class="label">實際 BT (°C)</td>${emptyEditable}</tr>
+                                <tr><td class="label">實際 🔥 火力 (%)</td>${emptyEditable}</tr>
+                                <tr><td class="label">實際 💨 風門 (%)</td>${emptyEditable}</tr>
+                                <tr><td class="label">實際 RoR (°C/min)</td>${emptyEditable}</tr>
+                                <tr><td class="label">備註 / 現象</td>${emptyEditable}</tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    ${chartImgHtml}
+                `;
+
+                document.getElementById('xlsx-preview-content').innerHTML = html;
+                document.getElementById('xlsx-preview-modal').style.display = 'block';
+            };
+
+            window.closeXLSXPreview = function() {
+                document.getElementById('xlsx-preview-modal').style.display = 'none';
+            };
+
+            window.downloadXLSXFromPreview = async function() {
+                // 把使用者在預覽中打過的「實際值」收集起來、一併寫進 XLSX
+                const editedActuals = {};
+                const rows = document.querySelectorAll('#xlsx-preview-content tbody tr');
+                const actualLabels = ['實際 BT (°C)', '實際 🔥 火力 (%)', '實際 💨 風門 (%)', '實際 RoR (°C/min)', '備註 / 現象'];
+                rows.forEach(r => {
+                    const labelCell = r.querySelector('td.label');
+                    if (!labelCell) return;
+                    const lbl = labelCell.innerText.trim();
+                    if (actualLabels.includes(lbl)) {
+                        const values = Array.from(r.querySelectorAll('td[contenteditable]')).map(td => td.innerText.trim());
+                        editedActuals[lbl] = values;
+                    }
+                });
+                _roastPlanState._editedActuals = editedActuals;
+                await exportRoastPlanXLSX();
+            };
+
             // 📊 匯出真正的 XLSX（格線 + 顏色 + 嵌圖）— lazy-load ExcelJS
             async function _loadExcelJS() {
                 if (window.ExcelJS) return window.ExcelJS;
@@ -3157,16 +3316,22 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 sepRow.getCell(1).alignment = { horizontal: 'center' };
                 sepRow.getCell(1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFFAFAFA' } };
 
-                // === 實際行（空白、有格線）===
-                const actualBtRow = ws.addRow(['實際 BT (°C)', ...times.map(() => '')]);
+                // === 實際行（有格線；若使用者已在預覽編輯過就帶進來，否則空白）===
+                const edited = _roastPlanState._editedActuals || {};
+                function actualVals(label) {
+                    const vals = edited[label];
+                    if (!vals) return times.map(() => '');
+                    return times.map((_, i) => vals[i] || '');
+                }
+                const actualBtRow = ws.addRow(['實際 BT (°C)', ...actualVals('實際 BT (°C)')]);
                 styleRow(actualBtRow, 'FFFFFFFF');
-                const actualFireRow = ws.addRow(['實際 🔥 火力 (%)', ...times.map(() => '')]);
+                const actualFireRow = ws.addRow(['實際 🔥 火力 (%)', ...actualVals('實際 🔥 火力 (%)')]);
                 styleRow(actualFireRow, 'FFFFFFFF');
-                const actualDamperRow = ws.addRow(['實際 💨 風門 (%)', ...times.map(() => '')]);
+                const actualDamperRow = ws.addRow(['實際 💨 風門 (%)', ...actualVals('實際 💨 風門 (%)')]);
                 styleRow(actualDamperRow, 'FFFFFFFF');
-                const actualRorRow = ws.addRow(['實際 RoR (°C/min)', ...times.map(() => '')]);
+                const actualRorRow = ws.addRow(['實際 RoR (°C/min)', ...actualVals('實際 RoR (°C/min)')]);
                 styleRow(actualRorRow, 'FFFFFFFF');
-                const notesRow = ws.addRow(['備註 / 現象', ...times.map(() => '')]);
+                const notesRow = ws.addRow(['備註 / 現象', ...actualVals('備註 / 現象')]);
                 styleRow(notesRow, 'FFFFFFFF');
 
                 // === 欄寬 ===
@@ -3430,7 +3595,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
 
                     <div style="display: flex; gap: 8px; margin-top: 16px;">
                         <button onclick="resetRoastPlanAnchors()" style="flex: 1; padding: 10px; background: #eee; color: #555; border: none; border-radius: 8px; font-size: 12px; cursor: pointer;">🔄 重設錨點</button>
-                        <button onclick="exportRoastPlanXLSX()" style="flex: 2; padding: 10px; background: #2e7d32; color: #fff; border: none; border-radius: 8px; font-size: 12px; font-weight: bold; cursor: pointer;">📊 匯出 Excel（含曲線圖）</button>
+                        <button onclick="openXLSXPreview()" style="flex: 2; padding: 10px; background: #2e7d32; color: #fff; border: none; border-radius: 8px; font-size: 12px; font-weight: bold; cursor: pointer;">📊 打開計畫表（可編輯 / 列印 / 存檔）</button>
                         <button onclick="closeRoastPlan()" style="flex: 1; padding: 10px; background: #5d4037; color: #fff; border: none; border-radius: 8px; font-size: 12px; cursor: pointer;">關閉</button>
                     </div>
                 `;
