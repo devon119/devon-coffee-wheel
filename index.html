@@ -2818,6 +2818,75 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
 
             function _rpEscape(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
 
+            // 依豆子特性估算預設密度（g/L）
+            function _rpDefaultDensity(ctx) {
+                let base = 700;
+                if (ctx.alt === 'high') base += 35;
+                else if (ctx.alt === 'low') base -= 40;
+                // 大象豆顆粒大、體積鬆散，密度略低
+                if (['pacamara', 'maragogype'].includes(ctx.varietyCode)) base -= 30;
+                // 瑰夏/SL28 等高地品種通常較緊實
+                if (['geisha', 'sl28', 'wush_wush'].includes(ctx.varietyCode)) base += 15;
+                // 印尼系豆質較鬆
+                if (['mandheling', 'java'].includes(ctx.varietyCode)) base -= 20;
+                // 日曬果肉附著過、密度略高
+                if (ctx.procCode === 'natural' || ctx.procCode === 'anaerobic_nat') base += 10;
+                // 印尼濕剝豆鬆散
+                if (ctx.procCode === 'wet_hulled') base -= 25;
+                return Math.round(base);
+            }
+
+            // 依豆子特性估算預設含水率（%）
+            function _rpDefaultMoisture(ctx) {
+                let base = 10.5;
+                if (ctx.procCode === 'washed') base = 10.3;
+                if (ctx.procCode === 'natural' || ctx.procCode === 'anaerobic_nat') base = 11.0;
+                if (ctx.procCode === 'honey_light' || ctx.procCode === 'honey_dark') base = 10.7;
+                if (ctx.procCode === 'wet_hulled') base = 12.5;  // 印尼濕剝特別濕
+                if (ctx.procCode === 'anaerobic_wash') base = 10.8;
+                return +base.toFixed(1);
+            }
+
+            // 從 open-meteo 免費天氣 API 取得目前室溫（需 HTTPS + geolocation 權限）
+            async function _rpFetchAmbientFromWeather() {
+                if (!navigator.geolocation) throw new Error('此瀏覽器不支援定位');
+                const pos = await new Promise((resolve, reject) => {
+                    navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 8000, maximumAge: 600000 });
+                });
+                const { latitude, longitude } = pos.coords;
+                const ctrl = new AbortController();
+                const timer = setTimeout(() => ctrl.abort(), 8000);
+                const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude.toFixed(2)}&longitude=${longitude.toFixed(2)}&current=temperature_2m`;
+                try {
+                    const r = await fetch(url, { signal: ctrl.signal });
+                    clearTimeout(timer);
+                    if (!r.ok) throw new Error('天氣 API ' + r.status);
+                    const data = await r.json();
+                    const t = data.current?.temperature_2m;
+                    if (typeof t !== 'number') throw new Error('天氣 API 回應格式異常');
+                    return Math.round(t);
+                } catch (err) {
+                    clearTimeout(timer);
+                    throw err;
+                }
+            }
+
+            window.fetchAmbientTemp = async function() {
+                const btn = document.getElementById('ambient-fetch-btn');
+                const input = document.querySelectorAll('#roast-plan-content input[oninput*="ambientC"]')[0];
+                if (!input) return;
+                if (btn) { btn.disabled = true; btn.innerText = '定位中…'; }
+                try {
+                    const t = await _rpFetchAmbientFromWeather();
+                    input.value = t;
+                    updateRoastMeasurement('ambientC', String(t));
+                    if (btn) { btn.innerText = `✓ ${t}°C`; btn.style.background = '#4caf50'; setTimeout(() => { btn.innerText = '📍 自動帶入'; btn.style.background = ''; btn.disabled = false; }, 1800); }
+                } catch (err) {
+                    if (btn) { btn.innerText = '取得失敗'; btn.style.background = '#c62828'; setTimeout(() => { btn.innerText = '📍 自動帶入'; btn.style.background = ''; btn.disabled = false; }, 2000); }
+                    console.warn('Weather fetch failed:', err);
+                }
+            };
+
             window.openRoastPlan = function() {
                 if (document.getElementById('sel-country').value === 'none') {
                     alert('請先在上方配置豆種品項（至少選擇產區）');
@@ -2837,9 +2906,24 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             };
 
             // 依 ctx + measurements 重新跑演算法，並把錨點 reset 為新基準
+            // 密度/含水率沒填 → 使用依豆子特性推算的預設值
             function _rpRecomputeProfile() {
                 const { ctx, measurements } = _roastPlanState;
-                const fullCfg = { ...ctx, ...measurements };
+                const densityUsed = measurements.densityGL !== '' ? measurements.densityGL : _rpDefaultDensity(ctx);
+                const moistureUsed = measurements.moisturePct !== '' ? measurements.moisturePct : _rpDefaultMoisture(ctx);
+                _roastPlanState.defaultsUsed = {
+                    density: measurements.densityGL === '',
+                    moisture: measurements.moisturePct === '',
+                    densityValue: densityUsed,
+                    moistureValue: moistureUsed
+                };
+                const fullCfg = {
+                    ...ctx,
+                    batchG: measurements.batchG,
+                    ambientC: measurements.ambientC,
+                    densityGL: densityUsed,
+                    moisturePct: moistureUsed
+                };
                 const profile = computeRoastProfile(fullCfg);
                 const totalMin = (profile.totalMinLow + profile.totalMinHigh) / 2;
                 _roastPlanState.profile = profile;
@@ -2902,19 +2986,22 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
 
                     <!-- 📏 實測參數（static，不隨 input 改動重繪，避免打字時失焦）-->
                     <div style="padding: 12px 14px; background: #f3e5f5; border: 1px solid #ce93d8; border-radius: 10px; margin-bottom: 14px;">
-                        <div style="font-size: 12px; font-weight: bold; color: #6a1b9a; margin-bottom: 8px;">📏 實測參數 <span style="font-size:10px; color:#888; font-weight:normal;">（選填、填了立刻影響目標與曲線）</span></div>
+                        <div style="font-size: 12px; font-weight: bold; color: #6a1b9a; margin-bottom: 8px;">📏 實測參數 <span style="font-size:10px; color:#888; font-weight:normal;">（密度/含水率未填會用豆子特性估算；室溫可自動帶入）</span></div>
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 11px;">
-                            <label style="display:flex; flex-direction:column; gap:3px;"><span style="color:#555;">⚖️ 豆重 (g) <span style="color:#888;">典型 200-300</span></span>
-                                <input type="number" value="${m.batchG}" placeholder="例 250" oninput="updateRoastMeasurement('batchG', this.value)" style="padding: 5px; border-radius: 5px; border: 1px solid #ccc;">
+                            <label style="display:flex; flex-direction:column; gap:3px;"><span style="color:#555;">⚖️ 豆重 (g) <span style="color:#c62828; font-weight:bold;">* 必填</span></span>
+                                <input type="number" value="${m.batchG}" placeholder="例 250（沒填曲線不算）" oninput="updateRoastMeasurement('batchG', this.value)" style="padding: 5px; border-radius: 5px; border: ${m.batchG === '' ? '2px solid #ef5350' : '1px solid #ccc'}; background: ${m.batchG === '' ? '#ffebee' : '#fff'};" autofocus>
                             </label>
-                            <label style="display:flex; flex-direction:column; gap:3px;"><span style="color:#555;">🌡️ 室溫 (°C) <span style="color:#888;">典型 20-25</span></span>
-                                <input type="number" value="${m.ambientC}" placeholder="例 22" oninput="updateRoastMeasurement('ambientC', this.value)" style="padding: 5px; border-radius: 5px; border: 1px solid #ccc;">
+                            <label style="display:flex; flex-direction:column; gap:3px;">
+                                <span style="color:#555; display:flex; align-items:center; gap:4px;">🌡️ 室溫 (°C)
+                                    <button id="ambient-fetch-btn" type="button" onclick="fetchAmbientTemp()" style="font-size:9px; padding:1px 6px; background:#1976d2; color:#fff; border:none; border-radius:4px; cursor:pointer;">📍 自動帶入</button>
+                                </span>
+                                <input type="number" value="${m.ambientC}" placeholder="例 22（或按 📍 自動）" oninput="updateRoastMeasurement('ambientC', this.value)" style="padding: 5px; border-radius: 5px; border: 1px solid #ccc;">
                             </label>
-                            <label style="display:flex; flex-direction:column; gap:3px;"><span style="color:#555;">⚖️ 豆密度 (g/L) <span style="color:#888;">典型 650-800</span></span>
-                                <input type="number" value="${m.densityGL}" placeholder="例 720" oninput="updateRoastMeasurement('densityGL', this.value)" style="padding: 5px; border-radius: 5px; border: 1px solid #ccc;">
+                            <label style="display:flex; flex-direction:column; gap:3px;"><span style="color:#555;">⚖️ 豆密度 (g/L) <span style="color:#888;">留空→估算</span></span>
+                                <input type="number" value="${m.densityGL}" placeholder="自動估算 ${_rpDefaultDensity(ctx)} g/L" oninput="updateRoastMeasurement('densityGL', this.value)" style="padding: 5px; border-radius: 5px; border: 1px solid #ccc;">
                             </label>
-                            <label style="display:flex; flex-direction:column; gap:3px;"><span style="color:#555;">💧 含水率 (%) <span style="color:#888;">典型 10-12</span></span>
-                                <input type="number" step="0.1" value="${m.moisturePct}" placeholder="例 10.8" oninput="updateRoastMeasurement('moisturePct', this.value)" style="padding: 5px; border-radius: 5px; border: 1px solid #ccc;">
+                            <label style="display:flex; flex-direction:column; gap:3px;"><span style="color:#555;">💧 含水率 (%) <span style="color:#888;">留空→估算</span></span>
+                                <input type="number" step="0.1" value="${m.moisturePct}" placeholder="自動估算 ${_rpDefaultMoisture(ctx)} %" oninput="updateRoastMeasurement('moisturePct', this.value)" style="padding: 5px; border-radius: 5px; border: 1px solid #ccc;">
                             </label>
                         </div>
                     </div>
@@ -2935,15 +3022,39 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             // 動態區塊重繪（measurement 改變 / 錨點重設時呼叫）— 不碰 measurement inputs
             function _rpRenderDynamic() {
                 if (!_roastPlanState) return;
-                const { profile, anchors } = _roastPlanState;
+                const { profile, anchors, measurements, defaultsUsed } = _roastPlanState;
+                const hasBatch = measurements.batchG !== '' && !isNaN(parseFloat(measurements.batchG));
+
+                const block = document.getElementById('rp-dynamic-block');
+                if (!block) return;
+
+                // 豆重沒填 → 不畫曲線，只提醒
+                if (!hasBatch) {
+                    block.innerHTML = `
+                        <div style="padding: 20px; background: #ffebee; border: 2px dashed #ef5350; border-radius: 12px; text-align: center; color: #c62828;">
+                            <div style="font-size: 16px; font-weight: bold; margin-bottom: 6px;">⚠️ 請先填「豆重」</div>
+                            <div style="font-size: 12px; color: #555; line-height: 1.6;">豆重是熱質量的關鍵，影響入豆溫、Drying 時間與火力配置。<br>上方填入豆重後，目標參數與曲線才會顯示。</div>
+                        </div>
+                    `;
+                    return;
+                }
+
                 const reasons = profile.adjustments.length > 0
                     ? profile.adjustments.map(a => `<li><b>[${a.stage}]</b> ${_rpEscape(a.reason)}</li>`).join('')
                     : '<li>本次配置無特殊調整，使用焙度基線參數。</li>';
                 const warn = profile.base.warn ? `<div style="padding: 10px 12px; background: #ffebee; border: 1px solid #ef5350; border-radius: 8px; margin: 10px 0; font-size: 12px; color: #c62828;">⚠️ ${_rpEscape(profile.base.warn)}</div>` : '';
 
-                const block = document.getElementById('rp-dynamic-block');
-                if (!block) return;
+                // 估算預設值使用提示
+                let estHint = '';
+                if (defaultsUsed && (defaultsUsed.density || defaultsUsed.moisture)) {
+                    const parts = [];
+                    if (defaultsUsed.density) parts.push(`密度 <b>${defaultsUsed.densityValue} g/L</b>`);
+                    if (defaultsUsed.moisture) parts.push(`含水率 <b>${defaultsUsed.moistureValue}%</b>`);
+                    estHint = `<div style="padding: 6px 10px; background: #e1f5fe; border-left: 3px solid #0288d1; border-radius: 4px; font-size: 10px; color: #01579b; margin-bottom: 10px;">💡 未填欄位自動估算：${parts.join('、')}（依豆子特性推算）</div>`;
+                }
+
                 block.innerHTML = `
+                    ${estHint}
                     <!-- 目標參數 -->
                     <div style="padding: 14px; background: #fff8e1; border: 2px solid #ffca28; border-radius: 12px; margin-bottom: 14px;">
                         <div style="font-size: 13px; font-weight: bold; color: #e65100; margin-bottom: 10px;">🎯 演算法推算目標參數</div>
