@@ -1424,14 +1424,15 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             function _rs_stageMachineSize(s) {
                 const kg = parseFloat(s.cfg.machineKg);
                 if (!kg || isNaN(kg) || kg <= 0) return;
+                // 家用機熱質量普遍小，需更積極降溫；依實戰 Olomo/Bullet/Hottop 經驗調整
                 if (kg < 0.5) {
-                    _rs_adj(s, 'MachineSize', 'charge', -10, `超小型機 ${kg}kg（氣流/熱風）：熱質量極小，入豆溫 -10°C 防瞬熱`);
+                    _rs_adj(s, 'MachineSize', 'charge', -12, `超小型機 ${kg}kg（氣流/熱風）：熱質量極小，入豆溫 -12°C 防瞬熱`);
                 } else if (kg < 1.5) {
-                    _rs_adj(s, 'MachineSize', 'charge', -7, `小型家用機 ${kg}kg（Hottop/Bullet 級）：熱質量小，入豆溫 -7°C`);
+                    _rs_adj(s, 'MachineSize', 'charge', -10, `小型家用機 ${kg}kg（Bullet/Hottop 級）：熱質量小，入豆溫 -10°C`);
                 } else if (kg < 3) {
-                    _rs_adj(s, 'MachineSize', 'charge', -4, `中小型機 ${kg}kg：入豆溫 -4°C 補小機特性`);
+                    _rs_adj(s, 'MachineSize', 'charge', -8, `家用中小機 ${kg}kg（Olomo 1.5/Bullet 2kg 級）：入豆溫 -8°C`);
                 } else if (kg < 5) {
-                    _rs_adj(s, 'MachineSize', 'charge', -2, `小商用機 ${kg}kg：入豆溫 -2°C`);
+                    _rs_adj(s, 'MachineSize', 'charge', -4, `小商用機 ${kg}kg：入豆溫 -4°C`);
                 } else if (kg > 15) {
                     _rs_adj(s, 'MachineSize', 'charge', +3, `大型商用機 ${kg}kg：熱質量巨大、入豆溫 +3°C 補蓄熱`);
                 }
@@ -3126,7 +3127,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                     ${estHint}
                     <!-- 目標參數 -->
                     <div style="padding: 14px; background: #fff8e1; border: 2px solid #ffca28; border-radius: 12px; margin-bottom: 14px;">
-                        <div style="font-size: 13px; font-weight: bold; color: #e65100; margin-bottom: 10px;">🎯 演算法推算目標參數</div>
+                        <div style="font-size: 13px; font-weight: bold; color: #e65100; margin-bottom: 10px;">🎯 演算法推算目標參數 <span style="font-size:10px; font-weight:normal; color:#666;">（已套用你在上方選的：產區 × 品種 × 海拔 × 處理 × 焙度 + 豆重 + 機器 + 實測值）</span></div>
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 13px;">
                             <div>🔥 入豆溫：<b>${profile.chargeTemp}°C</b></div>
                             <div>🎯 BT 終溫：<b>${profile.btLow}-${profile.btHigh}°C</b></div>
@@ -3368,9 +3369,10 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 const idealTPTemp = { min: 85, max: 95, sweet: '85-95' };
                 // 💨 轉黃點 BT 溫度理想 148-155°C
                 const idealYPTemp = { min: 148, max: 158, sweet: '148-158' };
-                const idealRoRDry = { min: 14, max: 22, sweet: '14-18' };
-                const idealRoRMai = { min: 8, max: 14, sweet: '9-12' };
-                const idealRoRDev = { min: 3, max: 7, sweet: '4-6' };
+                // RoR 理想值（依你實際烘豆經驗調整，較 Rao 原書 value 偏高、符合小機/華人風格）
+                const idealRoRDry = { min: 15, max: 25, sweet: '15-25' };
+                const idealRoRMai = { min: 10, max: 15, sweet: '10-15' };
+                const idealRoRDev = { min: 8, max: 10, sweet: '8-10' };
 
                 const check = (actual, ideal, tol = 0) => {
                     if (actual >= ideal.min - tol && actual <= ideal.max + tol) return '<span style="color:#2e7d32;">✓</span>';
