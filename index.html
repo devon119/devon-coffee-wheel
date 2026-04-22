@@ -2982,7 +2982,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 _roastPlanState.anchors = {
                     //          時間         溫度                                            火力%                            風門%
                     charge:     { t: 0,              temp: profile.chargeTemp,                   fire: existingFire ? existingFire.charge.fire     : 90, damper: existingFire ? existingFire.charge.damper     : 40 },
-                    turnPoint:  { t: 1.5,            temp: 95,                                   fire: existingFire ? existingFire.turnPoint.fire  : 65, damper: existingFire ? existingFire.turnPoint.damper  : 50 },
+                    turnPoint:  { t: 1.5,            temp: 90,                                   fire: existingFire ? existingFire.turnPoint.fire  : 65, damper: existingFire ? existingFire.turnPoint.damper  : 50 },
                     dryEnd:     { t: totalMin * 0.5, temp: 150,                                  fire: existingFire ? existingFire.dryEnd.fire     : 50, damper: existingFire ? existingFire.dryEnd.damper     : 70 },
                     firstCrack: { t: totalMin * 0.78,temp: 196,                                  fire: existingFire ? existingFire.firstCrack.fire : 35, damper: existingFire ? existingFire.firstCrack.damper : 85 },
                     drop:       { t: totalMin,       temp: (profile.btLow + profile.btHigh) / 2, fire: existingFire ? existingFire.drop.fire       : 0,  damper: existingFire ? existingFire.drop.damper       : 100 }
@@ -3013,7 +3013,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 const totalMin = (profile.totalMinLow + profile.totalMinHigh) / 2;
                 _roastPlanState.anchors = {
                     charge:     { t: 0,              temp: profile.chargeTemp,                   fire: 90, damper: 40 },
-                    turnPoint:  { t: 1.5,            temp: 95,                                   fire: 65, damper: 50 },
+                    turnPoint:  { t: 1.5,            temp: 90,                                   fire: 65, damper: 50 },
                     dryEnd:     { t: totalMin * 0.5, temp: 150,                                  fire: 50, damper: 70 },
                     firstCrack: { t: totalMin * 0.78,temp: 196,                                  fire: 35, damper: 85 },
                     drop:       { t: totalMin,       temp: (profile.btLow + profile.btHigh) / 2, fire: 0,  damper: 100 }
@@ -3363,11 +3363,9 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 const idealTP = { min: totalMin * 0.08, max: totalMin * 0.15 };
                 const idealYP = { min: totalMin * 0.40, max: totalMin * 0.55 };
                 const idealFC = { min: totalMin * 0.70, max: totalMin * 0.80 };
-                // 🔽 TP 溫度理想值：依機器大小動態調整（熱質量大的機 TP 溫偏高）
+                // 🔽 TP 溫度理想值：85-95°C（通用）
                 const mKg = parseFloat(_roastPlanState.measurements.machineKg) || 0;
-                const idealTPTemp = mKg >= 5 ? { min: 95, max: 110, sweet: '95-110' }
-                    : mKg >= 1.5 ? { min: 90, max: 105, sweet: '90-105' }
-                    : { min: 80, max: 100, sweet: '80-100' };
+                const idealTPTemp = { min: 85, max: 95, sweet: '85-95' };
                 // 💨 轉黃點 BT 溫度理想 148-155°C
                 const idealYPTemp = { min: 148, max: 158, sweet: '148-158' };
                 const idealRoRDry = { min: 14, max: 22, sweet: '14-18' };
