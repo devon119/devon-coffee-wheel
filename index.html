@@ -2693,6 +2693,22 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
 
             function _fcEscape(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
 
+            // 遮罩 desc 中的葉片自身名字（避免洩題）
+            // 例：「午後錫蘭紅茶剛泡開...」→「午後錫蘭▓▓剛泡開...」
+            function _fcMaskDesc(leaf) {
+                let desc = leaf.desc || '';
+                if (!desc) return desc;
+                // 取出「1. 紅茶」中的「紅茶」；多詞如「葡萄 Raisin」拆成 ["葡萄","Raisin"]
+                const cleanName = leaf.name.replace(/^\d+\.\s*/, '').trim();
+                const tokens = cleanName.split(/\s+/).filter(t => t.length > 0);
+                for (const tok of tokens) {
+                    if (tok.length < 2) continue;  // 單字過短（例如英文縮寫）跳過
+                    const escaped = tok.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                    desc = desc.replace(new RegExp(escaped, 'g'), '▓▓');
+                }
+                return desc;
+            }
+
             function _fcRender(phase, isCorrect, chosenName) {
                 const progEl = document.getElementById('fc-progress');
                 const contentEl = document.getElementById('fc-content');
@@ -2708,9 +2724,9 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                     contentEl.innerHTML = `
                         <p style="color: #555; margin: 0 0 8px 0; font-size: 12px;">🍃 以下描述對應哪個風味？</p>
                         <div style="padding: 14px 16px; background: #fffde7; border-left: 4px solid #fbc02d; border-radius: 8px; font-size: 14px; line-height: 1.7; color: #3e2723; margin-bottom: 16px;">
-                            「${_fcEscape(leaf.desc)}」
-                            ${leaf.ref ? `<div style="font-size: 11px; color: #888; margin-top: 8px;">📌 參考：${_fcEscape(leaf.ref)}</div>` : ''}
+                            「${_fcEscape(_fcMaskDesc(leaf))}」
                         </div>
+                        <p style="font-size: 10px; color: #999; margin: 0 0 10px 0;">💡 ▓▓ 是被遮蔽的答案關鍵字</p>
                         ${opts}
                     `;
                 } else if (phase === 'reveal') {
