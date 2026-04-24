@@ -7442,12 +7442,16 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                     active = false;
                     console.log('[idle-mouse] hide');
                 };
-                // 只在「真的點到風味扇形」時 hide 老鼠 + 3 秒後恢復
+                // 任何互動（點/觸/扇形）都讓老鼠退場、8 秒閒置才回來
+                const IDLE_RETURN_MS = 8000;
                 const stepAside = () => {
                     hide();
                     if (timer) clearTimeout(timer);
-                    timer = setTimeout(() => { _positionIdleMouse(); show(); }, RESUME_DELAY);
+                    timer = setTimeout(() => { _positionIdleMouse(); show(); }, IDLE_RETURN_MS);
                 };
+                pane.addEventListener('mousedown', stepAside, { passive: true });
+                pane.addEventListener('touchstart', stepAside, { passive: true });
+                pane.addEventListener('wheel', stepAside, { passive: true });
                 if (typeof myChart !== 'undefined' && myChart && typeof myChart.on === 'function') {
                     myChart.on('click', stepAside);
                 }
