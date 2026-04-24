@@ -3368,7 +3368,9 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                     ${hasTasting ? `<div class="viz-grid" style="grid-template-columns: 1fr;">${_renderWaterQuality()}</div>` : ''}
                     <div class="viz-grid" style="grid-template-columns: 1fr;">
                         ${_renderFlavorDiff(ctx)}
+                        ${_renderBrewCauseAnalysis(ctx)}
                         ${_renderMicroAdjust(ctx)}
+                        ${hasTasting && ctx.missing && ctx.missing.length ? _renderSensoryTraining() : ''}
                         ${_renderBrewCautionsCard(ctx)}
                         ${_renderBrewStrategyHint(ctx)}
                     </div>`;
@@ -3376,6 +3378,95 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                     console.warn('brew visuals err:', e);
                     return `<div style="padding:20px; color:#c62828;">視覺化生成失敗：${_escHtml(e.message)}</div>`;
                 }
+            }
+
+            // 沖煮端專項：各風味類別的沖煮參數調整路徑
+            function rec_brewFocusFactors(cat, ctx) {
+                const f = [];
+                const light = ['cinnamon','city','city_plus'].includes(ctx.roast);
+                const dark  = ['full_city_plus','vienna','french'].includes(ctx.roast);
+                if (cat === 'floralFruity') {
+                    f.push(`🌡️ 水溫：拉到 ${light?'93-95':'92-94'}°C，讓 CO2 充分排放、頂香打開`);
+                    f.push('⚙️ 研磨：中細偏細（Comandante ~22 click）；研磨越均勻，花果越跳脫');
+                    f.push('⏱️ 悶蒸：40-45 秒（淺焙 CO2 多、需足夠排氣）');
+                    f.push('🌊 注水：慢螺旋、水流細；避免粉層擾動過猛蓋掉頂香');
+                    f.push('💧 水質：TDS 75-125 ppm（偏軟）；鹼度不宜過高');
+                    f.push('📄 濾杯：V60 / Origami 錐形首選；Chemex 厚濾紙會吸掉部分香氣');
+                }
+                if (cat === 'acid') {
+                    f.push('🌡️ 水溫 +2°C：酸質萃取需足夠能量（淺焙尤其明顯）');
+                    f.push('⚙️ 研磨 -0.5 級（略細）：增加前段萃取效率');
+                    f.push('⏱️ 總萃取：手沖拉到 2:30-3:00；太短則酸質未完全顯');
+                    f.push('🌊 悶蒸 30-40s、攪拌 1-2 下讓濾床均勻');
+                    f.push('📄 濾杯：避免 French Press / Moka（浸泡類壓低酸質）');
+                }
+                if (cat === 'sweet') {
+                    f.push('🌡️ 水溫 +1°C：Maillard 物質需較高溫萃出');
+                    f.push('⚙️ 研磨 -0.5 級（略細）：增加萃取率，糖分完整釋放');
+                    f.push('⏱️ 拉長萃取：手沖 3:00-3:30，悶蒸 45s');
+                    f.push('🌊 中段水流延長：給糖分充足時間');
+                    f.push('🧊 降至 55°C 再品：甜感在此溫度才完整展現（人類舌頭對甜的感受度）');
+                }
+                if (cat === 'roasted' || cat === 'cocoa') {
+                    f.push('🌡️ 水溫 +2°C：深焙物質需高溫融出');
+                    f.push('⚙️ 研磨 -1 級（細）：提升萃取率讓烘焙/可可調走出');
+                    f.push('⏱️ 悶蒸 +10s，讓深焙油脂充分溶出');
+                    f.push('📄 濾杯：法壓 / Moka / AeroPress 最能展現烘焙調與醇厚度');
+                }
+                if (cat === 'body') {
+                    f.push('⚙️ 研磨 +1 級（粗）：減少細粉堵塞、提升通透性');
+                    f.push('📄 改濾杯：法壓 / 愛樂壓 / Chemex 去紙；V60 快流會淡化 body');
+                    f.push('⏱️ 拉長浸泡：法壓 4 分鐘以上、愛樂壓倒置 2 分鐘');
+                    f.push('🌊 Hoffmann 法壓技巧（撇浮粉 + 慢壓）body 最厚');
+                }
+                return f;
+            }
+
+            // 🔬 沖煮端：未呈現風味雙面歸因卡（大框架 × 沖煮專項）
+            function _renderBrewCauseAnalysis(ctx) {
+                if (!ctx.actual || !ctx.actual.length || !ctx.missing || !ctx.missing.length) return '';
+                if (typeof rec_categorize !== 'function') return '';
+                const c = rec_categorize(ctx.missing);
+                const blocks = [];
+
+                const pushBlock = (title, cat, tags, emoji) => {
+                    if (!tags.length) return;
+                    const macro = (typeof rec_diagnoseLoss === 'function') ? rec_diagnoseLoss(cat, ctx) : [];
+                    const focus = rec_brewFocusFactors(cat, ctx);
+                    if (!macro.length && !focus.length) return;
+                    blocks.push(`
+                    <div class="viz-cause-block">
+                        <div class="viz-cause-header">
+                            <span class="viz-cause-emoji">${emoji}</span>
+                            <span class="viz-cause-title">未品嚐到的${title}</span>
+                            <span class="viz-cause-tags">${tags.slice(0,5).map(t => `<span class="viz-flavor-tag missing">${_escHtml(t)}</span>`).join('')}</span>
+                        </div>
+                        <div class="viz-cause-grid">
+                            <div class="viz-cause-col">
+                                <div class="viz-cause-col-title">🌐 大框架因素（源頭）</div>
+                                ${macro.length ? '<ul class="viz-cause-ul">' + macro.map(x => `<li>${_escHtml(x)}</li>`).join('') + '</ul>' : '<div class="viz-cause-empty">（此類別無大框架問題）</div>'}
+                            </div>
+                            <div class="viz-cause-col">
+                                <div class="viz-cause-col-title viz-col-warn">💧 沖煮專項（可立即調整）</div>
+                                ${focus.length ? '<ul class="viz-cause-ul">' + focus.map(x => `<li>${_escHtml(x)}</li>`).join('') + '</ul>' : '<div class="viz-cause-empty">（此類別無沖煮專項）</div>'}
+                            </div>
+                        </div>
+                    </div>`);
+                };
+
+                pushBlock('花香 / 水果', 'floralFruity', [...(c.floral||[]), ...(c.fruit||[])], '🌸');
+                pushBlock('酸質',       'acid',         c.acid || [], '🍋');
+                pushBlock('甜感 / 堅果 / 可可', 'sweet', [...(c.sweet||[]), ...(c.nutty||[]), ...(c.cocoa||[])], '🍯');
+                pushBlock('烘焙調 / 可可',      'roasted', [...(c.roasted||[]), ...(c.cocoa||[])], '🔥');
+                pushBlock('body',              'body',    c.body || [], '💪');
+
+                if (!blocks.length) return '';
+                return `
+                <div class="viz-card" style="grid-column: 1 / -1;">
+                    <div class="viz-card-title">📉 未呈現風味 · 雙面歸因（沖煮端優先可調）</div>
+                    <div class="viz-cause-note">💡 左欄是<b>源頭因素</b>（豆源/處理/焙度/熟成）—— 已經定了、較難改；右欄是<b>沖煮專項</b> —— 下次沖時可直接試。先試右欄，若無效再回頭檢查左欄。</div>
+                    ${blocks.join('')}
+                </div>`;
             }
 
             // 🔬 未呈現風味「雙面歸因」卡 —— 大框架因素 + 烘焙曲線專項
