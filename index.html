@@ -7443,7 +7443,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                     console.log('[idle-mouse] hide');
                 };
                 // 任何互動（點/觸/扇形）都讓老鼠退場、8 秒閒置才回來
-                const IDLE_RETURN_MS = 8000;
+                const IDLE_RETURN_MS = 30000;
                 const stepAside = () => {
                     hide();
                     if (timer) clearTimeout(timer);
