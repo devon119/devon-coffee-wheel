@@ -5830,6 +5830,8 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 const proc = document.getElementById('sel-proc').options[document.getElementById('sel-proc').selectedIndex].text;
                 const brew = document.getElementById('sel-brew').value;
                 const brewLabel = document.getElementById('sel-brew').options[document.getElementById('sel-brew').selectedIndex].text;
+                const dripper = (document.getElementById('sel-dripper')||{}).value || 'v60';
+                const method = (document.getElementById('sel-method') ||{}).value || 'classic_3';
 
                 const expected = getExpectedTags();
                 const actual = selectionList.slice();
@@ -5837,7 +5839,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 const missing = expected.filter(t => !actual.includes(t));
                 const extra = actual.filter(t => !expected.includes(t));
                 const score = expected.length > 0 ? Math.round(matched.length / expected.length * 100) : 0;
-                const ctx = { country, countryCode, variety, varietyCode, roast, roastLabel, alt, altitude, soil, soilCode, proc, procCode, brew, brewLabel, expected, actual, matched, missing, extra, score };
+                const ctx = { country, countryCode, variety, varietyCode, roast, roastLabel, alt, altitude, soil, soilCode, proc, procCode, brew, brewLabel, dripper, method, expected, actual, matched, missing, extra, score };
 
                 const contentHtml = (mode === 'roast') ? _buildRoastContentHtml(ctx) : _buildBrewContentHtml(ctx);
                 openAnalysisViewer({
