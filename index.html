@@ -265,6 +265,127 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             color: #795548; font-size: 10.5px; line-height: 1.55;
             border-radius: 0 6px 6px 0;
         }
+
+        /* --- 研磨度 scale --- */
+        .viz-grind-bar {
+            position: relative; height: 22px; background: linear-gradient(to right,
+              #3e2723 0%, #6d4c41 35%, #8d6e63 65%, #a1887f 100%);
+            border-radius: 11px; margin: 10px 0 6px;
+        }
+        .viz-grind-bar .viz-grind-marker {
+            position: absolute; top: -4px; width: 6px; height: 30px;
+            background: #ffeb3b; border: 2px solid #5d4037; border-radius: 3px;
+            transform: translateX(-50%);
+        }
+        .viz-grind-labels {
+            display: flex; justify-content: space-between;
+            font-size: 9.5px; color: #8d6e63; font-weight: 600;
+            margin-top: 2px;
+        }
+        .viz-grind-current {
+            font-size: 13px; font-weight: 800; color: #3e2723; margin-top: 6px;
+        }
+        .viz-grind-note { font-size: 10.5px; color: #666; margin-top: 4px; line-height: 1.55; }
+
+        /* --- 養豆狀態時間軸 --- */
+        .viz-rest-bar {
+            position: relative; height: 18px;
+            background: linear-gradient(to right,
+              #ef5350 0%, #ef5350 18%,
+              #66bb6a 22%, #66bb6a 65%,
+              #ffb74d 70%, #bdbdbd 100%);
+            border-radius: 9px; margin: 10px 0 4px;
+        }
+        .viz-rest-labels {
+            display: flex; justify-content: space-between;
+            font-size: 9.5px; color: #666; font-weight: 600; margin-top: 2px;
+        }
+        .viz-rest-tag {
+            display: inline-block; margin-top: 8px; padding: 4px 10px;
+            background: #e8f5e9; color: #2e7d32; font-size: 11px;
+            font-weight: 700; border-radius: 10px;
+        }
+
+        /* --- 水質 / 通用 range gauge --- */
+        .viz-range-item { margin-bottom: 10px; }
+        .viz-range-item:last-child { margin-bottom: 0; }
+        .viz-range-label {
+            display: flex; justify-content: space-between;
+            font-size: 10.5px; color: #5d4037; font-weight: 700;
+        }
+        .viz-range-label .viz-range-val { color: #1976d2; font-weight: 800; }
+        .viz-range-bar {
+            position: relative; height: 12px; background: #eceff1;
+            border-radius: 6px; margin: 4px 0 2px;
+        }
+        .viz-range-fill {
+            position: absolute; top: 0; bottom: 0;
+            background: linear-gradient(to right, #90caf9, #42a5f5);
+            border-radius: 6px;
+        }
+        .viz-range-scale {
+            display: flex; justify-content: space-between;
+            font-size: 9px; color: #888;
+        }
+
+        /* --- 圓形吻合度 gauge --- */
+        .viz-gauge-wrap {
+            display: flex; flex-direction: column; align-items: center;
+            padding: 10px 0 0;
+        }
+        .viz-gauge-svg { width: 130px; height: 130px; }
+        .viz-gauge-label {
+            margin-top: 6px; font-size: 13px; font-weight: 800;
+            text-align: center;
+        }
+        .viz-gauge-sublabel { font-size: 10.5px; color: #666; margin-top: 2px; }
+
+        /* --- 風味 tag cloud --- */
+        .viz-tag-group { margin-top: 10px; }
+        .viz-tag-group-title {
+            font-size: 11px; font-weight: 700; color: #555;
+            margin-bottom: 6px; display: flex; align-items: center; gap: 6px;
+        }
+        .viz-tag-cloud { display: flex; flex-wrap: wrap; gap: 6px; }
+        .viz-flavor-tag {
+            display: inline-block; padding: 4px 10px; border-radius: 12px;
+            font-size: 11px; font-weight: 700; background: #fff;
+            border: 1.5px solid #bbdefb; color: #1565c0;
+        }
+        .viz-flavor-tag.missing { border-color: #ffb74d; color: #e65100; background: #fff8e1; }
+        .viz-flavor-tag.extra { border-color: #ce93d8; color: #6a1b9a; background: #f3e5f5; }
+        .viz-flavor-tag.defect { border-color: #ef9a9a; color: #c62828; background: #ffebee; }
+
+        /* --- 調整卡（微調方向 / 烘焙建議 / 警示）--- */
+        .viz-advice-list { display: flex; flex-direction: column; gap: 8px; }
+        .viz-advice {
+            padding: 10px 12px; background: #fff; border-left: 4px solid #8d6e63;
+            border-radius: 0 10px 10px 0; font-size: 12px; line-height: 1.7;
+            color: #3e2723; border: 1px solid #e8e4d8; border-left-width: 4px;
+        }
+        .viz-advice.warn { border-left-color: #e65100; background: #fff3e0; }
+        .viz-advice.danger { border-left-color: #c62828; background: #ffebee; }
+        .viz-advice.good { border-left-color: #2e7d32; background: #e8f5e9; }
+        .viz-advice-title { font-size: 12px; font-weight: 800; margin-bottom: 3px; }
+        .viz-advice-body { font-size: 11.5px; color: #555; line-height: 1.65; white-space: pre-line; }
+
+        /* --- 烘焙階段進度條（Drying / Maillard / Development）--- */
+        .viz-phase-bar {
+            display: flex; height: 26px; border-radius: 13px; overflow: hidden;
+            background: #eceff1; margin: 10px 0 4px; font-size: 10.5px;
+            font-weight: 700; color: #fff;
+        }
+        .viz-phase-seg {
+            display: flex; align-items: center; justify-content: center;
+            padding: 0 6px; min-width: 40px;
+        }
+        .viz-phase-seg.phase-dry { background: #8d6e63; }
+        .viz-phase-seg.phase-mai { background: #f57c00; }
+        .viz-phase-seg.phase-dev { background: #c62828; }
+        .viz-phase-labels {
+            display: flex; justify-content: space-between;
+            font-size: 9.5px; color: #888; font-weight: 600;
+        }
         .av-footer {
             padding: 16px 28px; background: #fafaf7; border-top: 1px solid #e8e4d8;
             display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap;
@@ -2811,18 +2932,355 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 </div>`;
             }
 
-            // 產生三張視覺化卡片的 grid 組合
-            function _renderBrewVisuals(ctx) {
+            // 🎯 圓形吻合度 Gauge
+            function _renderMatchGauge(score, title) {
+                const pct = Math.max(0, Math.min(100, score || 0));
+                const R = 52, C = 2 * Math.PI * R;
+                const dash = C * pct / 100;
+                const color = pct >= 80 ? '#2e7d32' : pct >= 50 ? '#ef6c00' : '#c62828';
+                const label = pct >= 80 ? '高度吻合' : pct >= 50 ? '中度吻合' : '差異明顯';
+                return `
+                <div class="viz-card" style="align-items:center;">
+                    <div class="viz-card-title" style="align-self:stretch;">🎯 ${title || '吻合度'}</div>
+                    <div class="viz-gauge-wrap">
+                        <svg class="viz-gauge-svg" viewBox="0 0 130 130">
+                            <circle cx="65" cy="65" r="${R}" fill="none" stroke="#eceff1" stroke-width="12"/>
+                            <circle cx="65" cy="65" r="${R}" fill="none" stroke="${color}" stroke-width="12"
+                                    stroke-dasharray="${dash} ${C}" stroke-linecap="round"
+                                    transform="rotate(-90 65 65)" style="transition: stroke-dasharray 0.6s ease-out;"/>
+                            <text x="65" y="62" text-anchor="middle" font-size="28" font-weight="800" fill="#3e2723">${pct}%</text>
+                            <text x="65" y="82" text-anchor="middle" font-size="10" fill="#888" font-weight="600">MATCH</text>
+                        </svg>
+                        <div class="viz-gauge-label" style="color:${color};">${label}</div>
+                        <div class="viz-gauge-sublabel">共 ${(ctx_last.expected||[]).length} 項預期 / 已命中 ${(ctx_last.matched||[]).length} 項</div>
+                    </div>
+                </div>`;
+            }
+            // 存上次 ctx 給 gauge sublabel 用
+            let ctx_last = {};
+
+            // ⚙️ 研磨度 scale
+            function _renderGrindScale(params) {
+                // 從 params.grind 字串抽序號（0-6）
+                const scale = ['極細(義式)', '細(摩卡/短縮)', '中細偏細', '中細', '中', '中粗', '粗(法壓/冷萃)'];
+                let idx = 3;
+                for (let i = 0; i < scale.length; i++) if (String(params.grind || '').includes(scale[i])) { idx = i; break; }
+                const pct = (idx / (scale.length - 1)) * 100;
+                const grindAdjs = (params.adjustments || []).filter(a => a.axis === 'grind');
+                const cum = grindAdjs.reduce((s, a) => s + a.delta, 0);
+                return `
+                <div class="viz-card">
+                    <div class="viz-card-title">⚙️ 研磨度</div>
+                    <div class="viz-grind-bar">
+                        <div class="viz-grind-marker" style="left: ${pct}%;"></div>
+                    </div>
+                    <div class="viz-grind-labels">
+                        <span>極細</span><span>細</span><span>中細</span><span>中</span><span>中粗</span><span>粗</span>
+                    </div>
+                    <div class="viz-grind-current">${_escHtml(params.grind || '—')}</div>
+                    <div class="viz-grind-note">累計調整 ${cum>0?'+':''}${cum} 級${grindAdjs.length ? '（' + grindAdjs.map(a => (a.delta>0?'+':'') + a.delta + ' ' + a.stage).join('、') + '）' : ''}</div>
+                </div>`;
+            }
+
+            // ⏱️ 養豆狀態（依 restDays 解析）
+            function _renderRestDays(params) {
+                const r = String(params.restDays || '');
+                // 試著抽第一個數字做當前位置；若解析不到就標中間
+                const m = r.match(/(\d+)/);
+                const day = m ? parseInt(m[1]) : 7;
+                const pct = Math.min(100, day / 21 * 100);
+                const stage = day < 3 ? { t:'⚠️ 新豆期（CO2 過多）', c:'#ef5350' }
+                            : day < 14 ? { t:'✨ 甜蜜期', c:'#2e7d32' }
+                            : day < 21 ? { t:'🟡 成熟後期', c:'#ef6c00' }
+                            : { t:'📉 走下坡，應冷藏', c:'#757575' };
+                return `
+                <div class="viz-card">
+                    <div class="viz-card-title">⏱️ 養豆</div>
+                    <div class="viz-rest-bar">
+                        <div class="viz-grind-marker" style="left: ${pct}%;"></div>
+                    </div>
+                    <div class="viz-rest-labels"><span>0d</span><span>3d</span><span>7d</span><span>14d</span><span>21d+</span></div>
+                    <span class="viz-rest-tag" style="background: ${stage.c}22; color: ${stage.c};">${stage.t}</span>
+                    <div class="viz-grind-note" style="margin-top:6px;">${_escHtml(r)}</div>
+                </div>`;
+            }
+
+            // 💧 水質指標（SCA 建議範圍）
+            function _renderWaterQuality() {
+                const items = [
+                    { k: 'TDS（總溶解固體）', lo: 75, hi: 175, unit: 'ppm', scale: 300, tip: '台灣自來水常 >300 ppm，建議濾水壺降至 150' },
+                    { k: '總硬度（GH）',       lo: 50, hi: 175, unit: 'ppm CaCO3', scale: 300 },
+                    { k: '鹼度（KH）',         lo: 40, hi: 75,  unit: 'ppm CaCO3', scale: 150 },
+                    { k: 'pH',                 lo: 6.5, hi: 7.5, unit: '', scale: 10 }
+                ];
+                return `
+                <div class="viz-card">
+                    <div class="viz-card-title">💧 水質（SCA 建議）</div>
+                    ${items.map(i => `
+                        <div class="viz-range-item">
+                            <div class="viz-range-label"><span>${i.k}</span><span class="viz-range-val">${i.lo}-${i.hi} ${i.unit}</span></div>
+                            <div class="viz-range-bar">
+                                <div class="viz-range-fill" style="left: ${(i.lo/i.scale*100).toFixed(1)}%; right: ${(100 - i.hi/i.scale*100).toFixed(1)}%;"></div>
+                            </div>
+                            <div class="viz-range-scale"><span>0</span><span>${i.scale}${i.unit?' '+i.unit:''}</span></div>
+                        </div>
+                    `).join('')}
+                </div>`;
+            }
+
+            // 🔧 微調建議（依 missing/extra 風味分類生成）
+            function _renderMicroAdjust(ctx) {
+                if (!ctx.actual || !ctx.actual.length) return '';
+                const c = (typeof rec_categorize === 'function') ? rec_categorize(ctx.missing) : {};
+                const e = (typeof rec_categorize === 'function') ? rec_categorize(ctx.extra) : {};
+                const advs = [];
+                if ((c.acid && c.acid.length) || (c.fruit && c.fruit.length) || (c.floral && c.floral.length)) {
+                    advs.push({ cls:'warn', t:'🍋 未品嚐到酸質/花果', b:'沖煮端：水溫 +2°C、研磨略粗、悶蒸縮短至 20s\n若無效：源頭可能在烘焙（焙度太深）或豆齡\n也可能是感官漏了 → 啜吸一口停留口腔中段再判斷' });
+                }
+                if (c.sweet && c.sweet.length) {
+                    advs.push({ cls:'warn', t:'🍯 未品嚐到甜感', b:'沖煮端：研磨略細、拉長萃取 15-25s、悶蒸延至 45s\n若無效：甜感主要由 Maillard 決定，需從烘焙解決\n甜感常在咖啡降至 55°C 後才明顯，可放涼再品' });
+                }
+                if ((c.roasted && c.roasted.length) || (c.cocoa && c.cocoa.length)) {
+                    advs.push({ cls:'warn', t:'🔥 未品嚐到烘焙/可可調', b:'水溫 +2°C、悶蒸 45s + 細研磨\n若無效：本配置焙度本就淺，期望錯位' });
+                }
+                if ((e.roasted && e.roasted.length > 1) || (ctx.actual || []).some(t => parseInt(t) === 53)) {
+                    advs.push({ cls:'danger', t:'☠️ 苦味 / 煙燻過重', b:'水溫 -2~-3°C、研磨加粗、縮短萃取 15-20s\n若法壓：預熱壺器 + 下壓後立即倒出避免後萃' });
+                }
+                if (e.defect && e.defect.length) {
+                    advs.push({ cls:'danger', t:'⚠️ 偵測到瑕疵味', b:'沖煮微調無法挽救，換新豆測試' });
+                }
+                if (!advs.length) advs.push({ cls:'good', t:'✅ 整體命中理想', b:'維持現有參數即可，可建檔為標竿配方' });
+                return `
+                <div class="viz-card" style="grid-column: 1 / -1;">
+                    <div class="viz-card-title">🔧 基於本次品嚐的微調方向</div>
+                    <div class="viz-advice-list">
+                        ${advs.map(a => `<div class="viz-advice ${a.cls}">
+                            <div class="viz-advice-title">${a.t}</div>
+                            <div class="viz-advice-body">${_escHtml(a.b)}</div>
+                        </div>`).join('')}
+                    </div>
+                </div>`;
+            }
+
+            // 📌 組合警示（焙度 × 沖煮法）
+            function _renderBrewCautionsCard(ctx) {
+                if (typeof rec_brewCautions !== 'function') return '';
+                const raw = rec_brewCautions(ctx.brew, ctx.roast);
+                if (!raw || !raw.trim()) return '';
+                // 依換行切段
+                const items = raw.split('\n').map(l => l.trim()).filter(l => l);
+                return `
+                <div class="viz-card" style="grid-column: 1 / -1;">
+                    <div class="viz-card-title">📌 此沖煮 × 焙度組合的特別提醒</div>
+                    <div class="viz-advice-list">
+                        ${items.map(l => `<div class="viz-advice warn"><div class="viz-advice-body">${_escHtml(l)}</div></div>`).join('')}
+                    </div>
+                </div>`;
+            }
+
+            // 💡 產區/品種沖煮策略 hint
+            function _renderBrewStrategyHint(ctx) {
+                const country = (typeof rec_countryHint === 'function') ? rec_countryHint(ctx) : '';
+                const variety = (typeof rec_varietyHint === 'function') ? rec_varietyHint(ctx) : '';
+                if (!country && !variety) return '';
+                return `
+                <div class="viz-card" style="grid-column: 1 / -1;">
+                    <div class="viz-card-title">💡 此豆的沖煮策略提示</div>
+                    <div class="viz-advice-list">
+                        ${country ? `<div class="viz-advice"><div class="viz-advice-title">📍 產區</div><div class="viz-advice-body">${_escHtml(country)}</div></div>` : ''}
+                        ${variety ? `<div class="viz-advice"><div class="viz-advice-title">🧬 品種</div><div class="viz-advice-body">${_escHtml(variety)}</div></div>` : ''}
+                    </div>
+                </div>`;
+            }
+
+            // 🔥 烘焙：入豆溫 + BT 終溫範圍
+            function _renderRoastTempBars(profile) {
+                const chargeAdjs = (profile.adjustments || []).filter(a => a.axis === 'charge');
+                const chargeCum = chargeAdjs.reduce((s, a) => s + a.delta, 0);
+                return `
+                <div class="viz-card" style="grid-column: span 2;">
+                    <div class="viz-card-title">🌡️ 關鍵溫度</div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+                        <div>
+                            <div style="font-size:11px; color:#8d6e63; font-weight:700;">入豆溫 (Charge)</div>
+                            <div style="font-size:22px; font-weight:900; color:#e65100; margin: 4px 0;">${profile.chargeTemp}°C</div>
+                            <div style="font-size:10.5px; color:#666;">${chargeAdjs.length ? '累計 ' + (chargeCum>0?'+':'') + chargeCum + '°C' : '基準值'}</div>
+                            ${chargeAdjs.map(a => `<div style="font-size:10.5px; color:#555; margin-top:3px;">${a.delta>0?'+':''}${a.delta}°C · ${_escHtml(a.stage)}</div>`).join('')}
+                        </div>
+                        <div>
+                            <div style="font-size:11px; color:#8d6e63; font-weight:700;">BT 終溫範圍 (Drop)</div>
+                            <div style="font-size:22px; font-weight:900; color:#c62828; margin: 4px 0;">${profile.btLow}-${profile.btHigh}°C</div>
+                            <div style="font-size:10.5px; color:#666;">${_escHtml(profile.base.note || '')}</div>
+                            ${profile.base.warn ? `<div style="margin-top:6px; padding:6px 8px; background:#ffebee; color:#c62828; border-radius:6px; font-size:10.5px;">⚠️ ${_escHtml(profile.base.warn)}</div>` : ''}
+                        </div>
+                    </div>
+                </div>`;
+            }
+
+            // 🔥 烘焙：總時 + Dev% + 階段比例
+            function _renderRoastTiming(profile) {
+                // 估 Drying/Maillard/Development 時間占比：Dev = dev%, Drying ~ 45-50%, Maillard 填剩下
+                const devPctLo = profile.devLow, devPctHi = profile.devHigh;
+                const devPct = (devPctLo + devPctHi) / 2;
+                const totalLo = profile.totalMinLow, totalHi = profile.totalMinHigh;
+                const totalAvg = (totalLo + totalHi) / 2;
+                // 階段切分（估計：乾燥 47% / 梅納 30% / 發展 23% by dev% 典型）
+                const dryPct = 50, maiPct = 100 - dryPct - devPct;
+                return `
+                <div class="viz-card" style="grid-column: span 2;">
+                    <div class="viz-card-title">⏱️ 時程 × Development</div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+                        <div>
+                            <div style="font-size:11px; color:#8d6e63; font-weight:700;">總烘焙時間</div>
+                            <div style="font-size:22px; font-weight:900; color:#3e2723; margin: 4px 0;">${totalLo}-${totalHi} 分</div>
+                        </div>
+                        <div>
+                            <div style="font-size:11px; color:#8d6e63; font-weight:700;">Development %</div>
+                            <div style="font-size:22px; font-weight:900; color:#e65100; margin: 4px 0;">${devPctLo}-${devPctHi}%</div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 12px;">
+                        <div style="font-size:11px; color:#8d6e63; font-weight:700; margin-bottom:4px;">階段比例（估算）</div>
+                        <div class="viz-phase-bar">
+                            <div class="viz-phase-seg phase-dry" style="width:${dryPct}%;">Drying ${dryPct}%</div>
+                            <div class="viz-phase-seg phase-mai" style="width:${maiPct}%;">Maillard ${Math.round(maiPct)}%</div>
+                            <div class="viz-phase-seg phase-dev" style="width:${devPct}%;">Dev ${Math.round(devPct)}%</div>
+                        </div>
+                        ${profile.dryingAdjSec ? `<div class="viz-grind-note" style="margin-top:6px;">Drying Phase ${profile.dryingAdjSec>0?'延長':'縮短'} ${Math.abs(profile.dryingAdjSec)}s（相對基準）</div>` : ''}
+                    </div>
+                </div>`;
+            }
+
+            // 🔥 烘焙調整軌跡（依軸分組）
+            function _renderRoastAdjustments(profile) {
+                const adjs = profile.adjustments || [];
+                if (!adjs.length) {
+                    return `<div class="viz-card" style="grid-column: 1 / -1;">
+                        <div class="viz-card-title">📐 參數推理軌跡</div>
+                        <div style="font-size:12px; color:#888; padding: 8px 0;">本配置採用預設基準值，無額外調整。</div>
+                    </div>`;
+                }
+                const axisIcon = { charge:'🌡️ 入豆溫', btLow:'🎯 BT 下限', btHigh:'🎯 BT 上限', devLow:'⏱️ Dev 下限', devHigh:'⏱️ Dev 上限', drying:'💨 Drying 時間' };
+                const byAxis = {};
+                adjs.forEach(a => { (byAxis[a.axis] = byAxis[a.axis] || []).push(a); });
+                return `
+                <div class="viz-card" style="grid-column: 1 / -1;">
+                    <div class="viz-card-title">📐 參數推理軌跡</div>
+                    ${Object.keys(byAxis).map(axis => `
+                        <div style="margin-bottom: 10px;">
+                            <div style="font-size:12px; font-weight:800; color:#5d4037; margin-bottom:6px;">${axisIcon[axis] || axis}</div>
+                            ${byAxis[axis].map(a => {
+                                const sign = a.delta > 0 ? '+' : '';
+                                const unit = axis === 'charge' || axis.startsWith('bt') ? '°C' : axis === 'drying' ? 's' : '%';
+                                const cls = a.delta > 0 ? 'viz-delta-pos' : 'viz-delta-neg';
+                                return `<div style="font-size:11px; color:#555; line-height:1.6; padding: 2px 0 2px 10px; border-left: 2px solid #d7ccc8;">
+                                    <span class="${cls}" style="font-weight:800;">${sign}${a.delta}${unit}</span> · <span style="color:#8d6e63; font-weight:600;">[${_escHtml(a.stage)}]</span> ${_escHtml(a.reason)}
+                                </div>`;
+                            }).join('')}
+                        </div>
+                    `).join('')}
+                </div>`;
+            }
+
+            // 📉📈 未呈現 / 過度風味（tag cloud + 歸因提示）
+            function _renderFlavorDiff(ctx) {
+                if (!ctx.actual || !ctx.actual.length) return '';
+                const missing = ctx.missing || [];
+                const extra = ctx.extra || [];
+                if (!missing.length && !extra.length) return '';
+                const toTagHtml = (list, cls) => list.map(t => `<span class="viz-flavor-tag ${cls}">${_escHtml(t)}</span>`).join('');
+                return `
+                <div class="viz-card" style="grid-column: 1 / -1;">
+                    <div class="viz-card-title">🎭 預期 vs 實際（風味對照）</div>
+                    ${missing.length ? `
+                    <div class="viz-tag-group">
+                        <div class="viz-tag-group-title">📉 預期但未品嚐到 <span style="color:#e65100;">(${missing.length})</span></div>
+                        <div class="viz-tag-cloud">${toTagHtml(missing, 'missing')}</div>
+                        <div class="viz-grind-note" style="margin-top:6px;">可能成因：① 烘焙/沖煮沒把風味帶出；② 豆齡問題；③ 感官訓練需求</div>
+                    </div>` : ''}
+                    ${extra.length ? `
+                    <div class="viz-tag-group">
+                        <div class="viz-tag-group-title">📈 額外出現（非預期） <span style="color:#6a1b9a;">(${extra.length})</span></div>
+                        <div class="viz-tag-cloud">${toTagHtml(extra, 'extra')}</div>
+                        <div class="viz-grind-note" style="margin-top:6px;">可能是此豆的個性亮點，也可能是瑕疵；參考下方「🔧 微調方向」排查。</div>
+                    </div>` : ''}
+                </div>`;
+            }
+
+            // 組合沖煮視覺化 content
+            function _buildBrewContentHtml(ctx) {
+                ctx_last = ctx;
                 try {
                     const params = computeBrewRecipe(ctx);
-                    return `<div class="viz-grid">
+                    const hasTasting = ctx.actual && ctx.actual.length;
+                    return `
+                    <div class="viz-grid">
                         ${_renderThermometer(params, ctx.roastLabel)}
                         ${_renderRatioGlass(params)}
                         ${_renderTimeline(params.schedule)}
+                    </div>
+                    <div class="viz-grid">
+                        ${_renderGrindScale(params)}
+                        ${_renderRestDays(params)}
+                        ${hasTasting ? _renderMatchGauge(ctx.score, '吻合度') : _renderWaterQuality()}
+                    </div>
+                    ${hasTasting ? `<div class="viz-grid" style="grid-template-columns: 1fr;">${_renderWaterQuality()}</div>` : ''}
+                    <div class="viz-grid" style="grid-template-columns: 1fr;">
+                        ${_renderFlavorDiff(ctx)}
+                        ${_renderMicroAdjust(ctx)}
+                        ${_renderBrewCautionsCard(ctx)}
+                        ${_renderBrewStrategyHint(ctx)}
                     </div>`;
                 } catch (e) {
-                    return '';  // 失敗不影響原分析文字
+                    console.warn('brew visuals err:', e);
+                    return `<div style="padding:20px; color:#c62828;">視覺化生成失敗：${_escHtml(e.message)}</div>`;
                 }
+            }
+
+            // 組合烘焙視覺化 content
+            function _buildRoastContentHtml(ctx) {
+                ctx_last = ctx;
+                try {
+                    // 烘焙校對需要品嚐資料才有意義；沒品嚐時降級顯示
+                    const fullCfg = (typeof _aiBuildLocalCtx === 'function') ? _aiBuildLocalCtx() : ctx;
+                    const profile = computeRoastProfile(fullCfg);
+                    const hasTasting = ctx.actual && ctx.actual.length > 0;
+                    return `<div class="viz-grid" style="grid-template-columns: ${hasTasting ? '1fr 2fr' : '1fr'};">
+                        ${hasTasting ? _renderMatchGauge(ctx.score, '烘焙吻合度') : ''}
+                        ${_renderRoastTempBars(profile)}
+                    </div>
+                    <div class="viz-grid" style="grid-template-columns: 1fr;">
+                        ${_renderRoastTiming(profile)}
+                    </div>
+                    <div class="viz-grid" style="grid-template-columns: 1fr;">
+                        ${_renderRoastAdjustments(profile)}
+                        ${_renderFlavorDiff(ctx)}
+                        ${hasTasting ? _renderMicroAdjust(ctx) : ''}
+                    </div>`;
+                } catch (e) {
+                    console.warn('roast visuals err:', e);
+                    return `<div style="padding:20px; color:#c62828;">視覺化生成失敗：${_escHtml(e.message)}</div>`;
+                }
+            }
+
+            // 輕量 markdown → HTML（給 AI 延伸輸出用）
+            function _mdToHtml(text) {
+                let s = _escHtml(text || '');
+                // 標題 ### ## #
+                s = s.replace(/^###\s+(.+)$/gm, '<h4 style="margin:14px 0 6px 0; color:#5d4037; font-size:14px;">$1</h4>');
+                s = s.replace(/^##\s+(.+)$/gm, '<h3 style="margin:16px 0 8px 0; color:#3e2723; font-size:15px;">$1</h3>');
+                // 粗體 **xxx**
+                s = s.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+                // 無序清單 - or *
+                s = s.replace(/^(?:[-*]\s+)(.+)$/gm, '<li>$1</li>');
+                s = s.replace(/(<li>[\s\S]+?<\/li>)(?!\s*<li>)/g, '<ul style="margin:6px 0; padding-left:22px;">$1</ul>');
+                // 有序 1.
+                s = s.replace(/^(\d+)\.\s+(.+)$/gm, '<li>$2</li>');
+                // 段落轉 br
+                s = s.replace(/\n\n+/g, '</p><p style="margin:8px 0;">');
+                s = '<p style="margin:8px 0;">' + s + '</p>';
+                s = s.replace(/\n/g, '<br>');
+                return s;
             }
 
             // ========= 🔬 分析結果全螢幕檢視器 =========
@@ -2901,16 +3359,14 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 const score = expected.length > 0 ? Math.round(matched.length / expected.length * 100) : 0;
                 const ctx = { country, countryCode, variety, varietyCode, roast, roastLabel, alt, altitude, soil, soilCode, proc, procCode, brew, brewLabel, expected, actual, matched, missing, extra, score };
 
-                const analysisText = (mode === 'roast') ? runLocalRoastAnalysis(ctx) : runLocalBrewAnalysis(ctx);
-                // 沖煮模式 → prepend 三張視覺化卡片（溫度計 / 粉水比杯 / 時間軸）
-                const visualsHtml = (mode === 'sensory') ? _renderBrewVisuals(ctx) : '';
+                const contentHtml = (mode === 'roast') ? _buildRoastContentHtml(ctx) : _buildBrewContentHtml(ctx);
                 openAnalysisViewer({
                     icon: mode === 'roast' ? '🔥' : '💧',
                     title: mode === 'roast' ? '烘焙校對' : '沖煮建議',
                     badgeClass: mode === 'roast' ? 'roast' : 'sensory',
                     badgeText: '本地規則引擎',
                     summaryItems: _buildAnalysisSummary(ctx),
-                    contentHtml: visualsHtml + `<pre class="av-raw">${_escHtml(analysisText)}</pre>`,
+                    contentHtml,
                     footerHtml:
                         `<button class="btn btn-purple btn-sm" onclick="runAI('${mode}')">✨ 用 AI 再跑一次（需 API Key）</button>` +
                         `<button class="btn btn-secondary btn-sm" onclick="closeAnalysisViewer()">關閉</button>`
@@ -3300,7 +3756,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                     const badge = document.getElementById('av-badge');
                     badge.className = 'av-badge ai';
                     badge.textContent = `AI · ${providerName}`;
-                    document.getElementById('av-content').innerHTML = escapeHtml(annotated) + correctionsHtml + localFooterHtml;
+                    document.getElementById('av-content').innerHTML = _mdToHtml(annotated) + correctionsHtml + localFooterHtml;
                     document.getElementById('av-footer').innerHTML =
                         `<button class="btn btn-purple btn-sm" onclick="runAI('${mode}')">🔄 再跑一次</button>` +
                         `<button class="btn btn-secondary btn-sm" onclick="closeAnalysisViewer()">關閉</button>`;
