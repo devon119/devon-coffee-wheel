@@ -141,6 +141,38 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
         .btn-row { display: flex; gap: 8px; }
         .btn-row .btn { flex: 1; }
 
+        /* 🧪 濾杯 + 手法 即時預覽卡 */
+        #dripper-preview {
+            display: none;
+            margin-top: 10px;
+            padding: 12px 14px;
+            background: #fff;
+            border: 1px solid #e8e4d8;
+            border-left: 4px solid #8d6e63;
+            border-radius: 8px;
+            gap: 14px;
+            align-items: center;
+        }
+        #dripper-preview.show { display: flex; }
+        #dripper-preview .dp-icon {
+            flex-shrink: 0; width: 72px; height: 72px;
+            background: #fafaf7; border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        #dripper-preview .dp-icon svg { width: 100%; height: 100%; }
+        #dripper-preview .dp-info { flex: 1; font-size: 12.5px; line-height: 1.65; }
+        #dripper-preview .dp-name {
+            font-size: 14px; font-weight: 800; color: #5d4037;
+            margin-bottom: 4px;
+        }
+        #dripper-preview .dp-note { color: #666; font-size: 12px; }
+        #dripper-preview .dp-method {
+            display: block; margin-top: 6px; padding-top: 6px;
+            border-top: 1px dashed #e8e4d8;
+            color: #8d6e63; font-size: 11.5px;
+        }
+        #dripper-preview .dp-method b { color: #5d4037; }
+
         /* ========== 🎬 串場動畫 Overlay ========== */
         #intermission {
             position: fixed; inset: 0; z-index: 2500;
@@ -1521,47 +1553,48 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             <div class="config-grid">
                 <div class="config-group" style="grid-column: span 2;">
                     <label>7. 沖煮方式（影響風味呈現）</label>
-                    <select id="sel-brew" onchange="onBrewChange(); updateExpected()" aria-label="選擇沖煮方式">
-                        <option value="pour_over">手沖濾紙</option>
-                        <option value="espresso">義式濃縮 (Espresso)</option>
-                        <option value="french_press">法式濾壓 (French Press)</option>
-                        <option value="aeropress">愛樂壓 (AeroPress)</option>
-                        <option value="moka">摩卡壺 (Moka Pot)</option>
-                        <option value="siphon">虹吸壺 (Siphon)</option>
-                        <option value="cold_brew">冷萃 (Cold Brew)</option>
+                    <select id="sel-brew" onchange="onBrewChange(); updateDripperPreview(); updateExpected()" aria-label="選擇沖煮方式">
+                        <option value="pour_over">☕ 手沖濾紙</option>
+                        <option value="espresso">⚡ 義式濃縮 (Espresso)</option>
+                        <option value="french_press">🫖 法式濾壓 (French Press)</option>
+                        <option value="aeropress">💨 愛樂壓 (AeroPress)</option>
+                        <option value="moka">🔥 摩卡壺 (Moka Pot)</option>
+                        <option value="siphon">🧪 虹吸壺 (Siphon)</option>
+                        <option value="cold_brew">🧊 冷萃 (Cold Brew)</option>
                     </select>
                 </div>
             </div>
             <div class="config-grid" id="pour-over-extra" style="display:grid;">
                 <div class="config-group">
                     <label>7a. 濾杯款式</label>
-                    <select id="sel-dripper" onchange="updateExpected()" aria-label="選擇濾杯款式">
-                        <option value="v60">Hario V60（錐形、流速快、層次）</option>
-                        <option value="kalita">Kalita Wave（平底、均勻、新手）</option>
-                        <option value="origami">Origami（20 摺、乾淨、可換濾紙）</option>
-                        <option value="chemex">Chemex（厚濾紙、極乾淨、茶感）</option>
-                        <option value="clever">Clever Dripper（浸泡+過濾、穩定）</option>
-                        <option value="switch">Hario Switch（V60+閥門、雙用）</option>
-                        <option value="orea">Orea V3/V4（平底、極快、賽用）</option>
-                        <option value="april">April Brewer（平底、WBrC）</option>
-                        <option value="melitta">Melitta（小孔錐形、body 扎實）</option>
-                        <option value="stagg">Fellow Stagg X（雙層、穩定）</option>
+                    <select id="sel-dripper" onchange="updateDripperPreview(); updateExpected()" aria-label="選擇濾杯款式">
+                        <option value="v60">🔻 Hario V60（錐形、流速快、層次）</option>
+                        <option value="kalita">〰️ Kalita Wave（平底波浪、均勻、新手）</option>
+                        <option value="origami">📐 Origami（20 摺、乾淨、可換濾紙）</option>
+                        <option value="chemex">⧖ Chemex（沙漏身、厚濾紙、茶感）</option>
+                        <option value="clever">🔘 Clever Dripper（閥門浸泡+過濾、穩定）</option>
+                        <option value="switch">🎛️ Hario Switch（V60+閥門、雙用）</option>
+                        <option value="orea">🏆 Orea V3/V4（平底、極快、賽用）</option>
+                        <option value="april">✨ April Brewer（平底、WBrC）</option>
+                        <option value="melitta">🏛️ Melitta（小孔錐形、body 扎實）</option>
+                        <option value="stagg">🔩 Fellow Stagg X（雙層保溫、穩定）</option>
                     </select>
                 </div>
                 <div class="config-group">
                     <label>7b. 手沖手法</label>
-                    <select id="sel-method" onchange="updateExpected()" aria-label="選擇手沖手法">
-                        <option value="classic_3">三段式（悶蒸→中段→後段 · 傳統）</option>
-                        <option value="single_pour">一刀流（悶蒸後一次注滿 · body）</option>
-                        <option value="kasuya_46">四六法 · 粕谷哲（5 段、可調酸甜/濃淡）</option>
-                        <option value="matt_winton">冠軍配方 · Matt Winton WBrC</option>
-                        <option value="lance_hi">高磨低溫 · Lance Hedrick（淺焙解法）</option>
-                        <option value="hoffmann_ult">Hoffmann Ultimate V60</option>
-                        <option value="scott_rao">Scott Rao 連續注水</option>
-                        <option value="tetsu_ice">冰手沖 · Kasuya Iced（急冷）</option>
-                        <option value="strong_conc">濃縮式（1:10 小水量）</option>
+                    <select id="sel-method" onchange="updateDripperPreview(); updateExpected()" aria-label="選擇手沖手法">
+                        <option value="classic_3">3️⃣ 三段式（悶蒸→中段→後段 · 傳統）</option>
+                        <option value="single_pour">🔪 一刀流（悶蒸後一次注滿 · body）</option>
+                        <option value="kasuya_46">4️⃣ 四六法 · 粕谷哲（5 段、可調酸甜/濃淡）</option>
+                        <option value="matt_winton">🥇 冠軍配方 · Matt Winton WBrC</option>
+                        <option value="lance_hi">❄️ 高磨低溫 · Lance Hedrick（淺焙解法）</option>
+                        <option value="hoffmann_ult">🌀 Hoffmann Ultimate V60</option>
+                        <option value="scott_rao">🎯 Scott Rao 連續注水</option>
+                        <option value="tetsu_ice">🧊 冰手沖 · Kasuya Iced（急冷）</option>
+                        <option value="strong_conc">💪 濃縮式（1:10 小水量）</option>
                     </select>
                 </div>
+                <div id="dripper-preview" style="grid-column: span 2;"></div>
             </div>
             </div></details>
 
@@ -6551,6 +6584,44 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 const brew = (document.getElementById('sel-brew')||{}).value;
                 const extra = document.getElementById('pour-over-extra');
                 if (extra) extra.style.display = (brew === 'pour_over') ? 'grid' : 'none';
+                // 切換其他沖煮時隱藏 dripper preview
+                const prev = document.getElementById('dripper-preview');
+                if (prev) prev.classList.toggle('show', brew === 'pour_over');
+            };
+
+            // 🧪 濾杯 SVG 小圖（64×64 viewBox、直觀形狀對照）
+            const DRIPPER_SVG = {
+                v60: `<svg viewBox="0 0 64 64"><path d="M 10 14 L 54 14 L 34 48 L 30 48 Z" fill="#e53935" stroke="#b71c1c" stroke-width="1.5"/><path d="M 12 16 L 52 16 L 33 46 L 31 46 Z" fill="#fff8e1" opacity="0.7"/><path d="M 54 20 Q 60 26 58 38 L 50 38" fill="none" stroke="#b71c1c" stroke-width="2.5" stroke-linecap="round"/></svg>`,
+                kalita: `<svg viewBox="0 0 64 64"><path d="M 10 14 Q 12 12 14 14 Q 16 12 18 14 Q 20 12 22 14 Q 24 12 26 14 Q 28 12 30 14 Q 32 12 34 14 Q 36 12 38 14 Q 40 12 42 14 Q 44 12 46 14 Q 48 12 50 14 Q 52 12 54 14 L 50 44 L 14 44 Z" fill="#ff7043" stroke="#bf360c" stroke-width="1.5"/><rect x="14" y="40" width="36" height="4" fill="#455a64"/><circle cx="24" cy="42" r="1.5" fill="#212121"/><circle cx="32" cy="42" r="1.5" fill="#212121"/><circle cx="40" cy="42" r="1.5" fill="#212121"/></svg>`,
+                origami: `<svg viewBox="0 0 64 64"><polygon points="10,14 14,18 12,22 16,26 14,30 18,34 16,38 20,42 18,46 32,48 46,46 44,42 48,38 46,34 50,30 48,26 52,22 50,18 54,14" fill="#ff9800" stroke="#e65100" stroke-width="1.5"/><path d="M 14 16 L 50 16 L 32 46" fill="none" stroke="#fff" stroke-width="1" opacity="0.5"/></svg>`,
+                chemex: `<svg viewBox="0 0 64 64"><path d="M 14 10 L 50 10 L 38 24 L 38 42 Q 38 46 42 48 L 42 52 L 22 52 L 22 48 Q 26 46 26 42 L 26 24 Z" fill="#fff3e0" stroke="#5d4037" stroke-width="1.5"/><path d="M 20 22 L 44 22" stroke="#5d4037" stroke-width="1" stroke-dasharray="2 2"/><ellipse cx="32" cy="16" rx="10" ry="2" fill="#4e342e" opacity="0.6"/></svg>`,
+                clever: `<svg viewBox="0 0 64 64"><path d="M 10 14 L 54 14 L 34 44 L 30 44 Z" fill="#5d4037" stroke="#3e2723" stroke-width="1.5"/><rect x="26" y="42" width="12" height="10" rx="2" fill="#212121"/><circle cx="32" cy="47" r="2" fill="#fff176"/></svg>`,
+                switch: `<svg viewBox="0 0 64 64"><path d="M 10 14 L 54 14 L 34 46 L 30 46 Z" fill="#607d8b" stroke="#37474f" stroke-width="1.5"/><path d="M 12 16 L 52 16 L 33 44 L 31 44 Z" fill="#eceff1" opacity="0.5"/><circle cx="32" cy="47" r="4" fill="#212121"/><rect x="28" y="45" width="8" height="2" fill="#ff6f00"/></svg>`,
+                orea: `<svg viewBox="0 0 64 64"><path d="M 8 14 L 56 14 L 50 42 L 14 42 Z" fill="#78909c" stroke="#455a64" stroke-width="1.5"/><ellipse cx="32" cy="42" rx="18" ry="4" fill="#455a64"/><circle cx="22" cy="42" r="2" fill="#212121"/><circle cx="32" cy="42" r="2" fill="#212121"/><circle cx="42" cy="42" r="2" fill="#212121"/><text x="32" y="24" text-anchor="middle" font-size="6" fill="#fff" font-weight="bold">V3/V4</text></svg>`,
+                april: `<svg viewBox="0 0 64 64"><path d="M 8 14 L 56 14 L 50 42 L 14 42 Z" fill="#ffb74d" stroke="#e65100" stroke-width="1.5"/><line x1="16" y1="18" x2="18" y2="40" stroke="#bf360c" stroke-width="1.5"/><line x1="24" y1="18" x2="24" y2="40" stroke="#bf360c" stroke-width="1.5"/><line x1="32" y1="18" x2="32" y2="40" stroke="#bf360c" stroke-width="1.5"/><line x1="40" y1="18" x2="40" y2="40" stroke="#bf360c" stroke-width="1.5"/><line x1="48" y1="18" x2="46" y2="40" stroke="#bf360c" stroke-width="1.5"/><ellipse cx="32" cy="42" rx="18" ry="3" fill="#bf360c"/></svg>`,
+                melitta: `<svg viewBox="0 0 64 64"><path d="M 10 14 L 54 14 L 36 46 L 28 46 Z" fill="#8d6e63" stroke="#4e342e" stroke-width="1.5"/><line x1="12" y1="18" x2="32" y2="46" stroke="#4e342e" stroke-width="0.8" opacity="0.5"/><line x1="20" y1="18" x2="32" y2="46" stroke="#4e342e" stroke-width="0.8" opacity="0.5"/><line x1="44" y1="18" x2="32" y2="46" stroke="#4e342e" stroke-width="0.8" opacity="0.5"/><line x1="52" y1="18" x2="32" y2="46" stroke="#4e342e" stroke-width="0.8" opacity="0.5"/><circle cx="32" cy="46" r="1.5" fill="#212121"/></svg>`,
+                stagg: `<svg viewBox="0 0 64 64"><path d="M 10 14 L 54 14 L 50 44 L 14 44 Z" fill="#37474f" stroke="#263238" stroke-width="1.5"/><path d="M 13 17 L 51 17 L 47 41 L 17 41 Z" fill="#546e7a"/><path d="M 16 20 L 48 20 L 44 38 L 20 38 Z" fill="none" stroke="#b0bec5" stroke-width="1"/><ellipse cx="32" cy="44" rx="18" ry="2" fill="#263238"/></svg>`
+            };
+
+            // 即時更新濾杯 + 手法 預覽卡
+            window.updateDripperPreview = function() {
+                const box = document.getElementById('dripper-preview');
+                if (!box) return;
+                const brew = (document.getElementById('sel-brew')||{}).value;
+                if (brew !== 'pour_over') { box.classList.remove('show'); return; }
+                const d = (document.getElementById('sel-dripper')||{}).value || 'v60';
+                const m = (document.getElementById('sel-method') ||{}).value || 'classic_3';
+                const dInfo = (typeof DRIPPER_INFO !== 'undefined' && DRIPPER_INFO[d]) || { name:d, note:'' };
+                const mInfo = (typeof POUR_METHODS !== 'undefined' && POUR_METHODS[m]) || { name:m, note:'' };
+                box.innerHTML = `
+                    <div class="dp-icon">${DRIPPER_SVG[d] || ''}</div>
+                    <div class="dp-info">
+                        <div class="dp-name">${_escHtml ? _escHtml(dInfo.name) : dInfo.name}</div>
+                        <div class="dp-note">${_escHtml ? _escHtml(dInfo.note) : dInfo.note}</div>
+                        <div class="dp-method">🎯 <b>${_escHtml ? _escHtml(mInfo.name) : mInfo.name}</b>：${_escHtml ? _escHtml(mInfo.note) : mInfo.note}</div>
+                    </div>
+                `;
+                box.classList.add('show');
             };
 
             // config panel 已整合進主版面、不可關閉；保留 journal 的 overlay 開關
@@ -8129,6 +8200,8 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 renderJournal();
                 // 初始化手沖子選單顯示狀態
                 onBrewChange();
+                // 初次渲染濾杯預覽
+                if (typeof updateDripperPreview === 'function') updateDripperPreview();
                 // 🐭 風味輪閒置老鼠
                 initIdleMouse();
             }
