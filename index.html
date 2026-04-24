@@ -159,37 +159,40 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
         }
         #analysis-viewer.open .av-card { transform: translateY(0); opacity: 1; }
         .av-header {
-            padding: 22px 28px; background: linear-gradient(135deg, #3e2723 0%, #5d4037 100%);
-            color: #fff; display: flex; justify-content: space-between; align-items: center; gap: 10px;
+            padding: 24px 32px; background: linear-gradient(135deg, #3e2723 0%, #5d4037 100%);
+            color: #fff; display: flex; justify-content: space-between; align-items: center; gap: 12px;
         }
         .av-header .av-title {
-            font-size: 18px; font-weight: 800; display: flex; align-items: center; gap: 10px;
+            font-size: 21px; font-weight: 800; display: flex; align-items: center; gap: 12px;
         }
         .av-header .av-close {
             background: rgba(255,255,255,0.15); border: none; color: #fff;
-            width: 36px; height: 36px; border-radius: 50%; font-size: 18px; cursor: pointer;
+            width: 40px; height: 40px; border-radius: 50%; font-size: 20px; cursor: pointer;
             transition: background 0.15s;
         }
         .av-header .av-close:hover { background: rgba(255,255,255,0.3); }
-        .av-body { padding: 28px 34px 34px; }
+        .av-body { padding: 30px 36px 36px; }
         .av-summary {
             background: #f5f2ec; border-left: 4px solid #8d6e63;
-            padding: 14px 18px; border-radius: 0 10px 10px 0;
-            font-size: 12px; color: #5d4037; line-height: 1.8;
-            margin-bottom: 18px; display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 6px 18px;
+            padding: 16px 20px; border-radius: 0 10px 10px 0;
+            font-size: 14px; color: #5d4037; line-height: 1.8;
+            margin-bottom: 20px; display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 6px 20px;
         }
-        .av-summary .av-kv { display: flex; gap: 6px; align-items: baseline; }
-        .av-summary .av-k { color: #8d6e63; font-weight: 700; font-size: 11px; flex-shrink: 0; }
-        .av-summary .av-v { color: #3e2723; font-weight: 600; }
+        .av-summary .av-kv { display: flex; gap: 8px; align-items: baseline; }
+        .av-summary .av-k { color: #8d6e63; font-weight: 700; font-size: 13px; flex-shrink: 0; }
+        .av-summary .av-v { color: #3e2723; font-weight: 600; font-size: 14px; }
         .av-content {
-            font-size: 14px; line-height: 1.85; color: #3e2723;
+            font-size: 15.5px; line-height: 1.85; color: #3e2723;
             font-family: "PingFang TC", "Microsoft JhengHei", sans-serif;
         }
         .av-content h3, .av-content strong { color: #5d4037; }
         .av-content pre.av-raw {
             white-space: pre-wrap; font-family: inherit; margin: 0;
-            font-size: 13px; line-height: 1.85;
+            font-size: 14.5px; line-height: 1.85;
+        }
+        .av-badge {
+            font-size: 13px !important; padding: 4px 12px !important;
         }
 
         /* 📊 沖煮視覺化卡片 */
@@ -203,51 +206,51 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
         }
         .viz-card {
             background: #fafaf7; border: 1px solid #e8e4d8; border-radius: 14px;
-            padding: 14px 16px; display: flex; flex-direction: column;
+            padding: 16px 18px; display: flex; flex-direction: column;
         }
         .viz-card-title {
-            font-size: 12px; font-weight: 800; color: #5d4037;
-            letter-spacing: 0.3px; margin-bottom: 10px;
-            padding-bottom: 8px; border-bottom: 1px solid #e8e4d8;
+            font-size: 14.5px; font-weight: 800; color: #5d4037;
+            letter-spacing: 0.3px; margin-bottom: 12px;
+            padding-bottom: 10px; border-bottom: 1px solid #e8e4d8;
         }
 
         /* --- 溫度計 --- */
         .viz-thermo-row { display: flex; gap: 14px; align-items: stretch; }
-        .viz-thermo { flex-shrink: 0; width: 60px; }
-        .viz-thermo-info { flex: 1; font-size: 11px; line-height: 1.65; display: flex; flex-direction: column; justify-content: center; }
-        .viz-thermo-info .viz-base { color: #8d6e63; font-weight: 600; }
-        .viz-thermo-info .viz-adj { color: #555; margin: 2px 0; font-size: 10.5px; display: flex; align-items: baseline; gap: 4px; }
+        .viz-thermo { flex-shrink: 0; width: 66px; }
+        .viz-thermo-info { flex: 1; font-size: 13px; line-height: 1.7; display: flex; flex-direction: column; justify-content: center; }
+        .viz-thermo-info .viz-base { color: #8d6e63; font-weight: 600; font-size: 13px; }
+        .viz-thermo-info .viz-adj { color: #555; margin: 3px 0; font-size: 12.5px; display: flex; align-items: baseline; gap: 6px; }
         .viz-thermo-info .viz-adj .viz-delta-pos { color: #c62828; font-weight: 700; }
         .viz-thermo-info .viz-adj .viz-delta-neg { color: #1565c0; font-weight: 700; }
         .viz-thermo-info .viz-final {
-            margin-top: 6px; padding-top: 6px; border-top: 1px dashed #d7d4c8;
-            color: #3e2723; font-weight: 800; font-size: 13px;
+            margin-top: 8px; padding-top: 8px; border-top: 1px dashed #d7d4c8;
+            color: #3e2723; font-weight: 800; font-size: 15px;
         }
 
         /* --- 粉水比杯 --- */
         .viz-cup-row { display: flex; gap: 14px; align-items: center; }
-        .viz-cup { flex-shrink: 0; width: 80px; height: 120px; }
-        .viz-cup-info { flex: 1; font-size: 11px; line-height: 1.65; }
+        .viz-cup { flex-shrink: 0; width: 88px; height: 132px; }
+        .viz-cup-info { flex: 1; font-size: 13px; line-height: 1.7; }
         .viz-cup-info .viz-ratio-big {
-            font-size: 24px; font-weight: 900; color: #3e2723;
+            font-size: 28px; font-weight: 900; color: #3e2723;
             letter-spacing: -0.5px; margin-bottom: 4px;
         }
-        .viz-cup-info .viz-ratio-calc { color: #5d4037; font-weight: 600; font-size: 12px; }
-        .viz-cup-info .viz-ratio-note { color: #888; font-size: 10.5px; margin-top: 4px; }
+        .viz-cup-info .viz-ratio-calc { color: #5d4037; font-weight: 600; font-size: 14px; }
+        .viz-cup-info .viz-ratio-note { color: #888; font-size: 12.5px; margin-top: 4px; }
 
         /* --- 時間軸 --- */
         .viz-timeline {
-            position: relative; padding: 6px 0 6px 14px;
+            position: relative; padding: 8px 0 8px 16px;
             border-left: 3px solid #d7ccc8;
         }
         .viz-timeline .viz-tl-row {
-            position: relative; padding: 4px 0 10px 14px;
-            font-size: 11.5px; line-height: 1.55;
+            position: relative; padding: 5px 0 12px 16px;
+            font-size: 13.5px; line-height: 1.65;
         }
         .viz-timeline .viz-tl-row::before {
             content: ''; position: absolute;
-            left: -20px; top: 7px;
-            width: 10px; height: 10px; border-radius: 50%;
+            left: -22px; top: 9px;
+            width: 12px; height: 12px; border-radius: 50%;
             background: #8d6e63; border: 2px solid #fafaf7;
             box-shadow: 0 0 0 2px #8d6e63;
         }
@@ -255,14 +258,14 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
         .viz-timeline .viz-tl-row.viz-tl-end::before { background: #c62828; box-shadow: 0 0 0 2px #c62828; }
         .viz-timeline .viz-tl-time {
             display: inline-block; font-weight: 800; color: #5d4037;
-            background: #efebe9; padding: 1px 8px; border-radius: 10px;
-            font-size: 10.5px; margin-right: 6px; min-width: 38px; text-align: center;
+            background: #efebe9; padding: 2px 10px; border-radius: 10px;
+            font-size: 12.5px; margin-right: 8px; min-width: 44px; text-align: center;
         }
         .viz-timeline .viz-tl-desc { color: #3e2723; }
         .viz-timeline .viz-tl-tip {
-            display: block; margin-top: 4px; padding: 6px 10px;
+            display: block; margin-top: 4px; padding: 8px 12px;
             background: #fff8e1; border-left: 3px solid #fbc02d;
-            color: #795548; font-size: 10.5px; line-height: 1.55;
+            color: #795548; font-size: 12.5px; line-height: 1.65;
             border-radius: 0 6px 6px 0;
         }
 
@@ -279,13 +282,13 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
         }
         .viz-grind-labels {
             display: flex; justify-content: space-between;
-            font-size: 9.5px; color: #8d6e63; font-weight: 600;
-            margin-top: 2px;
+            font-size: 11px; color: #8d6e63; font-weight: 600;
+            margin-top: 4px;
         }
         .viz-grind-current {
-            font-size: 13px; font-weight: 800; color: #3e2723; margin-top: 6px;
+            font-size: 15px; font-weight: 800; color: #3e2723; margin-top: 8px;
         }
-        .viz-grind-note { font-size: 10.5px; color: #666; margin-top: 4px; line-height: 1.55; }
+        .viz-grind-note { font-size: 12.5px; color: #666; margin-top: 6px; line-height: 1.65; }
 
         /* --- 養豆狀態時間軸 --- */
         .viz-rest-bar {
@@ -298,34 +301,34 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
         }
         .viz-rest-labels {
             display: flex; justify-content: space-between;
-            font-size: 9.5px; color: #666; font-weight: 600; margin-top: 2px;
+            font-size: 11px; color: #666; font-weight: 600; margin-top: 4px;
         }
         .viz-rest-tag {
-            display: inline-block; margin-top: 8px; padding: 4px 10px;
-            background: #e8f5e9; color: #2e7d32; font-size: 11px;
+            display: inline-block; margin-top: 10px; padding: 5px 12px;
+            background: #e8f5e9; color: #2e7d32; font-size: 13px;
             font-weight: 700; border-radius: 10px;
         }
 
         /* --- 水質 / 通用 range gauge --- */
-        .viz-range-item { margin-bottom: 10px; }
+        .viz-range-item { margin-bottom: 12px; }
         .viz-range-item:last-child { margin-bottom: 0; }
         .viz-range-label {
             display: flex; justify-content: space-between;
-            font-size: 10.5px; color: #5d4037; font-weight: 700;
+            font-size: 12.5px; color: #5d4037; font-weight: 700;
         }
         .viz-range-label .viz-range-val { color: #1976d2; font-weight: 800; }
         .viz-range-bar {
-            position: relative; height: 12px; background: #eceff1;
-            border-radius: 6px; margin: 4px 0 2px;
+            position: relative; height: 14px; background: #eceff1;
+            border-radius: 7px; margin: 5px 0 3px;
         }
         .viz-range-fill {
             position: absolute; top: 0; bottom: 0;
             background: linear-gradient(to right, #90caf9, #42a5f5);
-            border-radius: 6px;
+            border-radius: 7px;
         }
         .viz-range-scale {
             display: flex; justify-content: space-between;
-            font-size: 9px; color: #888;
+            font-size: 11px; color: #888;
         }
 
         /* --- 圓形吻合度 gauge --- */
@@ -333,23 +336,23 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             display: flex; flex-direction: column; align-items: center;
             padding: 10px 0 0;
         }
-        .viz-gauge-svg { width: 130px; height: 130px; }
+        .viz-gauge-svg { width: 150px; height: 150px; }
         .viz-gauge-label {
-            margin-top: 6px; font-size: 13px; font-weight: 800;
+            margin-top: 8px; font-size: 15px; font-weight: 800;
             text-align: center;
         }
-        .viz-gauge-sublabel { font-size: 10.5px; color: #666; margin-top: 2px; }
+        .viz-gauge-sublabel { font-size: 12.5px; color: #666; margin-top: 4px; text-align: center; }
 
         /* --- 風味 tag cloud --- */
-        .viz-tag-group { margin-top: 10px; }
+        .viz-tag-group { margin-top: 12px; }
         .viz-tag-group-title {
-            font-size: 11px; font-weight: 700; color: #555;
-            margin-bottom: 6px; display: flex; align-items: center; gap: 6px;
+            font-size: 13px; font-weight: 700; color: #555;
+            margin-bottom: 8px; display: flex; align-items: center; gap: 6px;
         }
-        .viz-tag-cloud { display: flex; flex-wrap: wrap; gap: 6px; }
+        .viz-tag-cloud { display: flex; flex-wrap: wrap; gap: 7px; }
         .viz-flavor-tag {
-            display: inline-block; padding: 4px 10px; border-radius: 12px;
-            font-size: 11px; font-weight: 700; background: #fff;
+            display: inline-block; padding: 5px 12px; border-radius: 12px;
+            font-size: 12.5px; font-weight: 700; background: #fff;
             border: 1.5px solid #bbdefb; color: #1565c0;
         }
         .viz-flavor-tag.missing { border-color: #ffb74d; color: #e65100; background: #fff8e1; }
@@ -357,74 +360,74 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
         .viz-flavor-tag.defect { border-color: #ef9a9a; color: #c62828; background: #ffebee; }
 
         /* --- 調整卡（微調方向 / 烘焙建議 / 警示）--- */
-        .viz-advice-list { display: flex; flex-direction: column; gap: 8px; }
+        .viz-advice-list { display: flex; flex-direction: column; gap: 10px; }
         .viz-advice {
-            padding: 10px 12px; background: #fff; border-left: 4px solid #8d6e63;
-            border-radius: 0 10px 10px 0; font-size: 12px; line-height: 1.7;
+            padding: 12px 15px; background: #fff; border-left: 4px solid #8d6e63;
+            border-radius: 0 10px 10px 0; font-size: 14px; line-height: 1.75;
             color: #3e2723; border: 1px solid #e8e4d8; border-left-width: 4px;
         }
         .viz-advice.warn { border-left-color: #e65100; background: #fff3e0; }
         .viz-advice.danger { border-left-color: #c62828; background: #ffebee; }
         .viz-advice.good { border-left-color: #2e7d32; background: #e8f5e9; }
-        .viz-advice-title { font-size: 12px; font-weight: 800; margin-bottom: 3px; }
-        .viz-advice-body { font-size: 11.5px; color: #555; line-height: 1.65; white-space: pre-line; }
+        .viz-advice-title { font-size: 14.5px; font-weight: 800; margin-bottom: 5px; }
+        .viz-advice-body { font-size: 13.5px; color: #555; line-height: 1.75; white-space: pre-line; }
 
         /* --- 烘焙階段進度條（Drying / Maillard / Development）--- */
         .viz-phase-bar {
-            display: flex; height: 26px; border-radius: 13px; overflow: hidden;
-            background: #eceff1; margin: 10px 0 4px; font-size: 10.5px;
+            display: flex; height: 30px; border-radius: 15px; overflow: hidden;
+            background: #eceff1; margin: 12px 0 4px; font-size: 12.5px;
             font-weight: 700; color: #fff;
         }
         .viz-phase-seg {
             display: flex; align-items: center; justify-content: center;
-            padding: 0 6px; min-width: 40px;
+            padding: 0 8px; min-width: 50px;
         }
         .viz-phase-seg.phase-dry { background: #8d6e63; }
         .viz-phase-seg.phase-mai { background: #f57c00; }
         .viz-phase-seg.phase-dev { background: #c62828; }
         .viz-phase-labels {
             display: flex; justify-content: space-between;
-            font-size: 9.5px; color: #888; font-weight: 600;
+            font-size: 11px; color: #888; font-weight: 600;
         }
 
         /* --- 雙面歸因卡（大框架 vs 烘焙曲線專項）--- */
         .viz-cause-note {
-            padding: 10px 12px; background: #fff3e0; border-left: 4px solid #fbc02d;
-            border-radius: 0 8px 8px 0; font-size: 11.5px; color: #6d4c41;
-            line-height: 1.7; margin-bottom: 14px;
+            padding: 12px 15px; background: #fff3e0; border-left: 4px solid #fbc02d;
+            border-radius: 0 8px 8px 0; font-size: 13.5px; color: #6d4c41;
+            line-height: 1.8; margin-bottom: 16px;
         }
         .viz-cause-note b { color: #e65100; }
         .viz-cause-block {
             background: #fafaf7; border: 1px solid #e8e4d8; border-radius: 10px;
-            padding: 12px; margin-bottom: 12px;
+            padding: 14px; margin-bottom: 14px;
         }
         .viz-cause-header {
-            display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
-            padding-bottom: 8px; margin-bottom: 10px;
+            display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+            padding-bottom: 10px; margin-bottom: 12px;
             border-bottom: 1px solid #e8e4d8;
         }
-        .viz-cause-emoji { font-size: 20px; }
-        .viz-cause-title { font-size: 13px; font-weight: 800; color: #3e2723; }
-        .viz-cause-tags { display: flex; gap: 4px; flex-wrap: wrap; margin-left: auto; }
+        .viz-cause-emoji { font-size: 24px; }
+        .viz-cause-title { font-size: 15.5px; font-weight: 800; color: #3e2723; }
+        .viz-cause-tags { display: flex; gap: 5px; flex-wrap: wrap; margin-left: auto; }
         .viz-cause-grid {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
         }
         @media (max-width: 768px) { .viz-cause-grid { grid-template-columns: 1fr; } }
         .viz-cause-col {
-            background: #fff; border: 1px solid #eceff1; border-radius: 8px; padding: 10px 12px;
+            background: #fff; border: 1px solid #eceff1; border-radius: 8px; padding: 12px 14px;
         }
         .viz-cause-col-title {
-            font-size: 11px; font-weight: 800; color: #1565c0;
-            margin-bottom: 6px; padding-bottom: 4px; border-bottom: 1px dashed #bbdefb;
+            font-size: 13px; font-weight: 800; color: #1565c0;
+            margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px dashed #bbdefb;
         }
         .viz-cause-col-title.viz-col-warn { color: #e65100; border-bottom-color: #ffcc80; }
         .viz-cause-ul {
-            margin: 0; padding: 0 0 0 18px;
-            font-size: 11.5px; line-height: 1.75; color: #444;
+            margin: 0; padding: 0 0 0 20px;
+            font-size: 13.5px; line-height: 1.85; color: #444;
         }
-        .viz-cause-ul li { margin-bottom: 4px; }
+        .viz-cause-ul li { margin-bottom: 5px; }
         .viz-cause-empty {
-            font-size: 11px; color: #aaa; padding: 6px 0; font-style: italic;
+            font-size: 13px; color: #aaa; padding: 8px 0; font-style: italic;
         }
         .viz-cause-block.viz-cause-danger {
             background: #fff5f5; border-color: #ffcdd2;
@@ -433,62 +436,62 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             border-bottom-color: #ffcdd2;
         }
         .viz-action-row {
-            display: flex; align-items: center; gap: 10px;
-            padding: 10px 12px; background: #fff8e1;
+            display: flex; align-items: center; gap: 12px;
+            padding: 12px 15px; background: #fff8e1;
             border: 1px dashed #fbc02d; border-radius: 8px;
-            margin-bottom: 10px; flex-wrap: wrap;
+            margin-bottom: 12px; flex-wrap: wrap;
         }
         .viz-action-label {
-            font-size: 11px; font-weight: 800; color: #6d4c41;
+            font-size: 13px; font-weight: 800; color: #6d4c41;
             white-space: nowrap;
         }
         .viz-action-row .viz-diag-deltas { margin: 0; }
 
         /* --- 感官訓練四階段 --- */
         .viz-sensory-stages {
-            display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
         }
         @media (max-width: 768px) { .viz-sensory-stages { grid-template-columns: 1fr 1fr; } }
         .viz-sensory-stage {
             background: #fff; border: 1px solid #e8e4d8; border-radius: 10px;
-            padding: 12px 10px; text-align: center;
+            padding: 14px 12px; text-align: center;
         }
         .viz-sensory-icon {
-            font-size: 28px; margin-bottom: 4px;
+            font-size: 34px; margin-bottom: 6px;
             filter: saturate(1.2);
         }
         .viz-sensory-step {
-            font-size: 12px; font-weight: 800; color: #3e2723; margin-bottom: 4px;
+            font-size: 14px; font-weight: 800; color: #3e2723; margin-bottom: 6px;
         }
         .viz-sensory-desc {
-            font-size: 10.5px; color: #666; line-height: 1.55;
+            font-size: 12.5px; color: #666; line-height: 1.7;
         }
 
         /* --- 反查診斷視覺化 --- */
         .viz-diag-ctx {
-            display: flex; gap: 8px; flex-wrap: wrap;
-            padding: 10px 12px; background: #efebe9; border-radius: 10px;
-            margin-bottom: 12px;
+            display: flex; gap: 10px; flex-wrap: wrap;
+            padding: 12px 15px; background: #efebe9; border-radius: 10px;
+            margin-bottom: 14px;
         }
         .viz-diag-ctx-item {
-            font-size: 11px; padding: 4px 10px; background: #fff;
+            font-size: 13px; padding: 5px 12px; background: #fff;
             border: 1px solid #d7ccc8; border-radius: 12px;
             color: #5d4037; font-weight: 600;
         }
         .viz-diag-ctx-item b { color: #3e2723; }
         .viz-diag-symptoms {
-            display: flex; gap: 6px; flex-wrap: wrap;
-            padding: 8px 0 12px; margin-bottom: 12px;
+            display: flex; gap: 7px; flex-wrap: wrap;
+            padding: 10px 0 14px; margin-bottom: 14px;
             border-bottom: 1px dashed #d7ccc8;
         }
         .viz-diag-sym {
             background: #ffebee; color: #c62828; border: 1px solid #ffcdd2;
-            padding: 3px 10px; border-radius: 12px;
-            font-size: 11px; font-weight: 700;
+            padding: 4px 12px; border-radius: 12px;
+            font-size: 13px; font-weight: 700;
         }
         .viz-diag-cause {
             background: #fff; border: 1px solid #e8e4d8; border-radius: 10px;
-            padding: 12px 14px; margin-bottom: 10px; border-left: 4px solid #8d6e63;
+            padding: 14px 16px; margin-bottom: 12px; border-left: 4px solid #8d6e63;
         }
         .viz-diag-cause.risk-high { border-left-color: #c62828; }
         .viz-diag-cause.risk-med  { border-left-color: #ef6c00; }
@@ -498,41 +501,41 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             margin-bottom: 6px;
         }
         .viz-diag-rank {
-            width: 24px; height: 24px; border-radius: 50%;
+            width: 28px; height: 28px; border-radius: 50%;
             background: #5d4037; color: #fff; font-weight: 800;
-            font-size: 12px; display: flex; align-items: center; justify-content: center;
+            font-size: 14px; display: flex; align-items: center; justify-content: center;
             flex-shrink: 0;
         }
-        .viz-diag-title { font-size: 13px; font-weight: 800; color: #3e2723; flex: 1; }
+        .viz-diag-title { font-size: 15.5px; font-weight: 800; color: #3e2723; flex: 1; }
         .viz-diag-risk {
-            font-size: 10px; padding: 2px 8px; border-radius: 10px;
+            font-size: 11.5px; padding: 3px 10px; border-radius: 10px;
             font-weight: 700; letter-spacing: 0.3px;
         }
         .viz-diag-risk.risk-high { background: #ffebee; color: #c62828; }
         .viz-diag-risk.risk-med  { background: #fff3e0; color: #ef6c00; }
         .viz-diag-risk.risk-low  { background: #e8f5e9; color: #2e7d32; }
         .viz-diag-bar-wrap {
-            display: flex; align-items: center; gap: 8px;
-            margin-bottom: 8px;
+            display: flex; align-items: center; gap: 10px;
+            margin-bottom: 10px;
         }
         .viz-diag-bar {
-            flex: 1; height: 8px; background: #eceff1; border-radius: 4px;
+            flex: 1; height: 10px; background: #eceff1; border-radius: 5px;
             overflow: hidden;
         }
         .viz-diag-bar-fill {
             height: 100%; background: linear-gradient(to right, #ef6c00, #c62828);
-            border-radius: 4px; transition: width 0.6s ease-out;
+            border-radius: 5px; transition: width 0.6s ease-out;
         }
-        .viz-diag-pct { font-size: 11px; font-weight: 800; color: #5d4037; min-width: 36px; text-align: right; }
+        .viz-diag-pct { font-size: 13px; font-weight: 800; color: #5d4037; min-width: 42px; text-align: right; }
         .viz-diag-fix {
-            font-size: 11.5px; color: #444; line-height: 1.65; margin-top: 6px;
+            font-size: 13.5px; color: #444; line-height: 1.75; margin-top: 8px;
         }
         .viz-diag-fix-label { font-weight: 700; color: #ef6c00; }
         .viz-diag-deltas {
-            display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px;
+            display: flex; gap: 7px; flex-wrap: wrap; margin-top: 10px;
         }
         .viz-diag-delta {
-            padding: 3px 10px; font-size: 11px; font-weight: 700;
+            padding: 4px 12px; font-size: 12.5px; font-weight: 700;
             border-radius: 12px; background: #e3f2fd; color: #1565c0;
             border: 1px solid #90caf9;
         }
@@ -540,54 +543,54 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
         .viz-diag-delta.down { background: #e3f2fd; color: #1565c0; border-color: #90caf9; }
         .viz-diag-delta.neutral { background: #fff8e1; color: #795548; border-color: #ffe082; }
         .viz-diag-method-tip {
-            margin-top: 14px; padding: 12px 14px; background: #fff8e1;
+            margin-top: 16px; padding: 14px 16px; background: #fff8e1;
             border: 1px dashed #fbc02d; border-radius: 10px;
-            font-size: 11.5px; color: #6d4c41; line-height: 1.7;
+            font-size: 13.5px; color: #6d4c41; line-height: 1.8;
         }
 
         /* --- 水平長條圖（排行榜）--- */
-        .viz-bar-list { display: flex; flex-direction: column; gap: 6px; }
-        .viz-bar-row { display: flex; align-items: center; gap: 8px; font-size: 11px; }
+        .viz-bar-list { display: flex; flex-direction: column; gap: 8px; }
+        .viz-bar-row { display: flex; align-items: center; gap: 10px; font-size: 13px; }
         .viz-bar-label {
             width: 34%; flex-shrink: 0; color: #5d4037; font-weight: 600;
             overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
         }
         .viz-bar-track {
             flex: 1; position: relative; background: #eceff1;
-            border-radius: 10px; height: 20px; overflow: hidden;
+            border-radius: 12px; height: 24px; overflow: hidden;
         }
         .viz-bar-fill {
             position: absolute; left: 0; top: 0; bottom: 0;
-            border-radius: 10px; transition: width 0.5s ease-out;
+            border-radius: 12px; transition: width 0.5s ease-out;
         }
         .viz-bar-value {
-            position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
-            font-size: 10.5px; color: #3e2723; font-weight: 700; z-index: 1;
+            position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+            font-size: 12px; color: #3e2723; font-weight: 700; z-index: 1;
         }
 
         /* --- 直方圖（分布）--- */
         .viz-hist {
             display: flex; align-items: flex-end; justify-content: space-around;
-            height: 140px; padding: 12px 6px 0; gap: 8px;
+            height: 160px; padding: 14px 6px 0; gap: 10px;
             border-bottom: 2px solid #d7ccc8;
         }
         .viz-hist-col {
             flex: 1; display: flex; flex-direction: column; align-items: center;
-            height: 100%; min-width: 40px;
+            height: 100%; min-width: 44px;
         }
         .viz-hist-bar-wrap {
             flex: 1; width: 100%; display: flex; flex-direction: column;
             justify-content: flex-end; align-items: center; position: relative;
         }
         .viz-hist-count {
-            font-size: 11px; font-weight: 800; color: #3e2723; margin-bottom: 3px;
+            font-size: 13px; font-weight: 800; color: #3e2723; margin-bottom: 5px;
         }
         .viz-hist-bar {
-            width: 80%; min-height: 2px; border-radius: 4px 4px 0 0;
+            width: 80%; min-height: 3px; border-radius: 5px 5px 0 0;
             transition: height 0.5s ease-out;
         }
         .viz-hist-label {
-            margin-top: 6px; font-size: 10px; color: #8d6e63; font-weight: 600;
+            margin-top: 8px; font-size: 12px; color: #8d6e63; font-weight: 600;
             text-align: center;
         }
         .av-footer {
@@ -723,13 +726,13 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
 
         .config-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         .config-group { display: flex; flex-direction: column; gap: 5px; margin-bottom: 12px; }
-        .config-group label { font-size: 10px; font-weight: 800; color: #888; letter-spacing: 0.5px; }
-        select { width: 100%; padding: 10px; border-radius: 10px; border: 1.5px solid #eee; font-size: 13px; background: #fff; cursor: pointer; outline: none; }
-        
+        .config-group label { font-size: 11.5px; font-weight: 800; color: #666; letter-spacing: 0.5px; }
+        select { width: 100%; padding: 11px; border-radius: 10px; border: 1.5px solid #eee; font-size: 14px; background: #fff; cursor: pointer; outline: none; }
+
         #expected-result-card { background: #f4f7ff; border: 1px solid #d1d9ff; border-radius: 20px; padding: 15px; margin-top: 5px; }
-        .expected-title { font-size: 12px; font-weight: bold; color: var(--accent-blue); margin-bottom: 10px; }
+        .expected-title { font-size: 13.5px; font-weight: bold; color: var(--accent-blue); margin-bottom: 10px; }
         .expected-tags { display: flex; flex-wrap: wrap; gap: 8px; }
-        .exp-tag { background: #fff; color: var(--accent-blue); border: 1px solid #c0ccff; padding: 4px 12px; border-radius: 8px; font-size: 11px; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.05); cursor: pointer; transition: 0.15s; }
+        .exp-tag { background: #fff; color: var(--accent-blue); border: 1px solid #c0ccff; padding: 5px 12px; border-radius: 8px; font-size: 12.5px; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.05); cursor: pointer; transition: 0.15s; }
         .exp-tag:hover { transform: scale(1.08); box-shadow: 0 4px 12px rgba(26,115,232,0.35); }
         .exp-tag.primary { background: var(--accent-blue); color: #fff; border-color: var(--accent-blue); }
         .exp-tag.primary::before { content: "★ "; font-size: 10px; }
@@ -737,14 +740,14 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
         .exp-tag.defect::before { content: "⚠️ "; font-size: 9px; }
         .exp-tag.matched { background: #e8f5e9; color: #1b5e20; border-color: #66bb6a; }
         .exp-tag.matched::after { content: " ✓"; font-weight: bold; }
-        .match-score { margin-top: 12px; padding: 10px 14px; border-radius: 12px; display: flex; align-items: center; gap: 14px; font-size: 12px; transition: 0.25s; }
+        .match-score { margin-top: 12px; padding: 12px 16px; border-radius: 12px; display: flex; align-items: center; gap: 14px; font-size: 13.5px; transition: 0.25s; }
         .match-score.high { background: #e8f5e9; border: 1.5px solid #66bb6a; color: #1b5e20; }
         .match-score.mid { background: #fff8e1; border: 1.5px solid #ffb300; color: #ef6c00; }
         .match-score.low { background: #ffebee; border: 1.5px solid #ef5350; color: #c62828; }
         .match-score.empty { background: #f5f5f5; border: 1.5px dashed #ccc; color: #888; }
-        .match-score .score-num { font-size: 28px; font-weight: 900; letter-spacing: -1px; }
-        .match-score .score-detail { font-size: 11px; opacity: 0.85; line-height: 1.4; }
-        #region-info { margin-top: 8px; padding: 9px 12px; background: #fafaff; border-left: 3px solid var(--accent-blue); border-radius: 6px; font-size: 11px; color: #555; line-height: 1.5; display: none; }
+        .match-score .score-num { font-size: 32px; font-weight: 900; letter-spacing: -1px; }
+        .match-score .score-detail { font-size: 12.5px; opacity: 0.85; line-height: 1.5; }
+        #region-info { margin-top: 8px; padding: 11px 14px; background: #fafaff; border-left: 3px solid var(--accent-blue); border-radius: 6px; font-size: 12.5px; color: #555; line-height: 1.65; display: none; }
         #region-info b { color: var(--accent-blue); }
         #wheel-hint { position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.7); color: #fff; padding: 6px 14px; border-radius: 20px; font-size: 11px; z-index: 50; pointer-events: none; white-space: nowrap; }
 
@@ -1138,16 +1141,16 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
     <div id="brew-diagnose-modal" style="display:none; position:fixed; inset:0; z-index:2100; background:rgba(0,0,0,0.75); backdrop-filter: blur(4px); overflow-y: auto; padding: 15px; box-sizing: border-box;">
         <div style="max-width: 720px; margin: 20px auto; background:#fff; border-radius: 16px; padding: 22px; box-shadow: 0 20px 80px rgba(0,0,0,0.5);">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 2px solid #e65100;">
-                <span style="font-size: 16px; font-weight: bold; color: #bf360c;">🔍 沖煮反向診斷</span>
-                <button onclick="closeBrewDiagnosis()" style="background:none; border:none; font-size: 20px; color: #888; cursor:pointer;">✕</button>
+                <span style="font-size: 19px; font-weight: bold; color: #bf360c;">🔍 沖煮反向診斷</span>
+                <button onclick="closeBrewDiagnosis()" style="background:none; border:none; font-size: 22px; color: #888; cursor:pointer;">✕</button>
             </div>
-            <div style="font-size: 12px; color: #555; margin-bottom: 10px; line-height: 1.6;">
+            <div style="font-size: 14px; color: #555; margin-bottom: 12px; line-height: 1.75;">
                 勾選你這杯<b>實際喝到的問題</b>，系統會依你目前的配置（焙度 × 濾杯 × 手法）反推可能成因，並給「下次怎麼改」的可操作建議。
             </div>
-            <div id="diag-symptoms" style="display:grid; grid-template-columns: repeat(2, 1fr); gap: 6px 10px; margin: 10px 0 14px 0;"></div>
-            <div style="display:flex; gap:8px;">
-                <button onclick="runBrewDiagnosis()" style="flex:2; padding: 12px; background: linear-gradient(135deg, #e65100, #bf360c); color:#fff; border:none; border-radius:10px; font-weight:bold; cursor:pointer;">🧪 執行診斷</button>
-                <button onclick="clearDiagSymptoms()" style="flex:1; padding: 12px; background: #eceff1; color:#37474f; border:none; border-radius:10px; font-weight:bold; cursor:pointer;">🔄 清除勾選</button>
+            <div id="diag-symptoms" style="display:grid; grid-template-columns: repeat(2, 1fr); gap: 8px 12px; margin: 12px 0 16px 0;"></div>
+            <div style="display:flex; gap:10px;">
+                <button onclick="runBrewDiagnosis()" style="flex:2; padding: 14px; background: linear-gradient(135deg, #e65100, #bf360c); color:#fff; border:none; border-radius:10px; font-weight:bold; cursor:pointer; font-size:14.5px;">🧪 執行診斷</button>
+                <button onclick="clearDiagSymptoms()" style="flex:1; padding: 14px; background: #eceff1; color:#37474f; border:none; border-radius:10px; font-weight:bold; cursor:pointer; font-size:14.5px;">🔄 清除勾選</button>
             </div>
             <div id="diag-output" style="margin-top: 14px;"></div>
         </div>
@@ -4111,7 +4114,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                         badgeText: '尚無資料',
                         badgeClass: '',
                         summaryItems: [],
-                        contentHtml: `<div style="text-align:center; padding:40px 20px; color:#8d6e63; font-size:14px; line-height:1.8;">還沒有任何杯測紀錄。<br>完成一次品嚐後點「💾 存檔本次杯測」開始累積。</div>`,
+                        contentHtml: `<div style="text-align:center; padding:50px 24px; color:#8d6e63; font-size:16px; line-height:1.9;">還沒有任何杯測紀錄。<br>完成一次品嚐後點「💾 存檔本次杯測」開始累積。</div>`,
                         footerHtml: `<button class="btn btn-secondary btn-sm" onclick="closeAnalysisViewer()">關閉</button>`
                     });
                     return;
@@ -4190,11 +4193,11 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                         <div class="viz-grid" style="grid-template-columns: 1fr 1fr;">
                             <div class="viz-card">
                                 <div class="viz-card-title">⭐ 個人評分趨勢</div>
-                                ${ratingData.length ? _renderLineChart(ratingData, { yMin: 1, yMax: 10, color: '#ef6c00' }) : '<div style="text-align:center; padding:20px; color:#888; font-size:12px;">尚無評分資料</div>'}
+                                ${ratingData.length ? _renderLineChart(ratingData, { yMin: 1, yMax: 10, color: '#ef6c00' }) : '<div style="text-align:center; padding:24px; color:#888; font-size:14px;">尚無評分資料</div>'}
                             </div>
                             <div class="viz-card">
                                 <div class="viz-card-title">🎯 吻合度趨勢</div>
-                                ${scoreData.length ? _renderLineChart(scoreData, { yMin: 0, yMax: 100, color: '#2e7d32' }) : '<div style="text-align:center; padding:20px; color:#888; font-size:12px;">尚無吻合度資料</div>'}
+                                ${scoreData.length ? _renderLineChart(scoreData, { yMin: 0, yMax: 100, color: '#2e7d32' }) : '<div style="text-align:center; padding:24px; color:#888; font-size:14px;">尚無吻合度資料</div>'}
                             </div>
                         </div>
                         <div class="viz-grid" style="grid-template-columns: 1fr 1fr;">
@@ -4205,27 +4208,27 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                             <div class="viz-card">
                                 <div class="viz-card-title">📊 吻合度分布</div>
                                 ${_renderHistogram(matchBins)}
-                                <div style="margin-top:8px; font-size:11px; color:#888; text-align:center;">右偏 = 吻合良好；左偏 = 感官訓練需求</div>
+                                <div style="margin-top:10px; font-size:13px; color:#888; text-align:center;">右偏 = 吻合良好；左偏 = 感官訓練需求</div>
                             </div>
                         </div>
                         <div class="viz-grid" style="grid-template-columns: 1fr 1fr;">
                             <div class="viz-card">
                                 <div class="viz-card-title">🌍 產區（依評分）</div>
-                                ${countries.length ? _renderBarChart(countries, { color: '#8d6e63' }) : '<div style="text-align:center; padding:20px; color:#888; font-size:12px;">—</div>'}
+                                ${countries.length ? _renderBarChart(countries, { color: '#8d6e63' }) : '<div style="text-align:center; padding:24px; color:#888; font-size:14px;">—</div>'}
                             </div>
                             <div class="viz-card">
                                 <div class="viz-card-title">💧 處理法（依評分）</div>
-                                ${processes.length ? _renderBarChart(processes, { color: '#1565c0' }) : '<div style="text-align:center; padding:20px; color:#888; font-size:12px;">—</div>'}
+                                ${processes.length ? _renderBarChart(processes, { color: '#1565c0' }) : '<div style="text-align:center; padding:24px; color:#888; font-size:14px;">—</div>'}
                             </div>
                         </div>
                         <div class="viz-grid" style="grid-template-columns: 1fr 1fr;">
                             <div class="viz-card">
                                 <div class="viz-card-title">🔥 焙度（依評分）</div>
-                                ${roasts.length ? _renderBarChart(roasts, { color: '#e65100' }) : '<div style="text-align:center; padding:20px; color:#888; font-size:12px;">—</div>'}
+                                ${roasts.length ? _renderBarChart(roasts, { color: '#e65100' }) : '<div style="text-align:center; padding:24px; color:#888; font-size:14px;">—</div>'}
                             </div>
                             <div class="viz-card">
                                 <div class="viz-card-title">☕ 沖煮方式（依評分）</div>
-                                ${brews.length ? _renderBarChart(brews, { color: '#6a1b9a' }) : '<div style="text-align:center; padding:20px; color:#888; font-size:12px;">—</div>'}
+                                ${brews.length ? _renderBarChart(brews, { color: '#6a1b9a' }) : '<div style="text-align:center; padding:24px; color:#888; font-size:14px;">—</div>'}
                             </div>
                         </div>`,
                     footerHtml: `<button class="btn btn-purple btn-sm" onclick="closeAnalysisViewer(); openInsights();">💡 洞察分析</button>
@@ -4329,20 +4332,20 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                             </div>
                             <div class="viz-card">
                                 <div class="viz-card-title">📅 今日複習</div>
-                                <div style="text-align:center; padding: 14px 0 6px;">
-                                    <div style="font-size: 40px; font-weight: 900; color: #e65100;">${dueCount}</div>
-                                    <div style="font-size: 11px; color: #888;">張到期 / 未學</div>
-                                    <button class="btn btn-accent btn-sm btn-full" style="margin-top:10px;" onclick="closeAnalysisViewer(); startFlashcard();">🎴 開始今日學習</button>
+                                <div style="text-align:center; padding: 16px 0 8px;">
+                                    <div style="font-size: 48px; font-weight: 900; color: #e65100;">${dueCount}</div>
+                                    <div style="font-size: 13px; color: #888;">張到期 / 未學</div>
+                                    <button class="btn btn-accent btn-full" style="margin-top:12px;" onclick="closeAnalysisViewer(); startFlashcard();">🎴 開始今日學習</button>
                                 </div>
                             </div>
                         </div>
                         <div class="viz-card" style="margin-bottom: 14px;">
                             <div class="viz-card-title">🗂️ 分類掌握率（依大類 L1）</div>
-                            ${l1Bars.length ? _renderBarChart(l1Bars) : '<div style="text-align:center; padding:20px; color:#888; font-size:12px;">尚未練習任何卡</div>'}
+                            ${l1Bars.length ? _renderBarChart(l1Bars) : '<div style="text-align:center; padding:24px; color:#888; font-size:14px;">尚未練習任何卡</div>'}
                         </div>
                         <div class="viz-card">
                             <div class="viz-card-title">🧊 最常答錯 Top 10（重點加強）</div>
-                            ${weakBars.length ? _renderBarChart(weakBars) : '<div style="text-align:center; padding:20px; color:#888; font-size:12px;">每張卡至少練 2 次後，這裡會列出你的弱點</div>'}
+                            ${weakBars.length ? _renderBarChart(weakBars) : '<div style="text-align:center; padding:24px; color:#888; font-size:14px;">每張卡至少練 2 次後，這裡會列出你的弱點</div>'}
                         </div>`,
                     footerHtml: `<button class="btn btn-accent btn-sm" onclick="closeAnalysisViewer(); startFlashcard();">🎴 繼續學習</button>
                                  <button class="btn btn-secondary btn-sm" onclick="closeAnalysisViewer()">關閉</button>`
@@ -4359,7 +4362,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                         badgeText: `需 ≥5 杯 · 目前 ${j.length} 杯`,
                         badgeClass: '',
                         summaryItems: [],
-                        contentHtml: `<div style="text-align:center; padding:40px 20px; color:#8d6e63; font-size:14px; line-height:1.9;">累積至少 <b>5 杯</b> 杯測紀錄後才能挖掘個人模式。<br>目前已累積 <b style="color:#e65100;">${j.length} 杯</b>。<br><br>20 杯以上洞察會更準確（例如「你評 9 分以上的肯亞都用 93°C」這類細節）。</div>`,
+                        contentHtml: `<div style="text-align:center; padding:50px 24px; color:#8d6e63; font-size:16px; line-height:2.0;">累積至少 <b>5 杯</b> 杯測紀錄後才能挖掘個人模式。<br>目前已累積 <b style="color:#e65100;">${j.length} 杯</b>。<br><br>20 杯以上洞察會更準確（例如「你評 9 分以上的肯亞都用 93°C」這類細節）。</div>`,
                         footerHtml: `<button class="btn btn-secondary btn-sm" onclick="closeAnalysisViewer()">關閉</button>`
                     });
                     return;
@@ -4521,7 +4524,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                         { k: '📅 最近', v: new Date(sorted[sorted.length-1].ts).toLocaleDateString('zh-TW') }
                     ],
                     contentHtml: `
-                        <div style="font-size: 11.5px; color: #8d6e63; padding: 10px 12px; background: #f5f2ec; border-radius: 8px; margin-bottom: 14px; line-height: 1.7;">
+                        <div style="font-size: 13.5px; color: #8d6e63; padding: 12px 15px; background: #f5f2ec; border-radius: 8px; margin-bottom: 16px; line-height: 1.8;">
                             💡 以下洞察是從你的杯測日誌自動挖掘。資料越多越準——<b>${j.length >= 20 ? '你已達 20 杯門檻，洞察可信度高' : '建議累積 20 杯後再看會更準'}</b>。
                         </div>
                         ${html}`,
@@ -5136,8 +5139,8 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 const box = document.getElementById('diag-symptoms');
                 if (!box) return;
                 box.innerHTML = DIAG_SYMPTOMS.map(s =>
-                    `<label style="display:flex; align-items:center; gap:6px; font-size:12px; cursor:pointer; padding:6px 8px; background:#fafafa; border:1px solid #e0e0e0; border-radius:8px;">
-                        <input type="checkbox" class="diag-chk" data-id="${s.id}" style="width:14px; height:14px; cursor:pointer;">
+                    `<label style="display:flex; align-items:center; gap:8px; font-size:13.5px; cursor:pointer; padding:8px 12px; background:#fafafa; border:1px solid #e0e0e0; border-radius:8px;">
+                        <input type="checkbox" class="diag-chk" data-id="${s.id}" style="width:16px; height:16px; cursor:pointer;">
                         <span>${s.label}</span>
                     </label>`
                 ).join('');
@@ -5181,7 +5184,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 const checked = Array.from(document.querySelectorAll('#diag-symptoms .diag-chk:checked'));
                 if (!checked.length) {
                     document.getElementById('diag-output').innerHTML =
-                        '<div style="padding:12px; background:#fff3e0; border:1px solid #ffcc80; border-radius:8px; color:#bf360c; font-size:12px;">請至少勾選一項你實際喝到的問題</div>';
+                        '<div style="padding:14px; background:#fff3e0; border:1px solid #ffcc80; border-radius:8px; color:#bf360c; font-size:14px;">請至少勾選一項你實際喝到的問題</div>';
                     return;
                 }
                 // 累積成因權重
@@ -5229,11 +5232,11 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                         <span class="viz-diag-ctx-item">☕ <b>${_escHtml(dripperName)}</b></span>
                         <span class="viz-diag-ctx-item">🌊 <b>${_escHtml(methodName)}</b></span>
                     </div>
-                    <div style="font-size:11px; color:#666; margin-bottom:6px; font-weight:700;">你喝到的問題：</div>
+                    <div style="font-size:13px; color:#666; margin-bottom:8px; font-weight:700;">你喝到的問題：</div>
                     <div class="viz-diag-symptoms">
                         ${symNames.map(n => `<span class="viz-diag-sym">${n}</span>`).join('')}
                     </div>
-                    <div style="font-size:13px; font-weight:800; color:#bf360c; margin-bottom:10px;">🧪 可能成因（依相關度排序）</div>
+                    <div style="font-size:15px; font-weight:800; color:#bf360c; margin-bottom:12px;">🧪 可能成因（依相關度排序）</div>
                 `;
 
                 ranked.forEach((r, i) => {
