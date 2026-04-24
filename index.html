@@ -4337,9 +4337,9 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 });
             }
 
-            // 🔁 所有「進場動畫」重新跑一次（保留卡片在畫面上、只重置 animation 讓其重播）
+            // 🔁 只重播「資料」動畫（長條、gauge、溫度液柱、數字等），
+            //    不碰 .viz-card / .av-kv — 它們留在原位，避免「整頁重刷」的錯覺
             const _REPLAY_SELECTORS = [
-                '.viz-card', '.av-kv',
                 '.viz-bar-fill', '.viz-diag-bar-fill', '.viz-range-fill',
                 '.viz-hist-bar', '.viz-phase-seg',
                 '.viz-gauge-svg circle:last-of-type',
@@ -7277,7 +7277,9 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                     if (timer) clearTimeout(timer);
                     timer = setTimeout(show, IDLE_DELAY);
                 };
-                ['mousedown', 'mousemove', 'touchstart', 'wheel', 'click'].forEach(ev => {
+                // ❗ 不監聽 mousemove（滑鼠隨便一動就 reset，10 秒閒置永遠達不到）
+                //    只看「真的有操作」的事件
+                ['mousedown', 'touchstart', 'wheel', 'click'].forEach(ev => {
                     pane.addEventListener(ev, bump, { passive: true });
                 });
                 const obs = new MutationObserver(() => {
