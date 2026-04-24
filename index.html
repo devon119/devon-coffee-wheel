@@ -60,7 +60,104 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             --accent-purple: #673ab7;
             --text-main: #3e2723;
         }
-        body { margin: 0; padding: 0; height: 100vh; background-color: #dcdcd7; font-family: "PingFang TC", "Microsoft JhengHei", sans-serif; overflow: hidden; }
+        body { margin: 0; padding: 0; height: 100vh; background-color: #dcdcd7; font-family: "PingFang TC", "Microsoft JhengHei", sans-serif; overflow: hidden; color: var(--text-main); }
+
+        /* ========== A 方案：左右分欄主版面 ========== */
+        #app-layout {
+            display: grid;
+            grid-template-columns: minmax(360px, 480px) 1fr;
+            height: 100vh;
+            width: 100vw;
+        }
+        #workbench-pane {
+            background: #fafaf7;
+            border-right: 1px solid #d7d4c8;
+            overflow-y: auto;
+            padding: 18px 20px 60px;
+            box-sizing: border-box;
+        }
+        #workbench-pane::-webkit-scrollbar { width: 8px; }
+        #workbench-pane::-webkit-scrollbar-thumb { background: #c8c3b5; border-radius: 4px; }
+        .app-title {
+            font-size: 18px; font-weight: 800; color: #3e2723;
+            margin: 0 0 14px 0; padding-bottom: 10px;
+            border-bottom: 2px solid #5d4037;
+            letter-spacing: -0.3px; display: flex; align-items: baseline; gap: 10px;
+        }
+        .app-title .app-subtitle { font-size: 11px; font-weight: 500; color: #8d6e63; letter-spacing: 0; }
+
+        /* Workbench 分區：<details class="wb-section"> */
+        .wb-section {
+            background: #fff; border: 1px solid #e8e4d8;
+            border-radius: 12px; margin-bottom: 10px; overflow: hidden;
+        }
+        .wb-section > summary {
+            padding: 11px 15px; font-size: 13px; font-weight: 700; color: #3e2723;
+            background: #f5f2ec; cursor: pointer; user-select: none; list-style: none;
+            display: flex; align-items: center; justify-content: space-between; gap: 8px;
+        }
+        .wb-section > summary::-webkit-details-marker { display: none; }
+        .wb-section > summary:hover { background: #ede7db; }
+        .wb-section[open] > summary { border-bottom: 1px solid #e8e4d8; }
+        .wb-section > summary::after {
+            content: '▸'; font-size: 12px; color: #8d6e63;
+            transition: transform 0.15s ease; flex-shrink: 0;
+        }
+        .wb-section[open] > summary::after { transform: rotate(90deg); }
+        .wb-body { padding: 14px 15px; }
+
+        /* 右側風味輪區 */
+        #wheel-pane {
+            position: relative; background: #dcdcd7;
+            display: flex; align-items: center; justify-content: center;
+            overflow: hidden; height: 100vh;
+        }
+
+        /* 統一按鈕系統 */
+        .btn {
+            padding: 10px 14px; border: none; border-radius: 10px;
+            font-size: 12px; font-weight: 700; cursor: pointer;
+            transition: background 0.15s, transform 0.1s;
+            font-family: inherit; box-sizing: border-box; line-height: 1.2;
+        }
+        .btn:hover { transform: translateY(-1px); }
+        .btn:active { transform: translateY(0); }
+        .btn-primary { background: #5d4037; color: #fff; }
+        .btn-primary:hover { background: #4e342e; }
+        .btn-accent { background: var(--accent-blue); color: #fff; }
+        .btn-accent:hover { background: #1557b0; }
+        .btn-success { background: var(--accent-green); color: #fff; }
+        .btn-success:hover { background: #1b5e20; }
+        .btn-warm { background: #e65100; color: #fff; }
+        .btn-warm:hover { background: #bf360c; }
+        .btn-purple { background: var(--accent-purple); color: #fff; }
+        .btn-purple:hover { background: #512da8; }
+        .btn-secondary { background: #eceff1; color: #37474f; }
+        .btn-secondary:hover { background: #cfd8dc; }
+        .btn-danger { background: #ffebee; color: #c62828; border: 1px solid #ffcdd2; }
+        .btn-danger:hover { background: #ffcdd2; }
+        .btn-full { width: 100%; }
+        .btn-sm { padding: 7px 10px; font-size: 11px; }
+        .btn-row { display: flex; gap: 8px; }
+        .btn-row .btn { flex: 1; }
+
+        /* 手機版：單欄、風味輪在上 */
+        @media (max-width: 900px) {
+            body { overflow-y: auto !important; height: auto; }
+            #app-layout {
+                grid-template-columns: 1fr;
+                grid-template-rows: 78vw auto;
+                height: auto; min-height: 100vh;
+            }
+            #wheel-pane {
+                height: 78vw; order: -1;
+                border-bottom: 1px solid #c8c5ba;
+            }
+            #workbench-pane {
+                border-right: none; height: auto;
+                overflow-y: visible; padding: 14px 14px 40px;
+            }
+        }
         
         @media (max-width: 768px) {
             body { font-size: 14px; }
@@ -77,12 +174,14 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             .ai-btn { padding: 10px; font-size: 12px; }
         }
         
-        #viewport { width: 100vw; height: 100vh; cursor: grab; display: flex; justify-content: center; align-items: center; overflow: hidden; }
+        #viewport { width: 100%; height: 100%; cursor: grab; display: flex; justify-content: center; align-items: center; overflow: hidden; }
         #viewport:active { cursor: grabbing; }
-        #main { width: 94vh; height: 94vh; transform-origin: center center; transition: transform 0.1s ease-out; }
-
-        @media (max-width: 768px) {
-            #main { width: 90vw; height: 90vw; max-width: 90vh; max-height: 90vh; }
+        #main {
+            width: min(94vh, 92%); height: min(94vh, 92%);
+            transform-origin: center center; transition: transform 0.1s ease-out;
+        }
+        @media (max-width: 900px) {
+            #main { width: min(90vw, 70vh); height: min(90vw, 70vh); }
         }
 
         .float-btn {
@@ -95,15 +194,14 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
         .float-btn:hover { transform: scale(1.05); }
         #btn-fullscreen { right: 20px; top: 20px; background: #37474f; padding: 12px 16px; font-size: 16px; }
         :fullscreen #btn-fullscreen { background: #c62828; }
-        /* 迷你召回按鈕：panel 收起後出現於右下 */
-        #btn-config-recall {
-            position: fixed; right: 20px; bottom: 20px; z-index: 500;
-            background: var(--accent-blue); color: #fff; border: none;
-            width: 56px; height: 56px; border-radius: 50%; font-size: 24px;
-            cursor: pointer; box-shadow: 0 6px 18px rgba(0,0,0,0.25);
-            transition: transform 0.2s; display: none;
+        .ui-controls {
+            position: fixed; right: 74px; top: 20px; z-index: 500;
+            background: #fff; color: #5d4037; border: 1px solid #bcaaa4;
+            width: 40px; height: 40px; border-radius: 50%; font-size: 18px;
+            cursor: pointer; box-shadow: 0 3px 10px rgba(0,0,0,0.12);
+            transition: transform 0.15s;
         }
-        #btn-config-recall:hover { transform: scale(1.1); }
+        .ui-controls:hover { transform: scale(1.08); background: #efebe9; }
 
         /* 📊 XLSX 預覽表格樣式 */
         .xlsx-preview-table { width: 100%; border-collapse: collapse; font-size: 11px; margin-bottom: 10px; }
@@ -176,7 +274,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
         .match-score .score-detail { font-size: 11px; opacity: 0.85; line-height: 1.4; }
         #region-info { margin-top: 8px; padding: 9px 12px; background: #fafaff; border-left: 3px solid var(--accent-blue); border-radius: 6px; font-size: 11px; color: #555; line-height: 1.5; display: none; }
         #region-info b { color: var(--accent-blue); }
-        #wheel-hint { position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.7); color: #fff; padding: 6px 14px; border-radius: 20px; font-size: 11px; z-index: 50; pointer-events: none; }
+        #wheel-hint { position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.7); color: #fff; padding: 6px 14px; border-radius: 20px; font-size: 11px; z-index: 50; pointer-events: none; white-space: nowrap; }
 
         @media (max-width: 768px) {
             #preset-bar { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 4px; }
@@ -238,17 +336,14 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
 <body>
 
     <button id="btn-fullscreen" class="float-btn" onclick="toggleFullscreen()" aria-label="切換全螢幕顯示" title="全螢幕">⛶</button>
-    <button id="btn-config-recall" onclick="togglePanel('config', true)" aria-label="重新開啟品鑑工作台" title="開啟品鑑工作台">☕</button>
 
-    <div id="item-config-panel" class="overlay-panel">
-        <div class="panel-header" id="config-header">
-            <span>☕ 一杯咖啡的全景 · 豆源 × 烘焙 × 沖煮 × 品嚐</span>
-            <div style="display:flex; align-items:center;">
-                <span class="collapse-btn" onclick="collapsePanel('item-config-panel')">收合</span>
-                <span class="close-btn" onclick="togglePanel('config', false)">&times;</span>
-            </div>
-        </div>
-        <div class="panel-content" id="config-content">
+    <div id="app-layout">
+    <aside id="workbench-pane">
+        <h1 class="app-title">☕ 咖啡品鑑工作台 <span class="app-subtitle">豆源 × 烘焙 × 沖煮 × 品嚐</span></h1>
+        <div id="item-config-panel">
+        <div id="config-content">
+
+            <details class="wb-section" open><summary>🌱 配置（豆源 × 烘焙 × 沖煮）</summary><div class="wb-body">
             <div id="preset-bar">
                 <button class="preset-btn" onclick="applyPreset('geisha')">🌸 衣索比亞瑰夏</button>
                 <button class="preset-btn" onclick="applyPreset('mandheling')">🌲 印尼曼特寧</button>
@@ -414,6 +509,9 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                     </select>
                 </div>
             </div>
+            </div></details>
+
+            <details class="wb-section" open><summary>🎯 預期對位矩陣</summary><div class="wb-body">
             <div id="region-info" role="status" aria-live="polite"></div>
             <div id="expected-result-card">
                 <div class="expected-title">🎯 組合對位「應出現」之風味矩陣 <span style="color:#888; font-weight:normal; font-size:10px;">（★=主調 / ⚠️=風土 / ✓=已品嚐到）</span></div>
@@ -432,28 +530,37 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                     <button class="share-btn" onclick="clearWheelHighlight()" aria-label="清除風味輪上的高亮">✨ 取消高亮</button>
                 </div>
             </div>
+            </div></details>
+
+            <details class="wb-section" open><summary>👅 品嚐到的風味</summary><div class="wb-body">
 
             <!-- ============================================================ -->
             <!-- 🕵️ 品嚐校對工具區（從原診斷面板搬入，整合進主配置面板）-->
             <!-- ============================================================ -->
-            <div style="margin-top: 20px; padding-top: 16px; border-top: 2px dashed #c8d4ff;">
+            
                 <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
                     <span style="font-size: 13px; font-weight: bold; color: var(--accent-blue);">🕵️ 品嚐到的風味 <span style="font-size:10px; font-weight:normal; color:#888;">（點扇形加入 · 點 chip 的 ● 調 1-5 強度）</span></span>
                     <button class="btn-clear" onclick="clearSensory()" aria-label="清除所有已選風味">🗑️ 一鍵清除</button>
                 </div>
                 <div id="selected-flavors"></div>
+            </div></details>
+
+            <details class="wb-section"><summary>⚙️ 分析與規劃</summary><div class="wb-body">
                 <div class="ai-group">
                     <button id="analysis-roast-btn" class="ai-btn" onclick="runAnalysis('roast')" aria-label="執行烘焙校對分析">🔥 烘焙校對</button>
                     <button id="analysis-sensory-btn" class="ai-btn sensory" onclick="runAnalysis('sensory')" aria-label="產生沖煮建議">💧 沖煮建議</button>
                 </div>
-                <button id="btn-diagnose" onclick="openBrewDiagnosis()" style="width:100%; margin-top:8px; padding: 10px; background: linear-gradient(135deg, #e65100 0%, #bf360c 100%); color: #fff; border: none; border-radius: 10px; font-size: 13px; font-weight: bold; cursor: pointer;" title="依你實際喝到的問題反推沖煮可能的原因">🔍 喝起來怪怪？反查沖煮問題</button>
-                <button onclick="openRoastPlan()" style="width:100%; margin-top:8px; padding: 10px; background: linear-gradient(135deg, #8d6e63 0%, #5d4037 100%); color: #fff; border: none; border-radius: 10px; font-size: 13px; font-weight: bold; cursor: pointer;">📋 烘焙計畫單 + 📈 曲線設計器</button>
+                <button id="btn-diagnose" class="btn btn-warm btn-full" style="margin-top:8px;" onclick="openBrewDiagnosis()" title="依你實際喝到的問題反推沖煮可能的原因">🔍 喝起來怪怪？反查沖煮問題</button>
+                <button class="btn btn-primary btn-full" style="margin-top:8px;" onclick="openRoastPlan()">📋 烘焙計畫單 + 📈 曲線設計器</button>
                 <div id="diag-result"></div>
+            </div></details>
+
+            <details class="wb-section"><summary>💾 杯測日誌</summary><div class="wb-body">
                 <!-- 杯測日誌操作 -->
-                <div style="display:flex; gap: 6px; margin-top: 12px; padding-top: 12px; border-top: 1px dashed #ddd;">
-                    <button class="share-btn" onclick="saveCurrentCupping()" style="background: var(--accent-green); color:#fff; flex:2; padding: 10px;">💾 存檔本次杯測</button>
-                    <button class="share-btn" onclick="togglePanel('journal', true); renderJournal();" style="background: #607d8b; color:#fff; flex:1; padding: 10px;">📜 查看歷史</button>
-                    <button class="share-btn" onclick="clearAllJournal()" style="background:#ffebee; color:#c62828; flex:1; padding: 10px;" title="清除所有杯測紀錄（不可復原）">🗑️ 清紀錄</button>
+                <div class="btn-row">
+                    <button class="btn btn-success" style="flex:2;" onclick="saveCurrentCupping()">💾 存檔本次杯測</button>
+                    <button class="btn btn-secondary" onclick="togglePanel('journal', true); renderJournal();">📜 歷史</button>
+                    <button class="btn btn-danger" onclick="clearAllJournal()" title="清除所有杯測紀錄（不可復原）">🗑️ 清紀錄</button>
                 </div>
                 <!-- 存檔表單（按 💾 才展開）-->
                 <div id="save-cupping-form" style="display:none; margin-top: 10px; padding: 12px; background: #f0f9f4; border: 1px solid #c3e6cb; border-radius: 10px;">
@@ -471,15 +578,15 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                             <input type="text" id="cup-time" placeholder="實際萃取時間 (例 2:45)" style="padding: 6px; border-radius: 4px; border: 1px solid #ccc; box-sizing:border-box;">
                         </div>
                     </details>
-                    <div style="display: flex; gap: 6px; margin-top: 10px;">
-                        <button class="share-btn" onclick="confirmSaveCupping()" style="background: var(--accent-green); color: #fff; flex: 2; padding: 9px;">✅ 確定儲存</button>
-                        <button class="share-btn" onclick="cancelSaveCupping()" style="background: #eee; color: #666; flex: 1; padding: 9px;">取消</button>
+                    <div class="btn-row" style="margin-top: 10px;">
+                        <button class="btn btn-success" style="flex:2;" onclick="confirmSaveCupping()">✅ 確定儲存</button>
+                        <button class="btn btn-secondary" onclick="cancelSaveCupping()">取消</button>
                     </div>
                 </div>
-                <details style="margin-top: 14px; padding: 10px 12px; background: #f5f5f5; border-radius: 10px; font-size: 11px;">
-                    <summary style="cursor: pointer; color: var(--accent-purple); font-weight: bold; user-select: none;">🧠 進階：AI 延伸分析（選配，需 API Key）</summary>
-                    <div style="margin-top: 10px;">
-                        <p style="color:#666; margin: 4px 0 8px 0;">本機規則引擎已涵蓋核心診斷。若想要更靈活的文字解讀（例如感官描述、風味聯想），可使用以下任一 AI 模型補充。</p>
+            </div></details>
+
+            <details class="wb-section"><summary>🧠 AI 延伸（選配）</summary><div class="wb-body">
+                <p style="font-size: 11px; color:#666; margin: 0 0 10px 0;">本機規則引擎已涵蓋核心診斷。若想要更靈活的文字解讀（例如感官描述、風味聯想），可使用以下任一 AI 模型補充。</p>
 
                         <label style="font-size: 10px; font-weight: bold; color: #555; display:block; margin-bottom: 3px;">🤖 AI 模型供應商</label>
                         <select id="ai-provider" onchange="onAiProviderChange()" style="width: 100%; padding: 6px; border-radius: 6px; border: 1px solid #ccc; font-size: 11px; box-sizing: border-box; margin-bottom: 8px;">
@@ -497,17 +604,22 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                             <div id="ai-onboarding" style="margin-top: 8px; font-size: 11px; line-height: 1.7; color: #555;"></div>
                         </details>
 
-                        <div style="display:flex; gap: 6px; margin-top: 12px;">
-                            <button id="ai-roast-btn" onclick="runAI('roast')" disabled class="share-btn" style="flex:1; background: var(--accent-purple); color: #fff; padding: 8px;" aria-label="AI 烘焙延伸分析">✨ AI 烘焙延伸</button>
-                            <button id="ai-sensory-btn" onclick="runAI('sensory')" disabled class="share-btn" style="flex:1; background: var(--accent-green); color: #fff; padding: 8px;" aria-label="AI 沖煮延伸分析">✨ AI 沖煮延伸</button>
+                        <div class="btn-row" style="margin-top: 12px;">
+                            <button id="ai-roast-btn" class="btn btn-purple btn-sm" onclick="runAI('roast')" disabled aria-label="AI 烘焙延伸分析">✨ AI 烘焙延伸</button>
+                            <button id="ai-sensory-btn" class="btn btn-success btn-sm" onclick="runAI('sensory')" disabled aria-label="AI 沖煮延伸分析">✨ AI 沖煮延伸</button>
                         </div>
                         <!-- legacy hidden compat: 舊版 saveKey/getActiveKey 預設讀這個 input -->
                         <input type="hidden" id="manual-api-key" value="">
-                    </div>
-                </details>
-            </div>
+            </div></details>
         </div>
+        </div>
+    </aside>
+    <main id="wheel-pane">
+        <div id="viewport"><div id="main" role="img" aria-label="SCAA 咖啡風味輪，點扇形可加入已品嚐標籤"></div></div>
+        <div id="wheel-hint">💡 點擊風味輪外圈扇形 → 加入「已品嚐」清單</div>
+    </main>
     </div>
+    <!-- /app-layout -->
 
     <!-- 杯測日誌面板 -->
     <div id="journal-panel" class="overlay-panel" style="top: 130px; right: 20px; left: auto; width: 480px;">
@@ -525,9 +637,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
         </div>
     </div>
 
-    <div class="ui-controls">
-        <button class="btn-action" onclick="resetView()" aria-label="全域清空並還原視圖">🔄 全域清空還原</button>
-    </div>
+    <button class="ui-controls" onclick="resetView()" aria-label="全域清空並還原視圖" title="全域清空還原（所有選擇 + 視圖）">🔄</button>
 
     <!-- 📊 XLSX 預覽 Modal（Excel 樣的可編輯表格）-->
     <!-- 🔍 沖煮反向診斷 Modal -->
@@ -588,9 +698,6 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             <div id="fc-content"></div>
         </div>
     </div>
-
-    <div id="viewport"><div id="main" role="img" aria-label="SCAA 咖啡風味輪，點扇形可加入已品嚐標籤"></div></div>
-    <div id="wheel-hint">💡 點擊風味輪外圈扇形 → 加入「已品嚐」清單</div>
 
     <script>
         (function() {
@@ -3103,14 +3210,12 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 if (extra) extra.style.display = (brew === 'pour_over') ? 'grid' : 'none';
             };
 
-            const _PANELS = { config: 'item-config-panel', journal: 'journal-panel' };
+            // config panel 已整合進主版面、不可關閉；保留 journal 的 overlay 開關
+            const _PANELS = { journal: 'journal-panel' };
             window.togglePanel = function(type, show) {
+                if (type === 'config') return;  // no-op: workbench 永遠在
                 const el = document.getElementById(_PANELS[type]);
                 if (el) el.style.display = show ? 'flex' : 'none';
-                if (type === 'config') {
-                    const recall = document.getElementById('btn-config-recall');
-                    if (recall) recall.style.display = show ? 'none' : 'flex';
-                }
             };
 
             // --- 🎲 盲測模式 ---
@@ -4571,7 +4676,6 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 }
                 updateUI();
                 updateExpected();
-                togglePanel('config', true);
             };
 
             window.deleteJournalRecord = function(idx) {
@@ -4659,7 +4763,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
 
             window.onload = function() {
                 initChart();
-                setupDraggable('item-config-panel', 'config-header');
+                // workbench 已融入主版面不可拖動；只有 journal overlay 可拖
                 setupDraggable('journal-panel', 'journal-header');
                 // AI 供應商初始化（從 localStorage 還原 + 渲染 onboarding）
                 const savedProvider = localStorage.getItem('COFFEE_AI_PROVIDER') || 'gemini';
@@ -4677,13 +4781,9 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 // 🔆 filter checkbox 從 localStorage 還原狀態
                 const chk = document.getElementById('chk-wheel-filter');
                 if (chk) chk.checked = _filterActive;
-                // 如果 URL 帶有配置 hash，自動開啟配置面板並套用
-                if (window.loadFromHash && window.loadFromHash()) {
-                    togglePanel('config', true);
-                }
+                // URL hash 帶入配置（workbench 永遠在，不必 toggle）
+                if (window.loadFromHash) window.loadFromHash();
                 renderJournal();
-                // 預設展開主面板（網頁版進來就是工作台）
-                togglePanel('config', true);
                 // 初始化手沖子選單顯示狀態
                 onBrewChange();
             }
