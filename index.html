@@ -7410,10 +7410,9 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 }
                 _positionIdleMouse();
                 window.addEventListener('resize', _positionIdleMouse);
-                const IDLE_DELAY = 7000;
+                const RESUME_DELAY = 3000;
                 let timer = null;
                 let active = false;
-                let _demoActive = false;  // demo 期間鎖定、不被互動打斷
                 const show = () => {
                     if (active) return;
                     _positionIdleMouse();
@@ -7431,43 +7430,36 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                     wrap.classList.remove('active');
                     spinner.classList.remove('idle-spin', 'spin-cw', 'spin-ccw');
                     active = false;
+                    console.log('[idle-mouse] hide');
                 };
-                const bump = (ev) => {
-                    if (_demoActive) return;  // demo 期間不讓任何互動打斷
-                    if (ev) console.log('[idle-mouse] bump by', ev.type);
-                    if (active) hide();
+                // 只在「真的點到風味扇形」時 hide 老鼠 + 3 秒後恢復
+                // 不 listen pane 的 mousedown/wheel/touchstart（避免滾動/hover 打斷）
+                const stepAside = () => {
+                    hide();
                     if (timer) clearTimeout(timer);
-                    timer = setTimeout(show, IDLE_DELAY);
+                    timer = setTimeout(() => { _positionIdleMouse(); show(); }, RESUME_DELAY);
                 };
-                ['mousedown', 'touchstart', 'wheel', 'click'].forEach(ev => {
-                    pane.addEventListener(ev, bump, { passive: true });
-                });
+                // 掛到 ECharts 的 click 事件（比 DOM click 精準：只有 ECharts 內部點到才會觸發）
+                if (typeof myChart !== 'undefined' && myChart && typeof myChart.on === 'function') {
+                    myChart.on('click', stepAside);
+                }
                 const obs = new MutationObserver(() => {
                     const v = document.getElementById('analysis-viewer');
                     if (v && v.classList.contains('open')) hide();
+                    else if (v && !v.classList.contains('open') && !active) {
+                        // viewer 關閉 → 1.5 秒後老鼠恢復
+                        if (timer) clearTimeout(timer);
+                        timer = setTimeout(() => { _positionIdleMouse(); show(); }, 1500);
+                    }
                 });
                 const av = document.getElementById('analysis-viewer');
                 if (av) obs.observe(av, { attributes: true, attributeFilter: ['class'] });
-                // URL query ?show-mouse 強制顯示（debug 用）
-                const forceShow = new URLSearchParams(location.search).has('show-mouse');
-                if (forceShow) {
-                    console.log('[idle-mouse] force-show via URL query');
-                    setTimeout(() => { _positionIdleMouse(); show(); }, 300);
-                    return;
-                }
-                // 📣 進站 demo：1.5s 後老鼠現身 4s 打招呼，期間互動不打斷
+                // 🐭 啟動：1 秒後老鼠出場、然後常駐（直到點風味或開 viewer）
                 setTimeout(() => {
-                    _demoActive = true;
                     _positionIdleMouse();
-                    console.log('[idle-mouse] demo greeting start');
+                    console.log('[idle-mouse] initial show');
                     show();
-                    setTimeout(() => {
-                        _demoActive = false;
-                        console.log('[idle-mouse] demo greeting end, enter idle loop');
-                        hide();
-                        bump();
-                    }, 4000);
-                }, 1500);
+                }, 1000);
             }
         })();
     </script>
