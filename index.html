@@ -386,6 +386,147 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             display: flex; justify-content: space-between;
             font-size: 9.5px; color: #888; font-weight: 600;
         }
+
+        /* --- 雙面歸因卡（大框架 vs 烘焙曲線專項）--- */
+        .viz-cause-note {
+            padding: 10px 12px; background: #fff3e0; border-left: 4px solid #fbc02d;
+            border-radius: 0 8px 8px 0; font-size: 11.5px; color: #6d4c41;
+            line-height: 1.7; margin-bottom: 14px;
+        }
+        .viz-cause-note b { color: #e65100; }
+        .viz-cause-block {
+            background: #fafaf7; border: 1px solid #e8e4d8; border-radius: 10px;
+            padding: 12px; margin-bottom: 12px;
+        }
+        .viz-cause-header {
+            display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+            padding-bottom: 8px; margin-bottom: 10px;
+            border-bottom: 1px solid #e8e4d8;
+        }
+        .viz-cause-emoji { font-size: 20px; }
+        .viz-cause-title { font-size: 13px; font-weight: 800; color: #3e2723; }
+        .viz-cause-tags { display: flex; gap: 4px; flex-wrap: wrap; margin-left: auto; }
+        .viz-cause-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+        }
+        @media (max-width: 768px) { .viz-cause-grid { grid-template-columns: 1fr; } }
+        .viz-cause-col {
+            background: #fff; border: 1px solid #eceff1; border-radius: 8px; padding: 10px 12px;
+        }
+        .viz-cause-col-title {
+            font-size: 11px; font-weight: 800; color: #1565c0;
+            margin-bottom: 6px; padding-bottom: 4px; border-bottom: 1px dashed #bbdefb;
+        }
+        .viz-cause-col-title.viz-col-warn { color: #e65100; border-bottom-color: #ffcc80; }
+        .viz-cause-ul {
+            margin: 0; padding: 0 0 0 18px;
+            font-size: 11.5px; line-height: 1.75; color: #444;
+        }
+        .viz-cause-ul li { margin-bottom: 4px; }
+        .viz-cause-empty {
+            font-size: 11px; color: #aaa; padding: 6px 0; font-style: italic;
+        }
+
+        /* --- 感官訓練四階段 --- */
+        .viz-sensory-stages {
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;
+        }
+        @media (max-width: 768px) { .viz-sensory-stages { grid-template-columns: 1fr 1fr; } }
+        .viz-sensory-stage {
+            background: #fff; border: 1px solid #e8e4d8; border-radius: 10px;
+            padding: 12px 10px; text-align: center;
+        }
+        .viz-sensory-icon {
+            font-size: 28px; margin-bottom: 4px;
+            filter: saturate(1.2);
+        }
+        .viz-sensory-step {
+            font-size: 12px; font-weight: 800; color: #3e2723; margin-bottom: 4px;
+        }
+        .viz-sensory-desc {
+            font-size: 10.5px; color: #666; line-height: 1.55;
+        }
+
+        /* --- 反查診斷視覺化 --- */
+        .viz-diag-ctx {
+            display: flex; gap: 8px; flex-wrap: wrap;
+            padding: 10px 12px; background: #efebe9; border-radius: 10px;
+            margin-bottom: 12px;
+        }
+        .viz-diag-ctx-item {
+            font-size: 11px; padding: 4px 10px; background: #fff;
+            border: 1px solid #d7ccc8; border-radius: 12px;
+            color: #5d4037; font-weight: 600;
+        }
+        .viz-diag-ctx-item b { color: #3e2723; }
+        .viz-diag-symptoms {
+            display: flex; gap: 6px; flex-wrap: wrap;
+            padding: 8px 0 12px; margin-bottom: 12px;
+            border-bottom: 1px dashed #d7ccc8;
+        }
+        .viz-diag-sym {
+            background: #ffebee; color: #c62828; border: 1px solid #ffcdd2;
+            padding: 3px 10px; border-radius: 12px;
+            font-size: 11px; font-weight: 700;
+        }
+        .viz-diag-cause {
+            background: #fff; border: 1px solid #e8e4d8; border-radius: 10px;
+            padding: 12px 14px; margin-bottom: 10px; border-left: 4px solid #8d6e63;
+        }
+        .viz-diag-cause.risk-high { border-left-color: #c62828; }
+        .viz-diag-cause.risk-med  { border-left-color: #ef6c00; }
+        .viz-diag-cause.risk-low  { border-left-color: #2e7d32; }
+        .viz-diag-head {
+            display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+            margin-bottom: 6px;
+        }
+        .viz-diag-rank {
+            width: 24px; height: 24px; border-radius: 50%;
+            background: #5d4037; color: #fff; font-weight: 800;
+            font-size: 12px; display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+        }
+        .viz-diag-title { font-size: 13px; font-weight: 800; color: #3e2723; flex: 1; }
+        .viz-diag-risk {
+            font-size: 10px; padding: 2px 8px; border-radius: 10px;
+            font-weight: 700; letter-spacing: 0.3px;
+        }
+        .viz-diag-risk.risk-high { background: #ffebee; color: #c62828; }
+        .viz-diag-risk.risk-med  { background: #fff3e0; color: #ef6c00; }
+        .viz-diag-risk.risk-low  { background: #e8f5e9; color: #2e7d32; }
+        .viz-diag-bar-wrap {
+            display: flex; align-items: center; gap: 8px;
+            margin-bottom: 8px;
+        }
+        .viz-diag-bar {
+            flex: 1; height: 8px; background: #eceff1; border-radius: 4px;
+            overflow: hidden;
+        }
+        .viz-diag-bar-fill {
+            height: 100%; background: linear-gradient(to right, #ef6c00, #c62828);
+            border-radius: 4px; transition: width 0.6s ease-out;
+        }
+        .viz-diag-pct { font-size: 11px; font-weight: 800; color: #5d4037; min-width: 36px; text-align: right; }
+        .viz-diag-fix {
+            font-size: 11.5px; color: #444; line-height: 1.65; margin-top: 6px;
+        }
+        .viz-diag-fix-label { font-weight: 700; color: #ef6c00; }
+        .viz-diag-deltas {
+            display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px;
+        }
+        .viz-diag-delta {
+            padding: 3px 10px; font-size: 11px; font-weight: 700;
+            border-radius: 12px; background: #e3f2fd; color: #1565c0;
+            border: 1px solid #90caf9;
+        }
+        .viz-diag-delta.up { background: #ffebee; color: #c62828; border-color: #ef9a9a; }
+        .viz-diag-delta.down { background: #e3f2fd; color: #1565c0; border-color: #90caf9; }
+        .viz-diag-delta.neutral { background: #fff8e1; color: #795548; border-color: #ffe082; }
+        .viz-diag-method-tip {
+            margin-top: 14px; padding: 12px 14px; background: #fff8e1;
+            border: 1px dashed #fbc02d; border-radius: 10px;
+            font-size: 11.5px; color: #6d4c41; line-height: 1.7;
+        }
         .av-footer {
             padding: 16px 28px; background: #fafaf7; border-top: 1px solid #e8e4d8;
             display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap;
@@ -3237,11 +3378,115 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 }
             }
 
+            // 🔬 未呈現風味「雙面歸因」卡 —— 大框架因素 + 烘焙曲線專項
+            function _renderRoastCauseAnalysis(ctx) {
+                if (!ctx.actual || !ctx.actual.length || !ctx.missing || !ctx.missing.length) return '';
+                if (typeof rec_categorize !== 'function') return '';
+                const c = rec_categorize(ctx.missing);
+                const blocks = [];
+
+                const pushBlock = (title, cat, tags, emoji) => {
+                    if (!tags.length) return;
+                    const macro = (typeof rec_diagnoseLoss === 'function') ? rec_diagnoseLoss(cat, ctx) : [];
+                    const curve = (typeof rec_roastCurveFactors === 'function') ? rec_roastCurveFactors(cat, ctx) : [];
+                    if (!macro.length && !curve.length) return;
+                    blocks.push(`
+                    <div class="viz-cause-block">
+                        <div class="viz-cause-header">
+                            <span class="viz-cause-emoji">${emoji}</span>
+                            <span class="viz-cause-title">未品嚐到的${title}</span>
+                            <span class="viz-cause-tags">${tags.slice(0,5).map(t => `<span class="viz-flavor-tag missing">${_escHtml(t)}</span>`).join('')}</span>
+                        </div>
+                        <div class="viz-cause-grid">
+                            <div class="viz-cause-col">
+                                <div class="viz-cause-col-title">🌐 大框架因素（豆源 × 處理 × 焙度 × 沖煮 × 熟成）</div>
+                                ${macro.length ? '<ul class="viz-cause-ul">' + macro.map(x => `<li>${_escHtml(x)}</li>`).join('') + '</ul>' : '<div class="viz-cause-empty">（此類別無大框架問題）</div>'}
+                            </div>
+                            <div class="viz-cause-col">
+                                <div class="viz-cause-col-title viz-col-warn">📈 烘焙曲線專項（大框架排除後才檢查）</div>
+                                ${curve.length ? '<ul class="viz-cause-ul">' + curve.map(x => `<li>${_escHtml(x)}</li>`).join('') + '</ul>' : '<div class="viz-cause-empty">（此類別無曲線專項）</div>'}
+                            </div>
+                        </div>
+                    </div>`);
+                };
+
+                pushBlock('花香 / 水果', 'floralFruity', [...(c.floral||[]), ...(c.fruit||[])], '🌸');
+                pushBlock('酸質',       'acid',         c.acid || [], '🍋');
+                pushBlock('甜感 / 堅果 / 可可', 'sweet', [...(c.sweet||[]), ...(c.nutty||[]), ...(c.cocoa||[])], '🍯');
+                pushBlock('烘焙調 / 可可',      'roasted', [...(c.roasted||[]), ...(c.cocoa||[])], '🔥');
+                pushBlock('body',              'body',    c.body || [], '💪');
+
+                if (!blocks.length) return '';
+                return `
+                <div class="viz-card" style="grid-column: 1 / -1;">
+                    <div class="viz-card-title">📉 未呈現風味 · 雙面歸因</div>
+                    <div class="viz-cause-note">💡 「未品嚐到」有兩種原因：<b>① 咖啡客觀問題</b>（可由參數調整）<b>② 感官訓練需求</b>（咖啡有但你沒抓到）。先對照左欄排除大框架，若都合理再檢查右欄曲線細節。</div>
+                    ${blocks.join('')}
+                </div>`;
+            }
+
+            // 🛠️ 烘焙瑕疵模式識別（針對 extra 中的瑕疵/過度風味）
+            function _renderRoastDefectsCard(ctx) {
+                if (!ctx.extra || !ctx.extra.length || typeof rec_categorize !== 'function') return '';
+                const e = rec_categorize(ctx.extra);
+                const extraWithRoast = ctx.extra.slice(); extraWithRoast.__roast = ctx.roast;
+                const defectHints = (typeof rec_roastDefectHint === 'function') ? rec_roastDefectHint(extraWithRoast) : [];
+                if (!e.defect.length && !e.terroir.length && !defectHints.length) return '';
+                const parts = [];
+                if (e.defect.length) {
+                    parts.push(`<div class="viz-advice danger">
+                        <div class="viz-advice-title">⚠️ 疑似真瑕疵</div>
+                        <div class="viz-tag-cloud" style="margin: 4px 0;">${e.defect.map(t => `<span class="viz-flavor-tag defect">${_escHtml(t)}</span>`).join('')}</div>
+                        <div class="viz-advice-body">行動順序：① 換新豆測試 → ② 檢查烘焙曲線 → ③ 校準烘豆機</div>
+                    </div>`);
+                }
+                if (defectHints.length) {
+                    parts.push(`<div class="viz-advice warn">
+                        <div class="viz-advice-title">🔎 烘焙瑕疵模式識別</div>
+                        <div class="viz-advice-body">${defectHints.map(h => _escHtml(h.replace(/^•\s*/, ''))).join('\n')}</div>
+                    </div>`);
+                }
+                if (e.terroir.length) {
+                    parts.push(`<div class="viz-advice good">
+                        <div class="viz-advice-title">🟡 風土特徵（非瑕疵）</div>
+                        <div class="viz-tag-cloud" style="margin: 4px 0;">${e.terroir.map(t => `<span class="viz-flavor-tag extra">${_escHtml(t)}</span>`).join('')}</div>
+                        <div class="viz-advice-body">印尼系 / 厭氧 / 深焙合理出現的特徵，是豆子個性不是錯誤。</div>
+                    </div>`);
+                }
+                return `
+                <div class="viz-card" style="grid-column: 1 / -1;">
+                    <div class="viz-card-title">🛠️ 實際出現但非預期 · 烘焙瑕疵診斷</div>
+                    <div class="viz-advice-list">${parts.join('')}</div>
+                </div>`;
+            }
+
+            // 👃 感官訓練提醒（啜吸四階段示意）
+            function _renderSensoryTraining() {
+                const stages = [
+                    { icon: '👃', t: '乾香', d: '粉末靠近鼻孔輕嗅，聞出「豆子本身的特性」' },
+                    { icon: '💨', t: '啜吸', d: '含口 5-10ml，有力吸入霧化，讓咖啡氣化打全口腔' },
+                    { icon: '👅', t: '口腔中段', d: '停留 3-5 秒，細微花果/酸質常在這階段才出現' },
+                    { icon: '🌬️', t: '後鼻腔', d: '吞下後用鼻呼氣，回甘與 aftertaste 會反湧上來' }
+                ];
+                return `
+                <div class="viz-card" style="grid-column: 1 / -1;">
+                    <div class="viz-card-title">👃 感官訓練：若懷疑味覺漏了，照此四階段細嚐</div>
+                    <div class="viz-sensory-stages">
+                        ${stages.map((s, i) => `
+                            <div class="viz-sensory-stage">
+                                <div class="viz-sensory-icon">${s.icon}</div>
+                                <div class="viz-sensory-step">${i+1}. ${s.t}</div>
+                                <div class="viz-sensory-desc">${s.d}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>`;
+            }
+
             // 組合烘焙視覺化 content
             function _buildRoastContentHtml(ctx) {
                 ctx_last = ctx;
                 try {
-                    // 烘焙校對需要品嚐資料才有意義；沒品嚐時降級顯示
                     const fullCfg = (typeof _aiBuildLocalCtx === 'function') ? _aiBuildLocalCtx() : ctx;
                     const profile = computeRoastProfile(fullCfg);
                     const hasTasting = ctx.actual && ctx.actual.length > 0;
@@ -3255,7 +3500,10 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                     <div class="viz-grid" style="grid-template-columns: 1fr;">
                         ${_renderRoastAdjustments(profile)}
                         ${_renderFlavorDiff(ctx)}
-                        ${hasTasting ? _renderMicroAdjust(ctx) : ''}
+                        ${_renderRoastCauseAnalysis(ctx)}
+                        ${_renderRoastDefectsCard(ctx)}
+                        ${hasTasting && ctx.missing && ctx.missing.length ? _renderSensoryTraining() : ''}
+                        ${_renderBrewStrategyHint(ctx)}
                     </div>`;
                 } catch (e) {
                     console.warn('roast visuals err:', e);
@@ -3948,6 +4196,27 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 document.getElementById('diag-output').innerHTML = '';
             };
 
+            // 每個成因對應的「下次調整」具體 delta chips
+            const DIAG_DELTAS = {
+                grind_fine:   [{ t:'⚙️ 研磨 +1~2 格', d:'up' }],
+                grind_coarse: [{ t:'⚙️ 研磨 -1 格', d:'down' }],
+                temp_hi:      [{ t:'🌡️ 水溫 -2~3°C', d:'down' }],
+                temp_lo:      [{ t:'🌡️ 水溫 +2~3°C', d:'up' }],
+                time_long:    [{ t:'⚙️ 研磨 +1 格', d:'up' }, { t:'💨 減少攪拌', d:'down' }],
+                time_short:   [{ t:'⚙️ 研磨 -1 格', d:'down' }, { t:'🌊 加段數', d:'up' }],
+                ratio_thick:  [{ t:'⚖️ 粉水比 +1 級（稀）', d:'up' }],
+                ratio_thin:   [{ t:'⚖️ 粉水比 -1 級（濃）', d:'down' }],
+                agitation_hi: [{ t:'💨 攪拌 -1', d:'down' }],
+                agitation_lo: [{ t:'💨 攪拌 +1', d:'up' }],
+                channel:      [{ t:'🫴 布粉均勻', d:'neutral' }, { t:'💧 RDT 灑水', d:'neutral' }],
+                paper_taste:  [{ t:'📄 潤濕濾紙 150g+', d:'neutral' }],
+                bean_fresh:   [{ t:'⏱️ 養豆 +7-14d', d:'up' }, { t:'🌊 悶蒸 +15s', d:'up' }],
+                bean_old:     [{ t:'🫘 換新豆', d:'neutral' }],
+                water:        [{ t:'💧 TDS 75-150ppm', d:'neutral' }],
+                agitation_method: [{ t:'🎯 參照手法時程', d:'neutral' }],
+                roast_mismatch:   [{ t:'🔥 選對焙度', d:'neutral' }]
+            };
+
             window.runBrewDiagnosis = function() {
                 const checked = Array.from(document.querySelectorAll('#diag-symptoms .diag-chk:checked'));
                 if (!checked.length) {
@@ -3964,7 +4233,6 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                     });
                 });
 
-                // Context 加乘：依當前 cfg 微調權重
                 const cfg = {
                     roast: (document.getElementById('sel-roast')||{}).value,
                     brew:  (document.getElementById('sel-brew') ||{}).value,
@@ -3973,13 +4241,12 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 };
                 const light = ['cinnamon','city','city_plus'].includes(cfg.roast);
                 const dark  = ['full_city_plus','vienna','french'].includes(cfg.roast);
-                if (dark && scores.temp_hi)    scores.temp_hi += 1;  // 深焙最常因溫度出苦
-                if (light && scores.temp_lo)   scores.temp_lo += 1;  // 淺焙最常因溫度不足萃不出
+                if (dark && scores.temp_hi)    scores.temp_hi += 1;
+                if (light && scores.temp_lo)   scores.temp_lo += 1;
                 if (cfg.dripper === 'chemex' && scores.time_long) scores.time_long += 1;
                 if (cfg.dripper === 'orea' && scores.time_short) scores.time_short += 1;
                 if (cfg.method === 'lance_hi' && scores.grind_fine) scores.grind_fine += 1;
 
-                // 排序取 top 5
                 const ranked = Object.entries(scores)
                     .map(([cause, score]) => ({ cause, score, info: DIAG_CAUSES[cause] || { title: cause, fix: '', risk: 'low' } }))
                     .sort((a,b) => b.score - a.score)
@@ -3991,31 +4258,46 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                     return s ? s.label : el.dataset.id;
                 });
 
-                // 脈絡描述
-                const ctxLine = `目前配置：${dark ? '深焙' : light ? '淺焙' : '中焙'} × ${DRIPPER_INFO[cfg.dripper]?.name || '—'} × ${POUR_METHODS[cfg.method]?.name || '—'}`;
+                const roastLabelCN = dark ? '深焙' : light ? '淺焙' : '中焙';
+                const dripperName = DRIPPER_INFO[cfg.dripper]?.name || '—';
+                const methodName = POUR_METHODS[cfg.method]?.name || '—';
 
+                // 脈絡 chips + 症狀 chips
                 let html = `
-                    <div style="padding:10px; background:#eceff1; border-radius:8px; font-size:11px; color:#37474f; margin-bottom:10px;">
-                        <div><b>症狀：</b>${symNames.join('、')}</div>
-                        <div style="margin-top:4px;">${ctxLine}</div>
+                    <div class="viz-diag-ctx">
+                        <span class="viz-diag-ctx-item">🔥 <b>${roastLabelCN}</b></span>
+                        <span class="viz-diag-ctx-item">☕ <b>${_escHtml(dripperName)}</b></span>
+                        <span class="viz-diag-ctx-item">🌊 <b>${_escHtml(methodName)}</b></span>
                     </div>
-                    <div style="font-size:12px; font-weight:bold; color:#bf360c; margin-bottom:8px;">🧪 可能成因（按相關度排序）</div>
+                    <div style="font-size:11px; color:#666; margin-bottom:6px; font-weight:700;">你喝到的問題：</div>
+                    <div class="viz-diag-symptoms">
+                        ${symNames.map(n => `<span class="viz-diag-sym">${n}</span>`).join('')}
+                    </div>
+                    <div style="font-size:13px; font-weight:800; color:#bf360c; margin-bottom:10px;">🧪 可能成因（依相關度排序）</div>
                 `;
+
                 ranked.forEach((r, i) => {
                     const pct = Math.round(r.score / topScore * 100);
-                    const riskColor = r.info.risk === 'high' ? '#c62828' : r.info.risk === 'med' ? '#ef6c00' : '#558b2f';
+                    const riskCls = 'risk-' + (r.info.risk || 'low');
+                    const riskText = r.info.risk === 'high' ? '高相關' : r.info.risk === 'med' ? '中相關' : '低相關';
+                    const deltas = DIAG_DELTAS[r.cause] || [];
                     html += `
-                        <div style="border-left: 4px solid ${riskColor}; padding: 8px 10px; margin-bottom: 8px; background: #fafafa; border-radius: 0 8px 8px 0;">
-                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
-                                <b style="font-size:13px; color:#3e2723;">${i+1}. ${r.info.title}</b>
-                                <span style="font-size:10px; color:#888;">相關度 ${pct}%</span>
-                            </div>
-                            <div style="font-size:12px; color:#555; line-height:1.6;">💡 ${r.info.fix}</div>
+                    <div class="viz-diag-cause ${riskCls}">
+                        <div class="viz-diag-head">
+                            <div class="viz-diag-rank">${i+1}</div>
+                            <div class="viz-diag-title">${_escHtml(r.info.title)}</div>
+                            <div class="viz-diag-risk ${riskCls}">${riskText}</div>
                         </div>
-                    `;
+                        <div class="viz-diag-bar-wrap">
+                            <div class="viz-diag-bar"><div class="viz-diag-bar-fill" style="width:${pct}%;"></div></div>
+                            <div class="viz-diag-pct">${pct}%</div>
+                        </div>
+                        ${deltas.length ? `<div class="viz-diag-deltas">${deltas.map(d => `<span class="viz-diag-delta ${d.d}">${d.t}</span>`).join('')}</div>` : ''}
+                        <div class="viz-diag-fix"><span class="viz-diag-fix-label">💡 詳細：</span>${_escHtml(r.info.fix)}</div>
+                    </div>`;
                 });
 
-                // 脈絡建議：針對具體手法的 tip
+                // 手法脈絡 tip
                 const methodTips = {
                     kasuya_46: '四六法 Tip：前兩段決定酸甜（6:4 偏甜 / 5:5 均衡 / 4:6 偏酸），後三段決定濃淡（段數越多越濃）',
                     matt_winton: '冠軍配方 Tip：若尖銳酸來自淺焙未開，可溫度再升 1°C；若苦澀來自深焙，改用 Hoffmann 法',
@@ -4024,7 +4306,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                     classic_3: '三段式 Tip：每段起注時機是「水位剛掉到粉床上」，早了會稀釋、晚了會過萃'
                 };
                 if (methodTips[cfg.method]) {
-                    html += `<div style="margin-top: 10px; padding: 10px; background: #fff8e1; border: 1px dashed #fbc02d; border-radius: 8px; font-size: 11px; color: #795548;">🎯 ${methodTips[cfg.method]}</div>`;
+                    html += `<div class="viz-diag-method-tip">🎯 ${methodTips[cfg.method]}</div>`;
                 }
 
                 document.getElementById('diag-output').innerHTML = html;
