@@ -3396,6 +3396,51 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 }
             }
 
+            // 每個風味類別對應的「烘焙行動」具體 delta chips
+            const ROAST_CAT_DELTAS = {
+                floralFruity: [
+                    { t:'⏱️ Dev Time 12-15%', d:'down' },
+                    { t:'🌡️ 入豆溫 -10°C', d:'down' },
+                    { t:'📈 RoR 平穩下降（不打平）', d:'neutral' },
+                    { t:'🔥 一爆 195-198°C 緩進', d:'neutral' },
+                    { t:'⚖️ 批次量 60-80% 容量', d:'up' }
+                ],
+                acid: [
+                    { t:'⏱️ Dev 15-18%', d:'neutral' },
+                    { t:'📈 RoR 平順下降至出豆（不 baked）', d:'neutral' },
+                    { t:'⏱️ 總時 ≥9 分（小機）', d:'up' },
+                    { t:'🌡️ 出豆溫 ≤深焙區', d:'down' }
+                ],
+                sweet: [
+                    { t:'⏱️ Drying 4-5 分', d:'up' },
+                    { t:'⏱️ 黃變期佔 30-40%', d:'up' },
+                    { t:'📈 Maillard RoR 8-12°C/min', d:'down' },
+                    { t:'🔥 入豆溫符合機器', d:'neutral' }
+                ],
+                roasted: [
+                    { t:'⏱️ Dev 18-22%', d:'up' },
+                    { t:'🌡️ BT 終 ≥215°C', d:'up' },
+                    { t:'🌬️ 中後段拉風門', d:'up' },
+                    { t:'⏱️ 總時 ≥12 分', d:'up' }
+                ],
+                body: [
+                    { t:'⏱️ Drying 4-5 分', d:'up' },
+                    { t:'⚖️ 批次量 ≥50% 容量', d:'up' },
+                    { t:'🌬️ 鍋/豆溫差 10-15°C', d:'neutral' }
+                ],
+                bitter_over: [
+                    { t:'⏱️ Dev -3%', d:'down' },
+                    { t:'🌡️ BT -3°C', d:'down' },
+                    { t:'🔥 一爆後縮短', d:'down' },
+                    { t:'⛔ 避免二爆停留', d:'down' }
+                ],
+                defect: [
+                    { t:'🫘 換新豆測試', d:'neutral' },
+                    { t:'🔧 校準烘豆機', d:'neutral' },
+                    { t:'📦 檢查生豆倉儲', d:'neutral' }
+                ]
+            };
+
             // 每個風味類別對應的「沖煮行動」具體 delta chips
             const BREW_CAT_DELTAS = {
                 floralFruity: [
@@ -3630,7 +3675,124 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 </div>`;
             }
 
-            // 🔬 未呈現風味「雙面歸因」卡 —— 大框架因素 + 烘焙曲線專項
+            // 🧭 烘焙整合分析：品嚐對位 · 歸因 × 烘焙行動（整合雙面歸因 + 瑕疵識別 + 微調）
+            function _renderRoastCombinedAnalysis(ctx) {
+                if (!ctx.actual || !ctx.actual.length) return '';
+                if (typeof rec_categorize !== 'function') return '';
+                const c = rec_categorize(ctx.missing || []);
+                const e = rec_categorize(ctx.extra || []);
+
+                const missBlock = (title, cat, tags, emoji) => {
+                    if (!tags.length) return '';
+                    const macro = (typeof rec_diagnoseLoss === 'function') ? rec_diagnoseLoss(cat, ctx) : [];
+                    const curve = (typeof rec_roastCurveFactors === 'function') ? rec_roastCurveFactors(cat, ctx) : [];
+                    const deltas = ROAST_CAT_DELTAS[cat] || [];
+                    if (!macro.length && !curve.length && !deltas.length) return '';
+                    return `
+                    <div class="viz-cause-block">
+                        <div class="viz-cause-header">
+                            <span class="viz-cause-emoji">${emoji}</span>
+                            <span class="viz-cause-title">未品嚐到：${title}</span>
+                            <span class="viz-cause-tags">${tags.slice(0,5).map(t => `<span class="viz-flavor-tag missing">${_escHtml(t)}</span>`).join('')}</span>
+                        </div>
+                        ${deltas.length ? `<div class="viz-action-row">
+                            <div class="viz-action-label">🎯 下批這樣烘：</div>
+                            <div class="viz-diag-deltas">${deltas.map(d => `<span class="viz-diag-delta ${d.d}">${d.t}</span>`).join('')}</div>
+                        </div>` : ''}
+                        <div class="viz-cause-grid">
+                            <div class="viz-cause-col">
+                                <div class="viz-cause-col-title">🌐 源頭因素（豆源×處理×沖煮×熟成）</div>
+                                ${macro.length ? '<ul class="viz-cause-ul">' + macro.map(x => `<li>${_escHtml(x)}</li>`).join('') + '</ul>' : '<div class="viz-cause-empty">（無源頭問題）</div>'}
+                            </div>
+                            <div class="viz-cause-col">
+                                <div class="viz-cause-col-title viz-col-warn">📈 烘焙曲線專項細節</div>
+                                ${curve.length ? '<ul class="viz-cause-ul">' + curve.map(x => `<li>${_escHtml(x)}</li>`).join('') + '</ul>' : '<div class="viz-cause-empty">（無曲線專項）</div>'}
+                            </div>
+                        </div>
+                    </div>`;
+                };
+
+                const extraBlock = (title, emoji, tags, cls, reasonList, deltaKey) => {
+                    if (!tags.length && !reasonList.length) return '';
+                    const deltas = ROAST_CAT_DELTAS[deltaKey] || [];
+                    const tagCls = cls === 'danger' ? 'defect' : 'extra';
+                    return `
+                    <div class="viz-cause-block viz-cause-${cls}">
+                        <div class="viz-cause-header">
+                            <span class="viz-cause-emoji">${emoji}</span>
+                            <span class="viz-cause-title">${title}</span>
+                            <span class="viz-cause-tags">${tags.slice(0,5).map(t => `<span class="viz-flavor-tag ${tagCls}">${_escHtml(t)}</span>`).join('')}</span>
+                        </div>
+                        ${deltas.length ? `<div class="viz-action-row">
+                            <div class="viz-action-label">🎯 下批這樣烘：</div>
+                            <div class="viz-diag-deltas">${deltas.map(d => `<span class="viz-diag-delta ${d.d}">${d.t}</span>`).join('')}</div>
+                        </div>` : ''}
+                        ${reasonList.length ? '<ul class="viz-cause-ul" style="margin-top:8px;">' + reasonList.map(x => `<li>${_escHtml(x)}</li>`).join('') + '</ul>' : ''}
+                    </div>`;
+                };
+
+                const blocks = [];
+                // 缺失風味 — 主要歸因區塊
+                blocks.push(missBlock('花香 / 水果', 'floralFruity', [...(c.floral||[]), ...(c.fruit||[])], '🌸'));
+                blocks.push(missBlock('酸質',       'acid',         c.acid || [], '🍋'));
+                blocks.push(missBlock('甜感 / 堅果 / 可可', 'sweet', [...(c.sweet||[]), ...(c.nutty||[]), ...(c.cocoa||[])], '🍯'));
+                blocks.push(missBlock('烘焙調 / 可可',      'roasted', [...(c.roasted||[]), ...(c.cocoa||[])], '🔥'));
+                blocks.push(missBlock('body',              'body',    c.body || [], '💪'));
+
+                // 過度風味：苦 / 煙燻過重
+                const bitterExtras = [...(e.roasted||[])];
+                const has53 = (ctx.actual || []).some(t => parseInt(t) === 53);
+                if (bitterExtras.length > 1 || has53) {
+                    const reasons = ['Development 時間可能過長', 'BT 終溫超過該焙度區間', '二爆後停留過久', '火力未適時降'];
+                    blocks.push(extraBlock('☠️ 過烘 · 苦 / 煙燻', '☠️', bitterExtras, 'danger', reasons, 'bitter_over'));
+                }
+
+                // 瑕疵味 + 烘焙瑕疵模式識別（整合進同一區塊）
+                if ((e.defect || []).length || (typeof rec_roastDefectHint === 'function' && rec_roastDefectHint((function(){const x=ctx.extra.slice();x.__roast=ctx.roast;return x;})()).length)) {
+                    const extraWithRoast = (ctx.extra || []).slice(); extraWithRoast.__roast = ctx.roast;
+                    const defectHints = (typeof rec_roastDefectHint === 'function') ? rec_roastDefectHint(extraWithRoast) : [];
+                    const reasons = [];
+                    if (defectHints.length) defectHints.forEach(h => reasons.push(h.replace(/^•\s*/, '')));
+                    if ((e.defect || []).length) {
+                        reasons.push('⚠️ 行動順序：① 換新豆測試 → ② 檢查烘焙曲線 → ③ 校準烘豆機');
+                    }
+                    blocks.push(extraBlock('⚠️ 瑕疵 · 烘焙問題識別', '⚠️', e.defect || [], 'danger', reasons, 'defect'));
+                }
+
+                // 風土特徵（非瑕疵、無須 action）
+                if ((e.terroir || []).length) {
+                    blocks.push(`
+                    <div class="viz-cause-block" style="background:#f1f8e9; border-color:#c5e1a5;">
+                        <div class="viz-cause-header" style="border-bottom-color:#c5e1a5;">
+                            <span class="viz-cause-emoji">🟡</span>
+                            <span class="viz-cause-title">風土特徵（非瑕疵）</span>
+                            <span class="viz-cause-tags">${e.terroir.map(t => `<span class="viz-flavor-tag extra">${_escHtml(t)}</span>`).join('')}</span>
+                        </div>
+                        <div class="viz-advice-body" style="padding: 2px 4px; color:#33691e;">這是印尼系 / 厭氧 / 深焙合理出現的特徵，是豆子個性不是錯誤；若覺得過頭可微調焙度。</div>
+                    </div>`);
+                }
+
+                const anyBlock = blocks.some(b => b);
+                if (!anyBlock) {
+                    return `
+                    <div class="viz-card" style="grid-column: 1 / -1;">
+                        <div class="viz-card-title">🧭 品嚐對位 · 烘焙歸因與行動</div>
+                        <div class="viz-advice good" style="border-left-width: 4px;">
+                            <div class="viz-advice-title">✅ 烘焙命中理想</div>
+                            <div class="viz-advice-body">實際品嚐與預期高度吻合，建議建檔為此豆標竿烘焙曲線。</div>
+                        </div>
+                    </div>`;
+                }
+
+                return `
+                <div class="viz-card" style="grid-column: 1 / -1;">
+                    <div class="viz-card-title">🧭 品嚐對位 · 烘焙歸因與行動</div>
+                    <div class="viz-cause-note">💡 每個未呈現 / 過度風味類別都給你：<b>🎯 下批怎麼烘（chips）</b> + <b>🌐 源頭因素</b>（難即時改）+ <b>📈 烘焙曲線細節</b>。先試頂部 chips，若下批仍未改善再深入檢查曲線或豆源。</div>
+                    ${blocks.join('')}
+                </div>`;
+            }
+
+            // 🔬 未呈現風味「雙面歸因」卡 —— 大框架因素 + 烘焙曲線專項（舊版，保留供參考）
             function _renderRoastCauseAnalysis(ctx) {
                 if (!ctx.actual || !ctx.actual.length || !ctx.missing || !ctx.missing.length) return '';
                 if (typeof rec_categorize !== 'function') return '';
@@ -3752,8 +3914,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                     <div class="viz-grid" style="grid-template-columns: 1fr;">
                         ${_renderRoastAdjustments(profile)}
                         ${_renderFlavorDiff(ctx)}
-                        ${_renderRoastCauseAnalysis(ctx)}
-                        ${_renderRoastDefectsCard(ctx)}
+                        ${_renderRoastCombinedAnalysis(ctx)}
                         ${hasTasting && ctx.missing && ctx.missing.length ? _renderSensoryTraining() : ''}
                         ${_renderBrewStrategyHint(ctx)}
                     </div>`;
