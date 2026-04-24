@@ -1439,9 +1439,9 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
         </div>
     </aside>
     <main id="wheel-pane">
-        <div id="viewport"><div id="wheel-spinner"><div id="main" role="img" aria-label="SCAA 咖啡風味輪，點扇形可加入已品嚐標籤"></div></div></div>
+        <div id="viewport"><div id="wheel-spinner" class="idle-spin spin-ccw"><div id="main" role="img" aria-label="SCAA 咖啡風味輪，點扇形可加入已品嚐標籤"></div></div></div>
         <div id="wheel-hint">💡 點擊風味輪外圈扇形 → 加入「已品嚐」清單</div>
-        <div id="idle-mouse-wrap" aria-hidden="true">
+        <div id="idle-mouse-wrap" class="active facing-right" aria-hidden="true">
             <svg id="idle-mouse" viewBox="0 0 130 80" width="160" height="100" aria-hidden="true">
                 <!-- 尾巴（會擺動） -->
                 <path class="m-tail" d="M 18 44 Q 2 42, 4 22" stroke="#8d6e63" stroke-width="2.5" fill="none" stroke-linecap="round"/>
@@ -7412,7 +7412,17 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 window.addEventListener('resize', _positionIdleMouse);
                 const RESUME_DELAY = 3000;
                 let timer = null;
-                let active = false;
+                // active 初始 = true，因為 HTML 已帶 .active class
+                let active = wrap.classList.contains('active');
+                console.log('[idle-mouse] init, active=' + active);
+                // 先定位一次
+                _positionIdleMouse();
+                // 再用 rAF 等一次渲染後重新定位（ECharts 可能改變 viewport 大小）
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(_positionIdleMouse);
+                });
+                setTimeout(_positionIdleMouse, 400);
+
                 const show = () => {
                     if (active) return;
                     _positionIdleMouse();
@@ -7433,13 +7443,11 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                     console.log('[idle-mouse] hide');
                 };
                 // 只在「真的點到風味扇形」時 hide 老鼠 + 3 秒後恢復
-                // 不 listen pane 的 mousedown/wheel/touchstart（避免滾動/hover 打斷）
                 const stepAside = () => {
                     hide();
                     if (timer) clearTimeout(timer);
                     timer = setTimeout(() => { _positionIdleMouse(); show(); }, RESUME_DELAY);
                 };
-                // 掛到 ECharts 的 click 事件（比 DOM click 精準：只有 ECharts 內部點到才會觸發）
                 if (typeof myChart !== 'undefined' && myChart && typeof myChart.on === 'function') {
                     myChart.on('click', stepAside);
                 }
@@ -7447,19 +7455,12 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                     const v = document.getElementById('analysis-viewer');
                     if (v && v.classList.contains('open')) hide();
                     else if (v && !v.classList.contains('open') && !active) {
-                        // viewer 關閉 → 1.5 秒後老鼠恢復
                         if (timer) clearTimeout(timer);
                         timer = setTimeout(() => { _positionIdleMouse(); show(); }, 1500);
                     }
                 });
                 const av = document.getElementById('analysis-viewer');
                 if (av) obs.observe(av, { attributes: true, attributeFilter: ['class'] });
-                // 🐭 啟動：1 秒後老鼠出場、然後常駐（直到點風味或開 viewer）
-                setTimeout(() => {
-                    _positionIdleMouse();
-                    console.log('[idle-mouse] initial show');
-                    show();
-                }, 1000);
             }
         })();
     </script>
