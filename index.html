@@ -232,15 +232,8 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             to { opacity: 1; transform: translateX(0); }
         }
 
-        /* 🐢 更慢、更有節奏的進場動畫 */
-        /* 卡片 staggered：每張 0.3s 間隔、每 grid 0.45s 間隔 */
-        #analysis-viewer.open .viz-card {
-            animation: viz-fade-up 0.9s cubic-bezier(.22,.8,.33,1) backwards;
-        }
-        #analysis-viewer.open .viz-card:nth-child(1) { animation-delay: 0.1s; }
-        #analysis-viewer.open .viz-card:nth-child(2) { animation-delay: 0.4s; }
-        #analysis-viewer.open .viz-card:nth-child(3) { animation-delay: 0.7s; }
-        #analysis-viewer.open .viz-card:nth-child(n+4) { animation-delay: 1.0s; }
+        /* 🐢 更慢、更有節奏的進場動畫；.viz-card 的 staggered fade-up
+           已移至下方 ambient 區（與 viz-card-breathe 合併在同一 animation shorthand） */
         #analysis-viewer.open .viz-grid { animation: viz-fade-up 0.9s cubic-bezier(.22,.8,.33,1) backwards; }
         #analysis-viewer.open .viz-grid:nth-of-type(1) { animation-delay: 0s; }
         #analysis-viewer.open .viz-grid:nth-of-type(2) { animation-delay: 0.5s; }
@@ -314,58 +307,110 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
         #analysis-viewer.open .av-summary .av-kv:nth-child(3) { animation-delay: 0.4s; }
         #analysis-viewer.open .av-summary .av-kv:nth-child(4) { animation-delay: 0.55s; }
 
-        /* ========== 💓 閒置時持續律動（每 X 秒動一次，讓畫面有生命感）========== */
-        @keyframes viz-pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.04); }
+        /* ========== 💓 閒置時持續律動（循環、明顯可見）========== */
+        @keyframes viz-pulse-strong {
+            0%, 100% { transform: scale(1); filter: brightness(1); }
+            50% { transform: scale(1.08); filter: brightness(1.08); }
         }
         @keyframes viz-shine {
-            0% { transform: translateX(-120%) skewX(-20deg); }
-            70%, 100% { transform: translateX(280%) skewX(-20deg); }
+            0% { transform: translateX(-150%) skewX(-25deg); opacity: 0; }
+            10% { opacity: 1; }
+            55% { opacity: 1; }
+            70%, 100% { transform: translateX(400%) skewX(-25deg); opacity: 0; }
         }
-        @keyframes viz-bob {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-3px); }
+        @keyframes viz-card-breathe {
+            0%, 100% { box-shadow: 0 0 0 rgba(141,110,99,0); transform: translateY(0); }
+            50% { box-shadow: 0 8px 24px rgba(141,110,99,0.18); transform: translateY(-2px); }
         }
-        /* Gauge：每 6 秒搏動一次（2 圈） */
+        /* Gauge：每 3.5 秒搏動（更明顯） */
         #analysis-viewer.open .viz-gauge-svg {
-            animation: viz-pulse 6s ease-in-out 3s infinite;
+            animation: viz-pulse-strong 3.5s ease-in-out 2s infinite;
             transform-origin: center;
         }
-        /* 長條：加光澤掃過效果 */
+        /* 長條：光澤掃過更頻繁、更亮 */
         .viz-bar-track, .viz-diag-bar, .viz-range-bar {
             position: relative; overflow: hidden;
         }
         .viz-bar-track::after, .viz-diag-bar::after, .viz-range-bar::after {
             content: ''; position: absolute; top: 0; bottom: 0; left: 0;
-            width: 30%; pointer-events: none;
-            background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.55) 50%, transparent 100%);
-            transform: translateX(-120%) skewX(-20deg);
+            width: 40%; pointer-events: none;
+            background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.75) 50%, transparent 100%);
+            transform: translateX(-150%) skewX(-25deg);
             opacity: 0;
         }
         #analysis-viewer.open .viz-bar-track::after,
         #analysis-viewer.open .viz-diag-bar::after,
         #analysis-viewer.open .viz-range-bar::after {
-            opacity: 1;
-            animation: viz-shine 4.5s ease-in-out 3s infinite;
+            animation: viz-shine 3s ease-in-out 2s infinite;
         }
-        /* 溫度球體每 4 秒搏動 */
+        /* 溫度球體每 2.5 秒搏動 + 液柱加輕微晃動 */
         @keyframes viz-thermo-bulb-pulse {
             0%, 100% { r: 14; }
-            50% { r: 15.5; }
+            50% { r: 16; }
         }
         #analysis-viewer.open .viz-thermo circle:first-of-type,
         #analysis-viewer.open .viz-thermo-mini circle:first-of-type {
-            animation: viz-thermo-bulb-pulse 4s ease-in-out 2s infinite;
+            animation: viz-thermo-bulb-pulse 2.5s ease-in-out 1.5s infinite;
         }
-        /* 時間軸節點每 5 秒散發漣漪 */
+        @keyframes viz-thermo-liquid-pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.85; }
+        }
+        #analysis-viewer.open .viz-thermo rect[fill="#e53935"],
+        #analysis-viewer.open .viz-thermo-mini rect[data-thermo-fill] {
+            animation: viz-thermo-rise 1.6s cubic-bezier(.22,.8,.33,1) 0.7s backwards,
+                       viz-thermo-liquid-pulse 2.5s ease-in-out 2.5s infinite;
+            transform-origin: bottom;
+        }
+        /* 時間軸節點每 2.5 秒散發漣漪 */
         @keyframes viz-tick-ripple {
-            0%, 100% { box-shadow: 0 0 0 2px #8d6e63; }
-            50% { box-shadow: 0 0 0 2px #8d6e63, 0 0 0 8px rgba(141,110,99,0.18); }
+            0%, 100% { box-shadow: 0 0 0 2px #8d6e63, 0 0 0 2px rgba(141,110,99,0); }
+            50% { box-shadow: 0 0 0 2px #8d6e63, 0 0 0 10px rgba(141,110,99,0.3); }
         }
         #analysis-viewer.open .viz-tl-row::before {
             animation: viz-tick 0.6s cubic-bezier(.34,1.56,.64,1) backwards,
-                       viz-tick-ripple 5s ease-in-out 3s infinite;
+                       viz-tick-ripple 2.5s ease-in-out 2s infinite;
+        }
+        /* 🆕 粉水比杯：水面波動 */
+        @keyframes viz-water-wave {
+            0%, 100% { transform: translateY(0) scaleY(1); }
+            50% { transform: translateY(-1.5px) scaleY(1.02); }
+        }
+        #analysis-viewer.open .viz-cup rect[fill*="bbdefb"],
+        #analysis-viewer.open .viz-cup rect[fill*="#bbdefb"],
+        #analysis-viewer.open .viz-cup rect:nth-of-type(2) {
+            animation: viz-water-fill 1.3s cubic-bezier(.22,.8,.33,1) 0.8s backwards,
+                       viz-water-wave 2.2s ease-in-out 2.2s infinite;
+            transform-origin: center bottom;
+        }
+        /* 🆕 viz-card spotlight 輪流呼吸（每張卡間隔 4 秒） */
+        #analysis-viewer.open .viz-card {
+            animation: viz-fade-up 0.9s cubic-bezier(.22,.8,.33,1) backwards;
+        }
+        #analysis-viewer.open .viz-card:nth-child(1) {
+            animation: viz-fade-up 0.9s cubic-bezier(.22,.8,.33,1) 0.1s backwards,
+                       viz-card-breathe 8s ease-in-out 3s infinite;
+        }
+        #analysis-viewer.open .viz-card:nth-child(2) {
+            animation: viz-fade-up 0.9s cubic-bezier(.22,.8,.33,1) 0.4s backwards,
+                       viz-card-breathe 8s ease-in-out 5s infinite;
+        }
+        #analysis-viewer.open .viz-card:nth-child(3) {
+            animation: viz-fade-up 0.9s cubic-bezier(.22,.8,.33,1) 0.7s backwards,
+                       viz-card-breathe 8s ease-in-out 7s infinite;
+        }
+        #analysis-viewer.open .viz-card:nth-child(n+4) {
+            animation: viz-fade-up 0.9s cubic-bezier(.22,.8,.33,1) 1.0s backwards,
+                       viz-card-breathe 8s ease-in-out 9s infinite;
+        }
+        /* 🆕 chips 循環輕彈（每 5 秒） */
+        @keyframes viz-chip-bob {
+            0%, 90%, 100% { transform: scale(1); }
+            94% { transform: scale(1.08); }
+        }
+        #analysis-viewer.open .viz-diag-delta {
+            animation: viz-pop 0.6s cubic-bezier(.34,1.56,.64,1) backwards,
+                       viz-chip-bob 5s ease-in-out 3s infinite;
         }
         /* counter 數字爆點 */
         .viz-counter { display: inline-block; }
@@ -829,6 +874,18 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
         
         #viewport { width: 100%; height: 100%; cursor: grab; display: flex; justify-content: center; align-items: center; overflow: hidden; }
         #viewport:active { cursor: grabbing; }
+        #wheel-spinner {
+            width: 100%; height: 100%;
+            display: flex; justify-content: center; align-items: center;
+            transform-origin: center center;
+        }
+        #wheel-spinner.idle-spin {
+            animation: wheel-slow-spin 45s linear infinite;
+        }
+        @keyframes wheel-slow-spin {
+            from { transform: rotate(0deg); }
+            to   { transform: rotate(-360deg); }
+        }
         #main {
             width: min(94vh, 92%); height: min(94vh, 92%);
             transform-origin: center center; transition: transform 0.1s ease-out;
@@ -929,34 +986,53 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
         #region-info b { color: var(--accent-blue); }
         #wheel-hint { position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.7); color: #fff; padding: 6px 14px; border-radius: 20px; font-size: 11px; z-index: 50; pointer-events: none; white-space: nowrap; }
 
-        /* 🐭 閒置時風味輪上方踱步的老鼠 */
+        /* 🐭 實驗鼠：踩在風味輪正上方頂端、原地跑步（風味輪被踩著轉） */
         #idle-mouse-wrap {
-            position: absolute; top: 6%; left: 5%;
+            position: absolute;
+            top: calc(50% - min(47vh, 46%) - 28px);  /* 風味輪頂端再往上 28px */
+            left: 50%;
             pointer-events: none; z-index: 40;
             opacity: 0; transition: opacity 0.6s ease-out;
-            will-change: transform, left;
+            transform: translateX(-50%);
         }
-        #idle-mouse-wrap.active {
-            opacity: 1;
-            animation: mouse-travel 26s linear infinite;
-        }
+        #idle-mouse-wrap.active { opacity: 1; }
         #idle-mouse {
-            display: inline-block; font-size: 38px; line-height: 1;
-            filter: drop-shadow(0 6px 10px rgba(0,0,0,0.25));
-            animation: mouse-bob 0.38s ease-in-out infinite alternate;
+            display: inline-block; font-size: 44px; line-height: 1;
+            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.35));
+            transform-origin: bottom center;
         }
-        @keyframes mouse-travel {
-            0%   { left: 5%; transform: scaleX(1); }
-            48%  { left: 88%; transform: scaleX(1); }
-            50%  { left: 88%; transform: scaleX(-1); }
-            52%  { left: 88%; transform: scaleX(-1) rotate(-8deg); }
-            55%  { left: 88%; transform: scaleX(-1) rotate(0); }
-            98%  { left: 5%; transform: scaleX(-1); }
-            100% { left: 5%; transform: scaleX(1); }
+        #idle-mouse-wrap.active #idle-mouse {
+            animation: mouse-scamper 0.22s ease-in-out infinite alternate;
         }
-        @keyframes mouse-bob {
-            from { transform: translateY(0); }
-            to { transform: translateY(-6px); }
+        /* 原地跑步：上下竄動 + 身體輕微前後擺 */
+        @keyframes mouse-scamper {
+            0%   { transform: translateY(0) scaleY(1) rotate(-4deg); }
+            100% { transform: translateY(-8px) scaleY(0.95) rotate(4deg); }
+        }
+        /* 小粒子（碎屑）從老鼠腳下噴出表示「踩動」 */
+        #idle-mouse-wrap::before, #idle-mouse-wrap::after {
+            content: '·'; position: absolute;
+            left: 50%; bottom: -4px;
+            color: #8d6e63; font-size: 18px; font-weight: 900;
+            opacity: 0;
+        }
+        #idle-mouse-wrap.active::before {
+            animation: crumb-left 0.7s ease-out infinite;
+        }
+        #idle-mouse-wrap.active::after {
+            animation: crumb-right 0.7s ease-out infinite 0.35s;
+        }
+        @keyframes crumb-left {
+            0% { transform: translate(0, 0); opacity: 0.9; }
+            100% { transform: translate(-18px, 14px); opacity: 0; }
+        }
+        @keyframes crumb-right {
+            0% { transform: translate(0, 0); opacity: 0.9; }
+            100% { transform: translate(18px, 14px); opacity: 0; }
+        }
+        @media (max-width: 900px) {
+            #idle-mouse-wrap { top: calc(39vw - 32px); }
+            #idle-mouse { font-size: 36px; }
         }
 
         @media (max-width: 768px) {
@@ -1301,7 +1377,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
         </div>
     </aside>
     <main id="wheel-pane">
-        <div id="viewport"><div id="main" role="img" aria-label="SCAA 咖啡風味輪，點扇形可加入已品嚐標籤"></div></div>
+        <div id="viewport"><div id="wheel-spinner"><div id="main" role="img" aria-label="SCAA 咖啡風味輪，點扇形可加入已品嚐標籤"></div></div></div>
         <div id="wheel-hint">💡 點擊風味輪外圈扇形 → 加入「已品嚐」清單</div>
         <div id="idle-mouse-wrap" aria-hidden="true"><span id="idle-mouse">🐭</span></div>
     </main>
@@ -7127,26 +7203,29 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 initIdleMouse();
             }
 
-            // 🐭 閒置 12 秒後老鼠出現在風味輪上方走動；任何風味輪互動立即停下
+            // 🐭 閒置 10 秒 → 老鼠出現踩風味輪頂端、風味輪跟著轉
+            //    任何風味輪互動 → 老鼠立即退場、輪子停轉
             function initIdleMouse() {
                 const wrap = document.getElementById('idle-mouse-wrap');
+                const spinner = document.getElementById('wheel-spinner');
                 const pane = document.getElementById('wheel-pane');
-                if (!wrap || !pane) return;
-                const IDLE_DELAY = 12000;
+                if (!wrap || !spinner || !pane) return;
+                const IDLE_DELAY = 10000;
                 let timer = null;
                 let active = false;
                 const show = () => {
                     if (active) return;
-                    // 隨機替換 emoji 讓每次不太一樣
                     const pool = ['🐭', '🐀', '🐁', '🐹'];
                     const mouse = document.getElementById('idle-mouse');
                     if (mouse) mouse.textContent = pool[Math.floor(Math.random() * pool.length)];
                     wrap.classList.add('active');
+                    spinner.classList.add('idle-spin');
                     active = true;
                 };
                 const hide = () => {
                     if (!active) return;
                     wrap.classList.remove('active');
+                    spinner.classList.remove('idle-spin');
                     active = false;
                 };
                 const bump = () => {
@@ -7154,18 +7233,15 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                     if (timer) clearTimeout(timer);
                     timer = setTimeout(show, IDLE_DELAY);
                 };
-                // 風味輪區任何互動 → 立即隱藏 + 重新計時
                 ['mousedown', 'mousemove', 'touchstart', 'wheel', 'click'].forEach(ev => {
                     pane.addEventListener(ev, bump, { passive: true });
                 });
-                // viewer 打開時也算有互動（避免背景還有老鼠）
                 const obs = new MutationObserver(() => {
                     const v = document.getElementById('analysis-viewer');
                     if (v && v.classList.contains('open')) hide();
                 });
                 const av = document.getElementById('analysis-viewer');
                 if (av) obs.observe(av, { attributes: true, attributeFilter: ['class'] });
-                // 啟動首次計時
                 bump();
             }
         })();
