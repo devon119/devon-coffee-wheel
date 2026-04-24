@@ -3312,18 +3312,18 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 return `
                 <div class="viz-card" style="grid-column: span 2;">
                     <div class="viz-card-title">🌡️ 關鍵溫度</div>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
                         <div>
-                            <div style="font-size:11px; color:#8d6e63; font-weight:700;">入豆溫 (Charge)</div>
-                            <div style="font-size:22px; font-weight:900; color:#e65100; margin: 4px 0;">${profile.chargeTemp}°C</div>
-                            <div style="font-size:10.5px; color:#666;">${chargeAdjs.length ? '累計 ' + (chargeCum>0?'+':'') + chargeCum + '°C' : '基準值'}</div>
-                            ${chargeAdjs.map(a => `<div style="font-size:10.5px; color:#555; margin-top:3px;">${a.delta>0?'+':''}${a.delta}°C · ${_escHtml(a.stage)}</div>`).join('')}
+                            <div style="font-size:13px; color:#8d6e63; font-weight:700;">入豆溫 (Charge)</div>
+                            <div style="font-size:28px; font-weight:900; color:#e65100; margin: 6px 0;">${profile.chargeTemp}°C</div>
+                            <div style="font-size:12.5px; color:#666;">${chargeAdjs.length ? '累計 ' + (chargeCum>0?'+':'') + chargeCum + '°C' : '基準值'}</div>
+                            ${chargeAdjs.map(a => `<div style="font-size:12.5px; color:#555; margin-top:5px; line-height:1.55;">${a.delta>0?'+':''}${a.delta}°C · ${_escHtml(a.stage)}</div>`).join('')}
                         </div>
                         <div>
-                            <div style="font-size:11px; color:#8d6e63; font-weight:700;">BT 終溫範圍 (Drop)</div>
-                            <div style="font-size:22px; font-weight:900; color:#c62828; margin: 4px 0;">${profile.btLow}-${profile.btHigh}°C</div>
-                            <div style="font-size:10.5px; color:#666;">${_escHtml(profile.base.note || '')}</div>
-                            ${profile.base.warn ? `<div style="margin-top:6px; padding:6px 8px; background:#ffebee; color:#c62828; border-radius:6px; font-size:10.5px;">⚠️ ${_escHtml(profile.base.warn)}</div>` : ''}
+                            <div style="font-size:13px; color:#8d6e63; font-weight:700;">BT 終溫範圍 (Drop)</div>
+                            <div style="font-size:28px; font-weight:900; color:#c62828; margin: 6px 0;">${profile.btLow}-${profile.btHigh}°C</div>
+                            <div style="font-size:12.5px; color:#666; line-height:1.65;">${_escHtml(profile.base.note || '')}</div>
+                            ${profile.base.warn ? `<div style="margin-top:8px; padding:8px 12px; background:#ffebee; color:#c62828; border-radius:6px; font-size:12.5px; line-height:1.6;">⚠️ ${_escHtml(profile.base.warn)}</div>` : ''}
                         </div>
                     </div>
                 </div>`;
@@ -3341,24 +3341,24 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 return `
                 <div class="viz-card" style="grid-column: span 2;">
                     <div class="viz-card-title">⏱️ 時程 × Development</div>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
                         <div>
-                            <div style="font-size:11px; color:#8d6e63; font-weight:700;">總烘焙時間</div>
-                            <div style="font-size:22px; font-weight:900; color:#3e2723; margin: 4px 0;">${totalLo}-${totalHi} 分</div>
+                            <div style="font-size:13px; color:#8d6e63; font-weight:700;">總烘焙時間</div>
+                            <div style="font-size:28px; font-weight:900; color:#3e2723; margin: 6px 0;">${totalLo}-${totalHi} 分</div>
                         </div>
                         <div>
-                            <div style="font-size:11px; color:#8d6e63; font-weight:700;">Development %</div>
-                            <div style="font-size:22px; font-weight:900; color:#e65100; margin: 4px 0;">${devPctLo}-${devPctHi}%</div>
+                            <div style="font-size:13px; color:#8d6e63; font-weight:700;">Development %</div>
+                            <div style="font-size:28px; font-weight:900; color:#e65100; margin: 6px 0;">${devPctLo}-${devPctHi}%</div>
                         </div>
                     </div>
-                    <div style="margin-top: 12px;">
-                        <div style="font-size:11px; color:#8d6e63; font-weight:700; margin-bottom:4px;">階段比例（估算）</div>
+                    <div style="margin-top: 14px;">
+                        <div style="font-size:13px; color:#8d6e63; font-weight:700; margin-bottom:6px;">階段比例（估算）</div>
                         <div class="viz-phase-bar">
                             <div class="viz-phase-seg phase-dry" style="width:${dryPct}%;">Drying ${dryPct}%</div>
                             <div class="viz-phase-seg phase-mai" style="width:${maiPct}%;">Maillard ${Math.round(maiPct)}%</div>
                             <div class="viz-phase-seg phase-dev" style="width:${devPct}%;">Dev ${Math.round(devPct)}%</div>
                         </div>
-                        ${profile.dryingAdjSec ? `<div class="viz-grind-note" style="margin-top:6px;">Drying Phase ${profile.dryingAdjSec>0?'延長':'縮短'} ${Math.abs(profile.dryingAdjSec)}s（相對基準）</div>` : ''}
+                        ${profile.dryingAdjSec ? `<div class="viz-grind-note" style="margin-top:8px;">Drying Phase ${profile.dryingAdjSec>0?'延長':'縮短'} ${Math.abs(profile.dryingAdjSec)}s（相對基準）</div>` : ''}
                     </div>
                 </div>`;
             }
@@ -3369,7 +3369,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 if (!adjs.length) {
                     return `<div class="viz-card" style="grid-column: 1 / -1;">
                         <div class="viz-card-title">📐 參數推理軌跡</div>
-                        <div style="font-size:12px; color:#888; padding: 8px 0;">本配置採用預設基準值，無額外調整。</div>
+                        <div style="font-size:14px; color:#888; padding: 10px 0;">本配置採用預設基準值，無額外調整。</div>
                     </div>`;
                 }
                 const axisIcon = { charge:'🌡️ 入豆溫', btLow:'🎯 BT 下限', btHigh:'🎯 BT 上限', devLow:'⏱️ Dev 下限', devHigh:'⏱️ Dev 上限', drying:'💨 Drying 時間' };
@@ -3379,14 +3379,14 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 <div class="viz-card" style="grid-column: 1 / -1;">
                     <div class="viz-card-title">📐 參數推理軌跡</div>
                     ${Object.keys(byAxis).map(axis => `
-                        <div style="margin-bottom: 10px;">
-                            <div style="font-size:12px; font-weight:800; color:#5d4037; margin-bottom:6px;">${axisIcon[axis] || axis}</div>
+                        <div style="margin-bottom: 12px;">
+                            <div style="font-size:14px; font-weight:800; color:#5d4037; margin-bottom:8px;">${axisIcon[axis] || axis}</div>
                             ${byAxis[axis].map(a => {
                                 const sign = a.delta > 0 ? '+' : '';
                                 const unit = axis === 'charge' || axis.startsWith('bt') ? '°C' : axis === 'drying' ? 's' : '%';
                                 const cls = a.delta > 0 ? 'viz-delta-pos' : 'viz-delta-neg';
-                                return `<div style="font-size:11px; color:#555; line-height:1.6; padding: 2px 0 2px 10px; border-left: 2px solid #d7ccc8;">
-                                    <span class="${cls}" style="font-weight:800;">${sign}${a.delta}${unit}</span> · <span style="color:#8d6e63; font-weight:600;">[${_escHtml(a.stage)}]</span> ${_escHtml(a.reason)}
+                                return `<div style="font-size:13px; color:#555; line-height:1.75; padding: 4px 0 4px 12px; border-left: 2px solid #d7ccc8; margin-bottom:3px;">
+                                    <span class="${cls}" style="font-weight:800; font-size:13.5px;">${sign}${a.delta}${unit}</span> · <span style="color:#8d6e63; font-weight:600;">[${_escHtml(a.stage)}]</span> ${_escHtml(a.reason)}
                                 </div>`;
                             }).join('')}
                         </div>
