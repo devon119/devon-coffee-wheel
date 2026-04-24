@@ -383,26 +383,14 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                        viz-water-wave 2.2s ease-in-out 2.2s infinite;
             transform-origin: center bottom;
         }
-        /* 🆕 viz-card spotlight 輪流呼吸（每張卡間隔 4 秒） */
+        /* 卡片 staggered 入場（不做輪流呼吸，避免干擾重播感） */
         #analysis-viewer.open .viz-card {
             animation: viz-fade-up 0.9s cubic-bezier(.22,.8,.33,1) backwards;
         }
-        #analysis-viewer.open .viz-card:nth-child(1) {
-            animation: viz-fade-up 0.9s cubic-bezier(.22,.8,.33,1) 0.1s backwards,
-                       viz-card-breathe 8s ease-in-out 3s infinite;
-        }
-        #analysis-viewer.open .viz-card:nth-child(2) {
-            animation: viz-fade-up 0.9s cubic-bezier(.22,.8,.33,1) 0.4s backwards,
-                       viz-card-breathe 8s ease-in-out 5s infinite;
-        }
-        #analysis-viewer.open .viz-card:nth-child(3) {
-            animation: viz-fade-up 0.9s cubic-bezier(.22,.8,.33,1) 0.7s backwards,
-                       viz-card-breathe 8s ease-in-out 7s infinite;
-        }
-        #analysis-viewer.open .viz-card:nth-child(n+4) {
-            animation: viz-fade-up 0.9s cubic-bezier(.22,.8,.33,1) 1.0s backwards,
-                       viz-card-breathe 8s ease-in-out 9s infinite;
-        }
+        #analysis-viewer.open .viz-card:nth-child(1) { animation-delay: 0.1s; }
+        #analysis-viewer.open .viz-card:nth-child(2) { animation-delay: 0.4s; }
+        #analysis-viewer.open .viz-card:nth-child(3) { animation-delay: 0.7s; }
+        #analysis-viewer.open .viz-card:nth-child(n+4) { animation-delay: 1.0s; }
         /* 🆕 chips 循環輕彈（每 5 秒） */
         @keyframes viz-chip-bob {
             0%, 90%, 100% { transform: scale(1); }
@@ -986,11 +974,10 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
         #region-info b { color: var(--accent-blue); }
         #wheel-hint { position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.7); color: #fff; padding: 6px 14px; border-radius: 20px; font-size: 11px; z-index: 50; pointer-events: none; white-space: nowrap; }
 
-        /* 🐭 實驗鼠：踩在風味輪正上方頂端、原地跑步（風味輪被踩著轉） */
+        /* 🐭 實驗鼠：踩在風味輪正上方頂端、原地跑步（位置由 JS 依風味輪大小動態算） */
         #idle-mouse-wrap {
             position: absolute;
-            top: calc(50% - min(47vh, 46%) - 28px);  /* 風味輪頂端再往上 28px */
-            left: 50%;
+            top: 20px; left: 50%;  /* 初值，JS 會 override */
             pointer-events: none; z-index: 40;
             opacity: 0; transition: opacity 0.6s ease-out;
             transform: translateX(-50%);
@@ -4350,6 +4337,39 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 });
             }
 
+            // 🔁 所有「進場動畫」重新跑一次（保留卡片在畫面上、只重置 animation 讓其重播）
+            const _REPLAY_SELECTORS = [
+                '.viz-card', '.av-kv',
+                '.viz-bar-fill', '.viz-diag-bar-fill', '.viz-range-fill',
+                '.viz-hist-bar', '.viz-phase-seg',
+                '.viz-gauge-svg circle:last-of-type',
+                '.viz-thermo rect[fill="#e53935"]',
+                '.viz-thermo-mini rect[data-thermo-fill]',
+                '.viz-cup rect',
+                '.viz-tl-row',
+                '.viz-diag-delta', '.viz-flavor-tag'
+            ].join(', ');
+            function _replayViewerAnimations() {
+                const v = document.getElementById('analysis-viewer');
+                if (!v || !v.classList.contains('open')) return;
+                const els = v.querySelectorAll(_REPLAY_SELECTORS);
+                els.forEach(el => { el.style.animation = 'none'; });
+                void v.offsetWidth;  // force reflow
+                els.forEach(el => { el.style.animation = ''; });
+                // counter 重新跑
+                _animateCounters(v);
+            }
+            let _viewerReplayTimer = null;
+            function _startViewerReplayLoop() {
+                clearInterval(_viewerReplayTimer);
+                // 第一次重播在 15 秒後，之後每 15 秒一次
+                _viewerReplayTimer = setInterval(_replayViewerAnimations, 15000);
+            }
+            function _stopViewerReplayLoop() {
+                clearInterval(_viewerReplayTimer);
+                _viewerReplayTimer = null;
+            }
+
             window.openAnalysisViewer = function(opts) {
                 document.getElementById('av-icon').textContent = opts.icon || '🔬';
                 document.getElementById('av-title-text').textContent = opts.title || '分析結果';
@@ -4363,11 +4383,10 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 document.getElementById('av-footer').innerHTML = opts.footerHtml || '';
                 const v = document.getElementById('analysis-viewer');
                 v.style.display = 'block';
-                // 下一幀才加 open class 讓 transition 起作用
                 requestAnimationFrame(() => {
                     v.classList.add('open');
-                    // counter 動畫延遲 250ms（配合卡片 fade-up 時序）
                     setTimeout(() => _animateCounters(v), 250);
+                    _startViewerReplayLoop();
                 });
                 document.body.style.overflow = 'hidden';
             };
@@ -4376,6 +4395,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 v.classList.remove('open');
                 setTimeout(() => { v.style.display = 'none'; }, 250);
                 document.body.style.overflow = '';
+                _stopViewerReplayLoop();
             };
 
             // ========== 📊 儀表板 / 洞察分析 / 學習進度 共用視覺化元件 ==========
@@ -7205,16 +7225,40 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
 
             // 🐭 閒置 10 秒 → 老鼠出現踩風味輪頂端、風味輪跟著轉
             //    任何風味輪互動 → 老鼠立即退場、輪子停轉
+            function _positionIdleMouse() {
+                const main = document.getElementById('main');
+                const pane = document.getElementById('wheel-pane');
+                const wrap = document.getElementById('idle-mouse-wrap');
+                if (!main || !pane || !wrap) return;
+                // 用 #main 的 bounding rect，但要避開旋轉影響：取 offsetTop/Left 相對 viewport
+                const viewport = document.getElementById('viewport');
+                if (!viewport) return;
+                const vr = viewport.getBoundingClientRect();
+                const pr = pane.getBoundingClientRect();
+                // #main 寬 = min(94vh, 92% * viewport.width)，等於高
+                const vh = window.innerHeight;
+                const wheelSize = Math.min(0.94 * vh, 0.92 * vr.width);
+                const wheelCenterY = vr.top - pr.top + vr.height / 2;
+                const wheelCenterX = vr.left - pr.left + vr.width / 2;
+                const mouseHeight = 46;
+                const top = Math.max(4, wheelCenterY - wheelSize / 2 - mouseHeight);
+                wrap.style.top = top + 'px';
+                wrap.style.left = wheelCenterX + 'px';
+            }
+
             function initIdleMouse() {
                 const wrap = document.getElementById('idle-mouse-wrap');
                 const spinner = document.getElementById('wheel-spinner');
                 const pane = document.getElementById('wheel-pane');
                 if (!wrap || !spinner || !pane) return;
+                _positionIdleMouse();
+                window.addEventListener('resize', _positionIdleMouse);
                 const IDLE_DELAY = 10000;
                 let timer = null;
                 let active = false;
                 const show = () => {
                     if (active) return;
+                    _positionIdleMouse();  // 出現前再定位一次（視窗可能已變）
                     const pool = ['🐭', '🐀', '🐁', '🐹'];
                     const mouse = document.getElementById('idle-mouse');
                     if (mouse) mouse.textContent = pool[Math.floor(Math.random() * pool.length)];
