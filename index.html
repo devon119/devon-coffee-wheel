@@ -238,6 +238,50 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             0%, 10%   { transform: translateY(0); }
             50%, 100% { transform: translateY(70px); }
         }
+        @keyframes im-siphon-rise {
+            0%, 15%  { transform: scaleY(0); }
+            45%, 70% { transform: scaleY(1); }
+            95%, 100%{ transform: scaleY(0.1); }  /* 關火後回流 */
+        }
+        @keyframes im-siphon-lower-drain {
+            0%, 15%  { transform: scaleY(1); }
+            45%, 70% { transform: scaleY(0); }    /* 水被吸上去 */
+            95%, 100%{ transform: scaleY(1); }    /* 回流 */
+        }
+        @keyframes im-stir-swirl {
+            from { transform: rotate(0deg); }
+            to   { transform: rotate(360deg); }
+        }
+        @keyframes im-grounds-sink {
+            0%   { transform: translateY(-60px); opacity: 0; }
+            20%  { opacity: 1; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes im-cold-tint {
+            0%   { fill: rgba(120,144,156,0.2); }   /* 清水 */
+            50%  { fill: rgba(109,76,65,0.7); }     /* 開始變褐 */
+            100% { fill: rgba(62,39,35,0.95); }     /* 深咖啡色 */
+        }
+        @keyframes im-ice-jiggle {
+            0%, 100% { transform: translateY(0) rotate(0); }
+            25%      { transform: translateY(-2px) rotate(4deg); }
+            75%      { transform: translateY(1px) rotate(-3deg); }
+        }
+        @keyframes im-aero-flip {
+            0%, 10%  { transform: rotate(180deg); }     /* 倒置浸泡 */
+            35%, 45% { transform: rotate(180deg); }
+            55%, 65% { transform: rotate(0deg); }       /* 翻正 */
+            70%, 100%{ transform: rotate(0deg); }
+        }
+        @keyframes im-aero-push {
+            0%, 55%    { transform: translateY(0); }
+            70%, 100%  { transform: translateY(90px); }
+        }
+        @keyframes im-aero-output {
+            0%, 70%   { opacity: 0; transform: scaleY(0); }
+            75%, 95%  { opacity: 1; transform: scaleY(1); }
+            100%      { opacity: 0; transform: scaleY(0); }
+        }
 
         /* 全螢幕「分析結果」檢視器 */
         #analysis-viewer {
@@ -4718,6 +4762,140 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                         </defs>
                     </svg>`
                 }),
+                // ----- 虹吸壺 -----
+                siphon: (caption) => ({
+                    caption: caption || '🧪 虹吸壺…水柱上升、浸泡攪拌、落回下壺',
+                    svg: `<svg viewBox="0 0 720 540" preserveAspectRatio="xMidYMid meet">
+                        <rect x="0" y="470" width="720" height="70" fill="#263238"/>
+                        <!-- 火焰 -->
+                        ${Array.from({length:6}).map((_,i)=>`
+                            <path d="M ${310+i*20} 460 Q ${315+i*20} 425 ${320+i*20} 460 Z"
+                                  fill="#ff9800"
+                                  style="animation: im-pulse-grow ${0.28+i*0.05}s ease-in-out infinite;"/>
+                            <path d="M ${315+i*20} 460 Q ${318+i*20} 440 ${321+i*20} 460 Z"
+                                  fill="#ffeb3b" opacity="0.9"/>
+                        `).join('')}
+                        <!-- 酒精燈/瓦斯座 -->
+                        <rect x="295" y="440" width="130" height="24" rx="6" fill="#37474f"/>
+                        <!-- 下壺（玻璃圓球） -->
+                        <circle cx="360" cy="380" r="70" fill="rgba(255,255,255,0.12)" stroke="#cfd8dc" stroke-width="4"/>
+                        <!-- 下壺水（動畫）-->
+                        <clipPath id="im-siphon-lower-clip"><circle cx="360" cy="380" r="66"/></clipPath>
+                        <rect x="290" y="315" width="140" height="130"
+                              fill="url(#im-siphon-water)"
+                              clip-path="url(#im-siphon-lower-clip)"
+                              style="transform-origin: 360px 446px; animation: im-siphon-lower-drain 10s ease-in-out infinite;"/>
+                        <!-- 玻璃管（上下連接）-->
+                        <rect x="355" y="180" width="10" height="140" fill="rgba(255,255,255,0.15)" stroke="#cfd8dc" stroke-width="2"/>
+                        <!-- 上壺（玻璃圓柱） -->
+                        <path d="M 280 180 L 280 70 Q 280 50 300 50 L 420 50 Q 440 50 440 70 L 440 180 Z"
+                              fill="rgba(255,255,255,0.12)" stroke="#cfd8dc" stroke-width="4"/>
+                        <!-- 上壺接合處 -->
+                        <ellipse cx="360" cy="180" rx="90" ry="8" fill="#37474f"/>
+                        <!-- 上壺水柱（上升到滿） -->
+                        <clipPath id="im-siphon-upper-clip"><rect x="284" y="60" width="152" height="118"/></clipPath>
+                        <rect x="284" y="60" width="152" height="118"
+                              fill="url(#im-siphon-water)"
+                              clip-path="url(#im-siphon-upper-clip)"
+                              style="transform-origin: center bottom; animation: im-siphon-rise 10s ease-in-out infinite;"/>
+                        <!-- 咖啡粉雲（懸浮於上壺）-->
+                        <g style="transform-origin: 360px 120px; animation: im-stir-swirl 4s linear infinite;">
+                            ${Array.from({length:8}).map((_,i)=>{
+                                const a=(i/8)*Math.PI*2, r=28;
+                                return `<circle cx="${360+Math.cos(a)*r}" cy="${120+Math.sin(a)*r*0.7}" r="5" fill="#4e342e" opacity="0.8"/>`;
+                            }).join('')}
+                        </g>
+                        <!-- 攪拌棒 -->
+                        <g style="transform-origin: 360px 120px; animation: im-stir-swirl 2s linear infinite reverse;">
+                            <rect x="358" y="55" width="4" height="65" fill="#bcaaa4"/>
+                        </g>
+                        <defs>
+                            <linearGradient id="im-siphon-water" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="#6d4c41"/>
+                                <stop offset="100%" stop-color="#3e2723"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>`
+                }),
+                // ----- 冷萃 -----
+                cold_brew: (caption) => ({
+                    caption: caption || '🧊 冷萃浸泡中…粉沉水底、慢慢染色 12 小時',
+                    svg: `<svg viewBox="0 0 720 540" preserveAspectRatio="xMidYMid meet">
+                        <rect x="0" y="470" width="720" height="70" fill="#37474f"/>
+                        <!-- 梅森罐（寬矮）-->
+                        <path d="M 240 140 L 240 450 Q 240 460 250 460 L 470 460 Q 480 460 480 450 L 480 140 Z"
+                              fill="rgba(178,223,219,0.15)" stroke="#cfd8dc" stroke-width="4"/>
+                        <!-- 玻璃螺紋 -->
+                        <line x1="240" y1="170" x2="480" y2="170" stroke="#cfd8dc" stroke-width="2" opacity="0.6"/>
+                        <line x1="240" y1="185" x2="480" y2="185" stroke="#cfd8dc" stroke-width="2" opacity="0.6"/>
+                        <!-- 金屬蓋 -->
+                        <rect x="230" y="90" width="260" height="50" rx="6" fill="#90a4ae"/>
+                        <rect x="230" y="100" width="260" height="8" fill="#78909c"/>
+                        <text x="360" y="122" text-anchor="middle" font-size="14" font-weight="700" fill="#fff" letter-spacing="2">COLD BREW</text>
+                        <!-- 水液體（漸漸變褐） -->
+                        <clipPath id="im-cb-clip"><path d="M 244 144 L 244 450 Q 244 456 250 456 L 470 456 Q 476 456 476 450 L 476 144 Z"/></clipPath>
+                        <rect x="244" y="200" width="232" height="256"
+                              clip-path="url(#im-cb-clip)"
+                              style="animation: im-cold-tint 10s ease-in-out forwards;"/>
+                        <!-- 咖啡粉沉入（從上方漂落）-->
+                        ${Array.from({length:16}).map((_,i)=>{
+                            const x = 260 + (i%6)*32;
+                            const y = 380 + (i%4)*14;
+                            const delay = i*0.15;
+                            return `<circle cx="${x}" cy="${y}" r="${3+i%2}" fill="#3e2723"
+                                style="transform-origin: ${x}px ${y}px; animation: im-grounds-sink 4s ease-in ${delay}s forwards;"/>`;
+                        }).join('')}
+                        <!-- 頂部冰塊 -->
+                        ${Array.from({length:5}).map((_,i)=>`
+                            <rect x="${270 + i*38}" y="210" width="26" height="26" rx="4" fill="rgba(224,247,250,0.75)"
+                                  stroke="rgba(255,255,255,0.9)" stroke-width="1.5"
+                                  style="transform-origin: ${283+i*38}px 223px; animation: im-ice-jiggle ${2+i*0.3}s ease-in-out infinite;"/>
+                        `).join('')}
+                        <!-- 氣泡從底部緩緩上升（慢速）-->
+                        ${Array.from({length:6}).map((_,i)=>`
+                            <circle cx="${280 + i*35}" cy="440" r="${2+i%2}" fill="#fff" opacity="0.5"
+                                style="--sx: ${(i%2 ? 3 : -3)}px; animation: im-steam 6s linear ${i*0.9}s infinite;"/>
+                        `).join('')}
+                    </svg>`
+                }),
+                // ----- 愛樂壓 -----
+                aeropress: (caption) => ({
+                    caption: caption || '💨 愛樂壓…倒置浸泡 → 翻正下壓',
+                    svg: `<svg viewBox="0 0 720 540" preserveAspectRatio="xMidYMid meet">
+                        <rect x="0" y="470" width="720" height="70" fill="#455a64"/>
+                        <!-- 主整組（倒置→翻正） -->
+                        <g style="transform-origin: 360px 300px; animation: im-aero-flip 10s ease-in-out infinite;">
+                            <!-- 外筒 -->
+                            <rect x="320" y="150" width="80" height="240" rx="4" fill="rgba(178,223,219,0.18)" stroke="#cfd8dc" stroke-width="3"/>
+                            <rect x="318" y="148" width="84" height="12" fill="#455a64"/>
+                            <!-- 底部濾帽（黑橡膠） -->
+                            <rect x="310" y="388" width="100" height="14" rx="3" fill="#1a1a1a"/>
+                            <rect x="310" y="402" width="100" height="6" fill="#424242"/>
+                            <!-- 內部咖啡液 -->
+                            <rect x="322" y="260" width="76" height="128" fill="url(#im-aero-liquid)"/>
+                            <!-- 浮粉 -->
+                            ${Array.from({length:10}).map((_,i)=>`
+                                <circle cx="${330+(i%5)*14}" cy="${268+Math.floor(i/5)*10}" r="2.5" fill="#3e2723"/>
+                            `).join('')}
+                            <!-- 推桿 -->
+                            <g style="transform-origin: 360px 150px; animation: im-aero-push 10s ease-in-out infinite;">
+                                <rect x="330" y="60" width="60" height="100" rx="3" fill="#37474f"/>
+                                <rect x="340" y="50" width="40" height="14" rx="4" fill="#263238"/>
+                            </g>
+                        </g>
+                        <!-- 底下接的咖啡杯 -->
+                        <path d="M 310 430 L 330 470 L 390 470 L 410 430 Z" fill="none" stroke="#cfd8dc" stroke-width="3"/>
+                        <!-- 推壓時擠出的咖啡液（只在推下那段顯示） -->
+                        <rect x="320" y="430" width="80" height="36" fill="url(#im-aero-liquid)"
+                              style="transform-origin: center top; animation: im-aero-output 10s ease-in-out infinite;"/>
+                        <defs>
+                            <linearGradient id="im-aero-liquid" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="#6d4c41"/>
+                                <stop offset="100%" stop-color="#2e1a12"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>`
+                }),
                 // ----- 烘焙 -----
                 roast: (caption) => ({
                     caption: caption || '🔥 烘焙中…生豆→黃變→一爆→落下',
@@ -4772,11 +4950,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             // 沖煮方式對應 scene key 的解析器
             function _pickBrewScene(brew, dripper) {
                 if (!brew) return 'pour_over';
-                if (brew === 'pour_over') return 'pour_over';
-                if (brew === 'espresso') return 'espresso';
-                if (brew === 'moka') return 'moka';
-                if (brew === 'french_press' || brew === 'aeropress') return 'french_press';
-                if (brew === 'siphon' || brew === 'cold_brew') return 'pour_over';  // 暫 fallback
+                if (IM_SCENES[brew]) return brew;  // 每種沖煮方式都有獨立動畫
                 return 'pour_over';
             }
 
