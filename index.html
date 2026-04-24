@@ -827,8 +827,48 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             .av-footer { padding: 12px 18px; }
         }
 
+        /* 📱 手機版專用 flavor info bar（點扇形時滑入） */
+        #flavor-info-bar {
+            display: none;  /* 桌面版不顯示 */
+            position: relative;
+            background: #fff;
+            border: 1px solid #e8e4d8;
+            border-left: 4px solid #c0392b;
+            border-radius: 10px;
+            padding: 14px 40px 14px 16px;
+            margin-bottom: 14px;
+            max-height: 0; overflow: hidden;
+            transition: max-height 0.35s ease-out, opacity 0.3s ease-out, padding 0.3s ease-out;
+            opacity: 0;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+        }
+        #flavor-info-bar.active {
+            max-height: 40vh; opacity: 1;
+            overflow-y: auto;
+        }
+        #flavor-info-bar .fib-close {
+            position: absolute; top: 8px; right: 8px;
+            width: 28px; height: 28px; border-radius: 50%;
+            background: #eceff1; border: none; cursor: pointer;
+            font-size: 15px; color: #666; line-height: 1;
+            display: flex; align-items: center; justify-content: center;
+        }
+        #flavor-info-bar .fib-body .fib-name {
+            font-size: 17px; font-weight: 800; color: #c0392b;
+            margin-bottom: 6px;
+        }
+        #flavor-info-bar .fib-body .fib-desc {
+            font-size: 13.5px; color: #3e2723; line-height: 1.75;
+        }
+        #flavor-info-bar .fib-body .fib-ref {
+            margin-top: 10px; padding-top: 10px; border-top: 1px dashed #e8e4d8;
+            font-size: 12.5px; color: var(--accent-blue); line-height: 1.65;
+        }
+        #flavor-info-bar .fib-body .fib-ref b { color: #1565c0; }
+
         /* 手機版：單欄、風味輪在上（放大） */
         @media (max-width: 900px) {
+            #flavor-info-bar { display: block; }
             body { overflow-y: auto !important; height: auto; }
             #app-layout {
                 grid-template-columns: 1fr;
@@ -1115,6 +1155,11 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
     <div id="app-layout">
     <aside id="workbench-pane">
         <h1 class="app-title">☕ 咖啡品鑑工作台 <span class="app-subtitle">豆源 × 烘焙 × 沖煮 × 品嚐</span></h1>
+        <!-- 📱 手機版專用：點風味扇形時、完整描述滑入此處（不擋風味輪） -->
+        <div id="flavor-info-bar" aria-live="polite">
+            <button type="button" class="fib-close" onclick="closeFlavorInfoBar()" aria-label="關閉">✕</button>
+            <div class="fib-body"></div>
+        </div>
         <div id="item-config-panel">
         <div id="config-content">
 
@@ -1792,20 +1837,13 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 myChart.setOption({
                     animationDurationUpdate: 1500,
                     tooltip: {
+                        // 手機版關掉 ECharts tooltip（改用 #flavor-info-bar 顯示完整描述）
+                        show: !window.matchMedia('(max-width: 768px)').matches,
                         trigger: "item", confine: true, enterable: false,
-                        backgroundColor: 'rgba(255,255,255,0.98)', padding: 10, textStyle: { color: '#333' },
-                        extraCssText: 'box-shadow: 0 6px 20px rgba(0,0,0,0.25); border-radius: 12px; border: 1px solid #ddd; pointer-events: none;',
+                        backgroundColor: 'rgba(255,255,255,0.98)', padding: 14, textStyle: { color: '#333' },
+                        extraCssText: 'box-shadow: 0 10px 30px rgba(0,0,0,0.3); border-radius: 16px; border: 1px solid #ddd; max-width: min(340px, 88vw); max-height: 70vh; overflow-y: auto; pointer-events: none;',
                         formatter: function (p) {
                             if (!p?.data || p.name === 'COFFEE') return "";
-                            const isMobile = window.matchMedia('(max-width: 768px)').matches;
-                            if (isMobile) {
-                                // 手機版：極簡小卡（~200px 寬）、只顯示名稱 + 簡短描述首句
-                                const shortDesc = String(p.data.desc || '').split(/[。]/)[0] || '';
-                                return `<div style="max-width: 220px; white-space: normal;">
-                                    <b style="font-size: 14px; color: #c0392b;">${p.name}</b>
-                                    ${shortDesc ? `<div style="font-size: 11.5px; color: #555; line-height: 1.55; margin-top: 3px;">${shortDesc}</div>` : ''}
-                                </div>`;
-                            }
                             let finalRef = p.data.children ? p.data.children.map(c => c.name).join('、') : (p.data.ref || "無");
                             return `<div style="max-width: 340px; white-space:normal; word-break:break-word;">
                                 <strong style="font-size:17px; color:#c0392b;">${p.name}</strong>
@@ -1835,8 +1873,37 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                         if (hint) { hint.style.background = 'rgba(46,125,50,0.9)'; hint.innerText = `✓ 已加入：${p.name}（強度 3，可點 chip 上的 ● 調整）`; setTimeout(() => { hint.style.background = 'rgba(0,0,0,0.7)'; hint.innerText = '💡 點擊風味輪外圈扇形 → 加入「已品嚐」清單'; }, 2000); }
                         updateUI();
                     }
+                    // 📱 手機版：同時在 info-bar 顯示完整描述
+                    if (window.matchMedia('(max-width: 768px)').matches) {
+                        showFlavorInfoBar(p.data);
+                    }
+                });
+                // 手機版 hover 也更新 info-bar（支援不選只想看描述）
+                myChart.on('mouseover', (p) => {
+                    if (!window.matchMedia('(max-width: 768px)').matches) return;
+                    if (!p?.data || p.name === 'COFFEE') return;
+                    showFlavorInfoBar(p.data);
                 });
             }
+
+            // 📱 顯示風味資訊條（手機版專用、不擋風味輪）
+            window.showFlavorInfoBar = function(data) {
+                const bar = document.getElementById('flavor-info-bar');
+                if (!bar) return;
+                const finalRef = data.children ? data.children.map(c => c.name).join('、') : (data.ref || '無');
+                bar.querySelector('.fib-body').innerHTML = `
+                    <div class="fib-name">${(data.name || '').replace(/</g,'&lt;')}</div>
+                    <div class="fib-desc"><b>感官體驗：</b>${(data.desc || '無詳細描述').replace(/</g,'&lt;')}</div>
+                    <div class="fib-ref"><b>官方參考 / 組成：</b>${finalRef.replace(/</g,'&lt;')}</div>
+                `;
+                bar.classList.add('active');
+                // workbench-pane 自動捲到頂讓使用者看到（但不干擾使用者）
+                // 不 scrollIntoView 避免打擾；user 自己 scroll 下來看
+            };
+            window.closeFlavorInfoBar = function() {
+                const bar = document.getElementById('flavor-info-bar');
+                if (bar) bar.classList.remove('active');
+            };
 
             // ============ 🔆 風味輪篩選（依配置預期風味暗化其他）============
             let _filterActive = localStorage.getItem('wheel_filter') === '1';
