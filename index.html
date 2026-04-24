@@ -993,64 +993,56 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             transition: transform 0.3s ease-out;
         }
         #idle-mouse-wrap.facing-left #idle-mouse { transform: scaleX(-1); }
-        /* 整隻身體上下輕微 bob（奔跑時身體起伏） */
+        /* 整隻身體上下 bob（奔跑起伏）+ 前傾姿態 */
         #idle-mouse-wrap.active .m-body {
-            animation: m-body-bob 0.26s ease-in-out infinite alternate;
+            animation: m-body-bob 0.16s ease-in-out infinite alternate;
             transform-origin: center;
         }
         @keyframes m-body-bob {
-            from { transform: translateY(0); }
-            to   { transform: translateY(-1.5px); }
+            from { transform: translateY(0) rotate(-3deg); }
+            to   { transform: translateY(-4px) rotate(-6deg); }
         }
-        /* 四腳：前後對角同步擺動（前1+後2、前2+後1） */
+        /* 四腳：前後對角同步擺動，加快步頻 + 加大幅度 → 奔跑感 */
         #idle-mouse-wrap.active .m-leg {
-            animation: m-leg-swing 0.26s linear infinite;
+            animation: m-leg-swing 0.16s linear infinite;
         }
         #idle-mouse-wrap.active .m-leg-front1,
-        #idle-mouse-wrap.active .m-leg-back2 {
-            animation-delay: 0s;
-        }
+        #idle-mouse-wrap.active .m-leg-back2 { animation-delay: 0s; }
         #idle-mouse-wrap.active .m-leg-front2,
-        #idle-mouse-wrap.active .m-leg-back1 {
-            animation-delay: -0.13s;  /* 反相位 */
-        }
+        #idle-mouse-wrap.active .m-leg-back1 { animation-delay: -0.08s; }
         @keyframes m-leg-swing {
-            0%   { transform: rotate(-35deg); }
-            50%  { transform: rotate(35deg); }
-            100% { transform: rotate(-35deg); }
+            0%   { transform: rotate(-55deg); }
+            50%  { transform: rotate(55deg); }
+            100% { transform: rotate(-55deg); }
         }
-        /* 尾巴擺動 */
+        /* 尾巴快速擺動（奔跑中尾巴甩) */
         #idle-mouse-wrap.active .m-tail {
-            animation: m-tail-wag 0.45s ease-in-out infinite alternate;
+            animation: m-tail-wag 0.28s ease-in-out infinite alternate;
             transform-origin: 18px 44px;
         }
         @keyframes m-tail-wag {
-            from { transform: rotate(-8deg); }
-            to   { transform: rotate(8deg); }
+            from { transform: rotate(-15deg); }
+            to   { transform: rotate(15deg); }
         }
-        /* 腳下碎屑 */
+        /* 腳下碎屑：奔跑時噴更快 */
         #idle-mouse-wrap::before, #idle-mouse-wrap::after {
             content: '·'; position: absolute;
-            left: 50%; bottom: -6px;
-            color: #8d6e63; font-size: 20px; font-weight: 900;
+            left: 50%; bottom: -8px;
+            color: #8d6e63; font-size: 22px; font-weight: 900;
             opacity: 0;
         }
-        #idle-mouse-wrap.active::before {
-            animation: crumb-left 0.7s ease-out infinite;
-        }
-        #idle-mouse-wrap.active::after {
-            animation: crumb-right 0.7s ease-out infinite 0.35s;
-        }
+        #idle-mouse-wrap.active::before { animation: crumb-left 0.5s ease-out infinite; }
+        #idle-mouse-wrap.active::after  { animation: crumb-right 0.5s ease-out infinite 0.25s; }
         @keyframes crumb-left {
             0%   { transform: translate(0, 0); opacity: 0.9; }
-            100% { transform: translate(-22px, 18px); opacity: 0; }
+            100% { transform: translate(-26px, 22px); opacity: 0; }
         }
         @keyframes crumb-right {
             0%   { transform: translate(0, 0); opacity: 0.9; }
-            100% { transform: translate(22px, 18px); opacity: 0; }
+            100% { transform: translate(26px, 22px); opacity: 0; }
         }
         @media (max-width: 900px) {
-            #idle-mouse { width: 80px; height: 50px; }
+            #idle-mouse { width: 110px; height: 68px; }
         }
 
         @media (max-width: 768px) {
@@ -1398,7 +1390,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
         <div id="viewport"><div id="wheel-spinner"><div id="main" role="img" aria-label="SCAA 咖啡風味輪，點扇形可加入已品嚐標籤"></div></div></div>
         <div id="wheel-hint">💡 點擊風味輪外圈扇形 → 加入「已品嚐」清單</div>
         <div id="idle-mouse-wrap" aria-hidden="true">
-            <svg id="idle-mouse" viewBox="0 0 130 80" width="100" height="62" aria-hidden="true">
+            <svg id="idle-mouse" viewBox="0 0 130 80" width="130" height="80" aria-hidden="true">
                 <!-- 尾巴（會擺動） -->
                 <path class="m-tail" d="M 18 44 Q 2 42, 4 22" stroke="#8d6e63" stroke-width="2.5" fill="none" stroke-linecap="round"/>
                 <!-- 後腳（會交替擺動） -->
@@ -7299,22 +7291,22 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             // 🐭 閒置 10 秒 → 老鼠出現踩風味輪頂端、風味輪跟著轉
             //    任何風味輪互動 → 老鼠立即退場、輪子停轉
             function _positionIdleMouse() {
-                const main = document.getElementById('main');
                 const pane = document.getElementById('wheel-pane');
                 const wrap = document.getElementById('idle-mouse-wrap');
-                if (!main || !pane || !wrap) return;
-                // 用 #main 的 bounding rect，但要避開旋轉影響：取 offsetTop/Left 相對 viewport
+                const mouseEl = document.getElementById('idle-mouse');
                 const viewport = document.getElementById('viewport');
-                if (!viewport) return;
+                if (!pane || !wrap || !viewport) return;
                 const vr = viewport.getBoundingClientRect();
                 const pr = pane.getBoundingClientRect();
-                // #main 寬 = min(94vh, 92% * viewport.width)，等於高
                 const vh = window.innerHeight;
                 const wheelSize = Math.min(0.94 * vh, 0.92 * vr.width);
                 const wheelCenterY = vr.top - pr.top + vr.height / 2;
                 const wheelCenterX = vr.left - pr.left + vr.width / 2;
-                const mouseHeight = 46;
-                const top = Math.max(4, wheelCenterY - wheelSize / 2 - mouseHeight);
+                // 取 SVG 實際高度（若還沒渲染 fallback 80）
+                const mr = mouseEl ? mouseEl.getBoundingClientRect() : null;
+                const mouseH = (mr && mr.height) ? mr.height : 80;
+                const gap = 14;  // 老鼠與輪子外圈之間的間距
+                const top = Math.max(4, wheelCenterY - wheelSize / 2 - mouseH - gap);
                 wrap.style.top = top + 'px';
                 wrap.style.left = wheelCenterX + 'px';
             }
