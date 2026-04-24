@@ -544,6 +544,52 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             border: 1px dashed #fbc02d; border-radius: 10px;
             font-size: 11.5px; color: #6d4c41; line-height: 1.7;
         }
+
+        /* --- 水平長條圖（排行榜）--- */
+        .viz-bar-list { display: flex; flex-direction: column; gap: 6px; }
+        .viz-bar-row { display: flex; align-items: center; gap: 8px; font-size: 11px; }
+        .viz-bar-label {
+            width: 34%; flex-shrink: 0; color: #5d4037; font-weight: 600;
+            overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+        }
+        .viz-bar-track {
+            flex: 1; position: relative; background: #eceff1;
+            border-radius: 10px; height: 20px; overflow: hidden;
+        }
+        .viz-bar-fill {
+            position: absolute; left: 0; top: 0; bottom: 0;
+            border-radius: 10px; transition: width 0.5s ease-out;
+        }
+        .viz-bar-value {
+            position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+            font-size: 10.5px; color: #3e2723; font-weight: 700; z-index: 1;
+        }
+
+        /* --- 直方圖（分布）--- */
+        .viz-hist {
+            display: flex; align-items: flex-end; justify-content: space-around;
+            height: 140px; padding: 12px 6px 0; gap: 8px;
+            border-bottom: 2px solid #d7ccc8;
+        }
+        .viz-hist-col {
+            flex: 1; display: flex; flex-direction: column; align-items: center;
+            height: 100%; min-width: 40px;
+        }
+        .viz-hist-bar-wrap {
+            flex: 1; width: 100%; display: flex; flex-direction: column;
+            justify-content: flex-end; align-items: center; position: relative;
+        }
+        .viz-hist-count {
+            font-size: 11px; font-weight: 800; color: #3e2723; margin-bottom: 3px;
+        }
+        .viz-hist-bar {
+            width: 80%; min-height: 2px; border-radius: 4px 4px 0 0;
+            transition: height 0.5s ease-out;
+        }
+        .viz-hist-label {
+            margin-top: 6px; font-size: 10px; color: #8d6e63; font-weight: 600;
+            text-align: center;
+        }
         .av-footer {
             padding: 16px 28px; background: #fafaf7; border-top: 1px solid #e8e4d8;
             display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap;
@@ -777,6 +823,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 <button class="preset-btn" onclick="applyPreset('anaerobic')">🍷 厭氧</button>
                 <button class="preset-btn" id="blind-btn" onclick="toggleBlindMode()" style="background:#fff3e0; color:#e65100; border-color:#e65100;">🎲 盲測練習</button>
                 <button class="preset-btn" onclick="startFlashcard()" style="background:#e3f2fd; color:#1565c0; border-color:#1565c0;">🎴 學習卡</button>
+                <button class="preset-btn" onclick="openLearningDashboard()" style="background:#f3e5f5; color:#6a1b9a; border-color:#6a1b9a;" title="學習進度：掌握率/熱力圖/今日複習">📊 學習進度</button>
             </div>
             <div class="config-grid">
                 <div class="config-group">
@@ -985,6 +1032,10 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                     <button class="btn btn-success" style="flex:2;" onclick="saveCurrentCupping()">💾 存檔本次杯測</button>
                     <button class="btn btn-secondary" onclick="togglePanel('journal', true); renderJournal();">📜 歷史</button>
                     <button class="btn btn-danger" onclick="clearAllJournal()" title="清除所有杯測紀錄（不可復原）">🗑️ 清紀錄</button>
+                </div>
+                <div class="btn-row" style="margin-top:8px;">
+                    <button class="btn btn-accent" onclick="openJournalDashboard()" title="視覺化統計：評分趨勢、風味辨識榜、產區偏好">📊 儀表板</button>
+                    <button class="btn btn-purple" onclick="openInsights()" title="累積資料後挖掘你的杯測模式與偏好">💡 洞察分析</button>
                 </div>
                 <!-- 存檔表單（按 💾 才展開）-->
                 <div id="save-cupping-form" style="display:none; margin-top: 10px; padding: 12px; background: #f0f9f4; border: 1px solid #c3e6cb; border-radius: 10px;">
@@ -3981,6 +4032,502 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 v.classList.remove('open');
                 setTimeout(() => { v.style.display = 'none'; }, 250);
                 document.body.style.overflow = '';
+            };
+
+            // ========== 📊 儀表板 / 洞察分析 / 學習進度 共用視覺化元件 ==========
+
+            // SVG 折線圖（評分趨勢）
+            function _renderLineChart(data, opts) {
+                opts = opts || {};
+                const W = 600, H = 180, PAD = { l: 40, r: 20, t: 20, b: 30 };
+                if (!data.length) return '<div style="text-align:center; padding:30px; color:#888;">尚無資料</div>';
+                const ys = data.map(d => d.y);
+                const yMin = opts.yMin != null ? opts.yMin : Math.min(...ys, 0);
+                const yMax = opts.yMax != null ? opts.yMax : Math.max(...ys, 10);
+                const xStep = (W - PAD.l - PAD.r) / Math.max(1, data.length - 1);
+                const toY = v => PAD.t + (H - PAD.t - PAD.b) * (1 - (v - yMin) / (yMax - yMin));
+                const points = data.map((d, i) => [PAD.l + i * xStep, toY(d.y)]);
+                const path = points.map((p, i) => (i === 0 ? 'M' : 'L') + p[0].toFixed(1) + ',' + p[1].toFixed(1)).join(' ');
+                const areaPath = path + ` L ${points[points.length-1][0].toFixed(1)},${(H-PAD.b).toFixed(1)} L ${PAD.l},${(H-PAD.b).toFixed(1)} Z`;
+                const yTicks = [yMin, (yMin + yMax) / 2, yMax];
+                return `<svg viewBox="0 0 ${W} ${H}" style="width:100%; height:auto;" preserveAspectRatio="xMidYMid meet">
+                    ${yTicks.map(t => `<line x1="${PAD.l}" y1="${toY(t)}" x2="${W-PAD.r}" y2="${toY(t)}" stroke="#eceff1" stroke-width="1"/><text x="${PAD.l-6}" y="${toY(t)+3}" font-size="9" fill="#888" text-anchor="end">${Number(t).toFixed(1)}</text>`).join('')}
+                    <path d="${areaPath}" fill="${opts.color || '#5d4037'}" opacity="0.12"/>
+                    <path d="${path}" fill="none" stroke="${opts.color || '#5d4037'}" stroke-width="2" stroke-linejoin="round"/>
+                    ${points.map((p, i) => `<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="3" fill="${opts.color || '#5d4037'}"/>`).join('')}
+                    ${data.filter((_,i) => i%Math.ceil(data.length/8) === 0 || i === data.length-1).map((d, idx) => {
+                        const i = data.indexOf(d);
+                        return `<text x="${(PAD.l + i * xStep).toFixed(1)}" y="${H - 8}" font-size="9" fill="#8d6e63" text-anchor="middle">${_escHtml(d.label || '')}</text>`;
+                    }).join('')}
+                </svg>`;
+            }
+
+            // 水平長條圖（排行榜）
+            function _renderBarChart(data, opts) {
+                opts = opts || {};
+                if (!data.length) return '<div style="text-align:center; padding:20px; color:#888;">尚無資料</div>';
+                const max = Math.max(...data.map(d => d.value), 1);
+                return `<div class="viz-bar-list">
+                    ${data.map(d => {
+                        const pct = (d.value / max * 100).toFixed(1);
+                        const color = d.color || opts.color || '#5d4037';
+                        return `<div class="viz-bar-row">
+                            <div class="viz-bar-label">${_escHtml(d.label)}</div>
+                            <div class="viz-bar-track">
+                                <div class="viz-bar-fill" style="width:${pct}%; background:${color};"></div>
+                                <span class="viz-bar-value">${d.display || d.value}</span>
+                            </div>
+                        </div>`;
+                    }).join('')}
+                </div>`;
+            }
+
+            // 直方圖（分布）
+            function _renderHistogram(bins, opts) {
+                opts = opts || {};
+                const max = Math.max(...bins.map(b => b.count), 1);
+                return `<div class="viz-hist">
+                    ${bins.map(b => {
+                        const h = (b.count / max * 100).toFixed(1);
+                        const color = b.color || opts.color || '#5d4037';
+                        return `<div class="viz-hist-col">
+                            <div class="viz-hist-bar-wrap">
+                                <div class="viz-hist-count">${b.count}</div>
+                                <div class="viz-hist-bar" style="height:${h}%; background:${color};"></div>
+                            </div>
+                            <div class="viz-hist-label">${_escHtml(b.label)}</div>
+                        </div>`;
+                    }).join('')}
+                </div>`;
+            }
+
+            // ========== A · 📊 杯測日誌儀表板 ==========
+            window.openJournalDashboard = function() {
+                const j = (typeof loadJournal === 'function') ? loadJournal() : [];
+                if (!j.length) {
+                    openAnalysisViewer({
+                        icon: '📊',
+                        title: '杯測日誌儀表板',
+                        badgeText: '尚無資料',
+                        badgeClass: '',
+                        summaryItems: [],
+                        contentHtml: `<div style="text-align:center; padding:40px 20px; color:#8d6e63; font-size:14px; line-height:1.8;">還沒有任何杯測紀錄。<br>完成一次品嚐後點「💾 存檔本次杯測」開始累積。</div>`,
+                        footerHtml: `<button class="btn btn-secondary btn-sm" onclick="closeAnalysisViewer()">關閉</button>`
+                    });
+                    return;
+                }
+                // 評分趨勢（按時間由舊到新）
+                const sorted = j.slice().sort((a,b) => a.ts - b.ts);
+                const ratingData = sorted.filter(r => r.rating).map((r, i) => ({
+                    y: r.rating,
+                    label: new Date(r.ts).toLocaleDateString('zh-TW', { month:'numeric', day:'numeric' })
+                }));
+                const scoreData = sorted.filter(r => r.score > 0).map((r, i) => ({
+                    y: r.score,
+                    label: new Date(r.ts).toLocaleDateString('zh-TW', { month:'numeric', day:'numeric' })
+                }));
+
+                // 風味辨識 top 10
+                const flavorHits = {};
+                j.forEach(r => (r.selected || []).forEach(f => flavorHits[f] = (flavorHits[f] || 0) + 1));
+                const flavorTop = Object.entries(flavorHits).sort((a,b) => b[1]-a[1]).slice(0, 10)
+                    .map(([f, c]) => ({ label: f, value: c, display: c + ' 次' }));
+
+                // 產區/處理/焙度榜
+                const group = (key, labelKey) => {
+                    const m = {};
+                    j.forEach(r => {
+                        const k = r.config?.[key]; if (!k) return;
+                        const label = r.label?.[labelKey || key] || k;
+                        m[k] = m[k] || { label, values: [] };
+                        if (r.rating) m[k].values.push(r.rating);
+                        else m[k].values.push(null);
+                    });
+                    return Object.entries(m).map(([k, v]) => {
+                        const rated = v.values.filter(x => x != null);
+                        const avg = rated.length ? (rated.reduce((a,b) => a+b, 0) / rated.length) : null;
+                        return {
+                            label: v.label + ` (${v.values.length}杯)`,
+                            value: avg != null ? avg : v.values.length,
+                            display: avg != null ? `⭐ ${avg.toFixed(1)}` : `${v.values.length} 杯`
+                        };
+                    }).sort((a,b) => b.value - a.value).slice(0, 6);
+                };
+                const countries = group('country', 'country');
+                const processes = group('proc', 'proc');
+                const roasts = group('roast', 'roast');
+                const brews = group('brew', 'brew');
+
+                // 吻合度分布
+                const matchBins = [
+                    { label: '0-25%', count: 0, color: '#c62828' },
+                    { label: '26-50%', count: 0, color: '#ef6c00' },
+                    { label: '51-75%', count: 0, color: '#fbc02d' },
+                    { label: '76-100%', count: 0, color: '#2e7d32' }
+                ];
+                j.forEach(r => {
+                    const s = r.score || 0;
+                    if (s <= 25) matchBins[0].count++;
+                    else if (s <= 50) matchBins[1].count++;
+                    else if (s <= 75) matchBins[2].count++;
+                    else matchBins[3].count++;
+                });
+                const avgScore = sorted.filter(r => r.score > 0).reduce((s, r) => s + r.score, 0) / Math.max(1, scoreData.length);
+                const avgRating = sorted.filter(r => r.rating).reduce((s, r) => s + r.rating, 0) / Math.max(1, ratingData.length);
+
+                openAnalysisViewer({
+                    icon: '📊',
+                    title: '杯測日誌儀表板',
+                    badgeClass: '',
+                    badgeText: `累計 ${j.length} 杯`,
+                    summaryItems: [
+                        { k: '📝 總杯數', v: j.length + ' 杯' },
+                        { k: '⭐ 平均評分', v: ratingData.length ? avgRating.toFixed(1) + ' / 10' : '—' },
+                        { k: '🎯 平均吻合度', v: scoreData.length ? Math.round(avgScore) + '%' : '—' },
+                        { k: '🎨 風味字典', v: Object.keys(flavorHits).length + ' 種' }
+                    ],
+                    contentHtml: `
+                        <div class="viz-grid" style="grid-template-columns: 1fr 1fr;">
+                            <div class="viz-card">
+                                <div class="viz-card-title">⭐ 個人評分趨勢</div>
+                                ${ratingData.length ? _renderLineChart(ratingData, { yMin: 1, yMax: 10, color: '#ef6c00' }) : '<div style="text-align:center; padding:20px; color:#888; font-size:12px;">尚無評分資料</div>'}
+                            </div>
+                            <div class="viz-card">
+                                <div class="viz-card-title">🎯 吻合度趨勢</div>
+                                ${scoreData.length ? _renderLineChart(scoreData, { yMin: 0, yMax: 100, color: '#2e7d32' }) : '<div style="text-align:center; padding:20px; color:#888; font-size:12px;">尚無吻合度資料</div>'}
+                            </div>
+                        </div>
+                        <div class="viz-grid" style="grid-template-columns: 1fr 1fr;">
+                            <div class="viz-card">
+                                <div class="viz-card-title">🏆 最常辨識風味 Top 10</div>
+                                ${_renderBarChart(flavorTop, { color: '#5d4037' })}
+                            </div>
+                            <div class="viz-card">
+                                <div class="viz-card-title">📊 吻合度分布</div>
+                                ${_renderHistogram(matchBins)}
+                                <div style="margin-top:8px; font-size:11px; color:#888; text-align:center;">右偏 = 吻合良好；左偏 = 感官訓練需求</div>
+                            </div>
+                        </div>
+                        <div class="viz-grid" style="grid-template-columns: 1fr 1fr;">
+                            <div class="viz-card">
+                                <div class="viz-card-title">🌍 產區（依評分）</div>
+                                ${countries.length ? _renderBarChart(countries, { color: '#8d6e63' }) : '<div style="text-align:center; padding:20px; color:#888; font-size:12px;">—</div>'}
+                            </div>
+                            <div class="viz-card">
+                                <div class="viz-card-title">💧 處理法（依評分）</div>
+                                ${processes.length ? _renderBarChart(processes, { color: '#1565c0' }) : '<div style="text-align:center; padding:20px; color:#888; font-size:12px;">—</div>'}
+                            </div>
+                        </div>
+                        <div class="viz-grid" style="grid-template-columns: 1fr 1fr;">
+                            <div class="viz-card">
+                                <div class="viz-card-title">🔥 焙度（依評分）</div>
+                                ${roasts.length ? _renderBarChart(roasts, { color: '#e65100' }) : '<div style="text-align:center; padding:20px; color:#888; font-size:12px;">—</div>'}
+                            </div>
+                            <div class="viz-card">
+                                <div class="viz-card-title">☕ 沖煮方式（依評分）</div>
+                                ${brews.length ? _renderBarChart(brews, { color: '#6a1b9a' }) : '<div style="text-align:center; padding:20px; color:#888; font-size:12px;">—</div>'}
+                            </div>
+                        </div>`,
+                    footerHtml: `<button class="btn btn-purple btn-sm" onclick="closeAnalysisViewer(); openInsights();">💡 洞察分析</button>
+                                 <button class="btn btn-secondary btn-sm" onclick="closeAnalysisViewer()">關閉</button>`
+                });
+            };
+
+            // ========== C · 📊 學習卡進度儀表板 ==========
+            window.openLearningDashboard = function() {
+                const leaves = (typeof _fcFlattenLeaves === 'function') ? _fcFlattenLeaves() : [];
+                const stats = (typeof _fcLoadStats === 'function') ? _fcLoadStats() : {};
+                const total = leaves.length;
+                const seen = Object.keys(stats).length;
+                let totalShown = 0, totalCorrect = 0, maxStreak = 0;
+                const byL1 = {};  // 分類 -> { shown, correct, names: [] }
+                const now = Date.now();
+                let dueCount = 0;
+                leaves.forEach(l => {
+                    const st = stats[l.name];
+                    byL1[l.categoryL1] = byL1[l.categoryL1] || { shown: 0, correct: 0, n: 0 };
+                    byL1[l.categoryL1].n++;
+                    if (st) {
+                        totalShown += st.shown || 0;
+                        totalCorrect += st.correct || 0;
+                        maxStreak = Math.max(maxStreak, st.streak || 0);
+                        byL1[l.categoryL1].shown += st.shown || 0;
+                        byL1[l.categoryL1].correct += st.correct || 0;
+                        if (st.nextDue && st.nextDue <= now) dueCount++;
+                    } else {
+                        // 沒見過視為「今日可學」
+                        dueCount++;
+                    }
+                });
+                const overallAcc = totalShown > 0 ? (totalCorrect / totalShown * 100) : 0;
+                const seenPct = total > 0 ? (seen / total * 100) : 0;
+
+                // L1 類別掌握率長條
+                const l1Bars = Object.entries(byL1).map(([k, v]) => {
+                    const acc = v.shown > 0 ? (v.correct / v.shown * 100) : 0;
+                    const color = acc >= 80 ? '#2e7d32' : acc >= 60 ? '#fbc02d' : acc >= 30 ? '#ef6c00' : '#c62828';
+                    return {
+                        label: `${k} (${v.n})`,
+                        value: v.shown > 0 ? acc : 0,
+                        display: v.shown > 0 ? `${acc.toFixed(0)}% (${v.correct}/${v.shown})` : '未練習',
+                        color
+                    };
+                }).sort((a,b) => b.value - a.value);
+
+                // 最常答錯 top 10
+                const weakest = leaves.map(l => {
+                    const st = stats[l.name] || { shown: 0, correct: 0 };
+                    return {
+                        name: l.name, shown: st.shown, correct: st.correct,
+                        acc: st.shown > 0 ? st.correct / st.shown : null,
+                        wrongs: (st.shown || 0) - (st.correct || 0)
+                    };
+                }).filter(x => x.shown >= 2).sort((a,b) => b.wrongs - a.wrongs || a.acc - b.acc).slice(0, 10);
+                const weakBars = weakest.map(w => ({
+                    label: w.name, value: w.wrongs,
+                    display: `錯 ${w.wrongs} / ${w.shown}（${(w.acc*100).toFixed(0)}%）`,
+                    color: '#c62828'
+                }));
+
+                // 進度環 SVG
+                const progressRing = (pct, label, sub, color) => {
+                    const R = 48, C = 2 * Math.PI * R;
+                    const dash = C * pct / 100;
+                    return `<div class="viz-gauge-wrap">
+                        <svg class="viz-gauge-svg" viewBox="0 0 130 130">
+                            <circle cx="65" cy="65" r="${R}" fill="none" stroke="#eceff1" stroke-width="10"/>
+                            <circle cx="65" cy="65" r="${R}" fill="none" stroke="${color}" stroke-width="10"
+                                    stroke-dasharray="${dash.toFixed(1)} ${C.toFixed(1)}" stroke-linecap="round"
+                                    transform="rotate(-90 65 65)"/>
+                            <text x="65" y="62" text-anchor="middle" font-size="22" font-weight="800" fill="#3e2723">${pct.toFixed(0)}%</text>
+                            <text x="65" y="80" text-anchor="middle" font-size="10" fill="#888" font-weight="600">${label}</text>
+                        </svg>
+                        <div class="viz-gauge-sublabel">${sub}</div>
+                    </div>`;
+                };
+
+                openAnalysisViewer({
+                    icon: '📊',
+                    title: '學習卡進度',
+                    badgeClass: 'ai',
+                    badgeText: `${seen} / ${total} 片已學`,
+                    summaryItems: [
+                        { k: '🎴 已練過', v: `${seen} / ${total} 片` },
+                        { k: '🎯 答對率', v: totalShown > 0 ? overallAcc.toFixed(0) + '%' : '—' },
+                        { k: '🔥 最長連勝', v: maxStreak },
+                        { k: '📅 今日可學', v: dueCount + ' 張' }
+                    ],
+                    contentHtml: `
+                        <div class="viz-grid" style="grid-template-columns: 1fr 1fr 1fr;">
+                            <div class="viz-card">
+                                <div class="viz-card-title">📘 學習覆蓋</div>
+                                ${progressRing(seenPct, 'SEEN', `${seen} / ${total} 片`, '#1565c0')}
+                            </div>
+                            <div class="viz-card">
+                                <div class="viz-card-title">🎯 整體答對率</div>
+                                ${progressRing(overallAcc, 'ACC', `${totalCorrect} / ${totalShown} 次`, overallAcc >= 70 ? '#2e7d32' : overallAcc >= 40 ? '#ef6c00' : '#c62828')}
+                            </div>
+                            <div class="viz-card">
+                                <div class="viz-card-title">📅 今日複習</div>
+                                <div style="text-align:center; padding: 14px 0 6px;">
+                                    <div style="font-size: 40px; font-weight: 900; color: #e65100;">${dueCount}</div>
+                                    <div style="font-size: 11px; color: #888;">張到期 / 未學</div>
+                                    <button class="btn btn-accent btn-sm btn-full" style="margin-top:10px;" onclick="closeAnalysisViewer(); startFlashcard();">🎴 開始今日學習</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="viz-card" style="margin-bottom: 14px;">
+                            <div class="viz-card-title">🗂️ 分類掌握率（依大類 L1）</div>
+                            ${l1Bars.length ? _renderBarChart(l1Bars) : '<div style="text-align:center; padding:20px; color:#888; font-size:12px;">尚未練習任何卡</div>'}
+                        </div>
+                        <div class="viz-card">
+                            <div class="viz-card-title">🧊 最常答錯 Top 10（重點加強）</div>
+                            ${weakBars.length ? _renderBarChart(weakBars) : '<div style="text-align:center; padding:20px; color:#888; font-size:12px;">每張卡至少練 2 次後，這裡會列出你的弱點</div>'}
+                        </div>`,
+                    footerHtml: `<button class="btn btn-accent btn-sm" onclick="closeAnalysisViewer(); startFlashcard();">🎴 繼續學習</button>
+                                 <button class="btn btn-secondary btn-sm" onclick="closeAnalysisViewer()">關閉</button>`
+                });
+            };
+
+            // ========== B · 💡 洞察分析（Pattern Mining） ==========
+            window.openInsights = function() {
+                const j = (typeof loadJournal === 'function') ? loadJournal() : [];
+                if (j.length < 5) {
+                    openAnalysisViewer({
+                        icon: '💡',
+                        title: '洞察分析',
+                        badgeText: `需 ≥5 杯 · 目前 ${j.length} 杯`,
+                        badgeClass: '',
+                        summaryItems: [],
+                        contentHtml: `<div style="text-align:center; padding:40px 20px; color:#8d6e63; font-size:14px; line-height:1.9;">累積至少 <b>5 杯</b> 杯測紀錄後才能挖掘個人模式。<br>目前已累積 <b style="color:#e65100;">${j.length} 杯</b>。<br><br>20 杯以上洞察會更準確（例如「你評 9 分以上的肯亞都用 93°C」這類細節）。</div>`,
+                        footerHtml: `<button class="btn btn-secondary btn-sm" onclick="closeAnalysisViewer()">關閉</button>`
+                    });
+                    return;
+                }
+                const insights = [];
+
+                // 1. 高分配置模式（rating >= 8）
+                const highScored = j.filter(r => r.rating >= 8);
+                if (highScored.length >= 2) {
+                    // groupBy country
+                    const byCountry = {};
+                    highScored.forEach(r => {
+                        const k = r.label?.country || r.config?.country;
+                        if (!k) return;
+                        byCountry[k] = (byCountry[k] || 0) + 1;
+                    });
+                    const topCountry = Object.entries(byCountry).sort((a,b) => b[1]-a[1])[0];
+                    if (topCountry && topCountry[1] >= 2) {
+                        insights.push({
+                            emoji: '🏆', cls: 'good',
+                            title: `你的口味偏好：${topCountry[0]}`,
+                            body: `在 ${highScored.length} 杯 8 分以上的咖啡中，${topCountry[1]} 杯是 ${topCountry[0]}。這是你的 signature 產區。`
+                        });
+                    }
+                    // 處理法偏好
+                    const byProc = {};
+                    highScored.forEach(r => {
+                        const k = r.label?.proc || r.config?.proc;
+                        if (!k) return;
+                        byProc[k] = (byProc[k] || 0) + 1;
+                    });
+                    const topProc = Object.entries(byProc).sort((a,b) => b[1]-a[1])[0];
+                    if (topProc && topProc[1] >= 2) {
+                        insights.push({
+                            emoji: '💧', cls: 'good',
+                            title: `高分杯多為「${topProc[0]}」`,
+                            body: `${highScored.length} 杯 8 分以上中有 ${topProc[1]} 杯用此處理法。下次選豆可優先考慮。`
+                        });
+                    }
+                }
+
+                // 2. 吻合度低的配置 → 需加強訓練
+                const lowMatch = j.filter(r => r.score > 0 && r.score < 50);
+                if (lowMatch.length >= 3) {
+                    const byCountry = {};
+                    lowMatch.forEach(r => {
+                        const k = r.label?.country || r.config?.country;
+                        if (!k) return;
+                        byCountry[k] = (byCountry[k] || 0) + 1;
+                    });
+                    const top = Object.entries(byCountry).sort((a,b) => b[1]-a[1])[0];
+                    if (top && top[1] >= 2) {
+                        insights.push({
+                            emoji: '🎯', cls: 'warn',
+                            title: `${top[0]} 的風味你最常漏掉`,
+                            body: `${lowMatch.length} 杯吻合度 <50% 中，${top[1]} 杯是 ${top[0]}。建議用「🎴 學習卡」加強此產區典型風味。`
+                        });
+                    }
+                }
+
+                // 3. 常辨識風味 vs 風味偏好
+                const flavorHits = {};
+                j.forEach(r => (r.selected || []).forEach(f => flavorHits[f] = (flavorHits[f] || 0) + 1));
+                const topFlavors = Object.entries(flavorHits).sort((a,b) => b[1]-a[1]).slice(0, 3);
+                if (topFlavors.length) {
+                    insights.push({
+                        emoji: '🎨', cls: 'info',
+                        title: `你的風味雷達最強 3 項`,
+                        body: topFlavors.map(([f, c]) => `<b>${f}</b>（${c} 次）`).join('、') + '。這些是你最容易抓到的風味。'
+                    });
+                }
+
+                // 4. 實際參數 vs 建議參數 pattern（若有填 actualBrew）
+                const withActual = j.filter(r => r.actualBrew && (r.actualBrew.temp || r.actualBrew.ratio));
+                if (withActual.length >= 3) {
+                    // 分析 ratings 高的實際參數
+                    const high = withActual.filter(r => r.rating >= 8);
+                    if (high.length >= 2) {
+                        const temps = high.map(r => r.actualBrew.temp).filter(x => x);
+                        const ratios = high.map(r => r.actualBrew.ratio).filter(x => x);
+                        const parts = [];
+                        if (temps.length) parts.push(`水溫 <b>${temps.join(' / ')}</b>`);
+                        if (ratios.length) parts.push(`粉水比 <b>${ratios.join(' / ')}</b>`);
+                        if (parts.length) {
+                            insights.push({
+                                emoji: '☕', cls: 'good',
+                                title: '你的 8 分以上杯實際參數',
+                                body: parts.join('、') + '。下次沖不確定時，先試這組。'
+                            });
+                        }
+                    }
+                }
+
+                // 5. 進步曲線（對比前後半）
+                const sorted = j.slice().sort((a,b) => a.ts - b.ts);
+                if (sorted.length >= 10) {
+                    const mid = Math.floor(sorted.length / 2);
+                    const earlyScores = sorted.slice(0, mid).filter(r => r.score > 0).map(r => r.score);
+                    const lateScores = sorted.slice(mid).filter(r => r.score > 0).map(r => r.score);
+                    if (earlyScores.length && lateScores.length) {
+                        const earlyAvg = earlyScores.reduce((a,b) => a+b, 0) / earlyScores.length;
+                        const lateAvg = lateScores.reduce((a,b) => a+b, 0) / lateScores.length;
+                        const delta = lateAvg - earlyAvg;
+                        if (Math.abs(delta) >= 5) {
+                            insights.push({
+                                emoji: delta > 0 ? '📈' : '📉', cls: delta > 0 ? 'good' : 'warn',
+                                title: delta > 0 ? `感官能力在進步：前半 ${earlyAvg.toFixed(0)}% → 後半 ${lateAvg.toFixed(0)}%` : `注意：吻合度近期下降 ${earlyAvg.toFixed(0)}% → ${lateAvg.toFixed(0)}%`,
+                                body: delta > 0 ? '繼續保持！你的風味辨識越來越精準。' : '近期可能太急、感官疲勞或豆子狀態不佳，放慢節奏、用學習卡複習基礎風味。'
+                            });
+                        }
+                    }
+                }
+
+                // 6. 焙度偏好
+                const byRoast = {};
+                j.filter(r => r.rating).forEach(r => {
+                    const k = r.label?.roast || r.config?.roast;
+                    if (!k) return;
+                    byRoast[k] = byRoast[k] || [];
+                    byRoast[k].push(r.rating);
+                });
+                const roastRanked = Object.entries(byRoast).map(([k, arr]) => ({
+                    k, n: arr.length, avg: arr.reduce((a,b) => a+b, 0) / arr.length
+                })).filter(x => x.n >= 2).sort((a,b) => b.avg - a.avg);
+                if (roastRanked.length >= 2) {
+                    const top = roastRanked[0], bot = roastRanked[roastRanked.length - 1];
+                    if (top.avg - bot.avg >= 1) {
+                        insights.push({
+                            emoji: '🔥', cls: 'info',
+                            title: `焙度偏好：${top.k} > ${bot.k}`,
+                            body: `${top.k} 平均 ${top.avg.toFixed(1)} 分 (${top.n} 杯) · ${bot.k} 平均 ${bot.avg.toFixed(1)} 分 (${bot.n} 杯)`
+                        });
+                    }
+                }
+
+                if (!insights.length) {
+                    insights.push({
+                        emoji: '🔍', cls: 'info',
+                        title: '尚未找到明顯模式',
+                        body: `目前 ${j.length} 杯資料仍不夠明顯。繼續累積、填入個人評分與實際沖煮參數，模式會浮現。`
+                    });
+                }
+
+                const html = insights.map(i => `
+                    <div class="viz-advice ${i.cls === 'info' ? '' : i.cls}" style="margin-bottom: 10px;">
+                        <div class="viz-advice-title">${i.emoji} ${i.title}</div>
+                        <div class="viz-advice-body">${i.body}</div>
+                    </div>`).join('');
+
+                openAnalysisViewer({
+                    icon: '💡',
+                    title: '洞察分析',
+                    badgeClass: 'ai',
+                    badgeText: `${j.length} 杯資料 · ${insights.length} 條洞察`,
+                    summaryItems: [
+                        { k: '📝 累計', v: j.length + ' 杯' },
+                        { k: '💡 洞察數', v: insights.length },
+                        { k: '📅 最早', v: new Date(sorted[0].ts).toLocaleDateString('zh-TW') },
+                        { k: '📅 最近', v: new Date(sorted[sorted.length-1].ts).toLocaleDateString('zh-TW') }
+                    ],
+                    contentHtml: `
+                        <div style="font-size: 11.5px; color: #8d6e63; padding: 10px 12px; background: #f5f2ec; border-radius: 8px; margin-bottom: 14px; line-height: 1.7;">
+                            💡 以下洞察是從你的杯測日誌自動挖掘。資料越多越準——<b>${j.length >= 20 ? '你已達 20 杯門檻，洞察可信度高' : '建議累積 20 杯後再看會更準'}</b>。
+                        </div>
+                        ${html}`,
+                    footerHtml: `<button class="btn btn-accent btn-sm" onclick="closeAnalysisViewer(); openJournalDashboard();">📊 儀表板</button>
+                                 <button class="btn btn-secondary btn-sm" onclick="closeAnalysisViewer()">關閉</button>`
+                });
             };
             // ESC 關閉
             document.addEventListener('keydown', e => {
