@@ -141,6 +141,104 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
         .btn-row { display: flex; gap: 8px; }
         .btn-row .btn { flex: 1; }
 
+        /* ========== 🎬 串場動畫 Overlay ========== */
+        #intermission {
+            position: fixed; inset: 0; z-index: 2500;
+            display: none; flex-direction: column; align-items: center; justify-content: center;
+            background: radial-gradient(ellipse at center, #3e2723 0%, #1a0f0a 80%);
+            padding: 40px 20px; box-sizing: border-box;
+            opacity: 0; transition: opacity 0.4s ease-out;
+        }
+        #intermission.show { display: flex; opacity: 1; }
+        .im-stage {
+            width: min(720px, 92vw); height: min(540px, 64vh);
+            position: relative;
+            filter: drop-shadow(0 20px 60px rgba(0,0,0,0.6));
+        }
+        .im-scene { width: 100%; height: 100%; }
+        .im-scene svg { width: 100%; height: 100%; }
+        .im-caption {
+            color: #ffecb3; font-size: 22px; font-weight: 700;
+            margin-top: 24px; letter-spacing: 0.5px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+            text-align: center;
+        }
+        .im-progress {
+            width: min(520px, 80vw); height: 5px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 3px; margin-top: 18px; overflow: hidden;
+        }
+        .im-progress-fill {
+            width: 0%; height: 100%;
+            background: linear-gradient(90deg, #ff7043, #ffb300);
+            border-radius: 3px;
+        }
+        #intermission.show .im-progress-fill {
+            animation: im-progress-grow 10s linear forwards;
+        }
+        @keyframes im-progress-grow {
+            from { width: 0%; }
+            to { width: 100%; }
+        }
+        .im-skip {
+            position: absolute; right: 24px; top: 24px;
+            background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3);
+            color: #fff; padding: 10px 18px; border-radius: 24px;
+            font-size: 13px; font-weight: 600; cursor: pointer;
+            backdrop-filter: blur(8px);
+            transition: background 0.2s;
+        }
+        .im-skip:hover { background: rgba(255,255,255,0.3); }
+
+        /* ----- 通用動畫 keyframes ----- */
+        @keyframes im-drop {
+            0%   { transform: translateY(-20px) scaleY(0.3); opacity: 0; }
+            20%  { opacity: 1; }
+            80%  { opacity: 1; }
+            100% { transform: translateY(220px) scaleY(2.2); opacity: 0; }
+        }
+        @keyframes im-steam {
+            0%   { transform: translate(0, 0) scale(1); opacity: 0; }
+            20%  { opacity: 0.6; }
+            100% { transform: translate(var(--sx, -10px), -110px) scale(2.2); opacity: 0; }
+        }
+        @keyframes im-fill-up {
+            from { transform: scaleY(0); }
+            to   { transform: scaleY(1); }
+        }
+        @keyframes im-kettle-pour {
+            0%, 100% { transform: rotate(0); }
+            15%, 85% { transform: rotate(-28deg); }
+        }
+        @keyframes im-pulse-grow {
+            0%, 100% { transform: scale(1); }
+            50%      { transform: scale(1.06); }
+        }
+        @keyframes im-bean-color-dance {
+            0%   { fill: #8bc34a; }   /* 生豆綠 */
+            25%  { fill: #d4a017; }   /* 黃 */
+            50%  { fill: #8d4e2a; }   /* 淺棕 */
+            75%  { fill: #5d2e15; }   /* 棕 */
+            100% { fill: #3e1f0a; }   /* 深棕 */
+        }
+        @keyframes im-drum-spin {
+            from { transform: rotate(0deg); }
+            to   { transform: rotate(360deg); }
+        }
+        @keyframes im-bean-bounce {
+            0%, 100% { transform: translate(var(--bx,0), var(--by,0)); }
+            50%      { transform: translate(calc(var(--bx,0) + 8px), calc(var(--by,0) - 15px)); }
+        }
+        @keyframes im-espresso-drip {
+            0%   { transform: translateY(0); opacity: 0; }
+            20%  { opacity: 1; }
+            100% { transform: translateY(140px); opacity: 0; }
+        }
+        @keyframes im-piston-press {
+            0%, 10%   { transform: translateY(0); }
+            50%, 100% { transform: translateY(70px); }
+        }
+
         /* 全螢幕「分析結果」檢視器 */
         #analysis-viewer {
             position: fixed; inset: 0; z-index: 2050;
@@ -1507,6 +1605,16 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
     <button class="ui-controls" onclick="resetView()" aria-label="全域清空並還原視圖" title="全域清空還原（所有選擇 + 視圖）">🔄</button>
 
     <!-- 📊 XLSX 預覽 Modal（Excel 樣的可編輯表格）-->
+    <!-- 🎬 分析前串場動畫 Overlay -->
+    <div id="intermission" role="dialog" aria-modal="true" aria-live="polite">
+        <div class="im-stage">
+            <div class="im-scene" id="im-scene"></div>
+        </div>
+        <div class="im-caption" id="im-caption">正在準備分析…</div>
+        <div class="im-progress"><div class="im-progress-fill"></div></div>
+        <button class="im-skip" onclick="skipIntermission()">略過 ▶</button>
+    </div>
+
     <!-- 🔬 分析結果全螢幕檢視器 -->
     <div id="analysis-viewer" role="dialog" aria-modal="true" aria-labelledby="av-title">
         <div class="av-card">
@@ -4442,6 +4550,277 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 return s;
             }
 
+            // ========= 🎬 串場動畫 scenes =========
+            // 每段都是 inline SVG（大畫面），10 秒 loop 式動畫；播完再進 analysis viewer
+            const IM_SCENES = {
+                // ----- 手沖（V60/Kalita/Origami/Chemex/Clever/Switch/Orea/April/Melitta/Stagg）-----
+                pour_over: (caption) => ({
+                    caption: caption || '☕ 細水慢注…正在沖煮你的咖啡',
+                    svg: `<svg viewBox="0 0 720 540" preserveAspectRatio="xMidYMid meet">
+                        <!-- 木桌 -->
+                        <rect x="0" y="470" width="720" height="70" fill="#4e342e"/>
+                        <!-- 壺（左側、傾斜） -->
+                        <g style="transform-origin: 180px 140px; animation: im-kettle-pour 10s ease-in-out infinite;">
+                            <ellipse cx="180" cy="150" rx="80" ry="60" fill="#455a64"/>
+                            <ellipse cx="180" cy="140" rx="70" ry="52" fill="#607d8b"/>
+                            <rect x="110" y="80" width="140" height="12" rx="6" fill="#37474f"/>
+                            <!-- 壺嘴 -->
+                            <path d="M 255 130 Q 300 110 310 160 L 295 170 Q 285 150 250 155 Z" fill="#607d8b"/>
+                            <!-- 把手 -->
+                            <path d="M 100 130 Q 70 130 70 170 L 100 180" fill="none" stroke="#37474f" stroke-width="10" stroke-linecap="round"/>
+                        </g>
+                        <!-- 水流（連續水滴）-->
+                        ${Array.from({length: 8}).map((_, i) => `
+                            <circle cx="310" cy="175" r="4" fill="#81d4fa"
+                                style="animation: im-drop 0.9s ease-in ${i*0.15}s infinite; transform-origin: 310px 175px;"/>
+                        `).join('')}
+                        <!-- V60 濾杯（錐形）-->
+                        <g style="transform-origin: 360px 300px;">
+                            <path d="M 280 230 L 440 230 L 380 360 L 340 360 Z" fill="#e53935" stroke="#b71c1c" stroke-width="3"/>
+                            <!-- 濾紙邊 -->
+                            <path d="M 285 235 L 435 235 L 378 355 L 342 355 Z" fill="#fff8e1" opacity="0.5"/>
+                            <!-- 粉床 -->
+                            <ellipse cx="360" cy="240" rx="72" ry="10" fill="#4e342e"/>
+                            <!-- 杯耳 -->
+                            <path d="M 440 250 Q 480 260 478 290 L 460 290" fill="none" stroke="#b71c1c" stroke-width="6" stroke-linecap="round"/>
+                        </g>
+                        <!-- 下方玻璃杯 -->
+                        <path d="M 310 380 L 330 460 L 390 460 L 410 380 Z" fill="none" stroke="#cfd8dc" stroke-width="4"/>
+                        <!-- 咖啡液上升 -->
+                        <rect x="315" y="400" width="90" height="58"
+                            fill="url(#coffee-grad)"
+                            style="transform-origin: center bottom; animation: im-fill-up 9s ease-in-out forwards;"/>
+                        <defs>
+                            <linearGradient id="coffee-grad" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="#6d4c41"/>
+                                <stop offset="100%" stop-color="#3e2723"/>
+                            </linearGradient>
+                        </defs>
+                        <!-- 蒸氣 -->
+                        ${Array.from({length: 4}).map((_, i) => `
+                            <circle cx="${345 + i*8}" cy="390" r="${5 + i}" fill="#fff" opacity="0.6"
+                                style="--sx: ${-15 + i*6}px; animation: im-steam 3s ease-out ${i*0.5}s infinite;"/>
+                        `).join('')}
+                    </svg>`
+                }),
+                // ----- 義式濃縮 -----
+                espresso: (caption) => ({
+                    caption: caption || '⚡ 高壓萃取中…',
+                    svg: `<svg viewBox="0 0 720 540" preserveAspectRatio="xMidYMid meet">
+                        <rect x="0" y="460" width="720" height="80" fill="#263238"/>
+                        <!-- 機頭（不鏽鋼）-->
+                        <rect x="220" y="60" width="280" height="180" rx="14" fill="#78909c"/>
+                        <rect x="240" y="80" width="240" height="140" rx="8" fill="#546e7a"/>
+                        <!-- 壓力表 -->
+                        <circle cx="310" cy="150" r="38" fill="#263238"/>
+                        <circle cx="310" cy="150" r="32" fill="#eceff1"/>
+                        <line x1="310" y1="150" x2="336" y2="128" stroke="#e53935" stroke-width="3" stroke-linecap="round"
+                              style="transform-origin: 310px 150px; animation: im-pulse-grow 1.5s ease-in-out infinite;"/>
+                        <circle cx="310" cy="150" r="4" fill="#212121"/>
+                        <!-- 開關按鈕 -->
+                        <rect x="390" y="130" width="70" height="40" rx="6" fill="#ff5722"
+                              style="animation: im-pulse-grow 1s ease-in-out infinite;"/>
+                        <!-- 沖煮頭 -->
+                        <rect x="320" y="240" width="80" height="30" fill="#455a64"/>
+                        <!-- 手柄 -->
+                        <g>
+                            <rect x="300" y="270" width="120" height="30" rx="4" fill="#5d4037"/>
+                            <rect x="420" y="278" width="80" height="14" rx="4" fill="#3e2723"/>
+                            <!-- 雙濾嘴 -->
+                            <rect x="330" y="300" width="16" height="18" fill="#455a64"/>
+                            <rect x="374" y="300" width="16" height="18" fill="#455a64"/>
+                        </g>
+                        <!-- 濃縮液往下滴（雙流）-->
+                        ${Array.from({length: 10}).map((_, i) => `
+                            <rect x="336" y="320" width="4" height="20" fill="#3e2723" rx="2"
+                                  style="animation: im-espresso-drip 0.7s linear ${i*0.07}s infinite;"/>
+                            <rect x="380" y="320" width="4" height="20" fill="#3e2723" rx="2"
+                                  style="animation: im-espresso-drip 0.7s linear ${0.035 + i*0.07}s infinite;"/>
+                        `).join('')}
+                        <!-- Shot 杯 -->
+                        <path d="M 320 400 L 330 458 L 400 458 L 410 400 Z" fill="none" stroke="#cfd8dc" stroke-width="3"/>
+                        <rect x="330" y="420" width="70" height="36" fill="url(#crema-grad)"
+                              style="transform-origin: center bottom; animation: im-fill-up 9s ease-in forwards;"/>
+                        <rect x="330" y="418" width="70" height="6" fill="#ffb300"/> <!-- crema -->
+                        <defs>
+                            <linearGradient id="crema-grad" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="#4e342e"/>
+                                <stop offset="100%" stop-color="#1b0f08"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>`
+                }),
+                // ----- 摩卡壺 -----
+                moka: (caption) => ({
+                    caption: caption || '🔥 摩卡壺噗噗…',
+                    svg: `<svg viewBox="0 0 720 540" preserveAspectRatio="xMidYMid meet">
+                        <rect x="0" y="460" width="720" height="80" fill="#37474f"/>
+                        <!-- 瓦斯爐火焰 -->
+                        <g style="transform-origin: 360px 460px;">
+                            ${Array.from({length:5}).map((_,i)=>`
+                                <path d="M ${320+i*20} 460 Q ${325+i*20} 430 ${330+i*20} 460 Z"
+                                      fill="#ff9800" opacity="0.9"
+                                      style="animation: im-pulse-grow ${0.3+i*0.08}s ease-in-out infinite;"/>
+                                <path d="M ${325+i*20} 460 Q ${328+i*20} 440 ${331+i*20} 460 Z"
+                                      fill="#ffeb3b" opacity="0.8"/>
+                            `).join('')}
+                        </g>
+                        <!-- 摩卡壺 上壺 八角柱 -->
+                        <path d="M 290 140 L 430 140 L 420 250 L 300 250 Z" fill="#b0bec5"/>
+                        <path d="M 300 250 L 420 250 L 420 270 L 300 270 Z" fill="#90a4ae"/>
+                        <!-- 下壺 -->
+                        <path d="M 300 270 L 420 270 L 410 420 L 310 420 Z" fill="#b0bec5"/>
+                        <!-- 八角紋 -->
+                        <line x1="330" y1="270" x2="330" y2="420" stroke="#78909c" stroke-width="2"/>
+                        <line x1="360" y1="270" x2="360" y2="420" stroke="#78909c" stroke-width="2"/>
+                        <line x1="390" y1="270" x2="390" y2="420" stroke="#78909c" stroke-width="2"/>
+                        <!-- 把手 -->
+                        <path d="M 430 230 Q 490 240 485 310 L 420 320" fill="none" stroke="#212121" stroke-width="14" stroke-linecap="round"/>
+                        <!-- 壺嘴 -->
+                        <path d="M 290 160 L 260 145 L 255 165 L 290 175 Z" fill="#b0bec5"/>
+                        <!-- 頂蓋 -->
+                        <rect x="320" y="128" width="80" height="14" rx="4" fill="#546e7a"/>
+                        <circle cx="360" cy="122" r="8" fill="#212121"/>
+                        <!-- 蒸氣 / 咖啡噴濺 -->
+                        ${Array.from({length: 10}).map((_, i) => `
+                            <circle cx="${350 + (i%3)*7 - 7}" cy="125" r="${6 + (i%3)}" fill="#fff" opacity="0.7"
+                                style="--sx: ${-20 + (i%5)*10}px; animation: im-steam 2.5s ease-out ${i*0.25}s infinite;"/>
+                        `).join('')}
+                    </svg>`
+                }),
+                // ----- 法式濾壓 -----
+                french_press: (caption) => ({
+                    caption: caption || '🫖 法壓…4 分鐘浸泡後下壓',
+                    svg: `<svg viewBox="0 0 720 540" preserveAspectRatio="xMidYMid meet">
+                        <rect x="0" y="470" width="720" height="70" fill="#4e342e"/>
+                        <!-- 玻璃圓柱 -->
+                        <rect x="260" y="150" width="200" height="300" rx="4" fill="rgba(255,255,255,0.1)" stroke="#cfd8dc" stroke-width="4"/>
+                        <!-- 咖啡液 -->
+                        <rect x="264" y="220" width="192" height="226" fill="url(#fp-coffee)"/>
+                        <!-- 金屬上蓋 -->
+                        <rect x="255" y="130" width="210" height="30" rx="6" fill="#90a4ae"/>
+                        <!-- 壓桿 -->
+                        <g style="transform-origin: 360px 100px; animation: im-piston-press 8s ease-in-out infinite;">
+                            <rect x="355" y="40" width="10" height="120" fill="#546e7a"/>
+                            <circle cx="360" cy="30" r="20" fill="#37474f"/>
+                            <!-- 濾網（壓桿下方） -->
+                            <ellipse cx="360" cy="175" rx="96" ry="6" fill="#455a64"/>
+                        </g>
+                        <!-- 浮粉漸漸下沉 -->
+                        ${Array.from({length: 12}).map((_, i) => `
+                            <circle cx="${280+(i%4)*45}" cy="${240+(Math.floor(i/4))*20}" r="3" fill="#3e2723" opacity="0.6"/>
+                        `).join('')}
+                        <defs>
+                            <linearGradient id="fp-coffee" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="#5d4037"/>
+                                <stop offset="100%" stop-color="#1b0f08"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>`
+                }),
+                // ----- 烘焙 -----
+                roast: (caption) => ({
+                    caption: caption || '🔥 烘焙中…生豆→黃變→一爆→落下',
+                    svg: `<svg viewBox="0 0 720 540" preserveAspectRatio="xMidYMid meet">
+                        <rect x="0" y="470" width="720" height="70" fill="#263238"/>
+                        <!-- 烘豆機主體 -->
+                        <rect x="140" y="160" width="440" height="260" rx="18" fill="#455a64"/>
+                        <rect x="160" y="180" width="400" height="220" rx="12" fill="#37474f"/>
+                        <!-- 玻璃觀察窗（圓） -->
+                        <circle cx="360" cy="290" r="110" fill="#1a0f0a"/>
+                        <!-- 鼓內（旋轉） -->
+                        <g style="transform-origin: 360px 290px; animation: im-drum-spin 4s linear infinite;">
+                            <circle cx="360" cy="290" r="96" fill="none" stroke="#5d4037" stroke-width="2" stroke-dasharray="6 8"/>
+                            <!-- 豆子們（各自 bounce + 顏色漸變） -->
+                            ${Array.from({length: 18}).map((_, i) => {
+                                const angle = (i / 18) * Math.PI * 2;
+                                const r = 60 + (i % 3) * 12;
+                                const cx = 360 + Math.cos(angle) * r;
+                                const cy = 290 + Math.sin(angle) * r;
+                                return `<ellipse cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" rx="7" ry="5"
+                                    style="animation: im-bean-color-dance 10s linear ${i*0.1}s forwards;"/>`;
+                            }).join('')}
+                        </g>
+                        <!-- 溫度計 -->
+                        <rect x="600" y="180" width="30" height="220" rx="10" fill="#37474f"/>
+                        <rect x="605" y="200" width="20" height="180" fill="#263238"/>
+                        <rect x="608" y="190" width="14" height="180" fill="url(#temp-grad)"
+                              style="transform-origin: center bottom; animation: im-fill-up 9s ease-out forwards;"/>
+                        <circle cx="615" cy="400" r="16" fill="#e53935"/>
+                        <!-- 火焰 (底部) -->
+                        ${Array.from({length:8}).map((_,i)=>`
+                            <path d="M ${250+i*30} 420 Q ${255+i*30} 390 ${260+i*30} 420 Z"
+                                  fill="#ff6f00"
+                                  style="animation: im-pulse-grow ${0.25+i*0.04}s ease-in-out infinite;"/>
+                        `).join('')}
+                        <!-- 排氣煙 -->
+                        ${Array.from({length: 6}).map((_, i) => `
+                            <circle cx="${320 + i*15}" cy="155" r="${6 + i%2}" fill="#cfd8dc" opacity="0.4"
+                                style="--sx: ${-5 + i*3}px; animation: im-steam 3s ease-out ${i*0.4}s infinite;"/>
+                        `).join('')}
+                        <defs>
+                            <linearGradient id="temp-grad" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="#ffeb3b"/>
+                                <stop offset="50%" stop-color="#ff9800"/>
+                                <stop offset="100%" stop-color="#e53935"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>`
+                })
+            };
+
+            // 沖煮方式對應 scene key 的解析器
+            function _pickBrewScene(brew, dripper) {
+                if (!brew) return 'pour_over';
+                if (brew === 'pour_over') return 'pour_over';
+                if (brew === 'espresso') return 'espresso';
+                if (brew === 'moka') return 'moka';
+                if (brew === 'french_press' || brew === 'aeropress') return 'french_press';
+                if (brew === 'siphon' || brew === 'cold_brew') return 'pour_over';  // 暫 fallback
+                return 'pour_over';
+            }
+
+            let _intermissionTimer = null;
+            window.playIntermission = function(mode) {
+                return new Promise(resolve => {
+                    const overlay = document.getElementById('intermission');
+                    const sceneEl = document.getElementById('im-scene');
+                    const captionEl = document.getElementById('im-caption');
+                    if (!overlay || !sceneEl) { resolve(); return; }
+                    // 決定 scene
+                    let sceneKey, scene;
+                    if (mode === 'roast') {
+                        sceneKey = 'roast';
+                        scene = IM_SCENES.roast();
+                    } else {
+                        const brew = (document.getElementById('sel-brew')||{}).value || 'pour_over';
+                        const dripper = (document.getElementById('sel-dripper')||{}).value;
+                        sceneKey = _pickBrewScene(brew, dripper);
+                        const brewLabel = document.getElementById('sel-brew')?.options[document.getElementById('sel-brew').selectedIndex]?.text || '';
+                        const dripperName = (typeof DRIPPER_INFO !== 'undefined' && DRIPPER_INFO[dripper]?.name) || '';
+                        const captionExtra = dripperName ? `（${dripperName}）` : '';
+                        scene = IM_SCENES[sceneKey](`☕ ${brewLabel} 沖煮中…${captionExtra}`);
+                    }
+                    sceneEl.innerHTML = scene.svg;
+                    captionEl.textContent = scene.caption;
+                    overlay.style.display = 'flex';
+                    requestAnimationFrame(() => overlay.classList.add('show'));
+                    document.body.style.overflow = 'hidden';
+                    const close = () => {
+                        overlay.classList.remove('show');
+                        setTimeout(() => { overlay.style.display = 'none'; document.body.style.overflow = ''; }, 400);
+                        if (_intermissionTimer) { clearTimeout(_intermissionTimer); _intermissionTimer = null; }
+                        resolve();
+                    };
+                    _intermissionTimer = setTimeout(close, 10000);
+                    overlay._close = close;
+                });
+            };
+            window.skipIntermission = function() {
+                const overlay = document.getElementById('intermission');
+                if (overlay && overlay._close) overlay._close();
+            };
+
             // ========= 🔬 分析結果全螢幕檢視器 =========
             function _escHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
             function _buildAnalysisSummary(cfg) {
@@ -5054,8 +5433,10 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 if (v && v.classList.contains('open') && e.target === v) closeAnalysisViewer();
             });
 
-            window.runAnalysis = function(mode) {
+            window.runAnalysis = async function(mode) {
                 if (document.getElementById('sel-country').value === 'none') { alert('請先在「🌱 配置」選擇產區國家'); return; }
+                // 🎬 先播 10 秒串場動畫（可 skip），再開分析 viewer
+                await playIntermission(mode);
                 const countryCode = document.getElementById('sel-country').value;
                 const country = document.getElementById('sel-country').options[document.getElementById('sel-country').selectedIndex].text;
                 const varietyCode = document.getElementById('sel-variety').value;
