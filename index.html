@@ -65,7 +65,6 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
         @media (max-width: 768px) {
             body { font-size: 14px; }
             .float-btn { top: 10px; padding: 10px 18px; font-size: 12px; }
-            #btn-config { left: 10px; }
             #btn-fullscreen { right: 10px; top: 10px; padding: 8px 12px; font-size: 14px; }
             .overlay-panel { left: 10px; width: calc(100vw - 20px); max-width: none; max-height: 80vh; }
             .panel-header { padding: 12px 15px; font-size: 14px; }
@@ -94,9 +93,17 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             font-size: 14px;
         }
         .float-btn:hover { transform: scale(1.05); }
-        #btn-config { left: 20px; background: var(--accent-blue); }
         #btn-fullscreen { right: 20px; top: 20px; background: #37474f; padding: 12px 16px; font-size: 16px; }
         :fullscreen #btn-fullscreen { background: #c62828; }
+        /* 迷你召回按鈕：panel 收起後出現於右下 */
+        #btn-config-recall {
+            position: fixed; right: 20px; bottom: 20px; z-index: 500;
+            background: var(--accent-blue); color: #fff; border: none;
+            width: 56px; height: 56px; border-radius: 50%; font-size: 24px;
+            cursor: pointer; box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+            transition: transform 0.2s; display: none;
+        }
+        #btn-config-recall:hover { transform: scale(1.1); }
 
         /* 📊 XLSX 預覽表格樣式 */
         .xlsx-preview-table { width: 100%; border-collapse: collapse; font-size: 11px; margin-bottom: 10px; }
@@ -230,8 +237,8 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
 </head>
 <body>
 
-    <button id="btn-config" class="float-btn" onclick="togglePanel('config', true)" aria-label="開啟品鑑工作台">☕ 品鑑工作台</button>
     <button id="btn-fullscreen" class="float-btn" onclick="toggleFullscreen()" aria-label="切換全螢幕顯示" title="全螢幕">⛶</button>
+    <button id="btn-config-recall" onclick="togglePanel('config', true)" aria-label="重新開啟品鑑工作台" title="開啟品鑑工作台">☕</button>
 
     <div id="item-config-panel" class="overlay-panel">
         <div class="panel-header" id="config-header">
@@ -365,14 +372,45 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             <div class="config-grid">
                 <div class="config-group" style="grid-column: span 2;">
                     <label>7. 沖煮方式（影響風味呈現）</label>
-                    <select id="sel-brew" onchange="updateExpected()" aria-label="選擇沖煮方式">
-                        <option value="pour_over">手沖濾紙 (V60/Chemex/Kalita)</option>
+                    <select id="sel-brew" onchange="onBrewChange(); updateExpected()" aria-label="選擇沖煮方式">
+                        <option value="pour_over">手沖濾紙</option>
                         <option value="espresso">義式濃縮 (Espresso)</option>
                         <option value="french_press">法式濾壓 (French Press)</option>
                         <option value="aeropress">愛樂壓 (AeroPress)</option>
                         <option value="moka">摩卡壺 (Moka Pot)</option>
                         <option value="siphon">虹吸壺 (Siphon)</option>
                         <option value="cold_brew">冷萃 (Cold Brew)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="config-grid" id="pour-over-extra" style="display:grid;">
+                <div class="config-group">
+                    <label>7a. 濾杯款式</label>
+                    <select id="sel-dripper" onchange="updateExpected()" aria-label="選擇濾杯款式">
+                        <option value="v60">Hario V60（錐形、流速快、層次）</option>
+                        <option value="kalita">Kalita Wave（平底、均勻、新手）</option>
+                        <option value="origami">Origami（20 摺、乾淨、可換濾紙）</option>
+                        <option value="chemex">Chemex（厚濾紙、極乾淨、茶感）</option>
+                        <option value="clever">Clever Dripper（浸泡+過濾、穩定）</option>
+                        <option value="switch">Hario Switch（V60+閥門、雙用）</option>
+                        <option value="orea">Orea V3/V4（平底、極快、賽用）</option>
+                        <option value="april">April Brewer（平底、WBrC）</option>
+                        <option value="melitta">Melitta（小孔錐形、body 扎實）</option>
+                        <option value="stagg">Fellow Stagg X（雙層、穩定）</option>
+                    </select>
+                </div>
+                <div class="config-group">
+                    <label>7b. 手沖手法</label>
+                    <select id="sel-method" onchange="updateExpected()" aria-label="選擇手沖手法">
+                        <option value="classic_3">三段式（悶蒸→中段→後段 · 傳統）</option>
+                        <option value="single_pour">一刀流（悶蒸後一次注滿 · body）</option>
+                        <option value="kasuya_46">四六法 · 粕谷哲（5 段、可調酸甜/濃淡）</option>
+                        <option value="matt_winton">冠軍配方 · Matt Winton WBrC</option>
+                        <option value="lance_hi">高磨低溫 · Lance Hedrick（淺焙解法）</option>
+                        <option value="hoffmann_ult">Hoffmann Ultimate V60</option>
+                        <option value="scott_rao">Scott Rao 連續注水</option>
+                        <option value="tetsu_ice">冰手沖 · Kasuya Iced（急冷）</option>
+                        <option value="strong_conc">濃縮式（1:10 小水量）</option>
                     </select>
                 </div>
             </div>
@@ -408,6 +446,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                     <button id="analysis-roast-btn" class="ai-btn" onclick="runAnalysis('roast')" aria-label="執行烘焙校對分析">🔥 烘焙校對</button>
                     <button id="analysis-sensory-btn" class="ai-btn sensory" onclick="runAnalysis('sensory')" aria-label="產生沖煮建議">💧 沖煮建議</button>
                 </div>
+                <button id="btn-diagnose" onclick="openBrewDiagnosis()" style="width:100%; margin-top:8px; padding: 10px; background: linear-gradient(135deg, #e65100 0%, #bf360c 100%); color: #fff; border: none; border-radius: 10px; font-size: 13px; font-weight: bold; cursor: pointer;" title="依你實際喝到的問題反推沖煮可能的原因">🔍 喝起來怪怪？反查沖煮問題</button>
                 <button onclick="openRoastPlan()" style="width:100%; margin-top:8px; padding: 10px; background: linear-gradient(135deg, #8d6e63 0%, #5d4037 100%); color: #fff; border: none; border-radius: 10px; font-size: 13px; font-weight: bold; cursor: pointer;">📋 烘焙計畫單 + 📈 曲線設計器</button>
                 <div id="diag-result"></div>
                 <!-- 杯測日誌操作 -->
@@ -491,6 +530,25 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
     </div>
 
     <!-- 📊 XLSX 預覽 Modal（Excel 樣的可編輯表格）-->
+    <!-- 🔍 沖煮反向診斷 Modal -->
+    <div id="brew-diagnose-modal" style="display:none; position:fixed; inset:0; z-index:2100; background:rgba(0,0,0,0.75); backdrop-filter: blur(4px); overflow-y: auto; padding: 15px; box-sizing: border-box;">
+        <div style="max-width: 720px; margin: 20px auto; background:#fff; border-radius: 16px; padding: 22px; box-shadow: 0 20px 80px rgba(0,0,0,0.5);">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 2px solid #e65100;">
+                <span style="font-size: 16px; font-weight: bold; color: #bf360c;">🔍 沖煮反向診斷</span>
+                <button onclick="closeBrewDiagnosis()" style="background:none; border:none; font-size: 20px; color: #888; cursor:pointer;">✕</button>
+            </div>
+            <div style="font-size: 12px; color: #555; margin-bottom: 10px; line-height: 1.6;">
+                勾選你這杯<b>實際喝到的問題</b>，系統會依你目前的配置（焙度 × 濾杯 × 手法）反推可能成因，並給「下次怎麼改」的可操作建議。
+            </div>
+            <div id="diag-symptoms" style="display:grid; grid-template-columns: repeat(2, 1fr); gap: 6px 10px; margin: 10px 0 14px 0;"></div>
+            <div style="display:flex; gap:8px;">
+                <button onclick="runBrewDiagnosis()" style="flex:2; padding: 12px; background: linear-gradient(135deg, #e65100, #bf360c); color:#fff; border:none; border-radius:10px; font-weight:bold; cursor:pointer;">🧪 執行診斷</button>
+                <button onclick="clearDiagSymptoms()" style="flex:1; padding: 12px; background: #eceff1; color:#37474f; border:none; border-radius:10px; font-weight:bold; cursor:pointer;">🔄 清除勾選</button>
+            </div>
+            <div id="diag-output" style="margin-top: 14px;"></div>
+        </div>
+    </div>
+
     <div id="xlsx-preview-modal" style="display:none; position:fixed; inset:0; z-index:2100; background:rgba(0,0,0,0.75); backdrop-filter: blur(4px); overflow-y: auto; padding: 15px; box-sizing: border-box;">
         <div style="max-width: 1400px; margin: 10px auto; background:#fff; border-radius: 16px; padding: 20px; box-shadow: 0 20px 80px rgba(0,0,0,0.5);">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 2px solid #5d4037;" class="no-print">
@@ -1224,7 +1282,9 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                     variety: document.getElementById('sel-variety').value,
                     proc: document.getElementById('sel-proc').value,
                     roast: document.getElementById('sel-roast').value,
-                    brew: document.getElementById('sel-brew').value
+                    brew: document.getElementById('sel-brew').value,
+                    dripper: (document.getElementById('sel-dripper')||{}).value || 'v60',
+                    method:  (document.getElementById('sel-method') ||{}).value || 'classic_3'
                 };
                 const box = document.getElementById('expected-tags-box');
 
@@ -1335,12 +1395,13 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 const hash = window.location.hash.slice(1);
                 if (!hash) return false;
                 const params = new URLSearchParams(hash);
-                const map = { country: 'sel-country', alt: 'sel-altitude', soil: 'sel-soil', variety: 'sel-variety', proc: 'sel-proc', roast: 'sel-roast', brew: 'sel-brew' };
+                const map = { country: 'sel-country', alt: 'sel-altitude', soil: 'sel-soil', variety: 'sel-variety', proc: 'sel-proc', roast: 'sel-roast', brew: 'sel-brew', dripper: 'sel-dripper', method: 'sel-method' };
                 let applied = false;
                 Object.keys(map).forEach(k => {
                     const v = params.get(k);
                     if (v) { const el = document.getElementById(map[k]); if (el) { el.value = v; applied = true; } }
                 });
+                if (typeof onBrewChange === 'function') onBrewChange();
                 if (applied) updateExpected();
                 return applied;
             };
@@ -1362,6 +1423,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 document.getElementById('sel-proc').value = p.proc;
                 document.getElementById('sel-roast').value = p.roast;
                 if (p.brew) document.getElementById('sel-brew').value = p.brew;
+                if (typeof onBrewChange === 'function') onBrewChange();
                 updateExpected();
             };
 
@@ -1635,6 +1697,33 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             const BREW_COLD_H_MAP = { cinnamon:22, city:20, city_plus:18, full_city:16, full_city_plus:14, vienna:12, french:12 };
             const BREW_GRIND_SCALE = ['極細(義式)', '細(摩卡/短縮)', '中細偏細', '中細', '中', '中粗', '粗(法壓/冷萃)'];
 
+            // 手沖濾杯特性（影響流速、body、推薦手法）
+            const DRIPPER_INFO = {
+                v60:     { name:'Hario V60',      flow:'fast',      grindAdj:0,  ratioAdj:0,  note:'螺旋肋+大單孔，水流快，對手法敏感；強調層次與香氣。', best:['kasuya_46','classic_3','hoffmann_ult','matt_winton','lance_hi'] },
+                kalita:  { name:'Kalita Wave',    flow:'med',       grindAdj:-1, ratioAdj:0,  note:'平底 3 小孔+波浪濾紙，萃取均勻；研磨需略細、水流穩即可。', best:['classic_3','single_pour','scott_rao'] },
+                origami: { name:'Origami',        flow:'variable',  grindAdj:0,  ratioAdj:0,  note:'20 摺錐形可配 V60 或 Kalita 濾紙；配 V60 濾紙偏快、配 Kalita 偏慢。', best:['kasuya_46','matt_winton','classic_3'] },
+                chemex:  { name:'Chemex',         flow:'slow',      grindAdj:+1, ratioAdj:+1, note:'厚濾紙+大單孔，流速慢、濾掉最多油脂；茶感明顯。研磨要粗一檔、水粉比稀一點。', best:['single_pour','classic_3','scott_rao'] },
+                clever:  { name:'Clever Dripper', flow:'hybrid',    grindAdj:0,  ratioAdj:0,  note:'閥門浸泡＋過濾，放底座才流出；穩定度高，適合新手與複雜手法難做時。', best:['single_pour','classic_3'] },
+                switch:  { name:'Hario Switch',   flow:'hybrid',    grindAdj:0,  ratioAdj:0,  note:'V60 + 閥門，可做純濾也可部分浸泡（打開/關閉閥門切換）。', best:['hoffmann_ult','single_pour','classic_3'] },
+                orea:    { name:'Orea V3/V4',     flow:'very_fast', grindAdj:-1, ratioAdj:0,  note:'平底大單孔、結構極快流；研磨需細、著重攪拌分布。世界賽常見。', best:['matt_winton','kasuya_46','lance_hi'] },
+                april:   { name:'April Brewer',   flow:'fast',      grindAdj:-1, ratioAdj:0,  note:'平底寬肋快流，Patrik Rolf 設計；乾淨度與甜感兼顧。', best:['kasuya_46','matt_winton','lance_hi'] },
+                melitta: { name:'Melitta 經典',   flow:'slow',      grindAdj:+1, ratioAdj:0,  note:'側壁肋+小孔，流速慢，body 扎實；早餐杯感。', best:['single_pour','classic_3'] },
+                stagg:   { name:'Fellow Stagg X', flow:'med',       grindAdj:0,  ratioAdj:0,  note:'雙層結構流速穩定、保溫佳；對手法容錯度高。', best:['classic_3','kasuya_46','single_pour'] }
+            };
+
+            // 手沖手法特性
+            const POUR_METHODS = {
+                classic_3:    { name:'三段式',           pulses:3, agitation:'med', tempAdj:0,  ratioAdj:0,  grindAdj:0,  note:'悶蒸→中段→後段，節奏穩定，新手友善。' },
+                single_pour:  { name:'一刀流',           pulses:1, agitation:'low', tempAdj:0,  ratioAdj:0,  grindAdj:+1, note:'悶蒸後一次性注滿，保留 body 與甜感；研磨需略粗避免堵塞。' },
+                kasuya_46:    { name:'四六法',           pulses:5, agitation:'high',tempAdj:-1, ratioAdj:0,  grindAdj:0,  note:'前 40% 兩段決定酸甜平衡、後 60% 三段決定濃淡（粕谷哲 WBrC 2016 冠軍）。' },
+                matt_winton:  { name:'冠軍配方 (Matt Winton)', pulses:4, agitation:'med', tempAdj:+1, ratioAdj:-1, grindAdj:-1, note:'高溫短時大水量、中細研磨；2015 WBrC 冠軍，強烈高頻萃取。' },
+                lance_hi:     { name:'高磨低溫 (Lance Hedrick)', pulses:2, agitation:'high', tempAdj:-2, ratioAdj:0, grindAdj:-2, note:'研磨極細+低溫+強攪拌，突破淺焙堅硬密度；風險：細粉易堵。' },
+                hoffmann_ult: { name:'Hoffmann Ultimate V60', pulses:2, agitation:'med', tempAdj:0,  ratioAdj:0,  grindAdj:0,  note:'悶蒸後 60% 水兩大段+攪拌旋轉+小 Spin，乾淨度高。' },
+                scott_rao:    { name:'Scott Rao 連續注水', pulses:1, agitation:'low', tempAdj:0,  ratioAdj:0,  grindAdj:0,  note:'不斷流維持水位穩定、濾床均勻，技術門檻較高。' },
+                tetsu_ice:    { name:'冰手沖 (Iced)',    pulses:3, agitation:'med', tempAdj:+2, ratioAdj:-2, grindAdj:-1, note:'濾杯下方放總水量 40% 冰塊、熱萃快速急冷，保留酸鮮香氣。' },
+                strong_conc:  { name:'濃縮式 1:10',      pulses:2, agitation:'low', tempAdj:-1, ratioAdj:-3, grindAdj:0,  note:'刻意降水量放大濃度，適合做冰美式底或強 body 杯感。' }
+            };
+
             function _br_create(cfg) {
                 const light = ['cinnamon','city','city_plus'].includes(cfg.roast);
                 const dark = ['full_city_plus','vienna','french'].includes(cfg.roast);
@@ -1688,6 +1777,162 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                     : '烘焙後 7-10 天進入甜蜜期，3 週內喝完';
             }
 
+            // 手沖食譜專用：依濾杯 + 手法 + 焙度組合生成 schedule
+            function _pourOverRecipe(s, pickGrind) {
+                const { light, dark, finalTempLo: lo, finalTempHi: hi } = s;
+                const dripperKey = s.cfg.dripper || 'v60';
+                const methodKey  = s.cfg.method  || 'classic_3';
+                const D = DRIPPER_INFO[dripperKey] || DRIPPER_INFO.v60;
+                const M = POUR_METHODS[methodKey] || POUR_METHODS.classic_3;
+
+                // 組合調整：濾杯 grind/ratio + 手法 temp/ratio/grind
+                let gAdj = (D.grindAdj || 0) + (M.grindAdj || 0);
+                let tAdj = (M.tempAdj || 0);
+                let rAdj = (D.ratioAdj || 0) + (M.ratioAdj || 0);
+
+                const tLo = lo + tAdj, tHi = hi + tAdj;
+                const grindBase = Math.max(0, Math.min(6, Math.round(3 + gAdj)));
+                const grindText = BREW_GRIND_SCALE[grindBase] + `（${D.name} × ${M.name}）`;
+
+                // 比例：1:15 基準 + rAdj × 0.5
+                const ratioHi = 16 + rAdj * 0.5;
+                const ratioLo = ratioHi - 1;
+                const ratioText = light
+                    ? `1:${ratioLo.toFixed(1)} ~ 1:${(ratioHi+0.5).toFixed(1)}（淺焙保留清亮）`
+                    : dark
+                    ? `1:${(ratioLo-1).toFixed(1)} ~ 1:${ratioLo.toFixed(1)}（深焙補 body）`
+                    : `1:${ratioLo.toFixed(1)} ~ 1:${ratioHi.toFixed(1)}`;
+
+                // 總水量（1:16 × 15g ≈ 240g，依 rAdj 微調）
+                const water = Math.round(240 + rAdj * 8);
+                const dose = `15g 粉 → ${water}g 水`;
+
+                // 依 method 產 schedule
+                const schedule = _makePourSchedule(methodKey, dripperKey, light, dark, water, tLo, tHi);
+
+                // 總時 estimate
+                const totalMin = light ? '3:00-3:30' : dark ? '2:20-2:45' : '2:30-3:00';
+
+                // 食譜尾註：濾杯特性 + 手法原則
+                const tail = [
+                    `🧪 ${D.name}：${D.note}`,
+                    `🎯 ${M.name}：${M.note}`
+                ];
+                return {
+                    dose, ratio: ratioText,
+                    temp: `${tLo}-${tHi}°C`,
+                    grind: grindText,
+                    time: `總時 ${totalMin}（${M.pulses} 段注水）`,
+                    schedule: [...schedule, ...tail]
+                };
+            }
+
+            function _makePourSchedule(methodKey, dripperKey, light, dark, water, tLo, tHi) {
+                // 常用值：悶蒸水量 = 粉重×2 = 30g
+                const BLOOM = 30;
+                const _fmt = (t, g, desc) => `${t} → 注至 ${g}g${desc ? '（' + desc + '）' : ''}`;
+                switch (methodKey) {
+                    case 'classic_3':
+                        return [
+                            `0:00 → 悶蒸 ${BLOOM}g × ${light ? 40 : dark ? 25 : 35}s`,
+                            `0:${light ? 40 : dark ? 25 : 35} → 注至 ${Math.round(water*0.55)}g（螺旋中段）`,
+                            `${light ? '1:30' : dark ? '1:10' : '1:20'} → 注至 ${water}g`,
+                            `${light ? '3:00-3:30' : dark ? '2:20-2:45' : '2:30-3:00'} → 滴完`
+                        ];
+                    case 'single_pour':
+                        return [
+                            `0:00 → 悶蒸 ${BLOOM}g × 30s（單段注水需充分排氣）`,
+                            `0:30 → 一次性注滿至 ${water}g（細水流定點或螺旋，30-40 秒完成注水）`,
+                            `2:30-3:00 → 滴完（時間若超過 3:30 下次研磨調粗一格）`,
+                            'Tip：body 會最重，適合深焙與追求濃郁甜感'
+                        ];
+                    case 'kasuya_46': {
+                        // 四六法：前 40% 兩段（酸甜平衡）+ 後 60% 三段（濃淡）
+                        // 淺焙小段多=更甜；深焙小段少=更淡
+                        const w40 = Math.round(water * 0.4);
+                        const w60 = water - w40;
+                        // 前兩段各半（可 6:4 或 5:5 調酸甜）
+                        const a1 = Math.round(w40 * 0.5), a2 = w40 - a1;
+                        const b = Math.round(w60 / 3);
+                        return [
+                            `0:00 → 注至 ${a1}g（第 1 段：定酸，${light ? '5:5 均勻' : '6:4 偏甜'}）`,
+                            `0:45 → 注至 ${w40}g（第 2 段，加 ${a2}g）`,
+                            `1:30 → 注至 ${w40+b}g（第 3 段：濃淡第 1 波）`,
+                            `1:55 → 注至 ${w40+b*2}g（第 4 段）`,
+                            `2:20 → 注至 ${water}g（第 5 段）`,
+                            `3:30 左右滴完（研磨：中等偏粗一格避免堵塞）`
+                        ];
+                    }
+                    case 'matt_winton': {
+                        // 冠軍：高溫短時、四段 + 攪拌
+                        const q = Math.round(water / 4);
+                        return [
+                            `0:00 → 悶蒸 ${BLOOM}g 攪拌 × 30s`,
+                            `0:30 → 注至 ${q*1+BLOOM}g`,
+                            `0:55 → 注至 ${q*2+BLOOM}g（水位剛掉一半即補）`,
+                            `1:20 → 注至 ${q*3+BLOOM}g`,
+                            `1:45 → 注至 ${water}g（最後一段大水衝）`,
+                            `2:15-2:30 → 滴完（高頻高溫注水、高強度萃取）`
+                        ];
+                    }
+                    case 'lance_hi':
+                        return [
+                            `0:00 → 悶蒸 ${BLOOM+5}g × 45s（極細研磨 CO2 多，悶蒸需長）`,
+                            `0:45 → 螺旋大攪拌+注至 ${Math.round(water*0.5)}g`,
+                            `1:30 → 注至 ${water}g，Rao Spin（旋轉濾杯）`,
+                            `3:30-4:30 → 滴完（細粉會顯著減緩流速，屬正常）`,
+                            'Tip：淺焙專用，水溫降至 88-90°C、研磨比平常細 2 格；若過澀下次研磨調粗半格'
+                        ];
+                    case 'hoffmann_ult':
+                        return [
+                            `0:00 → 悶蒸 ${BLOOM*2}g × 45s 攪拌（Rao Spin 5 秒）`,
+                            `0:45 → 注至 ${Math.round(water*0.6)}g（第一大段，30 秒內完成）`,
+                            `1:15 → 靜置到水位剛掉一半`,
+                            `1:30 → 注至 ${water}g（第二大段）`,
+                            `2:00 → Rao Spin 再攪一次`,
+                            `3:00-3:30 → 滴完`
+                        ];
+                    case 'scott_rao':
+                        return [
+                            `0:00 → 悶蒸 ${BLOOM}g × 45s 攪拌 + Rao Spin`,
+                            `0:45 → 連續注水維持水位穩定（不要讓粉層上浮的水流中斷）`,
+                            `1:45 → 達到 ${water}g 停注`,
+                            `3:00-3:30 → 滴完，末段 Spin 收尾讓粉床平整`,
+                            'Tip：水位不中斷是關鍵，要練習小穩定水流'
+                        ];
+                    case 'tetsu_ice': {
+                        const ice = Math.round(water * 0.4);
+                        const hot = water - ice;
+                        return [
+                            `📍 下壺先放 ${ice}g 冰塊（佔總水量 40%）`,
+                            `0:00 → 悶蒸 ${BLOOM}g × 45s`,
+                            `0:45 → 注至 ${Math.round(hot*0.5)+BLOOM}g`,
+                            `1:30 → 注至 ${Math.round(hot*0.75)+BLOOM}g`,
+                            `2:00 → 注至 ${hot}g 停注`,
+                            `2:30-3:00 → 急冷完成，直接上杯加冰`,
+                            'Tip：高溫熱萃保留香氣、冰塊急速稀釋鎖住芳香物'
+                        ];
+                    }
+                    case 'strong_conc': {
+                        const w = Math.round(water * 0.65); // 1:10 = 150g for 15g
+                        return [
+                            `📐 本法採 1:10，總水量改為 ${w}g`,
+                            `0:00 → 悶蒸 ${BLOOM}g × 40s`,
+                            `0:40 → 注至 ${Math.round(w*0.7)}g`,
+                            `1:30 → 注至 ${w}g 停注`,
+                            `2:30-3:00 → 滴完（濃度高，適合做冰美式底或加奶）`
+                        ];
+                    }
+                    default:
+                        return [
+                            `0:00 → 悶蒸 ${BLOOM}g × 35s`,
+                            `0:35 → 注至 ${Math.round(water*0.55)}g`,
+                            `1:20 → 注至 ${water}g`,
+                            `2:30-3:00 → 滴完`
+                        ];
+                }
+            }
+
             // --- Stage: BuildRecipe (依沖煮法產生最終食譜) ---
             function _br_stageRecipe(s) {
                 const pickGrind = base => BREW_GRIND_SCALE[Math.max(0, Math.min(6, Math.round(base + s.grindAdj)))];
@@ -1699,29 +1944,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 const coldH = BREW_COLD_H_MAP[roast] || 16;
 
                 const P = {
-                    pour_over: {
-                        dose: '15g 粉 → 240g 水（1:16 基準）',
-                        ratio: light ? '1:16 ~ 1:17（保留清亮）' : dark ? '1:14 ~ 1:15（補 body）' : '1:15 ~ 1:16',
-                        temp: `${lo}-${hi}°C（電熱水壺用這段）`,
-                        grind: pickGrind(3) + '（Comandante ~25 click / EK43 ~10）',
-                        time: light ? '總時 3:00-3:30（含悶蒸 40-45 秒）' : dark ? '總時 2:20-2:45（含悶蒸 30 秒）' : '總時 2:30-3:00（含悶蒸 30-40 秒）',
-                        schedule: light ? [
-                            '0:00 → 注 45g 熱水悶蒸，輕晃濾杯讓粉層均勻（CO2 排出關鍵）',
-                            '0:45 → 慢螺旋注水至 130g（主萃取期，水流細、中心往外）',
-                            '1:30 → 注水至 200g（中段延伸甜感）',
-                            '2:10 → 補至 240g（末段補足）',
-                            '3:00-3:30 → 滴完，若超過 3:30 下次研磨調粗 1 格'
-                        ] : dark ? [
-                            '0:00 → 注 30g 水悶蒸 30s（深焙 CO2 少，短悶蒸即可）',
-                            '0:30 → 一次性注水至 210g（深焙水溫低、用水量衝擊即可）',
-                            '2:20-2:45 → 滴完，若苦澀重下次溫度降 2°C'
-                        ] : [
-                            '0:00 → 悶蒸 40g × 35s（中焙標準）',
-                            '0:35 → 注至 130g（螺旋）',
-                            '1:20 → 注至 240g',
-                            '2:30-3:00 → 滴完'
-                        ]
-                    },
+                    pour_over: _pourOverRecipe(s, pickGrind),
                     espresso: {
                         dose: '18g 粉 → 36-45g 液',
                         ratio: light ? '1:2.5（淺焙降澀）' : dark ? '1:1.8（深焙防過萃）' : '1:2 平衡',
@@ -2417,7 +2640,9 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                     roast: document.getElementById('sel-roast').value,
                     roastLabel: document.getElementById('sel-roast').options[document.getElementById('sel-roast').selectedIndex].text,
                     alt: document.getElementById('sel-altitude').value,
-                    brew: document.getElementById('sel-brew').value
+                    brew: document.getElementById('sel-brew').value,
+                    dripper: (document.getElementById('sel-dripper')||{}).value || 'v60',
+                    method:  (document.getElementById('sel-method') ||{}).value || 'classic_3'
                 };
             }
 
@@ -2701,8 +2926,192 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 if (typeof updateMatchScore === 'function') updateMatchScore();
             }
 
+            // ============================================================
+            // 🔍 沖煮反向診斷（依實際喝到的問題反推沖煮可能成因）
+            // ============================================================
+            const DIAG_SYMPTOMS = [
+                { id:'bitter_general', label:'🌑 整體偏苦' },
+                { id:'bitter_late',    label:'🌑 後韻發苦（吞下才苦）' },
+                { id:'astringent',     label:'🧊 澀（口腔收緊、乾）' },
+                { id:'sour_sharp',     label:'🍋 尖銳酸、像生檸檬皮' },
+                { id:'sour_raw',       label:'🥒 生青感、未熟' },
+                { id:'watery',         label:'💧 水感、像熱水' },
+                { id:'hollow',         label:'🕳️ 中段空洞' },
+                { id:'bland_flat',     label:'😐 平淡、無層次' },
+                { id:'dusty',          label:'🫧 粉感、咬口' },
+                { id:'papery',         label:'📄 紙味 / 木箱味' },
+                { id:'burnt',          label:'🔥 焦味' },
+                { id:'ashy',           label:'🌋 煙灰味 / 乾涸' },
+                { id:'over_ferment',   label:'🍷 發酵過頭、酒精味' },
+                { id:'oily_heavy',     label:'🛢️ 油膩厚重、難入喉' },
+                { id:'salty',          label:'🧂 鹹感（明顯）' },
+                { id:'uneven',         label:'🌀 前段強後段弱（或反之）' }
+            ];
+
+            // 每個「成因軸」在當前 context 下如何描述
+            const DIAG_CAUSES = {
+                grind_fine:   { title:'研磨偏細',       fix:'下次研磨調粗 1-2 格（Comandante 加 3-5 click / EK43 +1-2）', risk:'high' },
+                grind_coarse: { title:'研磨偏粗',       fix:'下次研磨調細 1 格、或補強攪拌加快萃取',                   risk:'high' },
+                temp_hi:      { title:'水溫偏高',       fix:'下次降 2-3°C；深焙起手 85-88°C、淺焙 92-94°C 足矣',        risk:'high' },
+                temp_lo:      { title:'水溫偏低',       fix:'下次升 2-3°C 或改用保溫壺；淺焙需 93°C 以上才能完整萃取', risk:'med' },
+                time_long:    { title:'總時太長 / 流速過慢', fix:'研磨調粗、減少攪拌、檢查濾床是否堵塞',               risk:'high' },
+                time_short:   { title:'總時太短 / 流速過快', fix:'研磨調細、增加段數分次注水、或改慢水流',              risk:'high' },
+                ratio_thick:  { title:'粉水比過濃（水少）', fix:'下次拉到 1:16-1:17，先秤水再沖',                       risk:'med' },
+                ratio_thin:   { title:'粉水比過稀（水多）', fix:'下次拉到 1:14-1:15，提升濃度',                          risk:'med' },
+                agitation_hi: { title:'攪拌過度',       fix:'減少 Rao Spin、避免大力畫圈；中段不攪',                    risk:'med' },
+                agitation_lo: { title:'攪拌不足',       fix:'悶蒸期多攪 3-5 下、或在第二段補一次輕旋轉',               risk:'med' },
+                channel:      { title:'通道效應 / 濾床不均', fix:'布粉更均勻、悶蒸多加 5 秒確保全濕、RDT 前先灑水',      risk:'high' },
+                paper_taste:  { title:'濾紙味 / 紙沒潤濕', fix:'注水前用熱水充分潤濕濾紙（至少 150g 熱水沖過）',         risk:'low' },
+                bean_fresh:   { title:'豆子太新（CO2 太多）', fix:'養豆 7-14 天、或悶蒸延長到 45-60 秒，水量加倍到 2.2x', risk:'med' },
+                bean_old:     { title:'豆子氧化（過期）', fix:'豆子開封 3 週內喝完、密封放冷藏可延長',                  risk:'med' },
+                water:        { title:'水質偏差',       fix:'TDS 應在 75-150 ppm、GH/KH 比例 2:1；太軟萃不出層次、太硬苦澀', risk:'low' },
+                agitation_method: { title:'手法節奏失準', fix:'悶蒸→主注→收尾的間隔太短/太長，參照所選手法的標準時程', risk:'med' },
+                roast_mismatch: { title:'焙度與手法不匹配', fix:'淺焙需高溫高攪拌拉出風味、深焙需低溫輕手法避免苦化',   risk:'med' }
+            };
+
+            // 症狀 → 可能成因（權重 1-3，3=高度相關）
+            const DIAG_MAP = {
+                bitter_general: [['grind_fine',3],['temp_hi',3],['time_long',2],['ratio_thick',2]],
+                bitter_late:    [['time_long',3],['grind_fine',2],['temp_hi',2],['agitation_hi',1]],
+                astringent:     [['temp_hi',3],['agitation_hi',3],['grind_fine',2],['channel',2],['ratio_thick',1]],
+                sour_sharp:     [['temp_lo',3],['time_short',3],['grind_coarse',2],['ratio_thin',1]],
+                sour_raw:       [['time_short',3],['temp_lo',2],['grind_coarse',2],['bean_old',1]],
+                watery:         [['ratio_thin',3],['time_short',2],['grind_coarse',2],['agitation_lo',1]],
+                hollow:         [['grind_coarse',2],['agitation_lo',2],['time_short',2],['channel',2],['bean_old',1]],
+                bland_flat:     [['bean_old',3],['temp_lo',2],['agitation_lo',2],['ratio_thin',1],['water',1]],
+                dusty:          [['grind_fine',3],['channel',2],['agitation_hi',1]],
+                papery:         [['paper_taste',3]],
+                burnt:          [['temp_hi',3],['roast_mismatch',2]],
+                ashy:           [['roast_mismatch',3],['temp_hi',2]],
+                over_ferment:   [['time_long',2],['roast_mismatch',1]],
+                oily_heavy:     [['ratio_thick',2],['grind_fine',1],['roast_mismatch',1]],
+                salty:          [['time_short',2],['grind_coarse',1],['ratio_thin',1]],
+                uneven:         [['channel',3],['agitation_method',2],['agitation_lo',1]]
+            };
+
+            // 渲染症狀 checkbox
+            function _diag_renderSymptoms() {
+                const box = document.getElementById('diag-symptoms');
+                if (!box) return;
+                box.innerHTML = DIAG_SYMPTOMS.map(s =>
+                    `<label style="display:flex; align-items:center; gap:6px; font-size:12px; cursor:pointer; padding:6px 8px; background:#fafafa; border:1px solid #e0e0e0; border-radius:8px;">
+                        <input type="checkbox" class="diag-chk" data-id="${s.id}" style="width:14px; height:14px; cursor:pointer;">
+                        <span>${s.label}</span>
+                    </label>`
+                ).join('');
+            }
+
+            window.openBrewDiagnosis = function() {
+                _diag_renderSymptoms();
+                document.getElementById('diag-output').innerHTML = '';
+                document.getElementById('brew-diagnose-modal').style.display = 'block';
+            };
+            window.closeBrewDiagnosis = function() {
+                document.getElementById('brew-diagnose-modal').style.display = 'none';
+            };
+            window.clearDiagSymptoms = function() {
+                document.querySelectorAll('#diag-symptoms .diag-chk').forEach(c => c.checked = false);
+                document.getElementById('diag-output').innerHTML = '';
+            };
+
+            window.runBrewDiagnosis = function() {
+                const checked = Array.from(document.querySelectorAll('#diag-symptoms .diag-chk:checked'));
+                if (!checked.length) {
+                    document.getElementById('diag-output').innerHTML =
+                        '<div style="padding:12px; background:#fff3e0; border:1px solid #ffcc80; border-radius:8px; color:#bf360c; font-size:12px;">請至少勾選一項你實際喝到的問題</div>';
+                    return;
+                }
+                // 累積成因權重
+                const scores = {};
+                checked.forEach(el => {
+                    const sym = el.dataset.id;
+                    (DIAG_MAP[sym] || []).forEach(([cause, w]) => {
+                        scores[cause] = (scores[cause] || 0) + w;
+                    });
+                });
+
+                // Context 加乘：依當前 cfg 微調權重
+                const cfg = {
+                    roast: (document.getElementById('sel-roast')||{}).value,
+                    brew:  (document.getElementById('sel-brew') ||{}).value,
+                    dripper: (document.getElementById('sel-dripper')||{}).value,
+                    method:  (document.getElementById('sel-method') ||{}).value
+                };
+                const light = ['cinnamon','city','city_plus'].includes(cfg.roast);
+                const dark  = ['full_city_plus','vienna','french'].includes(cfg.roast);
+                if (dark && scores.temp_hi)    scores.temp_hi += 1;  // 深焙最常因溫度出苦
+                if (light && scores.temp_lo)   scores.temp_lo += 1;  // 淺焙最常因溫度不足萃不出
+                if (cfg.dripper === 'chemex' && scores.time_long) scores.time_long += 1;
+                if (cfg.dripper === 'orea' && scores.time_short) scores.time_short += 1;
+                if (cfg.method === 'lance_hi' && scores.grind_fine) scores.grind_fine += 1;
+
+                // 排序取 top 5
+                const ranked = Object.entries(scores)
+                    .map(([cause, score]) => ({ cause, score, info: DIAG_CAUSES[cause] || { title: cause, fix: '', risk: 'low' } }))
+                    .sort((a,b) => b.score - a.score)
+                    .slice(0, 5);
+
+                const topScore = ranked[0]?.score || 1;
+                const symNames = checked.map(el => {
+                    const s = DIAG_SYMPTOMS.find(x => x.id === el.dataset.id);
+                    return s ? s.label : el.dataset.id;
+                });
+
+                // 脈絡描述
+                const ctxLine = `目前配置：${dark ? '深焙' : light ? '淺焙' : '中焙'} × ${DRIPPER_INFO[cfg.dripper]?.name || '—'} × ${POUR_METHODS[cfg.method]?.name || '—'}`;
+
+                let html = `
+                    <div style="padding:10px; background:#eceff1; border-radius:8px; font-size:11px; color:#37474f; margin-bottom:10px;">
+                        <div><b>症狀：</b>${symNames.join('、')}</div>
+                        <div style="margin-top:4px;">${ctxLine}</div>
+                    </div>
+                    <div style="font-size:12px; font-weight:bold; color:#bf360c; margin-bottom:8px;">🧪 可能成因（按相關度排序）</div>
+                `;
+                ranked.forEach((r, i) => {
+                    const pct = Math.round(r.score / topScore * 100);
+                    const riskColor = r.info.risk === 'high' ? '#c62828' : r.info.risk === 'med' ? '#ef6c00' : '#558b2f';
+                    html += `
+                        <div style="border-left: 4px solid ${riskColor}; padding: 8px 10px; margin-bottom: 8px; background: #fafafa; border-radius: 0 8px 8px 0;">
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+                                <b style="font-size:13px; color:#3e2723;">${i+1}. ${r.info.title}</b>
+                                <span style="font-size:10px; color:#888;">相關度 ${pct}%</span>
+                            </div>
+                            <div style="font-size:12px; color:#555; line-height:1.6;">💡 ${r.info.fix}</div>
+                        </div>
+                    `;
+                });
+
+                // 脈絡建議：針對具體手法的 tip
+                const methodTips = {
+                    kasuya_46: '四六法 Tip：前兩段決定酸甜（6:4 偏甜 / 5:5 均衡 / 4:6 偏酸），後三段決定濃淡（段數越多越濃）',
+                    matt_winton: '冠軍配方 Tip：若尖銳酸來自淺焙未開，可溫度再升 1°C；若苦澀來自深焙，改用 Hoffmann 法',
+                    lance_hi: '高磨低溫 Tip：細粉堵塞是常見問題，下次考慮加小金字塔濾紙、或用 Clever Dripper 避開',
+                    single_pour: '一刀流 Tip：若水感明顯，檢查水流是否過粗、研磨是否過粗，或改三段式',
+                    classic_3: '三段式 Tip：每段起注時機是「水位剛掉到粉床上」，早了會稀釋、晚了會過萃'
+                };
+                if (methodTips[cfg.method]) {
+                    html += `<div style="margin-top: 10px; padding: 10px; background: #fff8e1; border: 1px dashed #fbc02d; border-radius: 8px; font-size: 11px; color: #795548;">🎯 ${methodTips[cfg.method]}</div>`;
+                }
+
+                document.getElementById('diag-output').innerHTML = html;
+            };
+
+            // 依沖煮方式切換「濾杯/手法」子選單顯示
+            window.onBrewChange = function() {
+                const brew = (document.getElementById('sel-brew')||{}).value;
+                const extra = document.getElementById('pour-over-extra');
+                if (extra) extra.style.display = (brew === 'pour_over') ? 'grid' : 'none';
+            };
+
             const _PANELS = { config: 'item-config-panel', journal: 'journal-panel' };
-            window.togglePanel = function(type, show) { const el = document.getElementById(_PANELS[type]); if (el) el.style.display = show ? 'flex' : 'none'; };
+            window.togglePanel = function(type, show) {
+                const el = document.getElementById(_PANELS[type]);
+                if (el) el.style.display = show ? 'flex' : 'none';
+                if (type === 'config') {
+                    const recall = document.getElementById('btn-config-recall');
+                    if (recall) recall.style.display = show ? 'none' : 'flex';
+                }
+            };
 
             // --- 🎲 盲測模式 ---
             let blindMode = false;
@@ -4104,7 +4513,9 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                         soil: document.getElementById('sel-soil').value,
                         proc: document.getElementById('sel-proc').value,
                         roast: document.getElementById('sel-roast').value,
-                        brew: document.getElementById('sel-brew').value
+                        brew: document.getElementById('sel-brew').value,
+                        dripper: (document.getElementById('sel-dripper')||{}).value || 'v60',
+                        method:  (document.getElementById('sel-method') ||{}).value || 'classic_3'
                     },
                     label: {
                         country: document.getElementById('sel-country').options[document.getElementById('sel-country').selectedIndex].text,
@@ -4271,6 +4682,10 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                     togglePanel('config', true);
                 }
                 renderJournal();
+                // 預設展開主面板（網頁版進來就是工作台）
+                togglePanel('config', true);
+                // 初始化手沖子選單顯示狀態
+                onBrewChange();
             }
         })();
     </script>
