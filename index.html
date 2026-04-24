@@ -184,9 +184,87 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
         .av-summary .av-v { color: #3e2723; font-weight: 600; }
         .av-content {
             font-size: 14px; line-height: 1.85; color: #3e2723;
-            white-space: pre-wrap; font-family: "PingFang TC", "Microsoft JhengHei", sans-serif;
+            font-family: "PingFang TC", "Microsoft JhengHei", sans-serif;
         }
         .av-content h3, .av-content strong { color: #5d4037; }
+        .av-content pre.av-raw {
+            white-space: pre-wrap; font-family: inherit; margin: 0;
+            font-size: 13px; line-height: 1.85;
+        }
+
+        /* 📊 沖煮視覺化卡片 */
+        .viz-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1.4fr;
+            gap: 14px; margin-bottom: 22px;
+        }
+        @media (max-width: 768px) {
+            .viz-grid { grid-template-columns: 1fr; gap: 10px; }
+        }
+        .viz-card {
+            background: #fafaf7; border: 1px solid #e8e4d8; border-radius: 14px;
+            padding: 14px 16px; display: flex; flex-direction: column;
+        }
+        .viz-card-title {
+            font-size: 12px; font-weight: 800; color: #5d4037;
+            letter-spacing: 0.3px; margin-bottom: 10px;
+            padding-bottom: 8px; border-bottom: 1px solid #e8e4d8;
+        }
+
+        /* --- 溫度計 --- */
+        .viz-thermo-row { display: flex; gap: 14px; align-items: stretch; }
+        .viz-thermo { flex-shrink: 0; width: 60px; }
+        .viz-thermo-info { flex: 1; font-size: 11px; line-height: 1.65; display: flex; flex-direction: column; justify-content: center; }
+        .viz-thermo-info .viz-base { color: #8d6e63; font-weight: 600; }
+        .viz-thermo-info .viz-adj { color: #555; margin: 2px 0; font-size: 10.5px; display: flex; align-items: baseline; gap: 4px; }
+        .viz-thermo-info .viz-adj .viz-delta-pos { color: #c62828; font-weight: 700; }
+        .viz-thermo-info .viz-adj .viz-delta-neg { color: #1565c0; font-weight: 700; }
+        .viz-thermo-info .viz-final {
+            margin-top: 6px; padding-top: 6px; border-top: 1px dashed #d7d4c8;
+            color: #3e2723; font-weight: 800; font-size: 13px;
+        }
+
+        /* --- 粉水比杯 --- */
+        .viz-cup-row { display: flex; gap: 14px; align-items: center; }
+        .viz-cup { flex-shrink: 0; width: 80px; height: 120px; }
+        .viz-cup-info { flex: 1; font-size: 11px; line-height: 1.65; }
+        .viz-cup-info .viz-ratio-big {
+            font-size: 24px; font-weight: 900; color: #3e2723;
+            letter-spacing: -0.5px; margin-bottom: 4px;
+        }
+        .viz-cup-info .viz-ratio-calc { color: #5d4037; font-weight: 600; font-size: 12px; }
+        .viz-cup-info .viz-ratio-note { color: #888; font-size: 10.5px; margin-top: 4px; }
+
+        /* --- 時間軸 --- */
+        .viz-timeline {
+            position: relative; padding: 6px 0 6px 14px;
+            border-left: 3px solid #d7ccc8;
+        }
+        .viz-timeline .viz-tl-row {
+            position: relative; padding: 4px 0 10px 14px;
+            font-size: 11.5px; line-height: 1.55;
+        }
+        .viz-timeline .viz-tl-row::before {
+            content: ''; position: absolute;
+            left: -20px; top: 7px;
+            width: 10px; height: 10px; border-radius: 50%;
+            background: #8d6e63; border: 2px solid #fafaf7;
+            box-shadow: 0 0 0 2px #8d6e63;
+        }
+        .viz-timeline .viz-tl-row.viz-tl-start::before { background: #2e7d32; box-shadow: 0 0 0 2px #2e7d32; }
+        .viz-timeline .viz-tl-row.viz-tl-end::before { background: #c62828; box-shadow: 0 0 0 2px #c62828; }
+        .viz-timeline .viz-tl-time {
+            display: inline-block; font-weight: 800; color: #5d4037;
+            background: #efebe9; padding: 1px 8px; border-radius: 10px;
+            font-size: 10.5px; margin-right: 6px; min-width: 38px; text-align: center;
+        }
+        .viz-timeline .viz-tl-desc { color: #3e2723; }
+        .viz-timeline .viz-tl-tip {
+            display: block; margin-top: 4px; padding: 6px 10px;
+            background: #fff8e1; border-left: 3px solid #fbc02d;
+            color: #795548; font-size: 10.5px; line-height: 1.55;
+            border-radius: 0 6px 6px 0;
+        }
         .av-footer {
             padding: 16px 28px; background: #fafaf7; border-top: 1px solid #e8e4d8;
             display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap;
@@ -2616,6 +2694,137 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 return out;
             }
 
+            // ========= 📊 沖煮視覺化元件 =========
+            // 溫度計（顯示最終溫度範圍 + 調整軌跡）
+            function _renderThermometer(params, roastLabel) {
+                const minT = 60, maxT = 100;  // 刻度範圍
+                const toY = t => 170 - ((t - minT) / (maxT - minT)) * 160;  // 溫度越高 Y 越小
+                const lo = params.finalTempLo, hi = params.finalTempHi;
+                const y_hi = toY(hi), y_lo = toY(lo);
+                const barH = y_lo - y_hi;  // 液柱高度（最終區間）
+                // 調整條目
+                const tAdjs = (params.adjustments || []).filter(a => a.axis === 'temp');
+                const cum = tAdjs.reduce((s, a) => s + a.delta, 0);
+                const adjsHtml = tAdjs.length
+                    ? tAdjs.map(a => {
+                        const sign = a.delta > 0 ? '+' : '';
+                        const cls = a.delta > 0 ? 'viz-delta-pos' : 'viz-delta-neg';
+                        return `<div class="viz-adj"><span class="${cls}">${sign}${a.delta}°C</span><span>[${_escHtml(a.stage)}] ${_escHtml(a.reason)}</span></div>`;
+                    }).join('')
+                    : '<div class="viz-adj" style="color:#aaa;">（無調整）</div>';
+                return `
+                <div class="viz-card">
+                    <div class="viz-card-title">🌡️ 水溫</div>
+                    <div class="viz-thermo-row">
+                        <svg class="viz-thermo" viewBox="0 0 60 200" aria-label="溫度計">
+                            <!-- 背景管柱 -->
+                            <rect x="26" y="10" width="8" height="160" rx="4" fill="#eceff1"/>
+                            <!-- 最終溫度區間（液柱）-->
+                            <rect x="26" y="${y_hi.toFixed(1)}" width="8" height="${Math.max(2, barH).toFixed(1)}" rx="4" fill="#e53935"/>
+                            <!-- 整條從底部到 lo 的背景（淺色底座）-->
+                            <rect x="26" y="${y_lo.toFixed(1)}" width="8" height="${(170 - y_lo).toFixed(1)}" fill="#e53935"/>
+                            <!-- 球泡 -->
+                            <circle cx="30" cy="182" r="14" fill="#e53935"/>
+                            <circle cx="30" cy="182" r="9" fill="#c62828"/>
+                            <!-- 刻度 -->
+                            ${[60, 70, 80, 90, 100].map(t => {
+                                const y = toY(t);
+                                return `<line x1="38" y1="${y}" x2="44" y2="${y}" stroke="#90a4ae" stroke-width="1"/><text x="47" y="${y+3}" font-size="7" fill="#607d8b">${t}</text>`;
+                            }).join('')}
+                        </svg>
+                        <div class="viz-thermo-info">
+                            <div class="viz-base">基礎 (${_escHtml(roastLabel || '—')}): ${params.baseTempLo}-${params.baseTempHi}°C</div>
+                            ${adjsHtml}
+                            <div class="viz-final">最終 ${params.finalTempLo}-${params.finalTempHi}°C (累計 ${cum>0?'+':''}${cum}°C)</div>
+                        </div>
+                    </div>
+                </div>`;
+            }
+
+            // 粉水比視覺（杯子 + 咖啡層 + 水層 + 大字比例）
+            function _renderRatioGlass(params) {
+                // 從 params.ratio 字串抽出比例；或直接從 ratioAdj 推
+                // params 有 grindAdj/ratioAdj/tempAdj
+                const m = String(params.ratio || '').match(/1[：:](\d+(?:\.\d+)?)/);
+                const ratio = m ? parseFloat(m[1]) : 15;
+                // 咖啡粉層 vs 水層高度（總高 100）
+                const total = ratio + 1;  // 1 份粉 + N 份水
+                const coffeePct = Math.max(6, 100 / total);  // 至少 6% 才看得見
+                const waterPct = 100 - coffeePct;
+                const coffeeH = (coffeePct / 100) * 90;  // 杯內空間約 90
+                const coffeeY = 115 - coffeeH;
+                const waterH = 90 - coffeeH;
+                const waterY = 25;
+                // 粉重 15g 對應的水量
+                const waterG = Math.round(15 * ratio);
+                const rAdjs = (params.adjustments || []).filter(a => a.axis === 'ratio');
+                const cum = rAdjs.reduce((s, a) => s + a.delta, 0);
+                return `
+                <div class="viz-card">
+                    <div class="viz-card-title">⚖️ 粉水比</div>
+                    <div class="viz-cup-row">
+                        <svg class="viz-cup" viewBox="0 0 80 130" aria-label="粉水比杯">
+                            <!-- 杯身 -->
+                            <path d="M 12 20 L 18 115 Q 19 122 26 122 L 54 122 Q 61 122 62 115 L 68 20 Z"
+                                  fill="#fff" stroke="#5d4037" stroke-width="2"/>
+                            <!-- 水層（淺藍） -->
+                            <rect x="19" y="${waterY}" width="42" height="${waterH.toFixed(1)}"
+                                  fill="#bbdefb" opacity="0.75"/>
+                            <!-- 咖啡粉層（深咖啡） -->
+                            <rect x="19" y="${coffeeY.toFixed(1)}" width="42" height="${coffeeH.toFixed(1)}"
+                                  fill="#4e342e"/>
+                            <!-- 粉顆粒紋路 -->
+                            <circle cx="28" cy="${(coffeeY + coffeeH/2).toFixed(1)}" r="0.8" fill="#3e2723"/>
+                            <circle cx="40" cy="${(coffeeY + coffeeH*0.3).toFixed(1)}" r="0.8" fill="#3e2723"/>
+                            <circle cx="50" cy="${(coffeeY + coffeeH*0.7).toFixed(1)}" r="0.8" fill="#3e2723"/>
+                            <!-- 底座 -->
+                            <ellipse cx="40" cy="125" rx="18" ry="3" fill="#8d6e63" opacity="0.3"/>
+                        </svg>
+                        <div class="viz-cup-info">
+                            <div class="viz-ratio-big">1 : ${ratio}</div>
+                            <div class="viz-ratio-calc">15g 粉 → ${waterG}g 水</div>
+                            <div class="viz-ratio-note">基礎 1:15-1:16<br>累計調整 ${cum>0?'+':''}${cum} 級</div>
+                        </div>
+                    </div>
+                </div>`;
+            }
+
+            // 注水時程時間軸
+            function _renderTimeline(schedule) {
+                if (!schedule || !schedule.length) return '';
+                const rows = schedule.map((line, idx) => {
+                    // 抓時間標記：支援 "0:00 → ..." / "3:00-3:30 → ..." / "📍 下壺..." / "Tip: ..."
+                    const tm = line.match(/^(\d+:\d+(?:-\d+:\d+)?)\s*[→\-]\s*(.+)/);
+                    if (tm) {
+                        const isStart = tm[1].startsWith('0:00');
+                        const isEnd = /滴完|完成|倒出|離火|結束/.test(tm[2]);
+                        const cls = isStart ? 'viz-tl-start' : isEnd ? 'viz-tl-end' : '';
+                        return `<div class="viz-tl-row ${cls}"><span class="viz-tl-time">${_escHtml(tm[1])}</span><span class="viz-tl-desc">${_escHtml(tm[2])}</span></div>`;
+                    }
+                    // 非時點（Tip / 提示）→ 黃色框
+                    return `<div class="viz-tl-row" style="padding-left:0;"><span class="viz-tl-tip">${_escHtml(line)}</span></div>`;
+                }).join('');
+                return `
+                <div class="viz-card">
+                    <div class="viz-card-title">🌊 注水 / 操作時程</div>
+                    <div class="viz-timeline">${rows}</div>
+                </div>`;
+            }
+
+            // 產生三張視覺化卡片的 grid 組合
+            function _renderBrewVisuals(ctx) {
+                try {
+                    const params = computeBrewRecipe(ctx);
+                    return `<div class="viz-grid">
+                        ${_renderThermometer(params, ctx.roastLabel)}
+                        ${_renderRatioGlass(params)}
+                        ${_renderTimeline(params.schedule)}
+                    </div>`;
+                } catch (e) {
+                    return '';  // 失敗不影響原分析文字
+                }
+            }
+
             // ========= 🔬 分析結果全螢幕檢視器 =========
             function _escHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
             function _buildAnalysisSummary(cfg) {
@@ -2693,13 +2902,15 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 const ctx = { country, countryCode, variety, varietyCode, roast, roastLabel, alt, altitude, soil, soilCode, proc, procCode, brew, brewLabel, expected, actual, matched, missing, extra, score };
 
                 const analysisText = (mode === 'roast') ? runLocalRoastAnalysis(ctx) : runLocalBrewAnalysis(ctx);
+                // 沖煮模式 → prepend 三張視覺化卡片（溫度計 / 粉水比杯 / 時間軸）
+                const visualsHtml = (mode === 'sensory') ? _renderBrewVisuals(ctx) : '';
                 openAnalysisViewer({
                     icon: mode === 'roast' ? '🔥' : '💧',
                     title: mode === 'roast' ? '烘焙校對' : '沖煮建議',
                     badgeClass: mode === 'roast' ? 'roast' : 'sensory',
                     badgeText: '本地規則引擎',
                     summaryItems: _buildAnalysisSummary(ctx),
-                    contentHtml: _escHtml(analysisText),
+                    contentHtml: visualsHtml + `<pre class="av-raw">${_escHtml(analysisText)}</pre>`,
                     footerHtml:
                         `<button class="btn btn-purple btn-sm" onclick="runAI('${mode}')">✨ 用 AI 再跑一次（需 API Key）</button>` +
                         `<button class="btn btn-secondary btn-sm" onclick="closeAnalysisViewer()">關閉</button>`
