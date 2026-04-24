@@ -195,6 +195,132 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             font-size: 13px !important; padding: 4px 12px !important;
         }
 
+        /* ========== 🎬 動畫效果 ========== */
+        @keyframes viz-fade-up {
+            from { opacity: 0; transform: translateY(18px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes viz-pop {
+            0% { transform: scale(0.6); opacity: 0; }
+            60% { transform: scale(1.08); opacity: 1; }
+            100% { transform: scale(1); }
+        }
+        @keyframes viz-bar-grow {
+            from { width: 0%; }
+        }
+        @keyframes viz-height-grow {
+            from { height: 0; }
+        }
+        @keyframes viz-draw-gauge {
+            from { stroke-dasharray: 0 999; }
+        }
+        @keyframes viz-thermo-rise {
+            from { transform: scaleY(0); }
+            to { transform: scaleY(1); }
+        }
+        @keyframes viz-water-fill {
+            0% { transform: translateY(100%); }
+            100% { transform: translateY(0); }
+        }
+        @keyframes viz-tick {
+            0% { transform: scale(0); }
+            60% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        @keyframes viz-slide-right {
+            from { opacity: 0; transform: translateX(-12px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* 卡片進場 staggered 動畫 */
+        #analysis-viewer.open .viz-card {
+            animation: viz-fade-up 0.45s cubic-bezier(.22,.8,.33,1) backwards;
+        }
+        #analysis-viewer.open .viz-card:nth-child(1) { animation-delay: 0.05s; }
+        #analysis-viewer.open .viz-card:nth-child(2) { animation-delay: 0.12s; }
+        #analysis-viewer.open .viz-card:nth-child(3) { animation-delay: 0.19s; }
+        #analysis-viewer.open .viz-card:nth-child(4) { animation-delay: 0.26s; }
+        #analysis-viewer.open .viz-card:nth-child(5) { animation-delay: 0.33s; }
+        #analysis-viewer.open .viz-card:nth-child(n+6) { animation-delay: 0.4s; }
+        #analysis-viewer.open .viz-grid { animation: viz-fade-up 0.45s cubic-bezier(.22,.8,.33,1) backwards; }
+        #analysis-viewer.open .viz-grid:nth-of-type(1) { animation-delay: 0s; }
+        #analysis-viewer.open .viz-grid:nth-of-type(2) { animation-delay: 0.1s; }
+        #analysis-viewer.open .viz-grid:nth-of-type(3) { animation-delay: 0.2s; }
+        #analysis-viewer.open .viz-grid:nth-of-type(4) { animation-delay: 0.3s; }
+
+        /* 水平長條漸入 */
+        #analysis-viewer.open .viz-bar-fill,
+        #analysis-viewer.open .viz-diag-bar-fill {
+            animation: viz-bar-grow 0.9s cubic-bezier(.22,.8,.33,1) 0.3s backwards;
+        }
+        #analysis-viewer.open .viz-range-fill {
+            animation: viz-bar-grow 0.9s cubic-bezier(.22,.8,.33,1) 0.4s backwards;
+        }
+        /* 直方圖柱從底部升起 */
+        #analysis-viewer.open .viz-hist-bar {
+            animation: viz-height-grow 0.7s cubic-bezier(.22,.8,.33,1) 0.3s backwards;
+            transform-origin: bottom;
+        }
+        /* 階段比例條漸入 */
+        #analysis-viewer.open .viz-phase-seg {
+            animation: viz-bar-grow 0.8s cubic-bezier(.22,.8,.33,1) 0.35s backwards;
+        }
+        /* SVG gauge 圓環 draw */
+        #analysis-viewer.open .viz-gauge-svg circle:last-of-type {
+            animation: viz-draw-gauge 1.0s cubic-bezier(.22,.8,.33,1) 0.25s backwards;
+        }
+        /* 溫度計液柱 */
+        #analysis-viewer.open .viz-thermo rect[fill="#e53935"] {
+            animation: viz-thermo-rise 0.8s cubic-bezier(.22,.8,.33,1) 0.35s backwards;
+            transform-origin: 30px 180px;
+        }
+        /* 粉水比杯：水與粉層填滿 */
+        #analysis-viewer.open .viz-cup rect {
+            animation: viz-water-fill 0.7s cubic-bezier(.22,.8,.33,1) 0.4s backwards;
+            transform-origin: center bottom;
+        }
+        /* 時間軸節點 pop */
+        #analysis-viewer.open .viz-tl-row::before {
+            animation: viz-tick 0.4s cubic-bezier(.34,1.56,.64,1) backwards;
+        }
+        #analysis-viewer.open .viz-tl-row:nth-child(1)::before { animation-delay: 0.3s; }
+        #analysis-viewer.open .viz-tl-row:nth-child(2)::before { animation-delay: 0.4s; }
+        #analysis-viewer.open .viz-tl-row:nth-child(3)::before { animation-delay: 0.5s; }
+        #analysis-viewer.open .viz-tl-row:nth-child(4)::before { animation-delay: 0.6s; }
+        #analysis-viewer.open .viz-tl-row:nth-child(5)::before { animation-delay: 0.7s; }
+        #analysis-viewer.open .viz-tl-row:nth-child(6)::before { animation-delay: 0.8s; }
+        #analysis-viewer.open .viz-tl-row:nth-child(n+7)::before { animation-delay: 0.9s; }
+        /* delta chips 依序彈入 */
+        #analysis-viewer.open .viz-diag-delta {
+            animation: viz-pop 0.4s cubic-bezier(.34,1.56,.64,1) backwards;
+        }
+        #analysis-viewer.open .viz-diag-delta:nth-child(1) { animation-delay: 0.5s; }
+        #analysis-viewer.open .viz-diag-delta:nth-child(2) { animation-delay: 0.58s; }
+        #analysis-viewer.open .viz-diag-delta:nth-child(3) { animation-delay: 0.66s; }
+        #analysis-viewer.open .viz-diag-delta:nth-child(4) { animation-delay: 0.74s; }
+        #analysis-viewer.open .viz-diag-delta:nth-child(n+5) { animation-delay: 0.82s; }
+        /* flavor tag 滑入 */
+        #analysis-viewer.open .viz-flavor-tag {
+            animation: viz-slide-right 0.35s cubic-bezier(.22,.8,.33,1) backwards;
+        }
+        #analysis-viewer.open .viz-flavor-tag:nth-child(1) { animation-delay: 0.3s; }
+        #analysis-viewer.open .viz-flavor-tag:nth-child(2) { animation-delay: 0.35s; }
+        #analysis-viewer.open .viz-flavor-tag:nth-child(3) { animation-delay: 0.4s; }
+        #analysis-viewer.open .viz-flavor-tag:nth-child(n+4) { animation-delay: 0.45s; }
+        /* summary KV 漸入 */
+        #analysis-viewer.open .av-summary .av-kv {
+            animation: viz-slide-right 0.35s cubic-bezier(.22,.8,.33,1) backwards;
+        }
+        #analysis-viewer.open .av-summary .av-kv:nth-child(1) { animation-delay: 0.05s; }
+        #analysis-viewer.open .av-summary .av-kv:nth-child(2) { animation-delay: 0.1s; }
+        #analysis-viewer.open .av-summary .av-kv:nth-child(3) { animation-delay: 0.15s; }
+        #analysis-viewer.open .av-summary .av-kv:nth-child(4) { animation-delay: 0.2s; }
+        /* counter 數字爆點 */
+        .viz-counter { display: inline-block; }
+        #analysis-viewer.open .viz-counter {
+            animation: viz-pop 0.5s cubic-bezier(.34,1.56,.64,1) 0.25s backwards;
+        }
+
         /* 📊 沖煮視覺化卡片 */
         .viz-grid {
             display: grid;
@@ -3160,7 +3286,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                             <circle cx="65" cy="65" r="${R}" fill="none" stroke="${color}" stroke-width="12"
                                     stroke-dasharray="${dash} ${C}" stroke-linecap="round"
                                     transform="rotate(-90 65 65)" style="transition: stroke-dasharray 0.6s ease-out;"/>
-                            <text x="65" y="62" text-anchor="middle" font-size="28" font-weight="800" fill="#3e2723">${pct}%</text>
+                            <text x="65" y="62" text-anchor="middle" font-size="28" font-weight="800" fill="#3e2723" data-count-to="${pct}" data-count-suffix="%">${pct}%</text>
                             <text x="65" y="82" text-anchor="middle" font-size="10" fill="#888" font-weight="600">MATCH</text>
                         </svg>
                         <div class="viz-gauge-label" style="color:${color};">${label}</div>
@@ -3315,7 +3441,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
                         <div>
                             <div style="font-size:13px; color:#8d6e63; font-weight:700;">入豆溫 (Charge)</div>
-                            <div style="font-size:28px; font-weight:900; color:#e65100; margin: 6px 0;">${profile.chargeTemp}°C</div>
+                            <div style="font-size:28px; font-weight:900; color:#e65100; margin: 6px 0;" data-count-to="${profile.chargeTemp}" data-count-suffix="°C">${profile.chargeTemp}°C</div>
                             <div style="font-size:12.5px; color:#666;">${chargeAdjs.length ? '累計 ' + (chargeCum>0?'+':'') + chargeCum + '°C' : '基準值'}</div>
                             ${chargeAdjs.map(a => `<div style="font-size:12.5px; color:#555; margin-top:5px; line-height:1.55;">${a.delta>0?'+':''}${a.delta}°C · ${_escHtml(a.stage)}</div>`).join('')}
                         </div>
@@ -4013,6 +4139,29 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                     { k: '👅 實際', v: (cfg.actual && cfg.actual.join('、')) || '（未選取）' }
                 ];
             }
+            // 🎬 counter 動畫：找出 data-count-to 的元素，從 0 跑到目標值
+            function _animateCounters(root) {
+                const els = root.querySelectorAll('[data-count-to]');
+                els.forEach(el => {
+                    const to = parseFloat(el.dataset.countTo);
+                    if (isNaN(to)) return;
+                    const decimals = parseInt(el.dataset.countDecimals || '0');
+                    const duration = 900;
+                    const start = performance.now();
+                    const suffix = el.dataset.countSuffix || '';
+                    const step = (now) => {
+                        const t = Math.min(1, (now - start) / duration);
+                        // ease-out cubic
+                        const eased = 1 - Math.pow(1 - t, 3);
+                        const val = to * eased;
+                        el.textContent = (decimals > 0 ? val.toFixed(decimals) : Math.round(val)) + suffix;
+                        if (t < 1) requestAnimationFrame(step);
+                        else el.textContent = (decimals > 0 ? to.toFixed(decimals) : Math.round(to)) + suffix;
+                    };
+                    requestAnimationFrame(step);
+                });
+            }
+
             window.openAnalysisViewer = function(opts) {
                 document.getElementById('av-icon').textContent = opts.icon || '🔬';
                 document.getElementById('av-title-text').textContent = opts.title || '分析結果';
@@ -4027,7 +4176,11 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 const v = document.getElementById('analysis-viewer');
                 v.style.display = 'block';
                 // 下一幀才加 open class 讓 transition 起作用
-                requestAnimationFrame(() => v.classList.add('open'));
+                requestAnimationFrame(() => {
+                    v.classList.add('open');
+                    // counter 動畫延遲 250ms（配合卡片 fade-up 時序）
+                    setTimeout(() => _animateCounters(v), 250);
+                });
                 document.body.style.overflow = 'hidden';
             };
             window.closeAnalysisViewer = function() {
@@ -4302,7 +4455,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                             <circle cx="65" cy="65" r="${R}" fill="none" stroke="${color}" stroke-width="10"
                                     stroke-dasharray="${dash.toFixed(1)} ${C.toFixed(1)}" stroke-linecap="round"
                                     transform="rotate(-90 65 65)"/>
-                            <text x="65" y="62" text-anchor="middle" font-size="22" font-weight="800" fill="#3e2723">${pct.toFixed(0)}%</text>
+                            <text x="65" y="62" text-anchor="middle" font-size="22" font-weight="800" fill="#3e2723" data-count-to="${pct.toFixed(0)}" data-count-suffix="%">${pct.toFixed(0)}%</text>
                             <text x="65" y="80" text-anchor="middle" font-size="10" fill="#888" font-weight="600">${label}</text>
                         </svg>
                         <div class="viz-gauge-sublabel">${sub}</div>
@@ -4333,7 +4486,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                             <div class="viz-card">
                                 <div class="viz-card-title">📅 今日複習</div>
                                 <div style="text-align:center; padding: 16px 0 8px;">
-                                    <div style="font-size: 48px; font-weight: 900; color: #e65100;">${dueCount}</div>
+                                    <div style="font-size: 48px; font-weight: 900; color: #e65100;" data-count-to="${dueCount}">${dueCount}</div>
                                     <div style="font-size: 13px; color: #888;">張到期 / 未學</div>
                                     <button class="btn btn-accent btn-full" style="margin-top:12px;" onclick="closeAnalysisViewer(); startFlashcard();">🎴 開始今日學習</button>
                                 </div>
