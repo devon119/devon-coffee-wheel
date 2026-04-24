@@ -210,6 +210,97 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             0%, 100% { transform: rotate(0); }
             15%, 85% { transform: rotate(-28deg); }
         }
+        /* ------ 9 種手沖手法客製 kettle 注水時序（10 秒一輪）------ */
+        /* 三段式：3 段均勻 */
+        @keyframes im-kettle-classic_3 {
+            0%, 4%, 26%, 36%, 58%, 68%, 90%, 100% { transform: rotate(0); }
+            5%, 25%, 37%, 57%, 69%, 89% { transform: rotate(-28deg); }
+        }
+        @keyframes im-water-classic_3 {
+            0%, 4%, 26%, 36%, 58%, 68%, 90%, 100% { opacity: 0; }
+            5%, 25%, 37%, 57%, 69%, 89% { opacity: 1; }
+        }
+        /* 一刀流：1 段長注水 */
+        @keyframes im-kettle-single_pour {
+            0%, 4%, 90%, 100% { transform: rotate(0); }
+            5%, 89% { transform: rotate(-32deg); }
+        }
+        @keyframes im-water-single_pour {
+            0%, 4%, 90%, 100% { opacity: 0; }
+            5%, 89% { opacity: 1; }
+        }
+        /* 四六法：5 段細分 */
+        @keyframes im-kettle-kasuya_46 {
+            0%, 2%, 16%, 20%, 34%, 38%, 52%, 56%, 70%, 74%, 88%, 100% { transform: rotate(0); }
+            3%, 15%, 21%, 33%, 39%, 51%, 57%, 69%, 75%, 87% { transform: rotate(-28deg); }
+        }
+        @keyframes im-water-kasuya_46 {
+            0%, 2%, 16%, 20%, 34%, 38%, 52%, 56%, 70%, 74%, 88%, 100% { opacity: 0; }
+            3%, 15%, 21%, 33%, 39%, 51%, 57%, 69%, 75%, 87% { opacity: 1; }
+        }
+        /* 冠軍 Matt Winton：4 段快節奏大水 */
+        @keyframes im-kettle-matt_winton {
+            0%, 2%, 20%, 24%, 42%, 46%, 64%, 68%, 86%, 100% { transform: rotate(0); }
+            3%, 19%, 25%, 41%, 47%, 63%, 69%, 85% { transform: rotate(-35deg); }
+        }
+        @keyframes im-water-matt_winton {
+            0%, 2%, 20%, 24%, 42%, 46%, 64%, 68%, 86%, 100% { opacity: 0; }
+            3%, 19%, 25%, 41%, 47%, 63%, 69%, 85% { opacity: 1; }
+        }
+        /* Lance Hedrick 高磨低溫：2 段慢、強攪拌 */
+        @keyframes im-kettle-lance_hi {
+            0%, 4%, 42%, 50%, 88%, 100% { transform: rotate(0); }
+            5%, 41%, 51%, 87% { transform: rotate(-22deg); }
+        }
+        @keyframes im-water-lance_hi {
+            0%, 4%, 42%, 50%, 88%, 100% { opacity: 0; }
+            5%, 41%, 51%, 87% { opacity: 1; }
+        }
+        /* Hoffmann Ultimate：2 段 + 粉床旋轉 Spin */
+        @keyframes im-kettle-hoffmann_ult {
+            0%, 4%, 36%, 44%, 84%, 100% { transform: rotate(0); }
+            5%, 35%, 45%, 83% { transform: rotate(-28deg); }
+        }
+        @keyframes im-water-hoffmann_ult {
+            0%, 4%, 36%, 44%, 84%, 100% { opacity: 0; }
+            5%, 35%, 45%, 83% { opacity: 1; }
+        }
+        /* Scott Rao 連續注水：全程不斷流 */
+        @keyframes im-kettle-scott_rao {
+            0%, 4%, 93%, 100% { transform: rotate(0); }
+            5%, 92% { transform: rotate(-30deg); }
+        }
+        @keyframes im-water-scott_rao {
+            0%, 4%, 93%, 100% { opacity: 0; }
+            5%, 92% { opacity: 1; }
+        }
+        /* Tetsu Iced 冰手沖：3 段 + 下方冰塊 */
+        @keyframes im-kettle-tetsu_ice {
+            0%, 4%, 28%, 34%, 58%, 64%, 88%, 100% { transform: rotate(0); }
+            5%, 27%, 35%, 57%, 65%, 87% { transform: rotate(-28deg); }
+        }
+        @keyframes im-water-tetsu_ice {
+            0%, 4%, 28%, 34%, 58%, 64%, 88%, 100% { opacity: 0; }
+            5%, 27%, 35%, 57%, 65%, 87% { opacity: 1; }
+        }
+        /* 濃縮式 1:10：2 段短小水量 */
+        @keyframes im-kettle-strong_conc {
+            0%, 4%, 30%, 46%, 74%, 100% { transform: rotate(0); }
+            5%, 29%, 47%, 73% { transform: rotate(-20deg); }
+        }
+        @keyframes im-water-strong_conc {
+            0%, 4%, 30%, 46%, 74%, 100% { opacity: 0; }
+            5%, 29%, 47%, 73% { opacity: 1; }
+        }
+        /* ------ 特殊元素動畫 ------ */
+        @keyframes im-rao-spin {
+            from { transform: rotate(0deg); }
+            to   { transform: rotate(-360deg); }
+        }
+        @keyframes im-ice-float {
+            0%, 100% { transform: translateY(0); }
+            50%      { transform: translateY(-3px); }
+        }
         @keyframes im-pulse-grow {
             0%, 100% { transform: scale(1); }
             50%      { transform: scale(1.06); }
@@ -2954,12 +3045,27 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             }
 
             // 手沖食譜專用：依濾杯 + 手法 + 焙度組合生成 schedule
+            // 每個手法的專屬「總時 / 粉量 / 水量 / 風格描述」
+            // 這裡才真正讓 9 種手法 output 不同數字（之前全部看 light/dark 所以看起來一樣）
+            const METHOD_PROFILE = {
+                classic_3:    { totalMin:{ light:'3:00-3:30', mid:'2:30-3:00', dark:'2:20-2:45' }, waterMul:1.00, doseG:15, style:'平衡穩定' },
+                single_pour:  { totalMin:{ light:'2:40-3:00', mid:'2:20-2:45', dark:'2:00-2:30' }, waterMul:0.95, doseG:15, style:'body 最重' },
+                kasuya_46:    { totalMin:{ light:'3:30-4:00', mid:'3:30-4:00', dark:'3:00-3:30' }, waterMul:1.00, doseG:15, style:'5 段、前 40% 定酸甜、後 60% 定濃淡' },
+                matt_winton:  { totalMin:{ light:'2:15-2:30', mid:'2:15-2:30', dark:'2:00-2:15' }, waterMul:1.10, doseG:15, style:'高溫短時大水量' },
+                lance_hi:     { totalMin:{ light:'3:45-4:30', mid:'3:30-4:15', dark:'3:15-4:00' }, waterMul:1.00, doseG:15, style:'極細磨 + 低溫 + 強攪拌' },
+                hoffmann_ult: { totalMin:{ light:'3:00-3:30', mid:'3:00-3:30', dark:'2:45-3:15' }, waterMul:1.00, doseG:15, style:'悶蒸 2x + Rao Spin' },
+                scott_rao:    { totalMin:{ light:'3:00-3:30', mid:'3:00-3:30', dark:'2:45-3:15' }, waterMul:1.00, doseG:15, style:'連續不斷流、水位穩定' },
+                tetsu_ice:    { totalMin:{ light:'2:30-3:00', mid:'2:30-3:00', dark:'2:20-2:50' }, waterMul:0.60, iceMul:0.40, doseG:15, style:'熱萃 60% + 急冷冰塊 40%' },
+                strong_conc:  { totalMin:{ light:'2:30-3:00', mid:'2:30-3:00', dark:'2:30-3:00' }, waterMul:0.63, doseG:15, style:'1:10 濃縮、用水量 150g' }
+            };
+
             function _pourOverRecipe(s, pickGrind) {
                 const { light, dark, finalTempLo: lo, finalTempHi: hi } = s;
                 const dripperKey = s.cfg.dripper || 'v60';
                 const methodKey  = s.cfg.method  || 'classic_3';
                 const D = DRIPPER_INFO[dripperKey] || DRIPPER_INFO.v60;
                 const M = POUR_METHODS[methodKey] || POUR_METHODS.classic_3;
+                const P = METHOD_PROFILE[methodKey] || METHOD_PROFILE.classic_3;
 
                 // 組合調整：濾杯 grind/ratio + 手法 temp/ratio/grind
                 let gAdj = (D.grindAdj || 0) + (M.grindAdj || 0);
@@ -2979,20 +3085,25 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                     ? `1:${(ratioLo-1).toFixed(1)} ~ 1:${ratioLo.toFixed(1)}（深焙補 body）`
                     : `1:${ratioLo.toFixed(1)} ~ 1:${ratioHi.toFixed(1)}`;
 
-                // 總水量（1:16 × 15g ≈ 240g，依 rAdj 微調）
-                const water = Math.round(240 + rAdj * 8);
-                const dose = `15g 粉 → ${water}g 水`;
+                // 總水量：基礎 1:16 × 15g = 240g，再乘 method 的 waterMul
+                const baseWater = Math.round(240 + rAdj * 8);
+                const water = Math.round(baseWater * (P.waterMul || 1));
+                const dose = methodKey === 'tetsu_ice'
+                    ? `${P.doseG}g 粉 → 熱水 ${water}g + 冰塊 ${Math.round(baseWater * P.iceMul)}g`
+                    : methodKey === 'strong_conc'
+                    ? `${P.doseG}g 粉 → ${water}g 水（1:10 濃縮，比一般少約 90g）`
+                    : `${P.doseG}g 粉 → ${water}g 水`;
 
                 // 依 method 產 schedule
                 const schedule = _makePourSchedule(methodKey, dripperKey, light, dark, water, tLo, tHi);
 
-                // 總時 estimate
-                const totalMin = light ? '3:00-3:30' : dark ? '2:20-2:45' : '2:30-3:00';
+                // 總時依 method + 焙度
+                const totalMin = P.totalMin[dark ? 'dark' : light ? 'light' : 'mid'];
 
-                // 食譜尾註：濾杯特性 + 手法原則
+                // 食譜尾註：濾杯特性 + 手法原則 + 手法風格標籤
                 const tail = [
                     `🧪 ${D.name}：${D.note}`,
-                    `🎯 ${M.name}：${M.note}`
+                    `🎯 ${M.name}（${P.style}）：${M.note}`
                 ];
                 return {
                     dose, ratio: ratioText,
@@ -4597,56 +4708,123 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             // ========= 🎬 串場動畫 scenes =========
             // 每段都是 inline SVG（大畫面），10 秒 loop 式動畫；播完再進 analysis viewer
             const IM_SCENES = {
-                // ----- 手沖（V60/Kalita/Origami/Chemex/Clever/Switch/Orea/April/Melitta/Stagg）-----
-                pour_over: (caption) => ({
-                    caption: caption || '☕ 細水慢注…正在沖煮你的咖啡',
+                // ----- 手沖（依手法客製節奏 + 特殊元素）-----
+                pour_over: (caption, opts) => {
+                    const method = (opts && opts.method) || 'classic_3';
+                    const dripperName = (opts && opts.dripperName) || '';
+                    const methodName = (opts && opts.methodName) || '三段式';
+                    const kettleAnim = 'im-kettle-' + method;
+                    const waterAnim = 'im-water-' + method;
+                    // 水滴數 + 密度依手法調整
+                    const dropCount = method === 'scott_rao' ? 14
+                                   : method === 'matt_winton' ? 12
+                                   : method === 'single_pour' ? 10
+                                   : method === 'strong_conc' ? 5
+                                   : method === 'lance_hi' ? 6  // 細水流
+                                   : 8;
+                    // 特殊元素：冰手沖要冰塊、Hoffmann 要 Rao Spin、Lance 細水流
+                    const isIce = method === 'tetsu_ice';
+                    const isHoffmann = method === 'hoffmann_ult';
+                    const isScottRao = method === 'scott_rao';
+                    const isLance = method === 'lance_hi';
+                    // 水溫指示（Lance 低溫、冰手沖兩溫、冠軍高溫）
+                    const tempHint = method === 'lance_hi' ? '🌡️ 88°C 低溫'
+                                   : method === 'matt_winton' ? '🌡️ 94°C 高溫'
+                                   : method === 'tetsu_ice' ? '🌡️ 92°C 熱萃急冷'
+                                   : method === 'strong_conc' ? '💪 1:10 濃縮'
+                                   : '';
+                    return {
+                    caption: caption || `☕ ${methodName}${dripperName ? ' · ' + dripperName : ''} 沖煮中…`,
                     svg: `<svg viewBox="0 0 720 540" preserveAspectRatio="xMidYMid meet">
-                        <!-- 木桌 -->
                         <rect x="0" y="470" width="720" height="70" fill="#4e342e"/>
-                        <!-- 壺（左側、傾斜） -->
-                        <g style="transform-origin: 180px 140px; animation: im-kettle-pour 10s ease-in-out infinite;">
+                        <!-- 壺 -->
+                        <g style="transform-origin: 180px 140px; animation: ${kettleAnim} 10s ease-in-out infinite;">
                             <ellipse cx="180" cy="150" rx="80" ry="60" fill="#455a64"/>
                             <ellipse cx="180" cy="140" rx="70" ry="52" fill="#607d8b"/>
                             <rect x="110" y="80" width="140" height="12" rx="6" fill="#37474f"/>
-                            <!-- 壺嘴 -->
                             <path d="M 255 130 Q 300 110 310 160 L 295 170 Q 285 150 250 155 Z" fill="#607d8b"/>
-                            <!-- 把手 -->
                             <path d="M 100 130 Q 70 130 70 170 L 100 180" fill="none" stroke="#37474f" stroke-width="10" stroke-linecap="round"/>
                         </g>
-                        <!-- 水流（連續水滴）-->
-                        ${Array.from({length: 8}).map((_, i) => `
-                            <circle cx="310" cy="175" r="4" fill="#81d4fa"
-                                style="animation: im-drop 0.9s ease-in ${i*0.15}s infinite; transform-origin: 310px 175px;"/>
-                        `).join('')}
-                        <!-- V60 濾杯（錐形）-->
+                        <!-- 水流容器（同步顯示/隱藏） -->
+                        <g style="animation: ${waterAnim} 10s ease-in-out infinite;">
+                            ${Array.from({length: dropCount}).map((_, i) => `
+                                <circle cx="${310 + (isLance ? 0 : (i%2)*2 - 1)}" cy="175"
+                                    r="${isLance ? 2.5 : isScottRao ? 3 : 4}" fill="#81d4fa"
+                                    style="animation: im-drop ${isScottRao ? 0.5 : 0.9}s ease-in ${i * (isScottRao ? 0.08 : 0.12)}s infinite; transform-origin: 310px 175px;"/>
+                            `).join('')}
+                            ${isScottRao ? '<rect x="308" y="160" width="4" height="90" fill="#81d4fa" opacity="0.45"/>' : ''}
+                        </g>
+                        <!-- V60 濾杯 -->
                         <g style="transform-origin: 360px 300px;">
                             <path d="M 280 230 L 440 230 L 380 360 L 340 360 Z" fill="#e53935" stroke="#b71c1c" stroke-width="3"/>
-                            <!-- 濾紙邊 -->
                             <path d="M 285 235 L 435 235 L 378 355 L 342 355 Z" fill="#fff8e1" opacity="0.5"/>
-                            <!-- 粉床 -->
-                            <ellipse cx="360" cy="240" rx="72" ry="10" fill="#4e342e"/>
-                            <!-- 杯耳 -->
+                            <!-- 粉床（Hoffmann 會旋轉 Rao Spin） -->
+                            <g style="transform-origin: 360px 240px; ${isHoffmann ? 'animation: im-rao-spin 2.5s linear infinite;' : ''}">
+                                <ellipse cx="360" cy="240" rx="72" ry="10" fill="#4e342e"/>
+                                ${isHoffmann ? `
+                                    <circle cx="330" cy="236" r="2" fill="#3e2723"/>
+                                    <circle cx="360" cy="244" r="2" fill="#3e2723"/>
+                                    <circle cx="390" cy="238" r="2" fill="#3e2723"/>
+                                ` : ''}
+                            </g>
                             <path d="M 440 250 Q 480 260 478 290 L 460 290" fill="none" stroke="#b71c1c" stroke-width="6" stroke-linecap="round"/>
                         </g>
-                        <!-- 下方玻璃杯 -->
-                        <path d="M 310 380 L 330 460 L 390 460 L 410 380 Z" fill="none" stroke="#cfd8dc" stroke-width="4"/>
-                        <!-- 咖啡液上升 -->
-                        <rect x="315" y="400" width="90" height="58"
-                            fill="url(#coffee-grad)"
-                            style="transform-origin: center bottom; animation: im-fill-up 9s ease-in-out forwards;"/>
-                        <defs>
-                            <linearGradient id="coffee-grad" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="0%" stop-color="#6d4c41"/>
-                                <stop offset="100%" stop-color="#3e2723"/>
-                            </linearGradient>
-                        </defs>
-                        <!-- 蒸氣 -->
-                        ${Array.from({length: 4}).map((_, i) => `
+                        <!-- 下方容器：冰手沖底下是帶冰的咖啡杯 -->
+                        ${isIce ? `
+                            <path d="M 310 380 L 330 460 L 390 460 L 410 380 Z" fill="rgba(224,247,250,0.2)" stroke="#cfd8dc" stroke-width="4"/>
+                            <rect x="315" y="400" width="90" height="58" fill="url(#coffee-grad-ice)"
+                                  style="transform-origin: center bottom; animation: im-fill-up 9s ease-in-out forwards;"/>
+                            ${Array.from({length:5}).map((_,i) => `
+                                <rect x="${320 + i*17}" y="${395 + (i%2)*8}" width="14" height="14" rx="2"
+                                      fill="rgba(255,255,255,0.85)" stroke="rgba(176,225,235,1)" stroke-width="1"
+                                      style="transform-origin: ${327+i*17}px ${402+(i%2)*8}px; animation: im-ice-float ${1.8+i*0.3}s ease-in-out infinite;"/>
+                            `).join('')}
+                            <defs>
+                                <linearGradient id="coffee-grad-ice" x1="0" y1="0" x2="0" y2="1">
+                                    <stop offset="0%" stop-color="#8d6e63"/>
+                                    <stop offset="100%" stop-color="#4e342e"/>
+                                </linearGradient>
+                            </defs>
+                        ` : `
+                            <path d="M 310 380 L 330 460 L 390 460 L 410 380 Z" fill="none" stroke="#cfd8dc" stroke-width="4"/>
+                            <rect x="315" y="400" width="90" height="58" fill="url(#coffee-grad)"
+                                  style="transform-origin: center bottom; animation: im-fill-up 9s ease-in-out forwards;"/>
+                            <defs>
+                                <linearGradient id="coffee-grad" x1="0" y1="0" x2="0" y2="1">
+                                    <stop offset="0%" stop-color="#6d4c41"/>
+                                    <stop offset="100%" stop-color="#3e2723"/>
+                                </linearGradient>
+                            </defs>
+                        `}
+                        <!-- 蒸氣（冰手沖沒蒸氣）-->
+                        ${isIce ? '' : Array.from({length: 4}).map((_, i) => `
                             <circle cx="${345 + i*8}" cy="390" r="${5 + i}" fill="#fff" opacity="0.6"
                                 style="--sx: ${-15 + i*6}px; animation: im-steam 3s ease-out ${i*0.5}s infinite;"/>
                         `).join('')}
+                        <!-- 右上角：溫度/特殊提示 -->
+                        ${tempHint ? `
+                            <rect x="520" y="60" width="180" height="42" rx="21"
+                                  fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
+                            <text x="610" y="87" text-anchor="middle" font-size="16" font-weight="700" fill="#fff8e1">${tempHint}</text>
+                        ` : ''}
+                        <!-- 右下角：段數指示 -->
+                        <rect x="540" y="410" width="160" height="48" rx="10"
+                              fill="rgba(0,0,0,0.4)" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+                        <text x="620" y="430" text-anchor="middle" font-size="12" fill="#ffe082" font-weight="600">${methodName}</text>
+                        <text x="620" y="450" text-anchor="middle" font-size="11" fill="#ffecb3">${
+                            method === 'kasuya_46' ? '5 段（40/60 法則）' :
+                            method === 'classic_3' ? '3 段（悶蒸 / 中 / 後）' :
+                            method === 'single_pour' ? '1 段（一刀流）' :
+                            method === 'matt_winton' ? '4 段（快節奏高萃）' :
+                            method === 'lance_hi' ? '2 段（細磨低溫）' :
+                            method === 'hoffmann_ult' ? '2 段 + Rao Spin' :
+                            method === 'scott_rao' ? '連續不斷流' :
+                            method === 'tetsu_ice' ? '3 段熱萃 + 急冷' :
+                            method === 'strong_conc' ? '2 段 · 1:10 濃縮' : ''
+                        }</text>
                     </svg>`
-                }),
+                    };
+                },
                 // ----- 義式濃縮 -----
                 espresso: (caption) => ({
                     caption: caption || '⚡ 高壓萃取中…',
@@ -4969,11 +5147,18 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                     } else {
                         const brew = (document.getElementById('sel-brew')||{}).value || 'pour_over';
                         const dripper = (document.getElementById('sel-dripper')||{}).value;
+                        const method = (document.getElementById('sel-method')||{}).value || 'classic_3';
                         sceneKey = _pickBrewScene(brew, dripper);
                         const brewLabel = document.getElementById('sel-brew')?.options[document.getElementById('sel-brew').selectedIndex]?.text || '';
                         const dripperName = (typeof DRIPPER_INFO !== 'undefined' && DRIPPER_INFO[dripper]?.name) || '';
-                        const captionExtra = dripperName ? `（${dripperName}）` : '';
-                        scene = IM_SCENES[sceneKey](`☕ ${brewLabel} 沖煮中…${captionExtra}`);
+                        const methodName = (typeof POUR_METHODS !== 'undefined' && POUR_METHODS[method]?.name) || '';
+                        // 手沖：傳 method 給 scene function 讓它切換動畫節奏與特殊元素
+                        if (sceneKey === 'pour_over') {
+                            scene = IM_SCENES.pour_over(null, { method, methodName, dripperName });
+                        } else {
+                            const captionExtra = dripperName ? `（${dripperName}）` : '';
+                            scene = IM_SCENES[sceneKey](`☕ ${brewLabel} 沖煮中…${captionExtra}`);
+                        }
                     }
                     sceneEl.innerHTML = scene.svg;
                     captionEl.textContent = scene.caption;
