@@ -562,6 +562,8 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             width: 100%; aspect-ratio: 1.15 / 1; display: flex; align-items: center; justify-content: center;
         }
         .ency-detail-hero .ency-hero-svg svg { width: 100%; height: 100%; }
+        .ency-detail-hero #ency-anim-container { aspect-ratio: 1 / 1; }
+        .ency-detail-hero #ency-anim-container svg { width: 100%; height: 100%; display:block; }
         .ency-detail-hero .ency-meta h2 {
             margin: 0 0 6px 0; font-size: 26px; color: #3e2723; font-weight: 900; letter-spacing: 0.5px;
         }
@@ -6850,8 +6852,11 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             </svg>`;
 
             // ========== 手沖手法 9 款 SVG（俯視注水軌跡 + 時間軸）==========
+            // 全域動畫資料 map（key = method id 例如 'classic_3'，動畫播放時讀取）
+            const METHOD_ANIM_DATA = {};
             // 共用底圖：俯視 V60 + 時間軸 frame
             function _encyMethodSvg(opts) {
+                if (opts.animKey) METHOD_ANIM_DATA[opts.animKey] = opts;
                 const { title, pours, timeline, info } = opts;
                 // pours: 注水點 [{cx, cy, num, color, label}]
                 // timeline: [{start_pct, width_pct, color, fill, text}]
@@ -6907,6 +6912,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             }
 
             const ENCY_SVG_M_CLASSIC3 = _encyMethodSvg({
+                animKey: 'classic_3', totalSec: 180,
                 title: '三段式（Classic 3-Pour）',
                 totalTime: '3:00',
                 pours: [
@@ -6929,6 +6935,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             });
 
             const ENCY_SVG_M_SINGLE = _encyMethodSvg({
+                animKey: 'single_pour', totalSec: 210,
                 title: '一刀流（Single Pour）',
                 totalTime: '3:30',
                 pours: [
@@ -6950,6 +6957,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             });
 
             const ENCY_SVG_M_KASUYA = _encyMethodSvg({
+                animKey: 'kasuya_46', totalSec: 210,
                 title: '四六法（粕谷哲 · 2016 WBrC 冠軍）',
                 totalTime: '3:30',
                 pours: [
@@ -6980,6 +6988,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             });
 
             const ENCY_SVG_M_MATTW = _encyMethodSvg({
+                animKey: 'matt_winton', totalSec: 150,
                 title: 'Matt Winton 冠軍配方（2015 WBrC）',
                 totalTime: '2:30',
                 pours: [
@@ -7005,6 +7014,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             });
 
             const ENCY_SVG_M_LANCE = _encyMethodSvg({
+                animKey: 'lance_hi', totalSec: 270,
                 title: 'Lance Hedrick 高磨低溫（淺焙解法）',
                 totalTime: '4:30',
                 pours: [
@@ -7028,6 +7038,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             });
 
             const ENCY_SVG_M_HOFFMANN = _encyMethodSvg({
+                animKey: 'hoffmann_ult', totalSec: 180,
                 title: 'Hoffmann Ultimate V60',
                 totalTime: '3:00',
                 pours: [
@@ -7052,6 +7063,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             });
 
             const ENCY_SVG_M_RAO = _encyMethodSvg({
+                animKey: 'scott_rao', totalSec: 180,
                 title: 'Scott Rao 連續注水',
                 totalTime: '3:00',
                 pours: [
@@ -7073,6 +7085,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             });
 
             const ENCY_SVG_M_TETSU_ICE = _encyMethodSvg({
+                animKey: 'tetsu_ice', totalSec: 180,
                 title: '冰手沖（Iced Pour-Over · 急冷）',
                 totalTime: '3:00',
                 pours: [
@@ -7231,6 +7244,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             });
 
             const ENCY_SVG_M_CONC = _encyMethodSvg({
+                animKey: 'strong_conc', totalSec: 120,
                 title: '濃縮式 1:10（Strong Concentrate）',
                 totalTime: '2:00',
                 pours: [
@@ -10148,6 +10162,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 document.body.style.overflow = 'hidden';
             };
             window.closeEncyclopedia = function() {
+                if (typeof _stopMethodAnim === 'function') _stopMethodAnim();
                 const m = document.getElementById('encyclopedia-modal');
                 m.classList.remove('open');
                 setTimeout(() => { m.style.display = 'none'; }, 250);
@@ -10160,6 +10175,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 document.getElementById('ency-back-btn').style.display = 'none';
             };
             window.encyBack = function() {
+                if (typeof _stopMethodAnim === 'function') _stopMethodAnim();
                 _encyRenderList();
                 document.getElementById('ency-back-btn').style.display = 'none';
                 document.getElementById('ency-tabs').style.display = 'flex';
@@ -10194,7 +10210,265 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                     </div>`;
             }
 
+            // ========== 手沖手法 step-by-step 注水動畫 ==========
+            let _methodAnimTimer = null;
+            let _methodAnimState = { elapsed: 0, paused: false, speed: 12, methodKey: null };
+
+            function _stopMethodAnim() {
+                if (_methodAnimTimer) { clearInterval(_methodAnimTimer); _methodAnimTimer = null; }
+                _methodAnimState.paused = false;
+            }
+            function _formatTimeMS(sec) {
+                const m = Math.floor(sec / 60), s = Math.floor(sec % 60);
+                return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+            }
+
+            function _renderMethodAnimSvg(methodKey) {
+                const data = METHOD_ANIM_DATA[methodKey];
+                if (!data) return '<div style="padding:30px;text-align:center;color:#888;">此手法尚無動畫資料</div>';
+                const totalSec = data.totalSec || 180;
+                const stageBars = (data.timeline || []).map((t, i) => {
+                    const x = 40 + t.start_pct * 4;
+                    const w = t.width_pct * 4;
+                    const fillColor = t.fill || '#fff';
+                    const strokeColor = t.color || '#5d4037';
+                    const safeText = String(t.text).replace(/[<>]/g,'');
+                    return `<rect data-stage-idx="${i}" class="ma-stage-bar" x="${x}" y="380" width="${w}" height="22" fill="${fillColor}" stroke="${strokeColor}" stroke-width="1.5" rx="3"/>` +
+                           `<text x="${x + w/2}" y="395" font-size="9.5" font-weight="700" fill="${strokeColor}" text-anchor="middle" pointer-events="none">${safeText}</text>`;
+                }).join('');
+                const pourDots = (data.pours || []).map((p, i) =>
+                    `<circle id="ma-pour-${i}" cx="${140+p.cx}" cy="${80+p.cy}" r="0" fill="${p.color}" stroke="#fff" stroke-width="2" opacity="0"/>`).join('');
+                return `<svg id="m-anim-svg" viewBox="0 0 480 480" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <radialGradient id="ma-bed" cx="0.5" cy="0.5" r="0.5">
+                            <stop offset="0%" stop-color="#a1887f"/>
+                            <stop offset="100%" stop-color="#5d4037"/>
+                        </radialGradient>
+                        <radialGradient id="ma-water" cx="0.5" cy="0.4" r="0.6">
+                            <stop offset="0%" stop-color="rgba(141, 110, 99, 0.4)"/>
+                            <stop offset="100%" stop-color="rgba(62, 39, 35, 0.7)"/>
+                        </radialGradient>
+                        <linearGradient id="ma-stream" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stop-color="rgba(180, 230, 250, 0.7)"/>
+                            <stop offset="100%" stop-color="rgba(141, 110, 99, 0.85)"/>
+                        </linearGradient>
+                    </defs>
+                    <text x="240" y="22" font-size="14" font-weight="800" fill="#3e2723" text-anchor="middle">${data.title}</text>
+                    <text id="ma-clock" x="240" y="46" font-size="20" font-weight="900" fill="#bf360c" text-anchor="middle">00:00 / ${_formatTimeMS(totalSec)}</text>
+                    <rect x="40" y="58" width="400" height="6" fill="#efebe9" rx="3"/>
+                    <rect id="ma-progress" x="40" y="58" width="0" height="6" fill="#e65100" rx="3"/>
+                    <g transform="translate(140 80)">
+                        <circle cx="100" cy="100" r="92" fill="#fffaf3" stroke="#a1887f" stroke-width="2"/>
+                        <g stroke="#bcaaa4" stroke-width="0.8" opacity="0.55" fill="none">
+                            <circle cx="100" cy="100" r="82"/><circle cx="100" cy="100" r="68"/>
+                            <circle cx="100" cy="100" r="54"/><circle cx="100" cy="100" r="38"/>
+                            <circle cx="100" cy="100" r="22"/>
+                        </g>
+                        <circle id="ma-bed" cx="100" cy="100" r="62" fill="url(#ma-bed)" opacity="0.7"/>
+                        <circle id="ma-water" cx="100" cy="100" r="0" fill="url(#ma-water)"/>
+                        <circle id="ma-rip1" cx="100" cy="100" r="0" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="2" opacity="0"/>
+                        <circle id="ma-rip2" cx="100" cy="100" r="0" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="1.8" opacity="0"/>
+                        <line id="ma-stream" x1="100" y1="-20" x2="100" y2="80" stroke="url(#ma-stream)" stroke-width="0" stroke-linecap="round"/>
+                        <g id="ma-bubbles" opacity="0">
+                            <circle cx="80" cy="90" r="3" fill="rgba(255,255,255,0.7)"/>
+                            <circle cx="120" cy="85" r="2.5" fill="rgba(255,255,255,0.7)"/>
+                            <circle cx="100" cy="115" r="3.5" fill="rgba(255,255,255,0.7)"/>
+                            <circle cx="85" cy="120" r="2" fill="rgba(255,255,255,0.7)"/>
+                            <circle cx="125" cy="118" r="2.8" fill="rgba(255,255,255,0.7)"/>
+                            <circle cx="115" cy="95" r="2" fill="rgba(255,255,255,0.7)"/>
+                        </g>
+                        <circle id="ma-center" cx="100" cy="100" r="0" fill="#fff" opacity="0"/>
+                    </g>
+                    <text id="ma-stage" x="240" y="320" font-size="15" font-weight="800" fill="#5d4037" text-anchor="middle">準備開始...</text>
+                    <text id="ma-action" x="240" y="342" font-size="12" fill="#8d6e63" text-anchor="middle" font-style="italic"></text>
+                    <line x1="40" y1="372" x2="440" y2="372" stroke="#3e2723" stroke-width="1.5"/>
+                    ${stageBars}
+                    ${pourDots}
+                </svg>`;
+            }
+
+            function _runMethodAnim(methodKey, opts) {
+                _stopMethodAnim();
+                _methodAnimState = { elapsed: 0, paused: false, speed: (opts && opts.speed) || 12, methodKey };
+                const data = METHOD_ANIM_DATA[methodKey];
+                if (!data) return;
+                const totalSec = data.totalSec || 180;
+                const tickMs = 50;
+                _methodAnimTimer = setInterval(() => {
+                    if (_methodAnimState.paused) return;
+                    _methodAnimState.elapsed += tickMs;
+                    const realSec = (_methodAnimState.elapsed / 1000) * _methodAnimState.speed;
+                    const pct = Math.min(100, (realSec / totalSec) * 100);
+                    _updateMethodAnimFrame(realSec, pct, totalSec);
+                    if (realSec >= totalSec) {
+                        _stopMethodAnim();
+                        const stageEl = document.getElementById('ma-stage');
+                        if (stageEl) stageEl.textContent = '✅ 完成！';
+                        const actionEl = document.getElementById('ma-action');
+                        if (actionEl) actionEl.textContent = '輕轉杯 → 聞乾香 → 喝';
+                        const pauseBtn = document.getElementById('m-anim-pause-btn');
+                        if (pauseBtn) pauseBtn.textContent = '🔁 重播';
+                    }
+                }, tickMs);
+            }
+
+            function _updateMethodAnimFrame(realSec, pct, totalSec) {
+                const data = METHOD_ANIM_DATA[_methodAnimState.methodKey];
+                if (!data) return;
+                const clock = document.getElementById('ma-clock');
+                if (clock) clock.textContent = `${_formatTimeMS(realSec)} / ${_formatTimeMS(totalSec)}`;
+                const prog = document.getElementById('ma-progress');
+                if (prog) prog.setAttribute('width', String(400 * pct / 100));
+                const timeline = data.timeline || [];
+                let currentStage = null, currentIdx = -1;
+                timeline.forEach((t, i) => {
+                    if (pct >= t.start_pct && pct < t.start_pct + t.width_pct + 0.01) {
+                        currentStage = t; currentIdx = i;
+                    }
+                });
+                document.querySelectorAll('.ma-stage-bar').forEach((bar, i) => {
+                    if (i === currentIdx) {
+                        bar.style.filter = 'drop-shadow(0 0 6px rgba(230,81,0,0.7))';
+                        bar.setAttribute('stroke-width', '2.5');
+                    } else {
+                        bar.style.filter = '';
+                        bar.setAttribute('stroke-width', '1.5');
+                    }
+                });
+                const stageEl = document.getElementById('ma-stage');
+                if (stageEl && currentStage) stageEl.textContent = currentStage.text;
+                const stageText = currentStage ? currentStage.text : '';
+                const isBloom = /Bloom|悶蒸|燙紙/.test(stageText);
+                const isPour = /注|段|刀|連續|spin|Spin|搖/.test(stageText);
+                const isWait = /流|完|靜|待/.test(stageText);
+
+                const stream = document.getElementById('ma-stream');
+                const rip1 = document.getElementById('ma-rip1');
+                const rip2 = document.getElementById('ma-rip2');
+                const center = document.getElementById('ma-center');
+                if (isPour || isBloom) {
+                    if (stream) stream.setAttribute('stroke-width', String(4 + Math.sin(realSec * 6) * 1.2));
+                    const ripT = (realSec * 1.5) % 1;
+                    if (rip1) {
+                        rip1.setAttribute('r', String(8 + ripT * 35));
+                        rip1.setAttribute('opacity', String(0.7 - ripT * 0.7));
+                    }
+                    const r2t = ((realSec * 1.5) + 0.5) % 1;
+                    if (rip2) {
+                        rip2.setAttribute('r', String(8 + r2t * 35));
+                        rip2.setAttribute('opacity', String(0.6 - r2t * 0.6));
+                    }
+                    if (center) {
+                        center.setAttribute('r', String(5 + Math.sin(realSec * 8) * 2));
+                        center.setAttribute('opacity', '0.85');
+                    }
+                } else {
+                    if (stream) stream.setAttribute('stroke-width', '0');
+                    if (rip1) rip1.setAttribute('opacity', '0');
+                    if (rip2) rip2.setAttribute('opacity', '0');
+                    if (center) center.setAttribute('opacity', '0');
+                }
+
+                const water = document.getElementById('ma-water');
+                if (water) {
+                    let pourProgress = 0, drainProgress = 0;
+                    timeline.forEach(t => {
+                        const tEnd = t.start_pct + t.width_pct;
+                        const isP = /注|Bloom|悶蒸|刀|連續|搖/.test(t.text);
+                        const isD = /流|完|靜|待/.test(t.text);
+                        if (pct >= tEnd) {
+                            if (isP) pourProgress += t.width_pct;
+                            if (isD) drainProgress += t.width_pct;
+                        } else if (pct > t.start_pct) {
+                            const partial = (pct - t.start_pct) / t.width_pct;
+                            if (isP) pourProgress += t.width_pct * partial;
+                            if (isD) drainProgress += t.width_pct * partial;
+                        }
+                    });
+                    const radius = Math.max(0, Math.min(60, pourProgress * 0.7 - drainProgress * 0.5));
+                    water.setAttribute('r', String(radius));
+                }
+
+                const bubbles = document.getElementById('ma-bubbles');
+                if (bubbles) bubbles.setAttribute('opacity', isBloom ? String(0.5 + Math.sin(realSec * 4) * 0.3) : '0');
+
+                const bed = document.getElementById('ma-bed');
+                if (bed) {
+                    if (isBloom) bed.setAttribute('r', String(64 + Math.sin(realSec * 3) * 2));
+                    else if (isPour) { bed.setAttribute('r', '64'); bed.setAttribute('opacity', '0.85'); }
+                    else { bed.setAttribute('r', '62'); bed.setAttribute('opacity', '0.7'); }
+                }
+
+                (data.pours || []).forEach((p, i) => {
+                    const dot = document.getElementById('ma-pour-' + i);
+                    if (!dot) return;
+                    const stageNum = String(p.num);
+                    if (currentStage && currentStage.text.includes(stageNum)) {
+                        dot.setAttribute('opacity', '1');
+                        dot.setAttribute('r', String((p.r || 7) + Math.sin(realSec * 8) * 2));
+                    } else {
+                        dot.setAttribute('opacity', '0');
+                        dot.setAttribute('r', '0');
+                    }
+                });
+
+                const actionEl = document.getElementById('ma-action');
+                if (actionEl) {
+                    if (isBloom) actionEl.textContent = '中心向外螺旋沾濕全粉、等待 CO₂ 釋放';
+                    else if (isPour) actionEl.textContent = '中心向外螺旋注水、再回中心、避免碰邊緣';
+                    else if (isWait) actionEl.textContent = '靜待水流下、不再做動作';
+                    else actionEl.textContent = '';
+                }
+            }
+
+            window.startMethodAnimation = function(key, speed) {
+                const container = document.getElementById('ency-anim-container');
+                if (!container) return;
+                container.innerHTML = _renderMethodAnimSvg(key);
+                container.style.display = 'block';
+                _runMethodAnim(key, { speed: speed || 12 });
+                const ctrl = document.getElementById('m-anim-controls');
+                if (ctrl) ctrl.style.display = 'flex';
+                const heroSvg = document.querySelector('.ency-detail-hero .ency-hero-svg');
+                if (heroSvg) heroSvg.style.display = 'none';
+                _highlightSpeedBtn(speed || 12);
+                const pauseBtn = document.getElementById('m-anim-pause-btn');
+                if (pauseBtn) pauseBtn.textContent = '⏸️ 暫停';
+            };
+            window.pauseMethodAnimation = function() {
+                if (!_methodAnimTimer && _methodAnimState.methodKey) {
+                    startMethodAnimation(_methodAnimState.methodKey, _methodAnimState.speed);
+                    return;
+                }
+                _methodAnimState.paused = !_methodAnimState.paused;
+                const btn = document.getElementById('m-anim-pause-btn');
+                if (btn) btn.textContent = _methodAnimState.paused ? '▶ 繼續' : '⏸️ 暫停';
+            };
+            window.stopMethodAnimation = function() {
+                _stopMethodAnim();
+                const container = document.getElementById('ency-anim-container');
+                const ctrl = document.getElementById('m-anim-controls');
+                const heroSvg = document.querySelector('.ency-detail-hero .ency-hero-svg');
+                if (container) { container.innerHTML = ''; container.style.display = 'none'; }
+                if (ctrl) ctrl.style.display = 'none';
+                if (heroSvg) heroSvg.style.display = '';
+            };
+            window.changeAnimSpeed = function(speed) {
+                _methodAnimState.speed = speed;
+                _highlightSpeedBtn(speed);
+            };
+            function _highlightSpeedBtn(speed) {
+                document.querySelectorAll('.m-anim-speed-btn').forEach(btn => {
+                    if (parseFloat(btn.dataset.speed) === speed) {
+                        btn.style.background = '#ffb74d'; btn.style.color = '#3e2723';
+                    } else {
+                        btn.style.background = '#fff'; btn.style.color = '#6d4c41';
+                    }
+                });
+            }
+
             window.showEncyDetail = function(cat, key) {
+                _stopMethodAnim();
                 const it = ENCYCLOPEDIA[cat].items[key];
                 if (!it || it.status !== 'ready') return;
                 document.getElementById('ency-back-btn').style.display = 'inline-block';
@@ -10230,10 +10504,25 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 document.getElementById('ency-body').innerHTML = `
                     <div class="ency-detail-hero">
                         <div class="ency-hero-svg">${it.heroSvg || ''}</div>
+                        <div id="ency-anim-container" style="display:none; width:100%;"></div>
                         <div class="ency-meta">
                             <h2>${_escHtml(it.name)}</h2>
                             <div class="ency-subtitle">${_escHtml(it.subtitle || it.tagline)}</div>
                             <div class="ency-chip-row">${chips}</div>
+                            ${(cat === 'method' && METHOD_ANIM_DATA[key]) ? `
+                            <div style="margin-top:14px; display:flex; flex-wrap:wrap; gap:8px;">
+                                <button class="btn btn-accent btn-sm" onclick="startMethodAnimation('${key}', 12)" style="font-size:13px;">▶️ 看 12x 加速演示</button>
+                                <button class="btn btn-secondary btn-sm" onclick="startMethodAnimation('${key}', 1)" style="font-size:13px;">⏱️ 1x 真實時間（練習用）</button>
+                            </div>
+                            <div id="m-anim-controls" style="display:none; margin-top:10px; flex-wrap:wrap; gap:6px; align-items:center;">
+                                <span style="font-size:12px; color:#6d4c41; font-weight:700;">速度：</span>
+                                <button class="m-anim-speed-btn" data-speed="1"  onclick="changeAnimSpeed(1)"  style="background:#fff; color:#6d4c41; border:1.5px solid #d7ccc8; border-radius:14px; padding:4px 10px; font-size:12px; font-weight:700; cursor:pointer;">1x</button>
+                                <button class="m-anim-speed-btn" data-speed="4"  onclick="changeAnimSpeed(4)"  style="background:#fff; color:#6d4c41; border:1.5px solid #d7ccc8; border-radius:14px; padding:4px 10px; font-size:12px; font-weight:700; cursor:pointer;">4x</button>
+                                <button class="m-anim-speed-btn" data-speed="12" onclick="changeAnimSpeed(12)" style="background:#ffb74d; color:#3e2723; border:1.5px solid #d7ccc8; border-radius:14px; padding:4px 10px; font-size:12px; font-weight:700; cursor:pointer;">12x</button>
+                                <button id="m-anim-pause-btn" onclick="pauseMethodAnimation()" style="background:#1976d2; color:#fff; border:none; border-radius:14px; padding:4px 12px; font-size:12px; font-weight:700; cursor:pointer;">⏸️ 暫停</button>
+                                <button onclick="stopMethodAnimation()" style="background:#fff; color:#c62828; border:1.5px solid #c62828; border-radius:14px; padding:4px 12px; font-size:12px; font-weight:700; cursor:pointer;">✕ 停止</button>
+                            </div>
+                            ` : ''}
                         </div>
                     </div>
                     ${specs ? `<div class="ency-block">
