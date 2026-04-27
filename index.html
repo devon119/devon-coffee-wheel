@@ -7370,6 +7370,236 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 <text x="400" y="100" font-size="30">⚡</text>`
             });
 
+            // ========== 處理法 hero SVG helper（流程圖式）==========
+            function _encyProcessSvg(opts) {
+                return `<svg viewBox="0 0 480 420" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="pr-bg-${opts.id}" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stop-color="${opts.bg1}"/>
+                            <stop offset="100%" stop-color="${opts.bg2}"/>
+                        </linearGradient>
+                    </defs>
+                    <rect width="480" height="420" fill="url(#pr-bg-${opts.id})" rx="16"/>
+                    <text x="240" y="58" font-size="13" font-weight="800" fill="${opts.tcolor||'#3e2723'}" text-anchor="middle" letter-spacing="3">${opts.subtitle||''}</text>
+                    ${opts.scene || ''}
+                    <!-- 流程：櫻桃果 → 處理 → 生豆 -->
+                    <g transform="translate(70 320)">
+                        <circle cx="0" cy="0" r="24" fill="#b71c1c"/>
+                        <circle cx="0" cy="0" r="20" fill="#e53935"/>
+                        <circle cx="-3" cy="-5" r="5" fill="#ffcdd2" opacity="0.7"/>
+                        <line x1="0" y1="-22" x2="-2" y2="-30" stroke="#388e3c" stroke-width="2.5"/>
+                        <text x="0" y="42" font-size="11" font-weight="700" fill="${opts.tcolor||'#3e2723'}" text-anchor="middle">紅咖啡果</text>
+                    </g>
+                    <path d="M 110 320 L 200 320" stroke="${opts.tcolor||'#3e2723'}" stroke-width="2.5" marker-end="url(#pa-${opts.id})"/>
+                    <defs>
+                        <marker id="pa-${opts.id}" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto">
+                            <polygon points="0 0, 8 3, 0 6" fill="${opts.tcolor||'#3e2723'}"/>
+                        </marker>
+                    </defs>
+                    <g transform="translate(240 320)">
+                        ${opts.midIcon}
+                        <text x="0" y="42" font-size="11" font-weight="700" fill="${opts.tcolor||'#3e2723'}" text-anchor="middle">${opts.midLabel}</text>
+                    </g>
+                    <path d="M 280 320 L 370 320" stroke="${opts.tcolor||'#3e2723'}" stroke-width="2.5" marker-end="url(#pa-${opts.id})"/>
+                    <g transform="translate(410 320)">
+                        <ellipse cx="0" cy="0" rx="22" ry="14" fill="#388e3c"/>
+                        <ellipse cx="0" cy="0" rx="18" ry="11" fill="#66bb6a"/>
+                        <line x1="0" y1="-12" x2="0" y2="12" stroke="#1b5e20" stroke-width="2"/>
+                        <text x="0" y="42" font-size="11" font-weight="700" fill="${opts.tcolor||'#3e2723'}" text-anchor="middle">綠色生豆</text>
+                    </g>
+                    <text x="240" y="395" font-size="22" font-weight="900" fill="${opts.tcolor||'#3e2723'}" text-anchor="middle">${opts.name}</text>
+                </svg>`;
+            }
+
+            const ENCY_PROC_WASHED = _encyProcessSvg({
+                id: 'washed', name: '水洗 Washed', subtitle: '乾淨明亮 · 精品主流',
+                bg1: '#e1f5fe', bg2: '#4fc3f7',
+                scene: `<!-- 水池 -->
+                    <ellipse cx="240" cy="180" rx="160" ry="60" fill="#0277bd" opacity="0.6"/>
+                    <ellipse cx="240" cy="170" rx="155" ry="50" fill="#039be5" opacity="0.7"/>
+                    <ellipse cx="240" cy="160" rx="150" ry="40" fill="#29b6f6"/>
+                    <!-- 水波 -->
+                    <path d="M 100 160 Q 130 152 160 160 Q 190 168 220 160" stroke="rgba(255,255,255,0.6)" stroke-width="1.5" fill="none"/>
+                    <path d="M 260 162 Q 290 154 320 162 Q 350 170 380 162" stroke="rgba(255,255,255,0.6)" stroke-width="1.5" fill="none"/>
+                    <!-- 浮選的豆子（重的沉、輕的漂）-->
+                    <circle cx="160" cy="155" r="6" fill="#c62828"/>
+                    <circle cx="200" cy="160" r="6" fill="#c62828"/>
+                    <circle cx="240" cy="158" r="6" fill="#c62828"/>
+                    <circle cx="280" cy="162" r="6" fill="#c62828"/>
+                    <circle cx="320" cy="156" r="6" fill="#c62828"/>
+                    <circle cx="180" cy="200" r="5" fill="#388e3c" opacity="0.7"/>
+                    <circle cx="220" cy="210" r="5" fill="#388e3c" opacity="0.7"/>
+                    <circle cx="260" cy="205" r="5" fill="#388e3c" opacity="0.7"/>
+                    <circle cx="300" cy="215" r="5" fill="#388e3c" opacity="0.7"/>
+                    <text x="240" y="100" font-size="40">💧</text>
+                    <text x="240" y="100" font-size="40" text-anchor="middle">💧</text>
+                    <text x="80" y="115" font-size="28">🚰</text>
+                    <text x="380" y="115" font-size="28">🚰</text>`,
+                midIcon: `<rect x="-25" y="-22" width="50" height="44" fill="#0277bd" rx="4"/>
+                    <text x="0" y="6" font-size="22" text-anchor="middle">💧</text>`,
+                midLabel: '水池發酵 + 水洗去果膠'
+            });
+
+            const ENCY_PROC_NATURAL = _encyProcessSvg({
+                id: 'natural', name: '日曬 Natural', subtitle: '果實完整曬乾 · 水果調',
+                bg1: '#fff8e1', bg2: '#ffb74d',
+                scene: `<!-- 太陽 -->
+                    <circle cx="240" cy="120" r="40" fill="#ffeb3b"/>
+                    <circle cx="240" cy="120" r="32" fill="#ffd54f"/>
+                    <g stroke="#fbc02d" stroke-width="3" stroke-linecap="round">
+                        <line x1="240" y1="60" x2="240" y2="74"/>
+                        <line x1="240" y1="166" x2="240" y2="180"/>
+                        <line x1="180" y1="120" x2="194" y2="120"/>
+                        <line x1="286" y1="120" x2="300" y2="120"/>
+                        <line x1="195" y1="75" x2="205" y2="85"/>
+                        <line x1="275" y1="155" x2="285" y2="165"/>
+                        <line x1="195" y1="165" x2="205" y2="155"/>
+                        <line x1="275" y1="85" x2="285" y2="75"/>
+                    </g>
+                    <text x="240" y="130" font-size="32" text-anchor="middle">☀️</text>
+                    <!-- 曬豆床 -->
+                    <rect x="80" y="220" width="320" height="40" fill="#8d6e63"/>
+                    <rect x="80" y="220" width="320" height="6" fill="#5d4037"/>
+                    <!-- 床上的紅櫻桃果（整顆曬）-->
+                    <g fill="#c62828">
+                        <circle cx="110" cy="245" r="6"/><circle cx="135" cy="245" r="6"/>
+                        <circle cx="160" cy="245" r="6"/><circle cx="185" cy="245" r="6"/>
+                        <circle cx="210" cy="245" r="6"/><circle cx="235" cy="245" r="6"/>
+                        <circle cx="260" cy="245" r="6"/><circle cx="285" cy="245" r="6"/>
+                        <circle cx="310" cy="245" r="6"/><circle cx="335" cy="245" r="6"/>
+                        <circle cx="360" cy="245" r="6"/>
+                    </g>
+                    <!-- 床支腳 -->
+                    <line x1="100" y1="260" x2="100" y2="290" stroke="#5d4037" stroke-width="3"/>
+                    <line x1="380" y1="260" x2="380" y2="290" stroke="#5d4037" stroke-width="3"/>`,
+                midIcon: `<rect x="-25" y="-22" width="50" height="44" fill="#bf360c" rx="4"/>
+                    <text x="0" y="6" font-size="22" text-anchor="middle">☀️</text>`,
+                midLabel: '陽光曬乾 14-21 天'
+            });
+
+            const ENCY_PROC_HONEY = _encyProcessSvg({
+                id: 'honey', name: '蜜處理 Honey', subtitle: '保留果膠 · 黃/紅/黑蜜',
+                bg1: '#fff8e1', bg2: '#ffc107',
+                scene: `<!-- 三色蜜豆比例 -->
+                    <text x="240" y="110" font-size="34" text-anchor="middle">🍯</text>
+                    <!-- 三排不同顏色蜜豆 -->
+                    <g transform="translate(120 180)">
+                        <text x="0" y="-8" font-size="11" font-weight="700" fill="#3e2723" text-anchor="middle">黃蜜</text>
+                        <ellipse cx="0" cy="10" rx="14" ry="9" fill="#fdd835"/>
+                        <ellipse cx="0" cy="10" rx="10" ry="6" fill="#ffe082"/>
+                        <ellipse cx="0" cy="30" rx="14" ry="9" fill="#fdd835"/>
+                        <ellipse cx="0" cy="30" rx="10" ry="6" fill="#ffe082"/>
+                        <text x="0" y="55" font-size="9" fill="#5d4037" text-anchor="middle">25% 果膠</text>
+                    </g>
+                    <g transform="translate(240 180)">
+                        <text x="0" y="-8" font-size="11" font-weight="700" fill="#3e2723" text-anchor="middle">紅蜜</text>
+                        <ellipse cx="0" cy="10" rx="14" ry="9" fill="#e53935"/>
+                        <ellipse cx="0" cy="10" rx="10" ry="6" fill="#ef5350"/>
+                        <ellipse cx="0" cy="30" rx="14" ry="9" fill="#e53935"/>
+                        <ellipse cx="0" cy="30" rx="10" ry="6" fill="#ef5350"/>
+                        <text x="0" y="55" font-size="9" fill="#5d4037" text-anchor="middle">50% 果膠</text>
+                    </g>
+                    <g transform="translate(360 180)">
+                        <text x="0" y="-8" font-size="11" font-weight="700" fill="#3e2723" text-anchor="middle">黑蜜</text>
+                        <ellipse cx="0" cy="10" rx="14" ry="9" fill="#3e2723"/>
+                        <ellipse cx="0" cy="10" rx="10" ry="6" fill="#5d4037"/>
+                        <ellipse cx="0" cy="30" rx="14" ry="9" fill="#3e2723"/>
+                        <ellipse cx="0" cy="30" rx="10" ry="6" fill="#5d4037"/>
+                        <text x="0" y="55" font-size="9" fill="#5d4037" text-anchor="middle">100% 果膠</text>
+                    </g>`,
+                midIcon: `<rect x="-25" y="-22" width="50" height="44" fill="#bf360c" rx="4"/>
+                    <text x="0" y="6" font-size="22" text-anchor="middle">🍯</text>`,
+                midLabel: '保留果膠曬乾'
+            });
+
+            const ENCY_PROC_ANAEROBIC = _encyProcessSvg({
+                id: 'anaerobic', name: '厭氧發酵 Anaerobic', subtitle: '密封發酵 · 藍莓酒香',
+                bg1: '#f3e5f5', bg2: '#9c27b0', tcolor: '#fff',
+                scene: `<!-- 密封發酵桶 -->
+                    <rect x="180" y="120" width="120" height="160" fill="#4a148c" rx="8"/>
+                    <ellipse cx="240" cy="120" rx="60" ry="10" fill="#6a1b9a"/>
+                    <ellipse cx="240" cy="120" rx="55" ry="6" fill="#7b1fa2"/>
+                    <!-- 桶身高光 -->
+                    <rect x="190" y="130" width="6" height="140" fill="rgba(255,255,255,0.3)" rx="3"/>
+                    <!-- 蓋子 -->
+                    <rect x="170" y="105" width="140" height="20" fill="#311b92" rx="3"/>
+                    <circle cx="240" cy="115" r="5" fill="#fff"/>
+                    <!-- CO2 氣泡 -->
+                    <text x="200" y="100" font-size="18" fill="#fff" opacity="0.7">○</text>
+                    <text x="220" y="85" font-size="14" fill="#fff" opacity="0.7">○</text>
+                    <text x="245" y="92" font-size="20" fill="#fff" opacity="0.7">○</text>
+                    <text x="270" y="78" font-size="16" fill="#fff" opacity="0.7">○</text>
+                    <text x="290" y="95" font-size="12" fill="#fff" opacity="0.6">○</text>
+                    <!-- 桶內咖啡果（看不到但暗示） -->
+                    <text x="240" y="220" font-size="40" text-anchor="middle">🍇</text>
+                    <text x="240" y="260" font-size="14" fill="#fff" font-weight="700" text-anchor="middle">CO₂ 環境</text>
+                    <!-- 邊角裝飾 -->
+                    <text x="80" y="115" font-size="28" fill="#fff">🫧</text>
+                    <text x="380" y="115" font-size="28" fill="#fff">🫧</text>`,
+                midIcon: `<rect x="-25" y="-22" width="50" height="44" fill="#4a148c" rx="4"/>
+                    <text x="0" y="6" font-size="20" text-anchor="middle">🛢️</text>`,
+                midLabel: '密封 48-120h'
+            });
+
+            const ENCY_PROC_CARBONIC = _encyProcessSvg({
+                id: 'carbonic', name: '二氧化碳浸漬 Carbonic Maceration', subtitle: '葡萄酒釀造法 · 強烈發酵',
+                bg1: '#fce4ec', bg2: '#c2185b', tcolor: '#fff',
+                scene: `<!-- 葡萄酒桶 -->
+                    <ellipse cx="240" cy="160" rx="110" ry="20" fill="#6d4c41"/>
+                    <rect x="130" y="160" width="220" height="120" fill="#5d4037"/>
+                    <ellipse cx="240" cy="280" rx="110" ry="20" fill="#3e2723"/>
+                    <!-- 桶箍 -->
+                    <rect x="125" y="180" width="230" height="6" fill="#1a1a1a"/>
+                    <rect x="125" y="220" width="230" height="6" fill="#1a1a1a"/>
+                    <rect x="125" y="260" width="230" height="6" fill="#1a1a1a"/>
+                    <!-- 桶身紋理 -->
+                    <line x1="160" y1="170" x2="160" y2="270" stroke="#3e2723" stroke-width="1.5"/>
+                    <line x1="200" y1="170" x2="200" y2="270" stroke="#3e2723" stroke-width="1.5"/>
+                    <line x1="240" y1="170" x2="240" y2="270" stroke="#3e2723" stroke-width="1.5"/>
+                    <line x1="280" y1="170" x2="280" y2="270" stroke="#3e2723" stroke-width="1.5"/>
+                    <line x1="320" y1="170" x2="320" y2="270" stroke="#3e2723" stroke-width="1.5"/>
+                    <!-- CO2 注入符號 -->
+                    <text x="240" y="220" font-size="36" text-anchor="middle">🍷</text>
+                    <text x="240" y="115" font-size="22" fill="#fff" text-anchor="middle" font-weight="800">CO₂ 浸泡</text>
+                    <!-- 邊角 -->
+                    <text x="80" y="140" font-size="26">🍇</text>
+                    <text x="380" y="140" font-size="26">🍇</text>`,
+                midIcon: `<rect x="-25" y="-22" width="50" height="44" fill="#880e4f" rx="4"/>
+                    <text x="0" y="6" font-size="22" text-anchor="middle">🍷</text>`,
+                midLabel: 'CO₂ 桶 5-15 天'
+            });
+
+            const ENCY_PROC_WET_HULLED = _encyProcessSvg({
+                id: 'wet_hulled', name: '濕剝 Wet-Hulled', subtitle: '印尼曼特寧獨有 · 土壤香草',
+                bg1: '#efebe9', bg2: '#5d4037', tcolor: '#fff',
+                scene: `<!-- 火山輪廓 -->
+                    <path d="M 0 280 L 120 130 L 200 200 L 280 100 L 380 220 L 480 180 L 480 300 L 0 300 Z" fill="#3e2723" opacity="0.6"/>
+                    <path d="M 0 290 L 120 160 L 200 220 L 280 130 L 380 240 L 480 200 L 480 320 L 0 320 Z" fill="#1a1a1a" opacity="0.7"/>
+                    <!-- 火山口煙 -->
+                    <text x="280" y="105" font-size="22" fill="#fff" opacity="0.7">💨</text>
+                    <text x="265" y="80" font-size="18" fill="#fff" opacity="0.5">💨</text>
+                    <!-- 濕的綠色生豆（沒乾透就剝殼）-->
+                    <g transform="translate(240 230)">
+                        <ellipse cx="-25" cy="0" rx="14" ry="9" fill="#558b2f"/>
+                        <ellipse cx="-25" cy="-2" rx="11" ry="6" fill="#7cb342"/>
+                        <ellipse cx="0" cy="0" rx="14" ry="9" fill="#558b2f"/>
+                        <ellipse cx="0" cy="-2" rx="11" ry="6" fill="#7cb342"/>
+                        <ellipse cx="25" cy="0" rx="14" ry="9" fill="#558b2f"/>
+                        <ellipse cx="25" cy="-2" rx="11" ry="6" fill="#7cb342"/>
+                        <!-- 水珠 -->
+                        <circle cx="-30" cy="-12" r="2" fill="#bbdefb"/>
+                        <circle cx="-15" cy="-14" r="1.5" fill="#bbdefb"/>
+                        <circle cx="10" cy="-14" r="2" fill="#bbdefb"/>
+                        <circle cx="30" cy="-13" r="1.5" fill="#bbdefb"/>
+                    </g>
+                    <text x="240" y="135" font-size="32" text-anchor="middle">🌋</text>
+                    <text x="80" y="115" font-size="24" fill="#fff">🌧️</text>
+                    <text x="380" y="115" font-size="24" fill="#fff">🌧️</text>`,
+                midIcon: `<rect x="-25" y="-22" width="50" height="44" fill="#1b5e20" rx="4"/>
+                    <text x="0" y="6" font-size="20" text-anchor="middle">🌋</text>`,
+                midLabel: '半乾即剝殼'
+            });
+
             const ENCYCLOPEDIA = {
                 history: {
                     title: '📜 咖啡起源與歷史',
@@ -8086,12 +8316,223 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                     title: '🔄 咖啡處理法',
                     icon: '🔄',
                     items: {
-                        washed:    { name: '水洗 (Washed)',         tagline: '乾淨、明亮、酸質清晰，精品主流', emoji: '💧', status: 'soon' },
-                        natural:   { name: '日曬 (Natural)',        tagline: '果實完整曬乾，水果調與發酵感', emoji: '☀️', status: 'soon' },
-                        honey:     { name: '蜜處理 (Honey)',        tagline: '介於水洗與日曬，分黃/紅/黑蜜', emoji: '🍯', status: 'soon' },
-                        anaerobic: { name: '厭氧發酵 (Anaerobic)',  tagline: '密封發酵：藍莓、酒香、實驗風味', emoji: '🍷', status: 'soon' },
-                        carbonic:  { name: '二氧化碳浸漬',          tagline: '葡萄酒釀造法移植：強烈水果發酵', emoji: '🫧', status: 'soon' },
-                        wet_hulled:{ name: '濕剝 (Wet-Hulled)',     tagline: '印尼曼特寧獨有，土壤香草巧克力', emoji: '🌋', status: 'soon' }
+                        washed: {
+                            name: '水洗 (Washed)', tagline: '乾淨、明亮、酸質清晰，精品主流',
+                            emoji: '💧', status: 'ready', heroSvg: ENCY_PROC_WASHED,
+                            subtitle: '把咖啡櫻桃果採收後，用水池浮選去除瑕疵豆，再去除果皮、發酵 24-72 小時去除果膠，最後水洗乾淨並曬乾。產出最乾淨、明亮、酸質清晰的杯感，是精品咖啡的主流處理法。',
+                            chips: [
+                                { text: '乾淨度高', class: 'green' },
+                                { text: '明亮酸質', class: 'cool' },
+                                { text: '精品主流', class: 'warm' },
+                                { text: '24-72h 發酵' },
+                                { text: '高水資源消耗', class: 'purple' }
+                            ],
+                            specs: [
+                                { k: '步驟', v: '採收 → 浮選 → 去果皮 → 水池發酵 → 水洗 → 曬乾' },
+                                { k: '發酵時間', v: '24-72 小時（水池或乾發酵）' },
+                                { k: '乾燥時間', v: '7-15 天（含水率降到 11%）' },
+                                { k: '水消耗', v: '每公斤豆需 40-60 公升水（高消耗）' },
+                                { k: '招牌風味', v: '乾淨、明亮酸質、層次清晰' },
+                                { k: '主要產區', v: '肯亞、衣索比亞 Yirgacheffe、瓜地馬拉、哥倫比亞' }
+                            ],
+                            origin: [
+                                { year: '17 世紀', text: '荷蘭東印度公司在爪哇開始系統化水洗處理，最早是為了去除果膠便於儲運。' },
+                                { year: '19 世紀', text: '中美洲（哥斯大黎加、瓜地馬拉）採用水洗作為標準處理法。' },
+                                { year: '1970s', text: '肯亞發展「雙重水洗」技術，把水洗推到極致：兩次發酵讓酸質更乾淨突出。' },
+                                { year: '2000s 第三波', text: '精品咖啡浪潮把水洗視為「呈現產區特色」的最佳方式，高品質莊園幾乎都用水洗。' },
+                                { year: '至今', text: '是全球精品咖啡比賽（CoE / WBrC）的標準處理法，但水資源消耗也使一些產區轉向蜜處理。' }
+                            ],
+                            originTitle: '📜 處理法歷史',
+                            tipsTitle: '🍒 風味特性與沖煮建議',
+                            tips: [
+                                { icon: '✨', title: '乾淨度天花板', desc: '水洗 = 沒有發酵雜味、沒有果肉殘留、最能呈現豆子本身的產地特色與品種特性。' },
+                                { icon: '🍋', title: '明亮酸質', desc: '水洗豆的招牌：清晰的酸質。檸檬、葡萄柚、紅醋栗等明亮酸調最常見。' },
+                                { icon: '☕', title: '沖煮：突顯酸甜', desc: '水洗豆適合 Hoffmann / 四六法、92-94°C、放大酸質與層次。' },
+                                { icon: '💧', title: '水資源消耗大', desc: '每公斤豆消耗 40-60 公升水，氣候變遷下產地越來越難承受，催生蜜處理興起。' },
+                                { icon: '🇰🇪', title: '肯亞雙重水洗', desc: '肯亞 AA 用「兩次發酵」+「兩次水洗」技術，是水洗的最高峰，黑醋栗酸質就靠這。' }
+                            ]
+                        },
+                        natural: {
+                            name: '日曬 (Natural)', tagline: '果實完整曬乾、水果調與發酵感',
+                            emoji: '☀️', status: 'ready', heroSvg: ENCY_PROC_NATURAL,
+                            subtitle: '咖啡櫻桃果採收後不去皮、不發酵、整顆鋪在曬豆床上日曬 14-21 天直到果肉乾透。豆子在乾燥過程中吸收果肉的糖分與發酵風味，產出強烈的水果調（藍莓、草莓、葡萄）與發酵感。是最古老也最便宜的處理法。',
+                            chips: [
+                                { text: '最古老處理法', class: 'purple' },
+                                { text: '水果調炸裂', class: 'warm' },
+                                { text: '發酵感', class: 'green' },
+                                { text: '14-21 天曬乾', class: 'cool' },
+                                { text: '低水消耗' }
+                            ],
+                            specs: [
+                                { k: '步驟', v: '採收 → 整顆果實鋪曬豆床 → 日曬乾燥 → 去殼' },
+                                { k: '發酵', v: '無外加發酵、靠果肉自然脫水（約 14-21 天）' },
+                                { k: '乾燥時間', v: '14-21 天（比水洗久 50%）' },
+                                { k: '水消耗', v: '極低（適合缺水產區）' },
+                                { k: '招牌風味', v: '藍莓、草莓、紅葡萄、發酵酒香' },
+                                { k: '主要產區', v: '衣索比亞 Sidamo / Guji、葉門、巴西、巴拿馬' }
+                            ],
+                            origin: [
+                                { year: '~ 850 AD', text: '衣索比亞牧羊人發現咖啡時，沒有水資源，自然採用日曬法。是人類最早的咖啡處理法。' },
+                                { year: '15 世紀葉門', text: '葉門 Mocha 港的咖啡都是日曬，「Mocha = 巧克力咖啡」的招牌風味就來自日曬發酵。' },
+                                { year: '20 世紀', text: '巴西、衣索比亞等水資源不足產區持續採用日曬。但因品質不穩定，曾被認為「次等處理」。' },
+                                { year: '2000s', text: '第三波咖啡浪潮重新評價日曬：發現衣索比亞 Sidamo 日曬豆有驚人的藍莓莓果調，瞬間翻紅。' },
+                                { year: '至今', text: '日曬從「便宜處理」升級為「個性風味」，與水洗並列為精品咖啡的主流處理法。' }
+                            ],
+                            originTitle: '📜 處理法歷史',
+                            tipsTitle: '🍒 風味特性與沖煮建議',
+                            tips: [
+                                { icon: '🫐', title: '藍莓 / 草莓炸彈', desc: '日曬豆招牌：強烈的「藍莓、草莓、紅葡萄」風味。果肉糖分與發酵滲入豆子。' },
+                                { icon: '🍷', title: '發酵酒香', desc: '較重的日曬豆會有「酒香、紅酒醋」感。喜歡的人狂愛、不喜歡的覺得「臭」。' },
+                                { icon: '☕', title: '沖煮：注意過萃', desc: '日曬豆糖分高、易過萃。建議水溫降到 90-92°C、研磨粗一檔。深焙風險高。' },
+                                { icon: '🌍', title: '低水消耗', desc: '不需水池發酵 + 不需水洗 = 低水消耗。氣候變遷下越來越受重視。' },
+                                { icon: '⚠️', title: '品質落差大', desc: '日曬靠天氣，容易出現黴菌、過度發酵等瑕疵。買日曬豆要選好莊園。' }
+                            ]
+                        },
+                        honey: {
+                            name: '蜜處理 (Honey)', tagline: '介於水洗與日曬、黃/紅/黑蜜分級',
+                            emoji: '🍯', status: 'ready', heroSvg: ENCY_PROC_HONEY,
+                            subtitle: '蜜處理（Honey Process）是去果皮但保留部分果膠（mucilage），再帶著果膠曬乾的中間派處理法。果膠本身就是甜的（西語 miel = 蜜），曬乾過程豆子吸收果膠糖分，產生介於水洗（乾淨）與日曬（水果）之間的甜感。依保留果膠多少分黃/紅/黑蜜。',
+                            chips: [
+                                { text: '哥斯大黎加發明', class: 'purple' },
+                                { text: '黃 / 紅 / 黑蜜', class: 'warm' },
+                                { text: '甜感突出', class: 'green' },
+                                { text: '介於水洗與日曬', class: 'cool' },
+                                { text: '低水消耗' }
+                            ],
+                            specs: [
+                                { k: '步驟', v: '採收 → 去果皮 → 保留果膠 → 帶果膠曬乾 → 去殼' },
+                                { k: '黃蜜', v: '保留 25% 果膠、曬乾快、最乾淨' },
+                                { k: '紅蜜', v: '保留 50% 果膠、平衡' },
+                                { k: '黑蜜', v: '保留 100% 果膠、最甜也最易出問題' },
+                                { k: '招牌風味', v: '蜂蜜、紅糖、果乾、圓潤甜感' },
+                                { k: '主要產區', v: '哥斯大黎加（發明地）、薩爾瓦多、巴西' }
+                            ],
+                            origin: [
+                                { year: '1990s 中美洲', text: '哥斯大黎加咖啡農面臨水資源減少，開始實驗「不洗果膠就曬」的處理法，意外發現甜感更強。' },
+                                { year: '2000s', text: '哥斯大黎加 Don Mayo / Las Lajas 等莊園系統化蜜處理，分黃/紅/黑三等級依果膠保留量。' },
+                                { year: '2008-2012', text: '蜜處理進入精品咖啡圈，被視為「水洗的甜感版」，迅速擴散到中南美洲。' },
+                                { year: '至今', text: '是哥斯大黎加 / 巴拿馬 / 薩爾瓦多等中美洲產區的招牌處理法，與水洗並列。' }
+                            ],
+                            originTitle: '📜 處理法歷史',
+                            tipsTitle: '🍒 風味特性與沖煮建議',
+                            tips: [
+                                { icon: '🍯', title: '蜂蜜紅糖甜感', desc: '蜜處理招牌：「蜂蜜、紅糖、果乾」的圓潤甜感。比水洗甜、比日曬乾淨。' },
+                                { icon: '🌈', title: '三色等級', desc: '黃蜜 = 25% 果膠、最乾淨；紅蜜 = 50%、平衡；黑蜜 = 100%、最甜但風險最高。' },
+                                { icon: '☕', title: '沖煮：突顯甜感', desc: '蜜處理豆適合一刀流 / 四六法、92-93°C、放大蜜餞紅糖調。' },
+                                { icon: '⚠️', title: '黑蜜易出問題', desc: '黑蜜保留 100% 果膠，曬乾過程容易發霉、過度發酵。買黑蜜要選頂級莊園。' },
+                                { icon: '💧', title: '比水洗省水', desc: '不需水池發酵 → 比水洗省 80% 水，是氣候友善的處理法。' }
+                            ]
+                        },
+                        anaerobic: {
+                            name: '厭氧發酵 (Anaerobic)', tagline: '密封發酵 · 藍莓酒香 · 第四波代表',
+                            emoji: '🍷', status: 'ready', heroSvg: ENCY_PROC_ANAEROBIC,
+                            subtitle: '把咖啡櫻桃果（去皮或不去皮）放入密封桶，排出氧氣讓乳酸菌主導發酵 48-120 小時，再正常曬乾。產出前所未有的「藍莓、酒香、肉桂、發酵感」風味，是 21 世紀的「咖啡實驗革命」。',
+                            chips: [
+                                { text: '密封無氧發酵', class: 'purple' },
+                                { text: '48-120h', class: 'warm' },
+                                { text: '藍莓 + 酒香', class: 'cool' },
+                                { text: '第四波代表', class: 'green' },
+                                { text: '哥倫比亞 / 巴拿馬' }
+                            ],
+                            specs: [
+                                { k: '步驟', v: '採收 → 入密封桶（去皮/帶皮）→ 排氣 → 發酵 → 取出 → 曬乾' },
+                                { k: '發酵時間', v: '48-120 小時（依風味目標調整）' },
+                                { k: '溫度', v: '可控（18-25°C 是常見區間）' },
+                                { k: '招牌風味', v: '藍莓、紅酒、肉桂、覆盆子、發酵感' },
+                                { k: '價格', v: '是水洗的 2-5 倍（精品實驗豆）' },
+                                { k: '主要產區', v: '哥倫比亞、巴拿馬、哥斯大黎加、衣索比亞' }
+                            ],
+                            origin: [
+                                { year: '2014 巴拿馬', text: 'Saša Šestić（澳洲咖啡冠軍）在巴拿馬翡翠莊園實驗厭氧發酵 Geisha，用葡萄酒釀造的概念。' },
+                                { year: '2015', text: 'Saša 用厭氧 Geisha 拿下 World Barista Championship 冠軍，震驚全球咖啡圈。' },
+                                { year: '2016-2018', text: '哥倫比亞、巴拿馬等產區開始大規模實驗厭氧，產出強烈水果調的精品豆。' },
+                                { year: '2019 衣索比亞', text: '衣索比亞 Heirloom 配厭氧處理，創造出「天然花香 + 強烈發酵」的全新風味類型。' },
+                                { year: '至今', text: '是第四波咖啡的代表處理法，每年都有新的厭氧實驗（雙重厭氧、酒桶熟成厭氧、酵母接種厭氧等）。' }
+                            ],
+                            originTitle: '📜 處理法歷史',
+                            tipsTitle: '🍒 風味特性與沖煮建議',
+                            tips: [
+                                { icon: '🫐', title: '藍莓酒香', desc: '厭氧豆招牌：強烈藍莓、紅酒、肉桂感。喝起來像水果酒，喜歡的狂愛。' },
+                                { icon: '⚗️', title: '科學可控', desc: '厭氧發酵可以精準控制溫度、時間、菌種，是咖啡最「實驗室化」的處理法。' },
+                                { icon: '☕', title: '沖煮：注意過頭', desc: '厭氧豆風味強烈，過萃會苦澀。建議淺焙、水溫 90-92°C（略低）、研磨略粗。' },
+                                { icon: '💰', title: '價格高', desc: '工序複雜 + 產量低 = 價格貴。一支頂級厭氧 Geisha 在精品店要 NT$1500+ / 杯。' },
+                                { icon: '⚠️', title: '不適合所有人', desc: '厭氧的發酵感很重，喜歡乾淨水洗風味的人可能覺得「太怪」。建議先試喝再買。' },
+                                { icon: '🆚', title: 'vs 二氧化碳浸漬', desc: '厭氧 = 自然排氧；二氧化碳浸漬 = 主動注入 CO₂。後者風味更猛烈、更像紅酒。' }
+                            ]
+                        },
+                        carbonic: {
+                            name: '二氧化碳浸漬 (Carbonic Maceration)',
+                            tagline: '葡萄酒釀造法移植 · 強烈水果發酵',
+                            emoji: '🫧', status: 'ready', heroSvg: ENCY_PROC_CARBONIC,
+                            subtitle: '從法國博若萊（Beaujolais）葡萄酒的釀造法移植到咖啡。把整顆咖啡櫻桃果放入注滿 CO₂ 的密封桶，在無氧 + 高 CO₂ 環境下發酵 5-15 天，產出極強烈的紅酒、漿果、肉桂風味。是厭氧的「升級實驗版」。',
+                            chips: [
+                                { text: '葡萄酒釀造法', class: 'purple' },
+                                { text: '主動注入 CO₂', class: 'warm' },
+                                { text: '5-15 天', class: 'cool' },
+                                { text: '紅酒風味', class: 'green' },
+                                { text: '巴拿馬冠軍器' }
+                            ],
+                            specs: [
+                                { k: '步驟', v: '採收 → 整果入桶 → 注入 CO₂ → 密封發酵 → 取出 → 曬乾' },
+                                { k: '發酵時間', v: '5-15 天（比厭氧長 3-5 倍）' },
+                                { k: '溫度', v: '低溫控制（18-22°C）' },
+                                { k: '原理', v: '葡萄酒博若萊新酒（Beaujolais Nouveau）的釀造法' },
+                                { k: '招牌風味', v: '紅酒、覆盆子、櫻桃、肉桂、葡萄皮' },
+                                { k: '價格', v: '是水洗的 5-10 倍（極高端實驗豆）' }
+                            ],
+                            origin: [
+                                { year: '1934 法國', text: '法國博若萊葡萄酒區開始用 Carbonic Maceration 釀造輕快果香的紅酒。' },
+                                { year: '2014', text: 'Saša Šestić 把這個葡萄酒概念移植到咖啡，先用厭氧、再用 Carbonic 浸漬。' },
+                                { year: '2015 WBC 冠軍', text: 'Saša 用 Carbonic Maceration 處理的 Sudan Rume 拿下世界咖啡師冠軍。' },
+                                { year: '2018-至今', text: '巴拿馬、哥倫比亞等產區開始嘗試 Carbonic 與雙重 Carbonic 處理，產生極強烈果香豆。' },
+                                { year: '至今', text: '是「最像紅酒的咖啡」處理法，價格極高，是頂級實驗豆的代名詞。' }
+                            ],
+                            originTitle: '📜 處理法歷史',
+                            tipsTitle: '🍒 風味特性與沖煮建議',
+                            tips: [
+                                { icon: '🍷', title: '像紅酒的咖啡', desc: 'Carbonic 招牌：明顯的「紅酒、葡萄皮、櫻桃」風味。喝起來像在喝果味紅酒。' },
+                                { icon: '⚗️', title: '比厭氧更強烈', desc: '主動注入 CO₂ + 更長發酵時間 = 風味比厭氧更猛烈、更像葡萄酒。' },
+                                { icon: '☕', title: '沖煮：謹慎處理', desc: '風味強烈，過萃會非常苦澀。建議淺焙、90-91°C、研磨粗一檔。' },
+                                { icon: '💰', title: '頂級價格', desc: '是水洗的 5-10 倍。一支頂級 Carbonic Geisha 在精品店要 NT$2000+ / 杯。' },
+                                { icon: '🆚', title: 'vs 厭氧發酵', desc: 'Carbonic = 主動注 CO₂ + 整果 + 長時；厭氧 = 自然排氧 + 較短。Carbonic 更激烈。' }
+                            ]
+                        },
+                        wet_hulled: {
+                            name: '濕剝 (Wet-Hulled / Giling Basah)',
+                            tagline: '印尼曼特寧獨有、土壤香草巧克力',
+                            emoji: '🌋', status: 'ready', heroSvg: ENCY_PROC_WET_HULLED,
+                            subtitle: '印尼蘇門答臘（Sumatra）獨有的處理法。咖啡只乾燥到 30-50% 含水率（半乾）就剝去帶殼皮（parchment），再繼續曬乾。半乾剝殼讓豆子變藍綠色、產出招牌的「土壤、香草、雪松、巧克力」風味，是曼特寧的靈魂。',
+                            chips: [
+                                { text: '印尼蘇門答臘獨有', class: 'purple' },
+                                { text: '半乾剝殼', class: 'warm' },
+                                { text: '土壤雪松', class: 'green' },
+                                { text: '低酸度', class: 'cool' },
+                                { text: '蘭花綠色生豆' }
+                            ],
+                            specs: [
+                                { k: '步驟', v: '採收 → 去果皮 → 短時發酵（1-2h）→ 曬到 50% 含水率 → 剝殼 → 繼續曬到 11%' },
+                                { k: '半乾剝殼', v: '是濕剝獨特之處（其他處理法都乾透才剝）' },
+                                { k: '生豆顏色', v: '深綠藍色（其他處理法是黃綠色）' },
+                                { k: '招牌風味', v: '土壤、香草、雪松、深巧克力、低酸' },
+                                { k: '產區', v: '印尼蘇門答臘 Lintong / Mandheling / Aceh Gayo' },
+                                { k: '名稱', v: '印尼語 "Giling Basah" = 濕剝' }
+                            ],
+                            origin: [
+                                { year: '17 世紀', text: '荷蘭東印度公司在爪哇推廣咖啡種植，但印尼潮濕氣候讓水洗發酵不穩定。' },
+                                { year: '19 世紀', text: '印尼農民適應當地高溫多雨氣候，發展出「半乾剝殼」加速乾燥的獨特處理法。' },
+                                { year: '20 世紀', text: '濕剝處理產出的曼特寧獨特風味（土壤雪松）在歐洲與日本市場獲得高度評價。' },
+                                { year: '至今', text: '印尼蘇門答臘是濕剝處理的唯一主要產區，曼特寧 / Aceh Gayo 是經典代表。' }
+                            ],
+                            originTitle: '📜 處理法歷史',
+                            tipsTitle: '🍒 風味特性與沖煮建議',
+                            tips: [
+                                { icon: '🌋', title: '土壤雪松感', desc: '濕剝豆招牌：「土壤、雪松、香草、深巧克力」的低調沉穩風味。完全沒有水洗的明亮酸。' },
+                                { icon: '☕', title: '深焙最對味', desc: '濕剝豆酸度天然偏低，深焙會放大巧克力與焦糖調，是少數深焙好喝的豆。' },
+                                { icon: '🎨', title: '藍綠色生豆', desc: '濕剝豆是唯一藍綠色生豆，烘焙出來顏色也偏深，是視覺上的識別標誌。' },
+                                { icon: '💪', title: 'body 厚實', desc: '濕剝豆 body 比水洗厚很多，喝起來有種「黏稠感」。配奶做拿鐵或卡布很適合。' },
+                                { icon: '🇮🇩', title: '經典產區', desc: '蘇門答臘 Lintong（最有名）、Mandheling、Aceh Gayo 是濕剝代表，喝印尼咖啡認這幾個地名。' }
+                            ]
+                        }
                     }
                 },
                 roast: {
