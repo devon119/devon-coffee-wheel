@@ -1421,11 +1421,14 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             transition: transform 0.15s;
         }
         .ui-controls:hover { transform: scale(1.08); background: #efebe9; }
-        /* 🔖 書籤式頁籤（無底條、純書籤紙片） */
+        /* 🔖 書籤式頁籤（掛在工作台左側上方） */
         #main-tabs {
-            position: fixed; top: 0; left: 50%; transform: translateX(-50%);
+            position: fixed; top: 0; left: 24px;
             z-index: 600;
             display: flex; gap: 4px; align-items: flex-start;
+        }
+        @media (max-width: 900px) {
+            #main-tabs { left: 16px; }
         }
         .main-tab {
             padding: 14px 32px 18px; min-width: 140px;
