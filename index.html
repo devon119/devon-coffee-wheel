@@ -1421,6 +1421,71 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             transition: transform 0.15s;
         }
         .ui-controls:hover { transform: scale(1.08); background: #efebe9; }
+        #btn-learning-hub {
+            position: fixed; right: 128px; top: 20px; z-index: 500;
+            background: linear-gradient(135deg, #6a1b9a 0%, #ab47bc 100%);
+            color: #fff; border: none; height: 40px;
+            padding: 0 16px; border-radius: 22px; font-size: 14px; font-weight: 800;
+            cursor: pointer; box-shadow: 0 3px 12px rgba(106,27,154,0.35);
+            transition: transform 0.15s, box-shadow 0.15s;
+            display: flex; align-items: center; gap: 6px; letter-spacing: 0.5px;
+        }
+        #btn-learning-hub:hover { transform: scale(1.05); box-shadow: 0 6px 18px rgba(106,27,154,0.5); }
+        @media (max-width: 768px) {
+            #btn-learning-hub { padding: 0 12px; font-size: 13px; }
+            #btn-learning-hub .lh-text { display: none; }
+        }
+        /* 🎓 學習中心 hub modal */
+        #learning-hub-modal {
+            position: fixed; inset: 0; z-index: 2070;
+            background: rgba(20, 15, 10, 0.6); backdrop-filter: blur(7px);
+            display: none; opacity: 0; transition: opacity 0.25s;
+            padding: 30px 16px; box-sizing: border-box; overflow-y: auto;
+        }
+        #learning-hub-modal.open { display: block; opacity: 1; }
+        #learning-hub-modal .lh-card {
+            max-width: 720px; margin: 40px auto; background: #fdf9f3;
+            border-radius: 22px; box-shadow: 0 30px 90px rgba(0,0,0,0.4);
+            overflow: hidden;
+            transform: translateY(20px) scale(0.97); opacity: 0;
+            transition: transform 0.3s cubic-bezier(.22,.8,.33,1), opacity 0.25s;
+        }
+        #learning-hub-modal.open .lh-card { transform: translateY(0) scale(1); opacity: 1; }
+        .lh-header {
+            background: linear-gradient(135deg, #4a148c 0%, #6a1b9a 60%, #ab47bc 100%);
+            color: #fff; padding: 26px 32px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .lh-header h2 { margin: 0; font-size: 22px; font-weight: 900; letter-spacing: 1px; display: flex; align-items: center; gap: 12px; }
+        .lh-header .lh-close {
+            background: rgba(255,255,255,0.18); border: none; color: #fff;
+            width: 38px; height: 38px; border-radius: 50%; font-size: 19px; cursor: pointer;
+            transition: background 0.15s;
+        }
+        .lh-header .lh-close:hover { background: rgba(255,255,255,0.35); }
+        .lh-body { padding: 26px 28px 32px; }
+        .lh-subtitle { font-size: 14px; color: #6d4c41; margin: 0 0 22px 0; line-height: 1.7; }
+        .lh-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 16px; }
+        .lh-tile {
+            background: #fff; border-radius: 16px; padding: 24px 20px 20px;
+            cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;
+            text-align: center; border: 2px solid transparent;
+            display: flex; flex-direction: column; gap: 8px; min-height: 200px;
+        }
+        .lh-tile:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 14px 32px rgba(106,27,154,0.18);
+        }
+        .lh-tile.tile-ency:hover { border-color: #2e7d32; }
+        .lh-tile.tile-flash:hover { border-color: #1565c0; }
+        .lh-tile.tile-dash:hover { border-color: #6a1b9a; }
+        .lh-tile-icon { font-size: 56px; line-height: 1; margin-bottom: 4px; }
+        .lh-tile-title { font-size: 17px; font-weight: 900; color: #3e2723; margin-bottom: 4px; }
+        .lh-tile-desc { font-size: 12.5px; color: #6d4c41; line-height: 1.6; flex: 1; }
+        .lh-tile-cta { font-size: 12px; font-weight: 700; padding: 5px 14px; border-radius: 14px; align-self: center; margin-top: 6px; }
+        .lh-tile.tile-ency .lh-tile-cta { background: #e8f5e9; color: #2e7d32; }
+        .lh-tile.tile-flash .lh-tile-cta { background: #e3f2fd; color: #1565c0; }
+        .lh-tile.tile-dash .lh-tile-cta { background: #f3e5f5; color: #6a1b9a; }
 
         /* 📊 XLSX 預覽表格樣式 */
         .xlsx-preview-table { width: 100%; border-collapse: collapse; font-size: 11px; margin-bottom: 10px; }
@@ -1649,9 +1714,6 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 <button class="preset-btn" onclick="applyPreset('kenyaAA')">🍋 肯亞 AA</button>
                 <button class="preset-btn" onclick="applyPreset('anaerobic')">🍷 厭氧</button>
                 <button class="preset-btn" id="blind-btn" onclick="toggleBlindMode()" style="background:#fff3e0; color:#e65100; border-color:#e65100;">🎲 盲測練習</button>
-                <button class="preset-btn" onclick="startFlashcard()" style="background:#e3f2fd; color:#1565c0; border-color:#1565c0;">🎴 學習卡</button>
-                <button class="preset-btn" onclick="openLearningDashboard()" style="background:#f3e5f5; color:#6a1b9a; border-color:#6a1b9a;" title="學習進度：掌握率/熱力圖/今日複習">📊 學習進度</button>
-                <button class="preset-btn" onclick="openEncyclopedia()" style="background:#e8f5e9; color:#2e7d32; border-color:#2e7d32;" title="沖煮器材百科：歷史/特色/操作/小技巧">📚 沖煮百科</button>
             </div>
             <div class="config-grid">
                 <div class="config-group">
@@ -1985,6 +2047,42 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
     </div>
 
     <button class="ui-controls" onclick="resetView()" aria-label="全域清空並還原視圖" title="全域清空還原（所有選擇 + 視圖）">🔄</button>
+    <button id="btn-learning-hub" onclick="openLearningHub()" aria-label="學習中心" title="學習中心：百科 / 學習卡 / 進度">
+        <span style="font-size:18px;">🎓</span><span class="lh-text">學習中心</span>
+    </button>
+
+    <!-- 🎓 學習中心 hub modal -->
+    <div id="learning-hub-modal" role="dialog" aria-modal="true" aria-labelledby="lh-title">
+        <div class="lh-card">
+            <div class="lh-header">
+                <h2 id="lh-title">🎓 學習中心</h2>
+                <button class="lh-close" onclick="closeLearningHub()" aria-label="關閉">✕</button>
+            </div>
+            <div class="lh-body">
+                <p class="lh-subtitle">把咖啡知識、自我練習、學習進度都收在這裡。從這三個入口開始你的精進之路。</p>
+                <div class="lh-grid">
+                    <div class="lh-tile tile-ency" onclick="closeLearningHub(); setTimeout(openEncyclopedia, 200)">
+                        <div class="lh-tile-icon">📚</div>
+                        <div class="lh-tile-title">沖煮百科</div>
+                        <div class="lh-tile-desc">咖啡起源、豆種、處理法、烘焙度、濾杯、沖煮方式、手沖手法 — 共 59 項，含擬真 SVG 與動畫演示。</div>
+                        <span class="lh-tile-cta">📖 開始閱讀 →</span>
+                    </div>
+                    <div class="lh-tile tile-flash" onclick="closeLearningHub(); setTimeout(startFlashcard, 200)">
+                        <div class="lh-tile-icon">🎴</div>
+                        <div class="lh-tile-title">學習卡</div>
+                        <div class="lh-tile-desc">4 選 1 風味辨識練習，間隔重複（SRS）幫助記憶 83 個 SCA 風味，每天複習答錯重來。</div>
+                        <span class="lh-tile-cta">🎯 開始練習 →</span>
+                    </div>
+                    <div class="lh-tile tile-dash" onclick="closeLearningHub(); setTimeout(openLearningDashboard, 200)">
+                        <div class="lh-tile-icon">📊</div>
+                        <div class="lh-tile-title">學習進度</div>
+                        <div class="lh-tile-desc">學習卡的覆蓋進度、答對率、L1 分類掌握、最常答錯 Top 10、今日複習配額。</div>
+                        <span class="lh-tile-cta">📈 查看進度 →</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- 📊 XLSX 預覽 Modal（Excel 樣的可編輯表格）-->
     <!-- 🎬 分析前串場動畫 Overlay -->
@@ -10264,6 +10362,29 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                         <div class="ency-grid">${cards}</div>
                     </div>`;
             }
+
+            // ========== 🎓 學習中心 hub ==========
+            window.openLearningHub = function() {
+                const m = document.getElementById('learning-hub-modal');
+                m.style.display = 'block';
+                requestAnimationFrame(() => m.classList.add('open'));
+                document.body.style.overflow = 'hidden';
+            };
+            window.closeLearningHub = function() {
+                const m = document.getElementById('learning-hub-modal');
+                m.classList.remove('open');
+                setTimeout(() => { m.style.display = 'none'; }, 250);
+                document.body.style.overflow = '';
+            };
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    const m = document.getElementById('learning-hub-modal');
+                    if (m && m.classList.contains('open')) closeLearningHub();
+                }
+            });
+            document.getElementById('learning-hub-modal').addEventListener('click', (e) => {
+                if (e.target.id === 'learning-hub-modal') closeLearningHub();
+            });
 
             // ========== 研磨度對照系統（粒徑 + 實物對照）==========
             const GRIND_REFERENCE = [
