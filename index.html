@@ -7564,6 +7564,67 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 <text x="400" y="100" font-size="30">⚡</text>`
             });
 
+            const ENCY_VAR_MUNDONOVO = _encyVarietySvg({
+                id: 'mundonovo', name: 'Mundo Novo', scientific: 'Bourbon × Typica 自然雜交',
+                subtext: '巴西商業骨幹 · 強健高產', bg1: '#f1f8e9', bg2: '#aed581',
+                beanW: 75, beanH: 100, curve: 'straight'
+            });
+
+            const ENCY_VAR_MARAGO = _encyVarietySvg({
+                id: 'marago', name: 'Maragogipe', scientific: 'Typica 巨型自然變異',
+                subtext: '阿拉比卡的「巨人」、Pacamara 父本', bg1: '#fffde7', bg2: '#fff176',
+                beanW: 110, beanH: 140, curve: 'straight',
+                deco: `<text x="80" y="115" font-size="34">🍈</text>
+                <text x="400" y="115" font-size="34">🥒</text>`
+            });
+
+            const ENCY_VAR_PACAS = _encyVarietySvg({
+                id: 'pacas', name: 'Pacas', scientific: 'Bourbon 矮株變異',
+                subtext: '薩爾瓦多自家品種 · Pacamara 母本', bg1: '#e0f2f1', bg2: '#80cbc4',
+                beanW: 70, beanH: 92, curve: 'straight'
+            });
+
+            const ENCY_VAR_WUSHWUSH = _encyVarietySvg({
+                id: 'wushwush', name: 'Wush Wush', scientific: '衣索比亞 Yirgacheffe 高地野生',
+                subtext: '茉莉花 + 佛手柑 + 白桃', bg1: '#fce4ec', bg2: '#f06292',
+                beanW: 62, beanH: 110, curve: 's',
+                deco: `<text x="80" y="100" font-size="30">🌸</text>
+                <text x="400" y="100" font-size="30">🌺</text>
+                <text x="60" y="270" font-size="22">🍑</text>`
+            });
+
+            const ENCY_VAR_SUDANRUME = _encyVarietySvg({
+                id: 'sudanrume', name: 'Sudan Rume', scientific: '蘇丹紅海邊野生品系',
+                subtext: '2015 WBC 冠軍 Saša 用過', bg1: '#fff3e0', bg2: '#ef5350',
+                beanW: 65, beanH: 105, curve: 's',
+                beanLight: '#a1887f', beanMid: '#6d4c41', beanDark: '#3e2723',
+                deco: `<text x="80" y="100" font-size="30">🌅</text>
+                <text x="400" y="100" font-size="30">🍷</text>
+                <text x="60" y="270" font-size="22">🍇</text>`
+            });
+
+            const ENCY_VAR_SIDRA = _encyVarietySvg({
+                id: 'sidra', name: 'Sidra', scientific: 'Bourbon × Typica（厄瓜多選育）',
+                subtext: '茉莉 + 桃子 + 葡萄 · 近年新星', bg1: '#fff9c4', bg2: '#ffd54f',
+                beanW: 65, beanH: 110, curve: 's',
+                deco: `<text x="80" y="100" font-size="30">🌼</text>
+                <text x="400" y="100" font-size="30">🍑</text>
+                <text x="60" y="270" font-size="22">🍇</text>`
+            });
+
+            const ENCY_VAR_CASTILLO = _encyVarietySvg({
+                id: 'castillo', name: 'Castillo', scientific: 'Caturra × Timor Hybrid（哥倫比亞培育）',
+                subtext: '抗葉鏽病 · 哥倫比亞 70% 商業豆', bg1: '#e8eaf6', bg2: '#7986cb',
+                beanW: 72, beanH: 95, curve: 'straight'
+            });
+
+            const ENCY_VAR_CATIMOR = _encyVarietySvg({
+                id: 'catimor', name: 'Catimor', scientific: 'Caturra × Timor Hybrid（葡萄牙培育）',
+                subtext: '抗病祖先 · 越南/印度主力', bg1: '#efebe9', bg2: '#8d6e63',
+                beanW: 70, beanH: 92, curve: 'straight',
+                beanLight: '#8d6e63', beanMid: '#5d4037', beanDark: '#3e2723'
+            });
+
             // ========== 處理法 hero SVG helper（流程圖式）==========
             function _encyProcessSvg(opts) {
                 return `<svg viewBox="0 0 480 420" xmlns="http://www.w3.org/2000/svg">
@@ -8618,6 +8679,290 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                                 { icon: '🌍', title: '價格優勢', desc: '低海拔可種 + 抗病 + 產量大 → 價格只有阿拉比卡 1/3。是大宗商業咖啡的核心。' },
                                 { icon: '⚠️', title: '純喝偏粗糙', desc: '純 Robusta 杯感粗糙、苦感重、有橡膠味。除非特定用途，精品店不會單獨用。' },
                                 { icon: '🇻🇳', title: '越南是最大產國', desc: '越南占全球 Robusta 40%，越南咖啡（如 G7、Trung Nguyen）就是 Robusta 加煉乳的傳統做法。' }
+                            ]
+                        },
+                        mundo_novo: {
+                            name: 'Mundo Novo', tagline: '巴西商業骨幹、Bourbon × Typica 雜交',
+                            emoji: '🌿', status: 'ready', heroSvg: ENCY_VAR_MUNDONOVO,
+                            subtitle: '1940 年代巴西聖保羅自然發現的 Bourbon × Typica 雜交，葉色青銅、樹勢強健、產量高。是巴西商業咖啡的奠基品種，也是後來 Catuai（Caturra × Mundo Novo）的父本。',
+                            chips: [
+                                { text: '1940s 巴西', class: 'green' },
+                                { text: 'Bourbon × Typica', class: 'warm' },
+                                { text: '強健高產', class: 'cool' },
+                                { text: '巴西支柱' },
+                                { text: 'Catuai 父本', class: 'purple' }
+                            ],
+                            specs: [
+                                { k: '學名', v: 'Coffea arabica var. Mundo Novo' },
+                                { k: '起源', v: '巴西聖保羅 Mineiros 自然雜交（1940s）' },
+                                { k: '父本', v: 'Bourbon × Typica' },
+                                { k: '豆形', v: '中等橢圓、頂端略尖' },
+                                { k: '主要產區', v: '巴西、巴拉圭、玻利維亞' },
+                                { k: '抗病力', v: '中等（比 Bourbon / Typica 強）' }
+                            ],
+                            origin: [
+                                { year: '1940s', text: '巴西聖保羅州 Mineiros do Tietê 一處 Bourbon 種植區出現自然雜交苗，葉色青銅、產量明顯較高。' },
+                                { year: '1950s', text: '巴西農業研究所 IAC 系統化選育、命名為 "Mundo Novo"（葡語「新世界」）。' },
+                                { year: '1960s', text: '巴西大規模採用 Mundo Novo，成為當時全國最普及的商業品種。' },
+                                { year: '1972', text: 'IAC 用 Caturra（矮株）× Mundo Novo（強健）培育出 Catuai，繼承兩者優點。' },
+                                { year: '至今', text: 'Mundo Novo 仍是巴西高品質莊園的主力之一，與 Catuai 並列。' }
+                            ],
+                            originTitle: '📜 品種歷史與傳播',
+                            tipsTitle: '🍒 風味特性與沖煮建議',
+                            tips: [
+                                { icon: '⚖️', title: '平衡無突出', desc: 'Mundo Novo 風味平衡、巧克力堅果、紅糖。比 Bourbon 略遜層次但比 Catuai 穩定。' },
+                                { icon: '🇧🇷', title: '巴西高品質代表', desc: '巴西 CoE 比賽常見品種，與 Bourbon 並列為巴西高品質豆的兩大選擇。' },
+                                { icon: '☕', title: '沖煮：通用百搭', desc: '三段式 / 四六法 / 一刀流都行。中焙最對味、巧克力調最強。' },
+                                { icon: '🍫', title: '深焙好喝', desc: '中深焙到 Full City+ 也能喝出黑巧克力與焦糖、是少數能深焙的精品豆。' },
+                                { icon: '🥛', title: '配奶很對味', desc: '巧克力與堅果調配奶做拿鐵 / 卡布很合，是家用奶咖底的好選擇。' }
+                            ]
+                        },
+                        maragogipe: {
+                            name: 'Maragogipe', tagline: '阿拉比卡的「巨人」、最大豆形之一',
+                            emoji: '🍈', status: 'ready', heroSvg: ENCY_VAR_MARAGO,
+                            subtitle: '1870 年巴西 Bahia 州 Maragogipe 鎮發現的 Typica 巨型自然變異。豆子比正常阿拉比卡大 60-70%，是阿拉比卡世界最大豆。產量低、風味溫和但獨特，後來與 Pacas 雜交誕生 Pacamara。',
+                            chips: [
+                                { text: '1870 巴西 Maragogipe', class: 'purple' },
+                                { text: 'Typica 巨型變異', class: 'warm' },
+                                { text: '最大豆形', class: 'cool' },
+                                { text: '低產 / 高品質', class: 'green' },
+                                { text: 'Pacamara 父本' }
+                            ],
+                            specs: [
+                                { k: '學名', v: 'Coffea arabica var. Maragogipe' },
+                                { k: '起源', v: '巴西 Bahia 州 Maragogipe 鎮（1870）' },
+                                { k: '父本', v: 'Typica（自然單基因變異）' },
+                                { k: '豆形', v: '巨型、比一般大 60-70%' },
+                                { k: '主要產區', v: '尼加拉瓜、宏都拉斯、墨西哥' },
+                                { k: '別名', v: '"Elephant Bean"（象豆）' }
+                            ],
+                            origin: [
+                                { year: '1870', text: '巴西 Bahia 州 Maragogipe 鎮一處 Typica 種植區出現「巨型變異」，豆子大得驚人。' },
+                                { year: '1880s', text: '當地農民開始繁殖這個變種，但因產量低逐漸被商業遺忘。' },
+                                { year: '1958', text: '薩爾瓦多 ISIC 用 Pacas × Maragogipe 雜交培育出 Pacamara，繼承巨型豆形。' },
+                                { year: '至今', text: '純 Maragogipe 種植在尼加拉瓜、宏都拉斯等中美洲產區，是「象豆」的代表。' }
+                            ],
+                            originTitle: '📜 品種歷史與傳播',
+                            tipsTitle: '🍒 風味特性與沖煮建議',
+                            tips: [
+                                { icon: '🍈', title: '巨型豆獨特', desc: 'Maragogipe 豆比正常大 60-70%，烘焙與研磨都要調整。視覺上極具辨識度。' },
+                                { icon: '🍯', title: '溫和甜感', desc: '風味偏溫和、不刺激、紅糖蜂蜜調為主。沒有 Bourbon 的厚甜、也沒有 Geisha 的花香。' },
+                                { icon: '☕', title: '沖煮：粗一檔', desc: '豆子大、研磨要比 V60 標準粗 1 檔（小富士 4.0），避免過萃。' },
+                                { icon: '⏰', title: '時間略長', desc: '大豆萃取慢，總時間可拉到 3:30-4:00。低海拔種的 Maragogipe 最常見。' },
+                                { icon: '🐘', title: '"Elephant Bean"', desc: '英文俗稱「象豆」、是咖啡師訓練教材中的視覺辨識題。' }
+                            ]
+                        },
+                        pacas: {
+                            name: 'Pacas', tagline: '薩爾瓦多家族選育 · Bourbon 矮株變異',
+                            emoji: '🌳', status: 'ready', heroSvg: ENCY_VAR_PACAS,
+                            subtitle: '1949 年薩爾瓦多 Pacas 家族莊園發現的 Bourbon 自然變異，類似 Caturra 的矮株（dwarf）特徵。風味承襲 Bourbon 但層次稍弱、產量較高。是 Pacamara（Pacas × Maragogipe）的母本。',
+                            chips: [
+                                { text: '1949 薩爾瓦多', class: 'purple' },
+                                { text: 'Bourbon 矮株變異', class: 'warm' },
+                                { text: '矮株高產', class: 'green' },
+                                { text: 'Pacamara 母本', class: 'cool' },
+                                { text: '中美洲特色' }
+                            ],
+                            specs: [
+                                { k: '學名', v: 'Coffea arabica var. Pacas' },
+                                { k: '起源', v: '薩爾瓦多 Pacas 家族莊園（1949）' },
+                                { k: '父本', v: 'Bourbon（單基因矮株變異）' },
+                                { k: '樹高', v: '矮株（同 Caturra）' },
+                                { k: '主要產區', v: '薩爾瓦多、宏都拉斯、瓜地馬拉' },
+                                { k: '名字', v: 'Pacas 家族（薩爾瓦多咖啡世家）' }
+                            ],
+                            origin: [
+                                { year: '1949', text: '薩爾瓦多 Pacas 家族在自家莊園發現一棵特別矮的 Bourbon 變異。' },
+                                { year: '1956', text: 'Pacas 家族開始系統化選育、推廣到中美洲商業種植。' },
+                                { year: '1958', text: 'ISIC 研究所用 Pacas × Maragogipe 雜交培育出 Pacamara。' },
+                                { year: '1980s-至今', text: '薩爾瓦多 / 宏都拉斯仍以 Pacas 為主力之一，與 Bourbon 並列。' }
+                            ],
+                            originTitle: '📜 品種歷史與傳播',
+                            tipsTitle: '🍒 風味特性與沖煮建議',
+                            tips: [
+                                { icon: '🍯', title: '甜感類似 Bourbon', desc: '風味承襲 Bourbon 圓潤甜感，但層次略弱。中焙最對味、是「平民版 Bourbon」。' },
+                                { icon: '🌳', title: '矮株好處理', desc: '矮株 = 採收方便 + 抗風 + 高產，比高株 Bourbon 商業上更實用。' },
+                                { icon: '☕', title: '沖煮：百搭', desc: '對手法寬容，三段式 / 四六法都能做出穩定杯感。' },
+                                { icon: '🇸🇻', title: '薩爾瓦多代表', desc: '想喝中美洲 Bourbon 系列豆，Pacas 是價格最親民的選擇之一。' },
+                                { icon: '🆚', title: 'vs Pacamara', desc: 'Pacas 風味溫和、Pacamara（其後代）熱帶水果調強烈。價格也差很多。' }
+                            ]
+                        },
+                        wush_wush: {
+                            name: 'Wush Wush', tagline: '衣索比亞高地野生 · 茉莉佛手柑',
+                            emoji: '🌸', status: 'ready', heroSvg: ENCY_VAR_WUSHWUSH,
+                            subtitle: '衣索比亞 Yirgacheffe 高地的野生品系，1980 年代被帶到哥倫比亞商業化。茉莉花、佛手柑、白桃的明亮花果香，是「平價版 Geisha」的代名詞。哥倫比亞與衣索比亞兩地產出風味略不同。',
+                            chips: [
+                                { text: '衣索比亞野生', class: 'green' },
+                                { text: '茉莉花 + 白桃', class: 'warm' },
+                                { text: '佛手柑香', class: 'cool' },
+                                { text: '哥倫比亞商業化', class: 'purple' },
+                                { text: '平價 Geisha 替代' }
+                            ],
+                            specs: [
+                                { k: '學名', v: 'Coffea arabica var. Wush Wush' },
+                                { k: '起源', v: '衣索比亞 Yirgacheffe 高地野生' },
+                                { k: '商業化', v: '1980s 由哥倫比亞 La Palma 莊園引種' },
+                                { k: '豆形', v: '長橢圓、類似 Geisha 但略寬' },
+                                { k: '主要產區', v: '哥倫比亞、衣索比亞、巴拿馬' },
+                                { k: '招牌風味', v: '茉莉花、佛手柑、白桃、檸檬皮' }
+                            ],
+                            origin: [
+                                { year: '~1900s', text: '衣索比亞 Yirgacheffe 地區的野生原生種，與其他 Heirloom 共生。' },
+                                { year: '1980s', text: '哥倫比亞 La Palma y El Tucán 莊園從衣索比亞引進、開始商業化栽培。' },
+                                { year: '2010s', text: '隨第三波咖啡浪潮，Wush Wush 因花果香近似 Geisha 但價格便宜，迅速走紅。' },
+                                { year: '2020s', text: '巴拿馬、瓜地馬拉等中美洲產區也開始種植 Wush Wush。' }
+                            ],
+                            originTitle: '📜 品種歷史與傳播',
+                            tipsTitle: '🍒 風味特性與沖煮建議',
+                            tips: [
+                                { icon: '🌸', title: '茉莉花炸彈', desc: 'Wush Wush 招牌：強烈茉莉花香 + 佛手柑 + 白桃。喝起來像香水但保有水果甜。' },
+                                { icon: '💰', title: '比 Geisha 親民', desc: '風味類似 Geisha 但價格只有 1/3 ~ 1/5，是「進階品鑑」的入門首選。' },
+                                { icon: '☕', title: '沖煮：高頻萃取', desc: '建議淺焙、Matt Winton 法或四六法、92-93°C，把花果香放到最大。' },
+                                { icon: '🚫', title: '別深焙', desc: '深焙會壓掉所有花香，變成普通巧克力豆。永遠淺焙、City Plus 以內。' },
+                                { icon: '🌍', title: '產地差異', desc: '衣索比亞 Wush Wush 偏茉莉檸檬、哥倫比亞 Wush Wush 偏佛手柑桃子，產地風土影響大。' }
+                            ]
+                        },
+                        sudan_rume: {
+                            name: 'Sudan Rume', tagline: '蘇丹野生品系 · 2015 WBC 冠軍配方',
+                            emoji: '🌅', status: 'ready', heroSvg: ENCY_VAR_SUDANRUME,
+                            subtitle: '1942 年從蘇丹紅海邊野生森林採集的稀有品系，保存於哥斯大黎加 CATIE 基因庫超過 70 年。2015 年澳洲冠軍 Saša Šestić 用 Sudan Rume + Carbonic Maceration 拿下 World Barista Championship 冠軍，從此聲名大噪。',
+                            chips: [
+                                { text: '1942 蘇丹採集', class: 'purple' },
+                                { text: 'CATIE 基因庫', class: 'cool' },
+                                { text: '2015 WBC 冠軍', class: 'warm' },
+                                { text: '莓果紅酒調', class: 'green' },
+                                { text: '極稀有' }
+                            ],
+                            specs: [
+                                { k: '學名', v: 'Coffea arabica var. Sudan Rume' },
+                                { k: '起源', v: '蘇丹紅海邊 Boma 高原野生森林（1942 採集）' },
+                                { k: '保存', v: '哥斯大黎加 CATIE 基因庫' },
+                                { k: '豆形', v: '長橢圓、深綠藍色生豆' },
+                                { k: '主要產區', v: '巴拿馬、哥倫比亞（極少量商業）' },
+                                { k: '招牌風味', v: '黑莓、紅酒、覆盆子、巧克力' }
+                            ],
+                            origin: [
+                                { year: '1942', text: '英國植物學家在蘇丹 Boma 高原採集這個野生品系，送到肯亞與哥斯大黎加保存。' },
+                                { year: '1950-2010', text: '在 CATIE 基因庫保存超過 60 年，被認為「產量太低、不適合商業化」。' },
+                                { year: '2014', text: '澳洲咖啡師 Saša Šestić 發現 CATIE 中的 Sudan Rume，與哥倫比亞莊園合作種植。' },
+                                { year: '2015', text: 'Saša 用 Sudan Rume + Carbonic Maceration 拿下 WBC 冠軍，震驚全球咖啡圈。' },
+                                { year: '至今', text: 'Sudan Rume 仍是極稀有豆種，每年產量極少、價格高昂。' }
+                            ],
+                            originTitle: '📜 品種歷史與傳播',
+                            tipsTitle: '🍒 風味特性與沖煮建議',
+                            tips: [
+                                { icon: '🍷', title: '紅酒莓果調', desc: 'Sudan Rume 招牌：黑莓、紅酒、覆盆子。配厭氧 / Carbonic 處理會放大酒香。' },
+                                { icon: '🏆', title: '冠軍器物', desc: 'Saša Šestić 用 Sudan Rume 拿 WBC 冠軍是現代咖啡賽事的傳奇故事。' },
+                                { icon: '☕', title: '沖煮：細粉低溫', desc: '建議淺焙、極細粉、低溫 88-90°C，類似 Lance Hedrick 法。' },
+                                { icon: '💰', title: '價格極高', desc: '稀有度 + 處理工藝 = 一支 100g 在精品店要 NT$2000+。是收藏級豆種。' },
+                                { icon: '⚠️', title: '謹慎挑選', desc: '市面有掛名 "Sudan Rume" 但品質普通的，要看莊園與處理法。' }
+                            ]
+                        },
+                        sidra: {
+                            name: 'Sidra', tagline: '厄瓜多 Bourbon × Typica · 近年新星',
+                            emoji: '🌺', status: 'ready', heroSvg: ENCY_VAR_SIDRA,
+                            subtitle: '厄瓜多火山高地的自然 Bourbon × Typica 雜交，2010 年代後在世界咖啡賽中爆紅。茉莉花、桃子、葡萄的明亮花果香，被譽為「下一個 Geisha」。厄瓜多火山土壤是它風味的關鍵。',
+                            chips: [
+                                { text: '厄瓜多火山高地', class: 'purple' },
+                                { text: 'Bourbon × Typica', class: 'warm' },
+                                { text: '茉莉 + 桃子', class: 'green' },
+                                { text: '世界賽常客', class: 'cool' },
+                                { text: '近年新星' }
+                            ],
+                            specs: [
+                                { k: '學名', v: 'Coffea arabica var. Sidra' },
+                                { k: '起源', v: '厄瓜多 Loja / Pichincha 火山區自然雜交' },
+                                { k: '父本', v: 'Bourbon × Typica（單株變異）' },
+                                { k: '豆形', v: '長橢圓、近似 Geisha' },
+                                { k: '主要產區', v: '厄瓜多、哥倫比亞、巴拿馬' },
+                                { k: '招牌風味', v: '茉莉、桃子、葡萄、奶油' }
+                            ],
+                            origin: [
+                                { year: '~2000s', text: '厄瓜多咖啡農在自家莊園發現少量「特別香」的單株，初期被當地稱為 "Sidra"（蘋果酒之意）。' },
+                                { year: '2014', text: '厄瓜多選手 Manuel Diaz 用 Sidra 進入 World Brewers Cup 決賽，引起國際關注。' },
+                                { year: '2018-2020', text: '厄瓜多 La Papaya / Hacienda La Soledad 等莊園開始商業化 Sidra。' },
+                                { year: '2022 WBC', text: '波蘭選手 Anthony Douglas 用 Sidra 拿下 WBC 冠軍，再次推升 Sidra 國際知名度。' },
+                                { year: '至今', text: '與 Geisha 並列為「頂級花香品種」雙雄，但 Sidra 價格略低於 Geisha。' }
+                            ],
+                            originTitle: '📜 品種歷史與傳播',
+                            tipsTitle: '🍒 風味特性與沖煮建議',
+                            tips: [
+                                { icon: '🌸', title: '茉莉桃子調', desc: 'Sidra 招牌：茉莉花 + 黃桃 + 葡萄 + 奶油的甜美花果香。比 Geisha 更圓潤。' },
+                                { icon: '🌋', title: '火山土壤關鍵', desc: '厄瓜多 Andes 火山土壤的礦物質讓 Sidra 風味豐富，他國種出來會失味。' },
+                                { icon: '☕', title: '沖煮：突顯花果', desc: '淺焙、92-93°C、四六法或一刀流。配蜜處理或厭氧會放大水果調。' },
+                                { icon: '🆚', title: 'vs Geisha', desc: 'Sidra 比 Geisha 多桃子奶油感、Geisha 比 Sidra 多佛手柑檸檬皮。風格不同。' },
+                                { icon: '🏆', title: '世界賽常客', desc: '近 5 年 WBC / WBrC 多位冠軍用 Sidra，是進階玩家必試品種。' }
+                            ]
+                        },
+                        castillo: {
+                            name: 'Castillo', tagline: '哥倫比亞抗病主力 · Caturra × Timor',
+                            emoji: '🛡️', status: 'ready', heroSvg: ENCY_VAR_CASTILLO,
+                            subtitle: '哥倫比亞 Cenicafé 研究院 1980 年代培育的抗葉鏽病雜交品種（Caturra × Timor Hybrid）。為了拯救 1970s 葉鏽病摧毀的咖啡產業，現為哥倫比亞 70% 商業豆的主力。風味平衡無突出但穩定可靠。',
+                            chips: [
+                                { text: '1980s 哥倫比亞', class: 'purple' },
+                                { text: 'Caturra × Timor', class: 'warm' },
+                                { text: '抗葉鏽病', class: 'green' },
+                                { text: '哥倫比亞 70% 商業', class: 'cool' },
+                                { text: '高產穩定' }
+                            ],
+                            specs: [
+                                { k: '學名', v: 'Coffea arabica var. Castillo' },
+                                { k: '研發單位', v: 'Cenicafé（哥倫比亞咖啡研究院）' },
+                                { k: '父本', v: 'Caturra × Timor Hybrid' },
+                                { k: '抗病力', v: '極強（抗葉鏽病主因）' },
+                                { k: '產區變種', v: '7 種地區優化版（Naranjal/Paraguaicito 等）' },
+                                { k: '釋出年', v: '2005（首批商業推廣）' }
+                            ],
+                            origin: [
+                                { year: '1970s', text: '葉鏽病席捲哥倫比亞，傳統 Caturra / Bourbon 大規模死亡，咖啡產業面臨崩潰。' },
+                                { year: '1982', text: 'Cenicafé 開始用 Caturra × Timor Hybrid（自帶抗病基因）培育新品種。' },
+                                { year: '2005', text: 'Castillo 系列品種正式釋出，分 7 種地區優化版適應不同產區氣候。' },
+                                { year: '2010-2020', text: '哥倫比亞政府主導大規模換種計畫，Castillo 比例從 0% 飆升到 70%。' },
+                                { year: '至今', text: '是哥倫比亞咖啡產業復興的英雄，也是 Caturra 在抗病基因上的繼任者。' }
+                            ],
+                            originTitle: '📜 品種歷史與傳播',
+                            tipsTitle: '🍒 風味特性與沖煮建議',
+                            tips: [
+                                { icon: '⚖️', title: '平衡無突出', desc: 'Castillo 風味中性、無強烈個性。比 Caturra 略遜層次但更穩定可預期。' },
+                                { icon: '🇨🇴', title: '哥倫比亞日常杯', desc: '市面上的「哥倫比亞 Supremo」如果不註明品種，多半是 Castillo。' },
+                                { icon: '☕', title: '沖煮：寬容百搭', desc: '對手法寬容，三段式 / 一刀流都行。中焙巧克力堅果調最對味。' },
+                                { icon: '⚠️', title: '精品圈評價兩極', desc: '商業實用性高，但精品愛好者覺得「太平淡」，沒有 Caturra 或 Geisha 那種特色。' },
+                                { icon: '🛡️', title: '英雄品種', desc: '沒有 Castillo，1980s 哥倫比亞咖啡產業可能無法復甦。是「實用大於風味」的典範。' }
+                            ]
+                        },
+                        catimor: {
+                            name: 'Catimor', tagline: '抗病祖先 · 越南 / 印度主力',
+                            emoji: '⚔️', status: 'ready', heroSvg: ENCY_VAR_CATIMOR,
+                            subtitle: '1959 年葡萄牙 CIFC 培育的 Caturra × Timor Hybrid 抗葉鏽病品系，是現代抗病雜交種的祖先（Castillo / Marsellesa 等都從 Catimor 衍生）。風味偏粗糙、商業豆為主，是越南、印度、印尼 20 世紀末的主力品種。',
+                            chips: [
+                                { text: '1959 葡萄牙', class: 'purple' },
+                                { text: 'Caturra × Timor', class: 'warm' },
+                                { text: '抗病祖先', class: 'green' },
+                                { text: '越南/印度主力', class: 'cool' },
+                                { text: '商業大宗' }
+                            ],
+                            specs: [
+                                { k: '學名', v: 'Coffea arabica var. Catimor' },
+                                { k: '研發單位', v: '葡萄牙 CIFC（咖啡銹病研究中心）' },
+                                { k: '父本', v: 'Caturra × Timor Hybrid（HdT）' },
+                                { k: '釋出年', v: '1959' },
+                                { k: '主要產區', v: '越南、印度、印尼、中美洲商業豆' },
+                                { k: '主要衍生', v: 'Castillo / Marsellesa / Tabi 都從此分支' }
+                            ],
+                            origin: [
+                                { year: '1949', text: '東帝汶（Timor）發現的 Coffea arabica × Coffea canephora 自然雜交（Hybrid de Timor），帶有 Robusta 抗病基因。' },
+                                { year: '1959', text: '葡萄牙 CIFC 把 HdT 與 Caturra 雜交，培育出 Catimor。' },
+                                { year: '1970s-80s', text: 'Catimor 大量擴散到亞洲（越南、印度、印尼），取代被葉鏽病摧毀的 Typica / Bourbon。' },
+                                { year: '至今', text: '雖然精品圈評價不高，但 Catimor 仍是亞洲商業大宗咖啡的支柱，也是現代抗病雜交種的「祖父」。' }
+                            ],
+                            originTitle: '📜 品種歷史與傳播',
+                            tipsTitle: '🍒 風味特性與沖煮建議',
+                            tips: [
+                                { icon: '☕', title: '風味偏粗糙', desc: 'Catimor 帶 Robusta 基因，杯感偏「粗糙、橡膠味、苦感重」，精品圈評價不高。' },
+                                { icon: '🌍', title: '商業大宗主力', desc: '越南 G7、印度南印度咖啡、印尼商業豆很多是 Catimor。便宜、抗病、產量大。' },
+                                { icon: '🥛', title: '配奶可救', desc: '直接喝太粗糙，配大量牛奶 + 糖（拿鐵 / 越南煉乳咖啡）才合理。' },
+                                { icon: '⚠️', title: '別買精品手沖', desc: '看到「Catimor 手沖豆」基本上是浪費錢，這品種設計就不是給精品用的。' },
+                                { icon: '🌳', title: '抗病英雄家族', desc: 'Catimor 是 Castillo / Marsellesa / Tabi 等現代抗病雜交種的祖先，歷史地位重要。' }
                             ]
                         }
                     }
