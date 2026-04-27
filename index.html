@@ -7251,6 +7251,125 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 extra: `<text x="240" y="392" font-size="10.5" font-style="italic" fill="#8d6e63" text-anchor="middle">「小水量 = 強濃度、適合做冰美式底或加冰塊稀釋」</text>`
             });
 
+            // ========== 豆種 hero SVG helper ==========
+            function _encyVarietySvg(opts) {
+                return `<svg viewBox="0 0 480 420" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <radialGradient id="bv-${opts.id}" cx="0.5" cy="0.4" r="0.7">
+                            <stop offset="0%" stop-color="${opts.bg1}"/>
+                            <stop offset="100%" stop-color="${opts.bg2}"/>
+                        </radialGradient>
+                        <linearGradient id="bvb-${opts.id}" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stop-color="${opts.beanLight||'#a1887f'}"/>
+                            <stop offset="50%" stop-color="${opts.beanMid||'#8d6e63'}"/>
+                            <stop offset="100%" stop-color="${opts.beanDark||'#5d4037'}"/>
+                        </linearGradient>
+                    </defs>
+                    <rect width="480" height="420" fill="url(#bv-${opts.id})" rx="16"/>
+                    <!-- 葉片左上 -->
+                    <g transform="translate(95 160) rotate(-25)">
+                        <ellipse cx="0" cy="0" rx="65" ry="28" fill="#2e7d32"/>
+                        <ellipse cx="0" cy="-2" rx="58" ry="22" fill="#43a047"/>
+                        <line x1="-60" y1="0" x2="60" y2="0" stroke="#1b5e20" stroke-width="1.5"/>
+                        <g stroke="#1b5e20" stroke-width="0.6" opacity="0.7">
+                            <line x1="-40" y1="0" x2="-30" y2="-12"/>
+                            <line x1="-20" y1="0" x2="-10" y2="-14"/>
+                            <line x1="0" y1="0" x2="10" y2="-14"/>
+                            <line x1="20" y1="0" x2="30" y2="-12"/>
+                            <line x1="-40" y1="0" x2="-30" y2="12"/>
+                            <line x1="-20" y1="0" x2="-10" y2="14"/>
+                            <line x1="0" y1="0" x2="10" y2="14"/>
+                            <line x1="20" y1="0" x2="30" y2="12"/>
+                        </g>
+                    </g>
+                    <!-- 葉片右下 -->
+                    <g transform="translate(390 285) rotate(35)">
+                        <ellipse cx="0" cy="0" rx="55" ry="24" fill="#2e7d32"/>
+                        <ellipse cx="0" cy="-2" rx="48" ry="18" fill="#43a047"/>
+                        <line x1="-50" y1="0" x2="50" y2="0" stroke="#1b5e20" stroke-width="1.4"/>
+                    </g>
+                    <!-- 咖啡櫻桃果（左下角） -->
+                    <circle cx="105" cy="335" r="22" fill="#b71c1c"/>
+                    <circle cx="105" cy="335" r="19" fill="#e53935"/>
+                    <circle cx="100" cy="328" r="5" fill="#ffcdd2" opacity="0.7"/>
+                    <circle cx="105" cy="335" r="3" fill="#5d4037"/>
+                    <line x1="105" y1="313" x2="103" y2="305" stroke="#388e3c" stroke-width="2"/>
+                    <!-- 第二顆果 -->
+                    <circle cx="135" cy="350" r="18" fill="#c62828"/>
+                    <circle cx="135" cy="350" r="15" fill="#ef5350"/>
+                    <line x1="135" y1="332" x2="138" y2="324" stroke="#388e3c" stroke-width="2"/>
+                    <!-- 中央放大豆（側視）-->
+                    <g transform="translate(240 220)">
+                        <ellipse cx="0" cy="0" rx="${opts.beanW||78}" ry="${opts.beanH||108}" fill="url(#bvb-${opts.id})"/>
+                        <path d="M 0 ${-(opts.beanH||108)+5} ${opts.curve === 's' ? `Q -10 -40 8 0 Q -10 40 0 ${(opts.beanH||108)-5}` : `L 0 ${(opts.beanH||108)-5}`}" stroke="#2e1a0e" stroke-width="3" fill="none"/>
+                        <ellipse cx="-25" cy="-50" rx="20" ry="35" fill="rgba(255,255,255,0.15)"/>
+                    </g>
+                    ${opts.deco || ''}
+                    <text x="240" y="58" font-size="13" font-style="italic" fill="${opts.tcolor||'#3e2723'}" text-anchor="middle" font-weight="700">${opts.scientific}</text>
+                    <text x="240" y="380" font-size="22" font-weight="900" fill="${opts.tcolor||'#3e2723'}" text-anchor="middle">${opts.name}</text>
+                    <text x="240" y="400" font-size="11" fill="${opts.tsub||'#5d4037'}" text-anchor="middle" font-style="italic">${opts.subtext||''}</text>
+                </svg>`;
+            }
+
+            const ENCY_VAR_TYPICA = _encyVarietySvg({
+                id: 'typica', name: 'Typica', scientific: 'Coffea arabica var. Typica',
+                subtext: '所有阿拉比卡的祖先', bg1: '#fff8e1', bg2: '#ffd54f',
+                beanW: 70, beanH: 115, curve: 'straight'
+            });
+            const ENCY_VAR_BOURBON = _encyVarietySvg({
+                id: 'bourbon', name: 'Bourbon', scientific: 'Coffea arabica var. Bourbon',
+                subtext: '甜感與圓潤的黃金品種', bg1: '#fff3e0', bg2: '#ffb74d',
+                beanW: 75, beanH: 100, curve: 'straight'
+            });
+            const ENCY_VAR_GEISHA = _encyVarietySvg({
+                id: 'geisha', name: 'Geisha (Gesha)', scientific: 'Coffea arabica var. Geisha',
+                subtext: '巴拿馬翡翠莊園、世界拍賣紀錄保持者', bg1: '#fce4ec', bg2: '#f8bbd0',
+                beanW: 60, beanH: 125, curve: 's',
+                deco: `<text x="80" y="100" font-size="32">🌸</text>
+                <text x="400" y="100" font-size="32">🌸</text>
+                <text x="60" y="260" font-size="24">🍑</text>`
+            });
+            const ENCY_VAR_SL28 = _encyVarietySvg({
+                id: 'sl28', name: 'SL28 / SL34', scientific: 'Scott Labs 28 / 34（Bourbon 改良）',
+                subtext: '肯亞黑醋栗酸的代名詞', bg1: '#f3e5f5', bg2: '#ce93d8',
+                beanW: 72, beanH: 105, curve: 'straight',
+                deco: `<text x="80" y="100" font-size="32">🍇</text>
+                <text x="400" y="100" font-size="32">🇰🇪</text>`
+            });
+            const ENCY_VAR_PACAMARA = _encyVarietySvg({
+                id: 'pacamara', name: 'Pacamara', scientific: 'Pacas × Maragogipe',
+                subtext: '阿拉比卡最大豆 / 熱帶水果調', bg1: '#fff9c4', bg2: '#fdd835',
+                beanW: 105, beanH: 140, curve: 'straight',
+                deco: `<text x="80" y="100" font-size="30">🍍</text>
+                <text x="400" y="100" font-size="30">🥭</text>`
+            });
+            const ENCY_VAR_CATURRA = _encyVarietySvg({
+                id: 'caturra', name: 'Caturra', scientific: 'Coffea arabica var. Caturra',
+                subtext: '矮株高產 · 中南美主力', bg1: '#e8f5e9', bg2: '#a5d6a7',
+                beanW: 70, beanH: 95, curve: 'straight'
+            });
+            const ENCY_VAR_CATUAI = _encyVarietySvg({
+                id: 'catuai', name: 'Catuai', scientific: 'Caturra × Mundo Novo',
+                subtext: '巴西主力 · 強健穩定', bg1: '#fff3e0', bg2: '#ffcc80',
+                beanW: 72, beanH: 100, curve: 'straight'
+            });
+            const ENCY_VAR_HEIRLOOM = _encyVarietySvg({
+                id: 'heirloom', name: 'Ethiopia Heirloom', scientific: '衣索比亞原生混合品系',
+                subtext: '千種野生變種、花果香炸裂', bg1: '#fce4ec', bg2: '#f48fb1',
+                beanW: 65, beanH: 100, curve: 's',
+                deco: `<text x="65" y="105" font-size="28">🌺</text>
+                <text x="400" y="105" font-size="28">🫐</text>
+                <text x="80" y="265" font-size="24">🌼</text>`
+            });
+            const ENCY_VAR_ROBUSTA = _encyVarietySvg({
+                id: 'robusta', name: 'Robusta', scientific: 'Coffea canephora',
+                subtext: '高咖啡因 · 義式拼配主力', bg1: '#efebe9', bg2: '#a1887f',
+                beanW: 80, beanH: 90, curve: 'straight',
+                beanLight: '#8d6e63', beanMid: '#5d4037', beanDark: '#3e2723',
+                deco: `<text x="80" y="100" font-size="30">💪</text>
+                <text x="400" y="100" font-size="30">⚡</text>`
+            });
+
             const ENCYCLOPEDIA = {
                 history: {
                     title: '📜 咖啡起源與歷史',
@@ -7634,15 +7753,333 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                     title: '🌱 咖啡豆種',
                     icon: '🌱',
                     items: {
-                        typica:    { name: 'Typica',           tagline: '所有阿拉比卡的祖先，平衡乾淨', emoji: '🌿', status: 'soon' },
-                        bourbon:   { name: 'Bourbon',          tagline: '甜感與圓潤的黃金品種', emoji: '🍯', status: 'soon' },
-                        geisha:    { name: 'Geisha (Gesha)',   tagline: '巴拿馬翡翠莊園 2004 年驚艷世界', emoji: '🌸', status: 'soon' },
-                        sl28:      { name: 'SL28 / SL34',      tagline: '肯亞黑醋栗酸的代名詞', emoji: '🍇', status: 'soon' },
-                        pacamara:  { name: 'Pacamara',         tagline: '薩爾瓦多巨型豆 / 熱帶水果調', emoji: '🍍', status: 'soon' },
-                        caturra:   { name: 'Caturra',          tagline: 'Bourbon 變種、矮株高產', emoji: '🌳', status: 'soon' },
-                        catuai:    { name: 'Catuai',           tagline: 'Caturra × Mundo Novo 巴西主力', emoji: '🌾', status: 'soon' },
-                        ethiopia_heirloom: { name: 'Ethiopia Heirloom', tagline: '衣索比亞原生混合品系，花果香炸裂', emoji: '🌺', status: 'soon' },
-                        robusta:   { name: 'Robusta',          tagline: '高咖啡因 / 低成本 / 義式拼配主力', emoji: '💪', status: 'soon' }
+                        typica: {
+                            name: 'Typica', tagline: '所有阿拉比卡的祖先，平衡乾淨',
+                            emoji: '🌿', status: 'ready', heroSvg: ENCY_VAR_TYPICA,
+                            subtitle: 'Typica 是所有現代阿拉比卡品種的祖先（與 Bourbon 並列），17 世紀從葉門經印尼、馬丁尼克島傳播到全球。豆形拉長橢圓、葉緣青銅色、產量低、抗病弱、但杯感乾淨平衡，是「教科書般」的咖啡風味。',
+                            chips: [
+                                { text: '阿拉比卡祖先', class: 'green' },
+                                { text: '葉門 → 全球', class: 'cool' },
+                                { text: '低產 / 高品質', class: 'warm' },
+                                { text: '長橢圓豆', class: 'purple' },
+                                { text: '青銅色嫩葉' }
+                            ],
+                            specs: [
+                                { k: '學名', v: 'Coffea arabica var. Typica' },
+                                { k: '起源', v: '葉門 → 印尼爪哇（1696）→ 馬丁尼克（1714）' },
+                                { k: '豆形', v: '長橢圓、頂端較尖' },
+                                { k: '葉色', v: '嫩葉為青銅色（與 Bourbon 對比）' },
+                                { k: '產區', v: '夏威夷 Kona、印尼曼特寧、巴拿馬、瓜地馬拉' },
+                                { k: '抗病力', v: '弱（易得葉鏽病）' }
+                            ],
+                            origin: [
+                                { year: '1696', text: '荷蘭東印度公司把葉門咖啡帶到印尼爪哇，這批就是 Typica 譜系的開端。' },
+                                { year: '1706', text: '一株 Typica 苗從爪哇送到阿姆斯特丹植物園，後來再被送到法國皇室。' },
+                                { year: '1714', text: '法國國王路易十四收到那株「皇家咖啡樹」，後代擴散到馬丁尼克島。' },
+                                { year: '1727 巴西', text: 'Francisco de Mello Palheta 帶到巴西、是巴西所有咖啡的源頭。' },
+                                { year: '至今', text: '全球各產區都有 Typica 譜系，但因低產逐漸被 Caturra / Catuai 取代。' }
+                            ],
+                            originTitle: '📜 品種歷史與傳播',
+                            tipsTitle: '🍒 風味特性與沖煮建議',
+                            tips: [
+                                { icon: '⚖️', title: '杯感平衡乾淨', desc: '沒有強烈個性，所有元素均衡。是「咖啡的標準味道」、新手最容易理解的品種。' },
+                                { icon: '🍫', title: '巧克力堅果調', desc: '中焙時最常表現巧克力、堅果、淡淡水果調。乾淨度高、無侵略性。' },
+                                { icon: '☕', title: '沖煮：寬容', desc: 'Typica 對手法與水溫不敏感，三段式 / 一刀流都行。' },
+                                { icon: '🇯🇲', title: '經典豆種', desc: '夏威夷 Kona、牙買加藍山、葉門 Mokha 都是 Typica 譜系的招牌豆。' },
+                                { icon: '⚠️', title: '抗病力弱', desc: '葉鏽病讓很多產區放棄 Typica 改種抗病品種，現存 Typica 多是高品質莊園才養得起。' }
+                            ]
+                        },
+                        bourbon: {
+                            name: 'Bourbon', tagline: '甜感與圓潤的黃金品種',
+                            emoji: '🍯', status: 'ready', heroSvg: ENCY_VAR_BOURBON,
+                            subtitle: 'Bourbon 與 Typica 並列阿拉比卡兩大祖先。1715 年法國人把咖啡苗帶到印度洋上的 Bourbon 島（今留尼旺），氣候與土壤讓豆子變異出更圓的豆形與更高的甜感。是現代精品咖啡圈最被珍視的「甜感擔當」。',
+                            chips: [
+                                { text: '1715 Bourbon 島', class: 'purple' },
+                                { text: '高甜感 / 圓潤', class: 'warm' },
+                                { text: '阿拉比卡祖先', class: 'green' },
+                                { text: '中等產量' },
+                                { text: '黃 / 紅 / 橘 / 粉紅變種', class: 'cool' }
+                            ],
+                            specs: [
+                                { k: '學名', v: 'Coffea arabica var. Bourbon' },
+                                { k: '起源', v: '法國 Bourbon 島（今留尼旺島）1715' },
+                                { k: '豆形', v: '較圓、頂端略平、比 Typica 短' },
+                                { k: '葉色', v: '嫩葉為淺綠（與 Typica 青銅色對比）' },
+                                { k: '產區', v: '盧安達、蒲隆地、薩爾瓦多、巴西、巴拿馬' },
+                                { k: '主要變種', v: '紅 Bourbon / 黃 Bourbon / 橘 Bourbon / 粉紅 Bourbon' }
+                            ],
+                            origin: [
+                                { year: '1715', text: '法國人從葉門帶咖啡苗到印度洋的 Bourbon 島（今留尼旺島）種植。' },
+                                { year: '1727', text: 'Bourbon 島的咖啡被傳教士帶到非洲（盧安達、蒲隆地、肯亞）。' },
+                                { year: '1860s', text: 'Bourbon 進入巴西，與 Typica 並列為當時主流。' },
+                                { year: '1870s', text: '法國傳教士把 Bourbon 帶到中美洲（薩爾瓦多、瓜地馬拉、宏都拉斯）。' },
+                                { year: '至今', text: '盧安達、蒲隆地、薩爾瓦多的 Bourbon 是精品咖啡圈最珍視的甜感豆。' }
+                            ],
+                            originTitle: '📜 品種歷史與傳播',
+                            tipsTitle: '🍒 風味特性與沖煮建議',
+                            tips: [
+                                { icon: '🍯', title: '甜感是核心', desc: 'Bourbon 最招牌的特色是「自然甜感」，無糖也甜的圓潤感。深焙會有焦糖蜜餞味。' },
+                                { icon: '🍒', title: '紅果酸調', desc: '中焙時常表現紅櫻桃、紅蘋果、葡萄柚等紅色水果調，比 Typica 有層次。' },
+                                { icon: '🌈', title: '彩色變種', desc: '黃 Bourbon（成熟果黃色）甜感最強、紅 Bourbon 最普遍、粉紅 Bourbon 最稀有最貴。' },
+                                { icon: '☕', title: '沖煮：四六法', desc: 'Bourbon 適合突顯甜感的手法，粕谷哲四六法、Hoffmann 法都能放大它的圓潤。' },
+                                { icon: '🇸🇻', title: '經典豆', desc: '薩爾瓦多 Pacas 莊園的 Bourbon、盧安達 Buf Cafe、巴拿馬 Esmeralda 都是世界級代表。' }
+                            ]
+                        },
+                        geisha: {
+                            name: 'Geisha (Gesha)',
+                            tagline: '巴拿馬翡翠莊園驚艷世界、咖啡界的勞斯萊斯',
+                            emoji: '🌸', status: 'ready', heroSvg: ENCY_VAR_GEISHA,
+                            subtitle: '1931 年從衣索比亞 Gesha 村採集的咖啡品種，1953 年進入巴拿馬後沉寂半世紀。2004 年巴拿馬翡翠莊園 Esmeralda 用 Geisha 拍出 21 USD/lb 創當時紀錄、2017 年再創 601 USD/lb 紀錄。茉莉花、佛手柑、桃子的明亮花果香是它的招牌。',
+                            chips: [
+                                { text: '衣索比亞 Gesha 村', class: 'purple' },
+                                { text: '巴拿馬翡翠莊園', class: 'green' },
+                                { text: '茉莉花 + 佛手柑', class: 'cool' },
+                                { text: '低產 / 高價', class: 'warm' },
+                                { text: '世界拍賣紀錄', class: '' },
+                                { text: '細長橢圓豆' }
+                            ],
+                            specs: [
+                                { k: '學名', v: 'Coffea arabica var. Geisha' },
+                                { k: '起源', v: '衣索比亞 Gesha 村（1931 採集）' },
+                                { k: '進入巴拿馬', v: '1953 年作為抗病實驗' },
+                                { k: '驚艷世界', v: '2004 翡翠莊園拍賣 21 USD/lb（當時 5x 紀錄）' },
+                                { k: '世界紀錄', v: '2017 年 601 USD/lb / 2018 年 803 USD/lb' },
+                                { k: '產區', v: '巴拿馬、哥倫比亞、瓜地馬拉、衣索比亞原產' }
+                            ],
+                            origin: [
+                                { year: '1931', text: '英國領事 Richard Whalley 在衣索比亞 Gesha 村採集樣本送到肯亞 / 哥斯大黎加。' },
+                                { year: '1953', text: '哥斯大黎加 CATIE 研究站把 Geisha 送到巴拿馬作為抗病實驗品種。' },
+                                { year: '1960s-2000s', text: 'Geisha 在巴拿馬被認為「品質普通、產量低」，被冷落半個世紀。' },
+                                { year: '2004', text: '翡翠莊園 Esmeralda 把一塊高海拔種植區的 Geisha 拿去 Best of Panama 比賽，杯測師震驚發現「茉莉花香」、拍賣價飆到 21 USD/lb。' },
+                                { year: '至今', text: '全球各產區開始種 Geisha，但只有極少數高海拔莊園能種出「翡翠等級」的風味。' }
+                            ],
+                            originTitle: '📜 品種歷史與傳播',
+                            tipsTitle: '🍒 風味特性與沖煮建議',
+                            tips: [
+                                { icon: '🌸', title: '茉莉花 + 佛手柑', desc: '招牌是「茉莉花、佛手柑、白桃、檸檬皮」的明亮花果調，有人形容像紅茶或白葡萄酒。' },
+                                { icon: '💰', title: '為什麼這麼貴', desc: '低產 + 種植難度高 + 風味極致 + 限量。一支頂級 Geisha 在精品店要 NT$1500+ / 杯。' },
+                                { icon: '☕', title: '沖煮：突顯花果', desc: '建議水溫 92-93°C、淺焙、Lance Hedrick 高磨低溫法或 Matt Winton 高頻法、放大花果調。' },
+                                { icon: '🚫', title: '別深焙', desc: 'Geisha 深焙是浪費。深焙會壓掉所有花香、變得跟普通豆沒兩樣。永遠淺焙。' },
+                                { icon: '🏆', title: '經典莊園', desc: '巴拿馬翡翠莊園 Esmeralda Special / 哥倫比亞 La Palma / 衣索比亞 Gesha Village。' },
+                                { icon: '⚠️', title: '謹慎挑選', desc: '「Geisha」名字非常值錢、市面有掛名但品質普通的。看莊園、看比賽分數、看烘焙日期。' }
+                            ]
+                        },
+                        sl28: {
+                            name: 'SL28 / SL34', tagline: '肯亞黑醋栗酸的代名詞',
+                            emoji: '🍇', status: 'ready', heroSvg: ENCY_VAR_SL28,
+                            subtitle: '1930s 肯亞 Scott Agricultural Laboratories 從 Bourbon 譜系改良的兩個品種，命名 SL28 與 SL34（SL = Scott Labs 縮寫）。深根抗旱、適應肯亞高原，產出招牌的「黑醋栗、莓果、明亮酸質」風味，是肯亞 AA 的靈魂。',
+                            chips: [
+                                { text: 'Scott Labs 1930s', class: 'purple' },
+                                { text: '肯亞主力', class: 'green' },
+                                { text: '黑醋栗酸調', class: 'warm' },
+                                { text: '深根抗旱', class: 'cool' },
+                                { text: 'Bourbon 譜系' }
+                            ],
+                            specs: [
+                                { k: '學名', v: 'Coffea arabica var. SL28 / SL34' },
+                                { k: '起源', v: '肯亞 Scott Agricultural Labs（1930s）' },
+                                { k: '譜系', v: 'Bourbon 改良' },
+                                { k: '特徵', v: '深根（抗旱）、適應肯亞高原' },
+                                { k: '主要產區', v: '肯亞 / 蒲隆地 / 盧安達' },
+                                { k: '招牌風味', v: '黑醋栗、莓果、葡萄柚、明亮酸' }
+                            ],
+                            origin: [
+                                { year: '1922', text: '肯亞 Scott Agricultural Labs（SAL）成立，目標：為肯亞高原找出最適合的咖啡品種。' },
+                                { year: '1935-1939', text: 'SAL 從超過 40 個 Bourbon 譜系中選出 SL28 與 SL34，以抗旱、產量、杯感為篩選標準。' },
+                                { year: '1950s-至今', text: 'SL28 與 SL34 成為肯亞咖啡產業的主力品種，肯亞 AA / AB 等級豆基本都是這兩個品系。' },
+                                { year: '至今', text: '盧安達、蒲隆地等鄰國也大量種植 SL28，產出類似的明亮酸質。' }
+                            ],
+                            originTitle: '📜 品種歷史與傳播',
+                            tipsTitle: '🍒 風味特性與沖煮建議',
+                            tips: [
+                                { icon: '🍇', title: '黑醋栗酸是招牌', desc: 'SL28 最大特色：「黑醋栗、莓果」的明亮酸質，喝起來有很重的酒香果酸感。' },
+                                { icon: '🇰🇪', title: '肯亞 AA 的靈魂', desc: '肯亞 AA / AB 等級豆基本都是 SL28 / SL34，高酸度 + 高甜度 + 厚 body 是典型風格。' },
+                                { icon: '☕', title: '沖煮：突顯酸質', desc: '建議水溫 92-94°C、淺中焙、Hoffmann 法或四六法（前段多倒）放大酸甜對比。' },
+                                { icon: '🍷', title: '酒香感', desc: '高 SL28 豆喝起來像紅酒，有人說「肯亞 AA 是杯子裡的卡本內」。' },
+                                { icon: '🌧️', title: '受氣候影響大', desc: '肯亞兩季雨型氣候 + SL28 深根 = 釋放最強風味。其他產區種出來會略遜色。' }
+                            ]
+                        },
+                        pacamara: {
+                            name: 'Pacamara', tagline: '阿拉比卡最大豆 / 熱帶水果調',
+                            emoji: '🍍', status: 'ready', heroSvg: ENCY_VAR_PACAMARA,
+                            subtitle: '1958 年薩爾瓦多咖啡研究所將 Pacas（Bourbon 變種）與 Maragogipe（Typica 變種、最大豆形）雜交，創造出 Pacamara。豆子比正常阿拉比卡大 50%、葉子也大、產出招牌的「鳳梨、芒果、橘類」熱帶水果風味。',
+                            chips: [
+                                { text: '1958 薩爾瓦多', class: 'purple' },
+                                { text: '阿拉比卡最大豆', class: 'warm' },
+                                { text: '熱帶水果調', class: 'green' },
+                                { text: 'Pacas × Maragogipe', class: 'cool' },
+                                { text: '產量中等' }
+                            ],
+                            specs: [
+                                { k: '學名', v: 'Coffea arabica var. Pacamara' },
+                                { k: '起源', v: '薩爾瓦多 ISIC 研究所（1958）' },
+                                { k: '父本', v: 'Pacas（Bourbon 變種）× Maragogipe（巨型 Typica）' },
+                                { k: '豆形', v: '比正常豆大 50%、極長橢圓' },
+                                { k: '主要產區', v: '薩爾瓦多 / 宏都拉斯 / 瓜地馬拉' },
+                                { k: '招牌風味', v: '鳳梨、芒果、百香果、橘類' }
+                            ],
+                            origin: [
+                                { year: '1958', text: '薩爾瓦多咖啡研究所 ISIC 為了結合 Pacas 的高產與 Maragogipe 的大豆形，開始雜交實驗。' },
+                                { year: '1980s', text: 'Pacamara 開始在薩爾瓦多商業化種植，但因「奇怪的水果調」一度被認為瑕疵。' },
+                                { year: '2000s', text: '第三波咖啡浪潮重新評價熱帶水果調，Pacamara 開始被精品咖啡圈追捧。' },
+                                { year: '2007', text: 'Cup of Excellence 薩爾瓦多冠軍由 Pacamara 拿下，奠定它的精品地位。' },
+                                { year: '至今', text: '是中美洲最具特色的「水果調豆種」，與 Geisha 並列為「個性派」品種代表。' }
+                            ],
+                            originTitle: '📜 品種歷史與傳播',
+                            tipsTitle: '🍒 風味特性與沖煮建議',
+                            tips: [
+                                { icon: '🍍', title: '熱帶水果炸彈', desc: 'Pacamara 招牌是「鳳梨、芒果、百香果」的強烈熱帶水果調。有人說像在喝果汁。' },
+                                { icon: '📏', title: '豆形大要調研磨', desc: '豆子比正常大 50%、烘焙與研磨都要調整。研磨建議比 V60 略粗一檔。' },
+                                { icon: '☕', title: '沖煮：突顯水果', desc: '淺焙、四六法或 Matt Winton 法、92-93°C、放大那些熱帶水果香氣。' },
+                                { icon: '🇸🇻', title: '經典莊園', desc: '薩爾瓦多 Las Mercedes / 宏都拉斯 Las Maravillas 是 Pacamara 代表作。' },
+                                { icon: '⚠️', title: '處理法影響大', desc: 'Pacamara 配厭氧或日曬處理會炸出更強水果調，水洗則乾淨穩定。' }
+                            ]
+                        },
+                        caturra: {
+                            name: 'Caturra', tagline: 'Bourbon 變種、矮株高產的中南美主力',
+                            emoji: '🌳', status: 'ready', heroSvg: ENCY_VAR_CATURRA,
+                            subtitle: '1937 年巴西發現的 Bourbon 自然變異，最大特徵是「dwarf 矮株」（樹高只有 Bourbon 的 1/3），方便採收且產量高。風味雖略遜 Bourbon 但平衡乾淨，是哥倫比亞、哥斯大黎加等中南美洲的主力品種。',
+                            chips: [
+                                { text: '1937 巴西發現', class: 'purple' },
+                                { text: 'Bourbon 自然變異', class: 'warm' },
+                                { text: '矮株高產', class: 'green' },
+                                { text: '哥倫比亞主力', class: 'cool' },
+                                { text: '紅 / 黃變種' }
+                            ],
+                            specs: [
+                                { k: '學名', v: 'Coffea arabica var. Caturra' },
+                                { k: '起源', v: '巴西 Minas Gerais 自然變異（1937）' },
+                                { k: '父本', v: 'Bourbon（單基因變異）' },
+                                { k: '樹高', v: '矮株（dwarf），約 Bourbon 的 1/3' },
+                                { k: '主要產區', v: '哥倫比亞、哥斯大黎加、宏都拉斯' },
+                                { k: '變種', v: '紅 Caturra / 黃 Caturra' }
+                            ],
+                            origin: [
+                                { year: '1937', text: '巴西 Minas Gerais 州的咖啡園發現一株 Bourbon 自然變異成矮株、葉節密集。' },
+                                { year: '1940s', text: '巴西農藝研究所 IAC 開始系統化繁殖 Caturra、發現抗風能力與產量都優於 Bourbon。' },
+                                { year: '1950s', text: 'Caturra 進入哥倫比亞，因方便採收（不用爬高梯）成為主力品種。' },
+                                { year: '1970s-至今', text: 'Caturra 在中南美洲擴散、與 Catuai 並列哥倫比亞咖啡產業的支柱。' }
+                            ],
+                            originTitle: '📜 品種歷史與傳播',
+                            tipsTitle: '🍒 風味特性與沖煮建議',
+                            tips: [
+                                { icon: '⚖️', title: '平衡乾淨', desc: 'Caturra 沒有強烈個性，但平衡乾淨、酸甜中等。是「日常杯」最舒服的選擇。' },
+                                { icon: '🇨🇴', title: '哥倫比亞代表', desc: '哥倫比亞 Supremo / Excelso 等級豆大多是 Caturra，是市面上最常見的精品入門豆。' },
+                                { icon: '☕', title: '沖煮：寬容', desc: 'Caturra 對手法寬容，三段式 / 一刀流 / 四六法都能做出穩定杯感。新手練習豆首選。' },
+                                { icon: '🍒', title: '紅果調', desc: '中焙時常表現紅櫻桃、葡萄、巧克力等中性風味。沒有 Bourbon 的圓潤甜，但乾淨度更高。' },
+                                { icon: '🌳', title: '矮株好處', desc: '矮株 = 容易採收 + 抗風 + 高產，但有些人認為風味不如高株 Bourbon「靈魂感」。' }
+                            ]
+                        },
+                        catuai: {
+                            name: 'Catuai', tagline: 'Caturra × Mundo Novo、巴西主力',
+                            emoji: '🌾', status: 'ready', heroSvg: ENCY_VAR_CATUAI,
+                            subtitle: '1949 年巴西 IAC 用 Caturra（矮株）與 Mundo Novo（強健、高產）雜交培育的品種。結合兩者優點：矮株好採收 + 強健抗病 + 產量穩定，是巴西商業咖啡園的支柱。風味均衡、無強烈個性，但是價格 / 性能比最佳的選擇。',
+                            chips: [
+                                { text: '1949 巴西 IAC', class: 'purple' },
+                                { text: '巴西主力', class: 'green' },
+                                { text: '強健抗病', class: 'cool' },
+                                { text: '高產穩定', class: 'warm' },
+                                { text: '紅 / 黃變種' }
+                            ],
+                            specs: [
+                                { k: '學名', v: 'Coffea arabica var. Catuai' },
+                                { k: '起源', v: '巴西 IAC（1949 雜交）' },
+                                { k: '父本', v: 'Caturra（矮株）× Mundo Novo（強健）' },
+                                { k: '特徵', v: '矮株、葉密、產量穩' },
+                                { k: '主要產區', v: '巴西（最大）、宏都拉斯、瓜地馬拉' },
+                                { k: '變種', v: '紅 Catuai / 黃 Catuai' }
+                            ],
+                            origin: [
+                                { year: '1949', text: '巴西 IAC（Instituto Agronômico de Campinas）開始雜交實驗，目標結合 Caturra 矮株與 Mundo Novo 強健。' },
+                                { year: '1972', text: 'Catuai 正式發布並推廣商業種植。' },
+                                { year: '1980s-至今', text: '巴西全國 Catuai 種植面積佔超過 30%，是巴西大宗商業咖啡的主力。' },
+                                { year: '至今', text: '雖然不是「精品圈」最愛的品種，但 Catuai 的穩定性與性價比讓它成為全球商業咖啡的支柱。' }
+                            ],
+                            originTitle: '📜 品種歷史與傳播',
+                            tipsTitle: '🍒 風味特性與沖煮建議',
+                            tips: [
+                                { icon: '⚖️', title: '均衡無突出', desc: 'Catuai 的風味是「中庸的咖啡味」、無明顯個性、無突出風味。可預測但無驚艷。' },
+                                { icon: '🇧🇷', title: '巴西主力', desc: '市面上的「巴西豆」絕大多數是 Catuai 或 Mundo Novo，是性價比最高的「日常杯」選擇。' },
+                                { icon: '☕', title: '沖煮：商業混搭', desc: 'Catuai 常作為義式拼配的基底（提供 body 與穩定性），與 Robusta 拼配做奶咖。' },
+                                { icon: '🥜', title: '堅果巧克力調', desc: '中焙到中深焙時最佳，常表現堅果、巧克力、紅糖等溫和風味。' },
+                                { icon: '💰', title: '價格優勢', desc: '產量大 → 價格便宜，是想喝精品但預算有限時的折衷選擇。' }
+                            ]
+                        },
+                        ethiopia_heirloom: {
+                            name: 'Ethiopia Heirloom',
+                            tagline: '衣索比亞原生混合品系、花果香炸裂',
+                            emoji: '🌺', status: 'ready', heroSvg: ENCY_VAR_HEIRLOOM,
+                            subtitle: '衣索比亞作為阿拉比卡咖啡的原生地，當地至今仍有上千個野生與半野生品系混合栽培，統稱 "Heirloom"（傳家寶）。沒有單一明確品種，每個產區甚至每塊地都有不同基因組合。產出全球最豐富的花果香（茉莉、藍莓、佛手柑、百香果）。',
+                            chips: [
+                                { text: '衣索比亞原生', class: 'green' },
+                                { text: '上千野生變種', class: 'purple' },
+                                { text: '茉莉花 + 藍莓', class: 'warm' },
+                                { text: '基因庫', class: 'cool' },
+                                { text: '原始多樣性' }
+                            ],
+                            specs: [
+                                { k: '學名', v: 'Coffea arabica（原生混合 Landraces）' },
+                                { k: '原生地', v: '衣索比亞 Kaffa / Yirgacheffe / Sidamo / Guji' },
+                                { k: '品系數量', v: '估計超過 1000 個原生變種' },
+                                { k: '管理方式', v: '小農混合栽培、自然選種' },
+                                { k: '主要產區', v: 'Yirgacheffe、Sidamo、Guji、Limu、Harrar' },
+                                { k: '招牌風味', v: '茉莉花、藍莓、百香果、佛手柑、檸檬' }
+                            ],
+                            origin: [
+                                { year: '~ 850 AD', text: '衣索比亞 Kaffa 高原是阿拉比卡咖啡的天然原生地、上千個野生變種共存。' },
+                                { year: '17 世紀', text: '葉門商人從衣索比亞帶走少量品系（後來成為 Typica / Bourbon 祖先）、但絕大多數品系留在原生地。' },
+                                { year: '20 世紀', text: '衣索比亞政府保護原生基因庫，禁止外國公司大規模商業化採集。' },
+                                { year: '現代', text: '當地小農按家族傳統混合種植 5-30 個品系，這就是 "Heirloom"（傳家寶）的由來。' },
+                                { year: '至今', text: '是全球咖啡品種多樣性的「諾亞方舟」，未來新品種改良可能都要從這裡找基因。' }
+                            ],
+                            originTitle: '📜 品種歷史與傳播',
+                            tipsTitle: '🍒 風味特性與沖煮建議',
+                            tips: [
+                                { icon: '🌸', title: '花果香炸裂', desc: 'Yirgacheffe 水洗 → 茉莉花 + 檸檬；Sidamo 日曬 → 藍莓 + 草莓；Guji → 桃子 + 百香果。' },
+                                { icon: '🎨', title: '每批不同', desc: 'Heirloom 沒有單一明確品種，每塊地、每年、每批都會略有不同。是它的特色也是不確定性。' },
+                                { icon: '☕', title: '沖煮：放大花果', desc: '淺焙、92-93°C、四六法或 Matt Winton 法。深焙會壓掉所有花果香、絕對禁忌。' },
+                                { icon: '🌍', title: '產區比品種重要', desc: '挑衣索比亞豆看產區（Yirgacheffe / Sidamo / Guji）比看品種更有意義，因為品種就是 "Heirloom"。' },
+                                { icon: '💧', title: '水洗 vs 日曬', desc: '水洗 → 乾淨花香；日曬 → 強烈水果發酵感。同產區兩種處理可以喝出完全不同的風格。' }
+                            ]
+                        },
+                        robusta: {
+                            name: 'Robusta', tagline: '高咖啡因 / 低成本 / 義式拼配主力',
+                            emoji: '💪', status: 'ready', heroSvg: ENCY_VAR_ROBUSTA,
+                            subtitle: 'Robusta（學名 Coffea canephora）是與阿拉比卡並列的兩大商業咖啡物種。1898 年在剛果盆地被發現，咖啡因含量是阿拉比卡的 2 倍、抗病力極強、低海拔可種，是越南、印尼、巴西等大宗商業咖啡的主力，也是義式拼配的重要組成。',
+                            chips: [
+                                { text: 'Coffea canephora', class: 'purple' },
+                                { text: '1898 剛果發現', class: 'cool' },
+                                { text: '咖啡因 2 倍', class: 'warm' },
+                                { text: '抗病力強', class: 'green' },
+                                { text: '義式拼配' },
+                                { text: '速溶主力' }
+                            ],
+                            specs: [
+                                { k: '學名', v: 'Coffea canephora（與阿拉比卡並列兩大物種）' },
+                                { k: '起源', v: '剛果盆地（1898 發現）' },
+                                { k: '咖啡因', v: '2.7%（阿拉比卡 1.5%）' },
+                                { k: '海拔需求', v: '低海拔即可種（200-800m）' },
+                                { k: '抗病力', v: '極強（耐高溫、耐病、耐蟲）' },
+                                { k: '主要產區', v: '越南（最大）、印尼、巴西、印度、烏干達' }
+                            ],
+                            origin: [
+                                { year: '1898', text: '法國植物學家在比屬剛果盆地發現 Coffea canephora，與阿拉比卡有顯著差異。' },
+                                { year: '1900s', text: '荷蘭殖民者把 Robusta 帶到爪哇取代被葉鏽病摧毀的阿拉比卡，從此 Robusta 在低海拔殖民地擴散。' },
+                                { year: '1920s', text: '越南法屬殖民引入 Robusta、20 世紀末越南成為全球第一大 Robusta 生產國。' },
+                                { year: '1960s', text: '即溶咖啡興起，Robusta 因價格低廉成為速溶主力豆。' },
+                                { year: '至今', text: '全球咖啡產量約 40% 是 Robusta，但精品咖啡圈幾乎只用阿拉比卡。' }
+                            ],
+                            originTitle: '📜 品種歷史與傳播',
+                            tipsTitle: '🍒 風味特性與沖煮建議',
+                            tips: [
+                                { icon: '💪', title: '咖啡因 2 倍', desc: 'Robusta 咖啡因 2.7%、阿拉比卡 1.5%。提神效果強、但也較苦澀。早晨想清醒首選。' },
+                                { icon: '☕', title: '義式拼配靈魂', desc: '義式 Espresso 常用 80% Arabica + 20% Robusta，Robusta 提供：更強 Crema + 更厚 body + 更穩定的萃取。' },
+                                { icon: '🥛', title: '配奶最對味', desc: 'Robusta 直接喝偏苦、配奶（拿鐵、卡布）會中和苦感，反而能突顯巧克力堅果調。' },
+                                { icon: '🌍', title: '價格優勢', desc: '低海拔可種 + 抗病 + 產量大 → 價格只有阿拉比卡 1/3。是大宗商業咖啡的核心。' },
+                                { icon: '⚠️', title: '純喝偏粗糙', desc: '純 Robusta 杯感粗糙、苦感重、有橡膠味。除非特定用途，精品店不會單獨用。' },
+                                { icon: '🇻🇳', title: '越南是最大產國', desc: '越南占全球 Robusta 40%，越南咖啡（如 G7、Trung Nguyen）就是 Robusta 加煉乳的傳統做法。' }
+                            ]
+                        }
                     }
                 },
                 process: {
