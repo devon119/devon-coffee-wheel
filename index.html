@@ -462,11 +462,10 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             font-size: 13px !important; padding: 4px 12px !important;
         }
 
-        /* 🌳 豆種真樹狀圖（上往下、純 CSS 連線） */
+        /* 🌳 豆種真樹狀圖（上往下、純 CSS 連線、無框 + auto-fit） */
         .vt-wrap {
-            background: linear-gradient(180deg, #fffaf2 0%, #f5ede0 100%);
-            border-radius: 16px; padding: 22px 18px 26px;
-            margin-bottom: 26px; border: 1.5px solid #e7dcc6;
+            background: transparent;
+            padding: 0; margin-bottom: 26px;
             position: relative;
         }
         .vt-title {
@@ -478,15 +477,14 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             margin: 0 0 16px 0; font-style: italic;
         }
         .ftree-scroll {
-            overflow-x: auto; -webkit-overflow-scrolling: touch;
-            background: rgba(255,255,255,0.5);
-            border-radius: 12px;
-            padding: 24px 16px 16px;
+            overflow: hidden;
+            padding: 24px 0 16px;
+            display: flex; justify-content: center;
         }
         .ftree {
             font-family: "PingFang TC", "Microsoft JhengHei", sans-serif;
             display: inline-block;
-            min-width: 100%;
+            transform-origin: top center;
         }
         .ftree ul {
             list-style: none; margin: 0;
@@ -11349,11 +11347,14 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                     </li>`;
                 }).join('');
 
+                // 觸發自動 fit（在 DOM render 後）
+                setTimeout(_fitVarietyTree, 50);
+                setTimeout(_fitVarietyTree, 400);  // 延後再做一次（catch 字型載入後）
                 return `<div class="vt-wrap">
                     <h3 class="vt-title">🌳 咖啡豆種血緣樹</h3>
                     <p class="vt-subtitle">根（咖啡屬）→ 物種 → 譜系 → 25 個品種　·　點葉子進詳情頁</p>
-                    <div class="ftree-scroll">
-                        <div class="ftree">
+                    <div class="ftree-scroll" id="ftree-scroll">
+                        <div class="ftree" id="ftree-content">
                             <ul>
                                 <li>
                                     <div class="ftree-node-wrap">
@@ -11366,6 +11367,28 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                     </div>
                 </div>`;
             }
+
+            function _fitVarietyTree() {
+                const tree = document.getElementById('ftree-content');
+                const scroll = document.getElementById('ftree-scroll');
+                if (!tree || !scroll) return;
+                tree.style.transform = 'none';
+                tree.style.height = '';
+                const containerW = scroll.clientWidth;
+                const treeW = tree.scrollWidth;
+                const naturalH = tree.scrollHeight;
+                if (treeW > containerW && treeW > 0) {
+                    const scale = (containerW - 4) / treeW;
+                    tree.style.transform = `scale(${scale})`;
+                    // 縮放後 height 會變小、補正容器高度
+                    scroll.style.height = (naturalH * scale + 16) + 'px';
+                } else {
+                    scroll.style.height = '';
+                }
+            }
+            window.addEventListener('resize', () => {
+                if (document.getElementById('ftree-content')) _fitVarietyTree();
+            });
 
             // 舊 SVG 樹保留作為備份（不再呼叫）
             function _renderVarietyTree_OLD() {
