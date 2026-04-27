@@ -4173,23 +4173,48 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             // ⏱️ 養豆狀態（依 restDays 解析）
             function _renderRestDays(params) {
                 const r = String(params.restDays || '');
-                // 試著抽第一個數字做當前位置；若解析不到就標中間
                 const m = r.match(/(\d+)/);
                 const day = m ? parseInt(m[1]) : 7;
-                const pct = Math.min(100, day / 21 * 100);
-                const stage = day < 3 ? { t:'⚠️ 新豆期（CO2 過多）', c:'#ef5350' }
-                            : day < 14 ? { t:'✨ 甜蜜期', c:'#2e7d32' }
-                            : day < 21 ? { t:'🟡 成熟後期', c:'#ef6c00' }
-                            : { t:'📉 走下坡，應冷藏', c:'#757575' };
+                // 4 段（依 0-25 天線性映射，21d+ 截在右側）
+                const totalDays = 25;
+                const segs = [
+                    { from: 0,  to: 3,  bg:'#ffebee', stroke:'#c62828', text:'⚠️ 新豆期', sub:'0-3d', tip:'CO₂ 過多、Bloom 過度' },
+                    { from: 3,  to: 14, bg:'#e8f5e9', stroke:'#2e7d32', text:'✨ 甜蜜期', sub:'3-14d', tip:'風味最佳區間' },
+                    { from: 14, to: 21, bg:'#fff3e0', stroke:'#ef6c00', text:'🟡 成熟後期', sub:'14-21d', tip:'仍可喝、香氣略減' },
+                    { from: 21, to: 25, bg:'#f5f5f5', stroke:'#757575', text:'📉 走下坡', sub:'21d+', tip:'建議冷藏延長' }
+                ];
+                const stage = day < 3 ? segs[0] : day < 14 ? segs[1] : day < 21 ? segs[2] : segs[3];
+                const w = 320;
+                const markerX = Math.min(w, (day / totalDays) * w);
                 return `
-                <div class="viz-card">
-                    <div class="viz-card-title">⏱️ 養豆</div>
-                    <div class="viz-rest-bar">
-                        <div class="viz-grind-marker" style="left: ${pct}%;"></div>
+                <div class="viz-card" style="grid-column: 1 / -1;">
+                    <div class="viz-card-title">⏱️ 養豆狀態（烘焙後 ${day} 天）</div>
+                    <div style="overflow-x:auto; padding: 6px 0;">
+                        <svg viewBox="0 0 340 130" xmlns="http://www.w3.org/2000/svg" style="min-width:300px; width:100%; height:auto; max-height:160px;">
+                            ${segs.map(seg => {
+                                const x = 10 + (seg.from / totalDays) * w;
+                                const segW = ((seg.to - seg.from) / totalDays) * w;
+                                const isCurrent = (day >= seg.from && day < seg.to) || (seg.from === 21 && day >= 21);
+                                return `
+                                    <rect x="${x}" y="22" width="${segW}" height="32" fill="${seg.bg}" stroke="${seg.stroke}" stroke-width="${isCurrent ? 2.5 : 1.2}" rx="4"/>
+                                    <text x="${x + segW/2}" y="38" font-size="11" font-weight="800" fill="${seg.stroke}" text-anchor="middle">${seg.text}</text>
+                                    <text x="${x + segW/2}" y="50" font-size="9.5" font-weight="700" fill="${seg.stroke}" text-anchor="middle">${seg.sub}</text>
+                                `;
+                            }).join('')}
+                            <!-- 當前位置 marker（豆子 + 三角形）-->
+                            <polygon points="${10+markerX-7},10 ${10+markerX+7},10 ${10+markerX},22" fill="#bf360c"/>
+                            <text x="${10+markerX}" y="76" font-size="11" font-weight="900" fill="#bf360c" text-anchor="middle">↑ ${day}d 現在</text>
+                            <!-- 時間刻度 -->
+                            <line x1="10" y1="60" x2="330" y2="60" stroke="#5d4037" stroke-width="1"/>
+                            ${[0, 3, 7, 14, 21].map(d => {
+                                const x = 10 + (d / totalDays) * w;
+                                return `<line x1="${x}" y1="58" x2="${x}" y2="62" stroke="#5d4037" stroke-width="1"/>
+                                        <text x="${x}" y="92" font-size="9.5" font-weight="700" fill="#5d4037" text-anchor="middle">${d}d</text>`;
+                            }).join('')}
+                            <text x="170" y="120" font-size="11" fill="${stage.stroke}" font-style="italic" text-anchor="middle">${stage.text} · ${stage.tip}</text>
+                        </svg>
                     </div>
-                    <div class="viz-rest-labels"><span>0d</span><span>3d</span><span>7d</span><span>14d</span><span>21d+</span></div>
-                    <span class="viz-rest-tag" style="background: ${stage.c}22; color: ${stage.c};">${stage.t}</span>
-                    <div class="viz-grind-note" style="margin-top:6px;">${_escHtml(r)}</div>
+                    <div class="viz-grind-note" style="margin-top:4px;">${_escHtml(r)}</div>
                 </div>`;
             }
 
