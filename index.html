@@ -7625,6 +7625,57 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 beanLight: '#8d6e63', beanMid: '#5d4037', beanDark: '#3e2723'
             });
 
+            const ENCY_VAR_MARSELLESA = _encyVarietySvg({
+                id: 'marsellesa', name: 'Marsellesa', scientific: 'Sarchimor × Villa Sarchi 改良',
+                subtext: '抗病又好喝的中美洲新主力', bg1: '#e0f7fa', bg2: '#4dd0e1',
+                beanW: 72, beanH: 100, curve: 'straight'
+            });
+
+            const ENCY_VAR_CENTRO = _encyVarietySvg({
+                id: 'centro', name: 'Centroamericano (H1)', scientific: 'WCR F1 雜交（Sudan Rume × Sarchimor 等）',
+                subtext: 'WCR 培育的高品質 F1 hybrid', bg1: '#fff8e1', bg2: '#ffd54f',
+                beanW: 70, beanH: 105, curve: 's',
+                deco: `<text x="80" y="100" font-size="28">🧬</text>
+                <text x="400" y="100" font-size="28">🏆</text>`
+            });
+
+            const ENCY_VAR_TABI = _encyVarietySvg({
+                id: 'tabi', name: 'Tabi', scientific: 'Typica × Bourbon × Timor Hybrid（哥倫比亞）',
+                subtext: '抗病 + 風味勝 Castillo', bg1: '#fff3e0', bg2: '#ff9800',
+                beanW: 72, beanH: 102, curve: 'straight'
+            });
+
+            const ENCY_VAR_RUIRU = _encyVarietySvg({
+                id: 'ruiru', name: 'Ruiru 11', scientific: '肯亞 1985 培育（K7 / Catimor 系列）',
+                subtext: '肯亞抗病商業豆', bg1: '#f1f8e9', bg2: '#9ccc65',
+                beanW: 70, beanH: 95, curve: 'straight'
+            });
+
+            const ENCY_VAR_BATIAN = _encyVarietySvg({
+                id: 'batian', name: 'Batian', scientific: '肯亞 2010（純阿拉比卡多代回交）',
+                subtext: '純阿拉比卡 + 抗病', bg1: '#fff3e0', bg2: '#ff7043',
+                beanW: 72, beanH: 100, curve: 'straight'
+            });
+
+            const ENCY_VAR_74110 = _encyVarietySvg({
+                id: 'jarc74', name: '74110 / 74112', scientific: '衣索比亞 JARC 選育系列',
+                subtext: 'Yirgacheffe 抗 CBD 標準品系', bg1: '#fce4ec', bg2: '#ce93d8',
+                beanW: 65, beanH: 110, curve: 's',
+                deco: `<text x="80" y="100" font-size="30">🌸</text>
+                <text x="400" y="100" font-size="30">🫐</text>
+                <text x="60" y="270" font-size="22">🍓</text>`
+            });
+
+            const ENCY_VAR_LIBERICA = _encyVarietySvg({
+                id: 'liberica', name: 'Liberica / Excelsa', scientific: 'Coffea liberica（第三大商業物種）',
+                subtext: '菲律賓 Barako · 木質煙燻菠蘿蜜', bg1: '#efebe9', bg2: '#558b2f',
+                beanW: 100, beanH: 130, curve: 's',
+                beanLight: '#8d6e63', beanMid: '#4e342e', beanDark: '#2e1a0e',
+                deco: `<text x="80" y="105" font-size="28">🪵</text>
+                <text x="400" y="105" font-size="28">🌳</text>
+                <text x="60" y="270" font-size="20">🍍</text>`
+            });
+
             // ========== 處理法 hero SVG helper（流程圖式）==========
             function _encyProcessSvg(opts) {
                 return `<svg viewBox="0 0 480 420" xmlns="http://www.w3.org/2000/svg">
@@ -8963,6 +9014,254 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                                 { icon: '🥛', title: '配奶可救', desc: '直接喝太粗糙，配大量牛奶 + 糖（拿鐵 / 越南煉乳咖啡）才合理。' },
                                 { icon: '⚠️', title: '別買精品手沖', desc: '看到「Catimor 手沖豆」基本上是浪費錢，這品種設計就不是給精品用的。' },
                                 { icon: '🌳', title: '抗病英雄家族', desc: 'Catimor 是 Castillo / Marsellesa / Tabi 等現代抗病雜交種的祖先，歷史地位重要。' }
+                            ]
+                        },
+                        marsellesa: {
+                            name: 'Marsellesa', tagline: '抗病又好喝的中美洲新主力',
+                            emoji: '🛡️', status: 'ready', heroSvg: ENCY_VAR_MARSELLESA,
+                            subtitle: '尼加拉瓜 ECOM 與法國 CIRAD 合作開發的 Sarchimor 改良品系（Villa Sarchi × Timor Hybrid 後代）。比 Catimor / Castillo 杯感更乾淨平衡，是「抗病又好喝」的代表，2010s 後在中美洲快速擴散。',
+                            chips: [
+                                { text: 'ECOM × CIRAD', class: 'purple' },
+                                { text: 'Sarchimor 改良', class: 'warm' },
+                                { text: '抗葉鏽', class: 'green' },
+                                { text: '中美洲新主力', class: 'cool' },
+                                { text: '杯感優於 Catimor' }
+                            ],
+                            specs: [
+                                { k: '學名', v: 'Coffea arabica var. Marsellesa' },
+                                { k: '研發單位', v: 'ECOM Trading + CIRAD（法國農業研究中心）' },
+                                { k: '父本', v: 'Villa Sarchi × Timor Hybrid（Sarchimor 系列）' },
+                                { k: '釋出年', v: '2010s' },
+                                { k: '主要產區', v: '尼加拉瓜、宏都拉斯、墨西哥' },
+                                { k: '抗病力', v: '抗葉鏽病、抗萎凋病' }
+                            ],
+                            origin: [
+                                { year: '1990s', text: 'CIRAD 與中美洲咖啡研究機構開始選育 Sarchimor 系列改良版，尋找抗病又有風味的品種。' },
+                                { year: '2010s', text: 'ECOM 在尼加拉瓜 Marsellesa 莊園系統化選育、命名為 Marsellesa。' },
+                                { year: '2015-2020', text: '經 Cup of Excellence 等比賽驗證，杯感比 Catimor / Castillo 明顯優秀，獲得精品圈認可。' },
+                                { year: '至今', text: '是中美洲新一代抗病主力，逐漸取代 Catimor 在商業精品市場的地位。' }
+                            ],
+                            originTitle: '📜 品種歷史與傳播',
+                            tipsTitle: '🍒 風味特性與沖煮建議',
+                            tips: [
+                                { icon: '⚖️', title: '平衡又乾淨', desc: 'Marsellesa 風味平衡、巧克力堅果、紅糖。比 Catimor 多甜感、比 Castillo 多層次。' },
+                                { icon: '🛡️', title: '抗病優勢', desc: '抗葉鏽病 + 抗萎凋病、無 Robusta 雜交粗糙感、是現代精品兼商業的甜蜜點。' },
+                                { icon: '☕', title: '沖煮：通用百搭', desc: '中焙到淺中焙都行、三段式或四六法。對手法寬容、新手友善。' },
+                                { icon: '🌍', title: '永續友善', desc: '抗病能減少農藥使用、是環保意識高的咖啡選擇。' },
+                                { icon: '🆚', title: 'vs Castillo', desc: 'Castillo 商業性強但風味平淡；Marsellesa 兼顧商業與精品、CoE 比賽常見。' }
+                            ]
+                        },
+                        centroamericano: {
+                            name: 'Centroamericano (H1)', tagline: 'WCR 培育的 F1 雜交、未來主流',
+                            emoji: '🧬', status: 'ready', heroSvg: ENCY_VAR_CENTRO,
+                            subtitle: 'World Coffee Research（WCR）2010s 培育的 F1 雜交品種（Sudan Rume × Sarchimor 等多代雜交）。結合野生稀有品系的高品質 + 抗病基因 + 高產量，被視為「未來咖啡的方向」。',
+                            chips: [
+                                { text: 'WCR 培育', class: 'purple' },
+                                { text: 'F1 雜交品種', class: 'warm' },
+                                { text: 'Sudan Rume 血統', class: 'green' },
+                                { text: '抗病高產', class: 'cool' },
+                                { text: '2010s 新品種' }
+                            ],
+                            specs: [
+                                { k: '學名', v: 'Coffea arabica F1 hybrid（Centroamericano / H1）' },
+                                { k: '研發單位', v: 'World Coffee Research（WCR）+ CATIE + ECOM' },
+                                { k: '父本', v: 'Sudan Rume × Sarchimor / Marsellesa 等多代' },
+                                { k: '釋出年', v: '2010s（H1 / Starmaya / Casiopea 等系列）' },
+                                { k: '主要產區', v: '尼加拉瓜、宏都拉斯、薩爾瓦多（試驗推廣）' },
+                                { k: '招牌風味', v: '紅莓、黑莓、巧克力、紅酒（繼承 Sudan Rume）' }
+                            ],
+                            origin: [
+                                { year: '2010', text: 'World Coffee Research 成立，目標：用現代基因技術培育「品質好 + 抗病 + 高產」的下一代咖啡。' },
+                                { year: '2014', text: 'CATIE 釋出第一批 F1 hybrid 品系（H1 系列），開始試驗種植。' },
+                                { year: '2017', text: 'Centroamericano 在 Cup of Excellence 比賽獲得高分、驚艷精品圈。' },
+                                { year: '2020s', text: 'WCR 持續發展 Starmaya、Casiopea 等新 F1 品系，朝向氣候適應性更強的方向。' },
+                                { year: '至今', text: '被視為「咖啡 2.0」的代表，氣候變遷下的未來主流。' }
+                            ],
+                            originTitle: '📜 品種歷史與傳播',
+                            tipsTitle: '🍒 風味特性與沖煮建議',
+                            tips: [
+                                { icon: '🍇', title: '繼承 Sudan Rume', desc: '紅莓、黑莓、紅酒調很明顯，加上 Sarchimor 的抗病優勢、是「Sudan Rume 平民版」。' },
+                                { icon: '🧬', title: 'F1 雜交活力強', desc: 'F1 雜交種具有「雜交優勢」（heterosis），第一代產量、抗病、風味都很強。' },
+                                { icon: '☕', title: '沖煮：突顯莓果', desc: '建議淺焙、四六法或 Hoffmann 法、92°C，把莓果與紅酒調最大化。' },
+                                { icon: '⚠️', title: 'F1 限制', desc: 'F1 種子第二代會性狀分離、不能自留種、需向 WCR 等買新苗。商業限制。' },
+                                { icon: '🌍', title: '未來方向', desc: '氣候變遷讓傳統品種越來越難種、F1 雜交將是 21 世紀後半的主流。' }
+                            ]
+                        },
+                        tabi: {
+                            name: 'Tabi', tagline: '哥倫比亞抗病但風味勝 Castillo',
+                            emoji: '🌟', status: 'ready', heroSvg: ENCY_VAR_TABI,
+                            subtitle: '哥倫比亞 Cenicafé 培育的多源雜交（Typica × Bourbon × Timor Hybrid），抗葉鏽病的同時保留更多 Typica / Bourbon 風味基因。比 Castillo 風味更有層次，是哥倫比亞精品莊園的選擇。',
+                            chips: [
+                                { text: 'Cenicafé 培育', class: 'purple' },
+                                { text: 'Typica × Bourbon × Timor', class: 'warm' },
+                                { text: '抗病 + 風味', class: 'green' },
+                                { text: '哥倫比亞精品', class: 'cool' },
+                                { text: '比 Castillo 強' }
+                            ],
+                            specs: [
+                                { k: '學名', v: 'Coffea arabica var. Tabi' },
+                                { k: '研發單位', v: 'Cenicafé（哥倫比亞咖啡研究院）' },
+                                { k: '父本', v: '(Typica × Bourbon) × Timor Hybrid' },
+                                { k: '釋出年', v: '2002' },
+                                { k: '主要產區', v: '哥倫比亞 Huila / Tolima 高海拔精品莊園' },
+                                { k: '名字由來', v: 'Tabi（南美原住民語：「禮物」）' }
+                            ],
+                            origin: [
+                                { year: '1980s', text: 'Cenicafé 在開發 Castillo 的同時，並行培育「保留更多風味」的抗病品種。' },
+                                { year: '2002', text: 'Tabi 正式釋出。比 Castillo 多了 Typica × Bourbon 的風味基因、抗病力同樣強。' },
+                                { year: '2010s', text: '哥倫比亞精品莊園逐漸採用 Tabi 取代 Castillo，CoE 比賽分數明顯較高。' },
+                                { year: '至今', text: '是哥倫比亞「精品 + 抗病」的最佳折衷選擇，被視為 Castillo 的高階版。' }
+                            ],
+                            originTitle: '📜 品種歷史與傳播',
+                            tipsTitle: '🍒 風味特性與沖煮建議',
+                            tips: [
+                                { icon: '🍯', title: '甜感層次強', desc: 'Tabi 招牌：紅糖、蜂蜜、紅果調 + 巧克力。比 Castillo 明顯多層次。' },
+                                { icon: '🇨🇴', title: '哥倫比亞精品代表', desc: 'Huila 與 Tolima 的高海拔 Tabi 是哥倫比亞精品圈的招牌之一。' },
+                                { icon: '☕', title: '沖煮：四六法', desc: '建議中焙到淺中焙、四六法或 Hoffmann 法、92°C，放大甜感與層次。' },
+                                { icon: '🛡️', title: '抗病同 Castillo', desc: '抗葉鏽病能力與 Castillo 相當，但風味明顯優於後者。' },
+                                { icon: '💡', title: '名字含義', desc: 'Tabi 在原住民語意為「禮物」、象徵這個品種是給咖啡產業的禮物。' }
+                            ]
+                        },
+                        ruiru_11: {
+                            name: 'Ruiru 11', tagline: '肯亞抗病商業豆',
+                            emoji: '🌾', status: 'ready', heroSvg: ENCY_VAR_RUIRU,
+                            subtitle: '肯亞 Coffee Research Foundation 在 1985 年釋出的抗病品種，名字來自 Ruiru 鎮研究站。為了應對葉鏽病與 CBD（Coffee Berry Disease）對 SL28 / SL34 的威脅。風味比 SL28 略遜層次，但抗病與產量大幅提升。',
+                            chips: [
+                                { text: '1985 肯亞', class: 'purple' },
+                                { text: '抗 CBD + 葉鏽', class: 'warm' },
+                                { text: '高產', class: 'green' },
+                                { text: '肯亞商業大宗', class: 'cool' },
+                                { text: 'Catimor 系列' }
+                            ],
+                            specs: [
+                                { k: '學名', v: 'Coffea arabica var. Ruiru 11' },
+                                { k: '研發單位', v: '肯亞 Coffee Research Foundation' },
+                                { k: '父本', v: 'K7 × Catimor 等多元雜交' },
+                                { k: '釋出年', v: '1985' },
+                                { k: '主要產區', v: '肯亞低海拔商業園區' },
+                                { k: '抗病力', v: '抗葉鏽病、抗 CBD' }
+                            ],
+                            origin: [
+                                { year: '1971', text: 'CBD（Coffee Berry Disease）席捲肯亞、傳統 SL28 大量染病。CRF 開始開發抗病品種。' },
+                                { year: '1985', text: 'Ruiru 11 正式釋出、命名來自 CRF 的 Ruiru 鎮研究站。' },
+                                { year: '1990s-2000s', text: '肯亞政府推廣低海拔產區換種 Ruiru 11，產量明顯提升。' },
+                                { year: '至今', text: '是肯亞商業大宗咖啡的主力之一，但精品圈仍偏好 SL28。' }
+                            ],
+                            originTitle: '📜 品種歷史與傳播',
+                            tipsTitle: '🍒 風味特性與沖煮建議',
+                            tips: [
+                                { icon: '☕', title: '風味比 SL28 弱', desc: 'Ruiru 11 仍有部分黑醋栗酸調，但層次與酸質強度明顯不如 SL28。' },
+                                { icon: '🇰🇪', title: '肯亞商業豆', desc: '市面上的「肯亞 AB」很多是 Ruiru 11，只有 AA 等級才確保 SL28。' },
+                                { icon: '🥛', title: '配奶可救', desc: '直接喝層次普通、配奶或做美式可中和並突顯巧克力堅果調。' },
+                                { icon: '⚠️', title: '不要當精品買', desc: '精品市場買 Ruiru 11 是浪費錢、買肯亞要看莊園與品種標示。' },
+                                { icon: '🛡️', title: '抗病主力', desc: 'CBD + 葉鏽雙重抗病、是肯亞咖啡產業在病害下的救星。' }
+                            ]
+                        },
+                        batian: {
+                            name: 'Batian', tagline: '肯亞 2010 純阿拉比卡抗病新銳',
+                            emoji: '🏔️', status: 'ready', heroSvg: ENCY_VAR_BATIAN,
+                            subtitle: '肯亞 Coffee Research Foundation 在 2010 年釋出的最新抗病品種，與 Ruiru 11 不同的是 Batian 經過多代回交後幾乎是「純阿拉比卡」（無 Robusta 基因）。風味接近 SL28、酸質明亮、是肯亞精品圈逐漸接受的選擇。',
+                            chips: [
+                                { text: '2010 肯亞', class: 'purple' },
+                                { text: '純阿拉比卡', class: 'warm' },
+                                { text: '抗 CBD + 葉鏽', class: 'green' },
+                                { text: '風味近 SL28', class: 'cool' },
+                                { text: '名來自肯亞山峰' }
+                            ],
+                            specs: [
+                                { k: '學名', v: 'Coffea arabica var. Batian' },
+                                { k: '研發單位', v: '肯亞 Coffee Research Foundation' },
+                                { k: '父本', v: 'SL28 × Rume Sudan × Catimor 多代回交' },
+                                { k: '釋出年', v: '2010' },
+                                { k: '主要產區', v: '肯亞中部與西部' },
+                                { k: '名字由來', v: 'Batian（肯亞山最高峰之一）' }
+                            ],
+                            origin: [
+                                { year: '1990s', text: 'CRF 觀察到 Ruiru 11 的 Robusta 雜交基因影響風味、開始多代回交「淨化」品系。' },
+                                { year: '2010', text: 'Batian 釋出、命名為「肯亞山的高峰」、風味與抗病兼顧的代表。' },
+                                { year: '2015-2020', text: '精品莊園逐漸接受 Batian、CoE 比賽中表現佳。' },
+                                { year: '至今', text: '是肯亞「下一代 SL28」的候選、抗病力強且純阿拉比卡風味。' }
+                            ],
+                            originTitle: '📜 品種歷史與傳播',
+                            tipsTitle: '🍒 風味特性與沖煮建議',
+                            tips: [
+                                { icon: '🍇', title: '酸質明亮近 SL28', desc: 'Batian 招牌：黑醋栗、莓果、葡萄柚調，酸質明亮但比 SL28 略圓潤。' },
+                                { icon: '🇰🇪', title: '肯亞精品新選擇', desc: '想喝肯亞 AA 風格但 SL28 太貴時、Batian 是替代選擇。價格約 SL28 的 2/3。' },
+                                { icon: '☕', title: '沖煮：四六法或 Hoffmann', desc: '建議淺焙、92-93°C、放大酸質與層次。' },
+                                { icon: '🛡️', title: '純阿拉比卡優勢', desc: '無 Robusta 雜交粗糙感、是 Ruiru 11 的高階替代。' },
+                                { icon: '🔮', title: '未來主流', desc: '隨氣候變遷，Batian 抗病優勢將讓它逐漸取代 SL28 成肯亞商業主力。' }
+                            ]
+                        },
+                        jarc_74: {
+                            name: '74110 / 74112', tagline: '衣索比亞 JARC 選育的 Yirgacheffe 標準品系',
+                            emoji: '🌸', status: 'ready', heroSvg: ENCY_VAR_74110,
+                            subtitle: '衣索比亞 JARC（Jimma Agricultural Research Center）在 1974 年從 Yirgacheffe 地區選育的抗 CBD 品系，編號 74110 與 74112 是兩個最普及的版本。是「Heirloom」中具體可追溯的品系，茉莉花 + 莓果 + 檸檬皮的招牌風味來源。',
+                            chips: [
+                                { text: 'JARC 1974 選育', class: 'purple' },
+                                { text: 'Yirgacheffe 標準', class: 'warm' },
+                                { text: '抗 CBD', class: 'green' },
+                                { text: '茉莉莓果調', class: 'cool' },
+                                { text: 'Heirloom 具名版' }
+                            ],
+                            specs: [
+                                { k: '學名', v: 'Coffea arabica var. 74110 / 74112' },
+                                { k: '研發單位', v: '衣索比亞 JARC' },
+                                { k: '釋出年', v: '1974' },
+                                { k: '父本', v: '從 Yirgacheffe / Sidamo 野生 Heirloom 選育' },
+                                { k: '主要產區', v: 'Yirgacheffe、Sidamo、Guji' },
+                                { k: '招牌風味', v: '茉莉花、藍莓、檸檬皮、佛手柑' }
+                            ],
+                            origin: [
+                                { year: '1971', text: 'CBD 在衣索比亞爆發、傳統 Heirloom 大量染病。JARC 開始系統化選育抗病品系。' },
+                                { year: '1974', text: '74110 與 74112 從上千個 Yirgacheffe 變異中選出、抗 CBD 且風味突出。' },
+                                { year: '1980s-至今', text: 'Yirgacheffe 與 Sidamo 的咖啡園逐漸換種 74110 / 74112，是現在「Heirloom」的核心。' },
+                                { year: '至今', text: '當你買到「Yirgacheffe Heirloom」豆時，74110 / 74112 是最常見的具體品系。' }
+                            ],
+                            originTitle: '📜 品種歷史與傳播',
+                            tipsTitle: '🍒 風味特性與沖煮建議',
+                            tips: [
+                                { icon: '🌸', title: '茉莉莓果經典', desc: '74110 與 74112 是 Yirgacheffe 招牌風味的真正來源、茉莉 + 藍莓 + 檸檬皮的經典組合。' },
+                                { icon: '🌍', title: '可追溯的 Heirloom', desc: '一般 Heirloom 是大雜燴、但 74110 / 74112 是具體品系、品質可預期。' },
+                                { icon: '☕', title: '沖煮：放大花果', desc: '淺焙、四六法或 Matt Winton 法、92-93°C，把茉莉與藍莓最大化。' },
+                                { icon: '💧', title: '水洗 vs 日曬', desc: '74110/74112 水洗 → 茉莉檸檬乾淨；日曬 → 藍莓草莓發酵感。兩種風格都試試。' },
+                                { icon: '⚠️', title: '深焙浪費', desc: '深焙會壓掉所有花果調、永遠淺焙、City Plus 以內。' }
+                            ]
+                        },
+                        liberica: {
+                            name: 'Liberica / Excelsa', tagline: '第三大商業物種 · 木質煙燻菠蘿蜜',
+                            emoji: '🪵', status: 'ready', heroSvg: ENCY_VAR_LIBERICA,
+                            subtitle: 'Coffea liberica 是與阿拉比卡、Robusta 並列的三大商業咖啡物種之一。1850 年代在賴比瑞亞發現、豆形巨大不規則。風味獨特：木質、煙燻、菠蘿蜜、發酵感、帶有醋酸調。菲律賓 Barako 與東南亞特色品。',
+                            chips: [
+                                { text: 'Coffea liberica 物種', class: 'purple' },
+                                { text: '1850s 賴比瑞亞', class: 'warm' },
+                                { text: '巨大不規則豆', class: 'green' },
+                                { text: '木質煙燻調', class: 'cool' },
+                                { text: '菲律賓 Barako' }
+                            ],
+                            specs: [
+                                { k: '學名', v: 'Coffea liberica（含 var. excelsa）' },
+                                { k: '原生地', v: '西非 賴比瑞亞 / 象牙海岸' },
+                                { k: '主要產區', v: '菲律賓、馬來西亞、印尼、越南' },
+                                { k: '豆形', v: '巨大、不規則、像橢圓水滴' },
+                                { k: '咖啡因', v: '1.2-1.5%（介於阿拉比卡與 Robusta 之間）' },
+                                { k: '招牌風味', v: '木質、煙燻、菠蘿蜜、醋酸、發酵' }
+                            ],
+                            origin: [
+                                { year: '1850s', text: '英國植物學家在賴比瑞亞發現 Coffea liberica，與阿拉比卡 / Robusta 顯著不同。' },
+                                { year: '1880s', text: '菲律賓殖民時期，Liberica 取代被葉鏽病摧毀的阿拉比卡，成為當地主力。' },
+                                { year: '1900s', text: 'Liberica 在菲律賓被稱為 "Barako"（武士）、是民族咖啡飲料。' },
+                                { year: '20 世紀', text: '商業上被阿拉比卡與 Robusta 取代，但東南亞仍保留為特色品。' },
+                                { year: '近年', text: '精品咖啡圈重新發現 Liberica 的獨特風味、開始有少量精品莊園販售。' }
+                            ],
+                            originTitle: '📜 物種歷史',
+                            tipsTitle: '🍒 風味特性與沖煮建議',
+                            tips: [
+                                { icon: '🪵', title: '極獨特風味', desc: 'Liberica 招牌：木質、煙燻、菠蘿蜜、醋酸、發酵調。完全不同於阿拉比卡 / Robusta。' },
+                                { icon: '🇵🇭', title: '菲律賓 Barako', desc: '菲律賓 Cavite 與 Batangas 是 Barako 主要產地、是當地民族飲料。' },
+                                { icon: '☕', title: '沖煮：粗一檔', desc: '豆子大、研磨要粗一檔、水溫降到 90°C 避免過萃。配奶或加糖才合理。' },
+                                { icon: '🍍', title: '菠蘿蜜調獨特', desc: 'Liberica 與 Excelsa（其變種）的菠蘿蜜 / 龍眼乾調是其他品種沒有的。' },
+                                { icon: '⚠️', title: '挑選謹慎', desc: '市售 Liberica 良莠不齊、商業豆風味粗糙、精品莊園的 Liberica 才有獨特性。' },
+                                { icon: '🌍', title: '物種多元性', desc: '世界 124 種 Coffea，目前商業只用 Arabica / Robusta / Liberica 三種、Liberica 是其中最稀有。' }
                             ]
                         }
                     }
