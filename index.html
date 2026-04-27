@@ -5303,6 +5303,8 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             let _viewerReplayTimer = null;
             function _startViewerReplayLoop() {
                 clearInterval(_viewerReplayTimer);
+                // 手機版小螢幕重跑動畫看起來像整頁 reload，直接停用
+                if (window.matchMedia('(max-width: 900px)').matches) return;
                 // 第一次重播在 15 秒後，之後每 15 秒一次
                 _viewerReplayTimer = setInterval(_replayViewerAnimations, 15000);
             }
