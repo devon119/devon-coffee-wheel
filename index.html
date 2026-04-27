@@ -5654,6 +5654,625 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 <text x="20" y="294" font-size="10.5" fill="#5d4037">中粉、20-25g</text>
             </svg>`;
 
+            // Kalita Wave 大圖（不鏽鋼平底 + 波浪濾紙 + 3 小孔）
+            const ENCY_SVG_KALITA = `<svg viewBox="0 0 480 420" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="kal-steel" x1="0" y1="0" x2="1" y2="0">
+                        <stop offset="0%" stop-color="#546e7a"/>
+                        <stop offset="20%" stop-color="#90a4ae"/>
+                        <stop offset="50%" stop-color="#eceff1"/>
+                        <stop offset="80%" stop-color="#90a4ae"/>
+                        <stop offset="100%" stop-color="#546e7a"/>
+                    </linearGradient>
+                    <linearGradient id="kal-coffee" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#5d4037"/>
+                        <stop offset="100%" stop-color="#2e1a0e"/>
+                    </linearGradient>
+                    <radialGradient id="kal-shadow" cx="0.5" cy="0.5" r="0.5">
+                        <stop offset="0%" stop-color="rgba(0,0,0,0.28)"/>
+                        <stop offset="100%" stop-color="rgba(0,0,0,0)"/>
+                    </radialGradient>
+                </defs>
+                <ellipse cx="240" cy="372" rx="130" ry="14" fill="url(#kal-shadow)"/>
+                <!-- 後牆陰影 -->
+                <path d="M 90 110 L 390 110 L 340 270 L 140 270 Z" fill="#37474f"/>
+                <!-- 內部 -->
+                <path d="M 96 116 L 384 116 L 336 266 L 144 266 Z" fill="#1c2226"/>
+                <!-- 內部濾紙底 -->
+                <rect x="148" y="252" width="184" height="14" fill="#fff8e1" opacity="0.9"/>
+                <!-- 咖啡粉床（薄餅平鋪）-->
+                <rect x="156" y="244" width="168" height="12" fill="url(#kal-coffee)"/>
+                <ellipse cx="240" cy="244" rx="84" ry="2" fill="#8d6e63" opacity="0.5"/>
+                <!-- 不鏽鋼外殼 -->
+                <path d="M 90 110 L 390 110 L 340 268 L 140 268 Z" fill="url(#kal-steel)" opacity="0.95"/>
+                <!-- 波浪濾紙頂部摺紋（20 摺）-->
+                <g fill="none" stroke="#bcaaa4" stroke-width="1.2">
+                    <path d="M 100 116 Q 105 100 110 116 Q 115 100 120 116 Q 125 100 130 116 Q 135 100 140 116 Q 145 100 150 116 Q 155 100 160 116 Q 165 100 170 116 Q 175 100 180 116 Q 185 100 190 116 Q 195 100 200 116 Q 205 100 210 116 Q 215 100 220 116 Q 225 100 230 116 Q 235 100 240 116 Q 245 100 250 116 Q 255 100 260 116 Q 265 100 270 116 Q 275 100 280 116 Q 285 100 290 116 Q 295 100 300 116 Q 305 100 310 116 Q 315 100 320 116 Q 325 100 330 116 Q 335 100 340 116 Q 345 100 350 116 Q 355 100 360 116 Q 365 100 370 116 Q 375 100 380 116" fill="#fff8e1"/>
+                </g>
+                <!-- 內側肋紋（少量豎條）-->
+                <g stroke="#455a64" stroke-width="0.8" opacity="0.4">
+                    <line x1="125" y1="130" x2="156" y2="262"/>
+                    <line x1="180" y1="130" x2="195" y2="262"/>
+                    <line x1="240" y1="130" x2="240" y2="262"/>
+                    <line x1="300" y1="130" x2="285" y2="262"/>
+                    <line x1="355" y1="130" x2="324" y2="262"/>
+                </g>
+                <!-- 高光 -->
+                <path d="M 100 122 L 145 260" stroke="rgba(255,255,255,0.4)" stroke-width="2" fill="none"/>
+                <!-- 杯口厚環 -->
+                <ellipse cx="240" cy="110" rx="150" ry="6" fill="#37474f"/>
+                <ellipse cx="240" cy="110" rx="146" ry="3.5" fill="#cfd8dc"/>
+                <!-- 平底（金屬） -->
+                <rect x="140" y="266" width="200" height="6" fill="#455a64"/>
+                <!-- 3 個出水孔（招牌特徵）-->
+                <ellipse cx="200" cy="269" rx="4" ry="1.8" fill="#0a0a0a"/>
+                <ellipse cx="240" cy="269" rx="4" ry="1.8" fill="#0a0a0a"/>
+                <ellipse cx="280" cy="269" rx="4" ry="1.8" fill="#0a0a0a"/>
+                <!-- 底座（梯形支撐） -->
+                <path d="M 220 272 L 260 272 L 270 298 L 210 298 Z" fill="#37474f"/>
+                <ellipse cx="240" cy="298" rx="32" ry="3" fill="#1c2226"/>
+                <!-- 滴落水珠（3 處對應 3 孔）-->
+                <ellipse cx="200" cy="282" rx="2.5" ry="3.5" fill="#5d4037" opacity="0.85"/>
+                <ellipse cx="240" cy="284" rx="3" ry="4" fill="#5d4037" opacity="0.9"/>
+                <ellipse cx="280" cy="282" rx="2.5" ry="3.5" fill="#5d4037" opacity="0.85"/>
+                <ellipse cx="240" cy="320" rx="3" ry="5" fill="#5d4037" opacity="0.7"/>
+                <ellipse cx="240" cy="345" rx="2" ry="3" fill="#5d4037" opacity="0.45"/>
+                <!-- 標註：波浪濾紙 -->
+                <line x1="120" y1="108" x2="58" y2="80" stroke="#1565c0" stroke-width="1.2" stroke-dasharray="3 2"/>
+                <text x="56" y="76" font-size="12" font-weight="700" fill="#1565c0" text-anchor="end">20 摺波浪濾紙</text>
+                <text x="56" y="90" font-size="10.5" fill="#1565c0" text-anchor="end">與壁面之間留空氣</text>
+                <!-- 標註：3 小孔 -->
+                <line x1="240" y1="270" x2="335" y2="318" stroke="#2e7d32" stroke-width="1.2" stroke-dasharray="3 2"/>
+                <text x="340" y="320" font-size="12" font-weight="700" fill="#2e7d32">3 小孔出水</text>
+                <text x="340" y="334" font-size="10.5" fill="#2e7d32">流速穩定可預期</text>
+                <!-- 標註：平底 -->
+                <line x1="170" y1="266" x2="20" y2="298" stroke="#e65100" stroke-width="1.2" stroke-dasharray="3 2"/>
+                <text x="18" y="312" font-size="12" font-weight="700" fill="#e65100" text-anchor="start">平底萃取</text>
+                <text x="18" y="326" font-size="10.5" fill="#e65100" text-anchor="start">咖啡粉均勻分布</text>
+                <!-- 標註：不鏽鋼材質 -->
+                <line x1="370" y1="155" x2="450" y2="135" stroke="#6a1b9a" stroke-width="1.2" stroke-dasharray="3 2"/>
+                <text x="458" y="132" font-size="12" font-weight="700" fill="#6a1b9a" text-anchor="end">304 不鏽鋼</text>
+                <text x="458" y="146" font-size="10.5" fill="#6a1b9a" text-anchor="end">保溫均勻</text>
+            </svg>`;
+
+            // Origami 大圖（陶瓷 20 摺）
+            const ENCY_SVG_ORIGAMI = `<svg viewBox="0 0 480 420" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="ori-orange" x1="0" y1="0" x2="1" y2="0">
+                        <stop offset="0%" stop-color="#bf360c"/>
+                        <stop offset="40%" stop-color="#ff7043"/>
+                        <stop offset="60%" stop-color="#ff8a65"/>
+                        <stop offset="100%" stop-color="#bf360c"/>
+                    </linearGradient>
+                    <linearGradient id="ori-coffee" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#5d4037"/>
+                        <stop offset="100%" stop-color="#2e1a0e"/>
+                    </linearGradient>
+                    <radialGradient id="ori-shadow" cx="0.5" cy="0.5" r="0.5">
+                        <stop offset="0%" stop-color="rgba(0,0,0,0.28)"/>
+                        <stop offset="100%" stop-color="rgba(0,0,0,0)"/>
+                    </radialGradient>
+                </defs>
+                <ellipse cx="240" cy="372" rx="130" ry="14" fill="url(#ori-shadow)"/>
+                <!-- 後牆 -->
+                <polygon points="80,108 90,114 86,120 96,124 92,130 102,134 98,140 108,144 104,150 114,154 110,160 120,164 116,170 126,174 122,180 240,300 358,180 354,174 364,170 360,164 370,160 366,154 376,150 372,144 382,140 378,134 388,130 384,124 394,120 390,114 400,108" fill="#7a1a05"/>
+                <!-- 內部空腔 -->
+                <polygon points="90,118 240,290 390,118" fill="#2a0d05"/>
+                <!-- 內部濾紙（V 形）-->
+                <polygon points="100,124 240,280 380,124" fill="rgba(255,250,240,0.92)" stroke="#e0d4b8" stroke-width="1"/>
+                <!-- 咖啡粉床 -->
+                <polygon points="170,210 310,210 246,278 234,278" fill="url(#ori-coffee)"/>
+                <ellipse cx="240" cy="212" rx="70" ry="3" fill="#8d6e63" opacity="0.45"/>
+                <!-- 外殼（20 摺鋸齒）-->
+                <polygon points="80,108 90,114 86,120 96,124 92,130 102,134 98,140 108,144 104,150 114,154 110,160 120,164 116,170 126,174 122,180 132,184 128,190 138,194 134,200 144,204 140,210 240,300 340,210 336,204 346,200 342,194 352,190 348,184 358,180 354,174 364,170 360,164 370,160 366,154 376,150 372,144 382,140 378,134 388,130 384,124 394,120 390,114 400,108" fill="url(#ori-orange)" opacity="0.93"/>
+                <!-- 摺紋陰影線 -->
+                <g stroke="#7a1a05" stroke-width="1.2" opacity="0.6" fill="none">
+                    <line x1="86" y1="120" x2="186" y2="240"/>
+                    <line x1="98" y1="140" x2="200" y2="240"/>
+                    <line x1="110" y1="160" x2="214" y2="240"/>
+                    <line x1="122" y1="180" x2="228" y2="240"/>
+                    <line x1="240" y1="298" x2="240" y2="240"/>
+                    <line x1="358" y1="180" x2="252" y2="240"/>
+                    <line x1="370" y1="160" x2="266" y2="240"/>
+                    <line x1="382" y1="140" x2="280" y2="240"/>
+                    <line x1="394" y1="120" x2="294" y2="240"/>
+                </g>
+                <!-- 杯口厚環 -->
+                <ellipse cx="240" cy="108" rx="160" ry="6" fill="#7a1a05"/>
+                <ellipse cx="240" cy="108" rx="156" ry="3.5" fill="#3a0a02"/>
+                <!-- 高光 -->
+                <path d="M 100 124 L 220 280" stroke="rgba(255,200,180,0.5)" stroke-width="2" fill="none"/>
+                <!-- 把手（雙耳）-->
+                <path d="M 78 130 Q 60 144 60 175 Q 60 206 78 222" fill="none" stroke="#7a1a05" stroke-width="6" stroke-linecap="round"/>
+                <path d="M 402 130 Q 420 144 420 175 Q 420 206 402 222" fill="none" stroke="#7a1a05" stroke-width="6" stroke-linecap="round"/>
+                <!-- 底部出水（單孔）-->
+                <ellipse cx="240" cy="298" rx="6" ry="2" fill="#0a0404"/>
+                <!-- 底座 -->
+                <path d="M 232 300 L 248 300 L 252 322 L 228 322 Z" fill="#7a1a05"/>
+                <!-- 水珠 -->
+                <ellipse cx="240" cy="335" rx="4" ry="6" fill="#5d4037" opacity="0.85"/>
+                <ellipse cx="240" cy="358" rx="2.5" ry="3.5" fill="#5d4037" opacity="0.6"/>
+                <!-- 標註：20 摺結構 -->
+                <line x1="124" y1="174" x2="32" y2="180" stroke="#1565c0" stroke-width="1.2" stroke-dasharray="3 2"/>
+                <text x="30" y="170" font-size="12" font-weight="700" fill="#1565c0" text-anchor="end">20 摺鋸齒</text>
+                <text x="30" y="184" font-size="10.5" fill="#1565c0" text-anchor="end">與濾紙留導流空隙</text>
+                <text x="30" y="198" font-size="10.5" fill="#1565c0" text-anchor="end">流速與排氣加倍</text>
+                <!-- 標註：可換 V60 / Kalita -->
+                <line x1="240" y1="240" x2="430" y2="270" stroke="#2e7d32" stroke-width="1.2" stroke-dasharray="3 2"/>
+                <text x="435" y="270" font-size="12" font-weight="700" fill="#2e7d32" text-anchor="start">兩用濾紙</text>
+                <text x="435" y="284" font-size="10.5" fill="#2e7d32" text-anchor="start">V60 紙快、Kalita 紙慢</text>
+                <!-- 標註：陶瓷 -->
+                <line x1="370" y1="160" x2="450" y2="140" stroke="#6a1b9a" stroke-width="1.2" stroke-dasharray="3 2"/>
+                <text x="455" y="138" font-size="12" font-weight="700" fill="#6a1b9a" text-anchor="end">陶瓷材質</text>
+                <text x="455" y="152" font-size="10.5" fill="#6a1b9a" text-anchor="end">蓄熱穩、有彩色版本</text>
+                <!-- 標註：雙耳 -->
+                <line x1="60" y1="175" x2="20" y2="200" stroke="#e65100" stroke-width="1.2" stroke-dasharray="3 2"/>
+                <text x="18" y="216" font-size="12" font-weight="700" fill="#e65100" text-anchor="start">雙耳設計</text>
+            </svg>`;
+
+            // Chemex 大圖（玻璃沙漏 + 木環 + 皮繩）
+            const ENCY_SVG_CHEMEX = `<svg viewBox="0 0 480 420" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="chx-glass" x1="0" y1="0" x2="1" y2="0">
+                        <stop offset="0%" stop-color="rgba(176,200,210,0.45)"/>
+                        <stop offset="40%" stop-color="rgba(220,235,240,0.7)"/>
+                        <stop offset="60%" stop-color="rgba(200,225,235,0.65)"/>
+                        <stop offset="100%" stop-color="rgba(150,180,200,0.5)"/>
+                    </linearGradient>
+                    <linearGradient id="chx-wood" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#a1887f"/>
+                        <stop offset="50%" stop-color="#6d4c41"/>
+                        <stop offset="100%" stop-color="#4e342e"/>
+                    </linearGradient>
+                    <linearGradient id="chx-coffee-liq" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#5d4037"/>
+                        <stop offset="100%" stop-color="#2e1a0e"/>
+                    </linearGradient>
+                    <radialGradient id="chx-shadow" cx="0.5" cy="0.5" r="0.5">
+                        <stop offset="0%" stop-color="rgba(0,0,0,0.3)"/>
+                        <stop offset="100%" stop-color="rgba(0,0,0,0)"/>
+                    </radialGradient>
+                </defs>
+                <ellipse cx="240" cy="392" rx="120" ry="12" fill="url(#chx-shadow)"/>
+                <!-- 下半球（液體容器）-->
+                <path d="M 156 240 Q 156 380 240 380 Q 324 380 324 240" fill="url(#chx-glass)" stroke="#90a4ae" stroke-width="1.5"/>
+                <!-- 下半液體（咖啡） -->
+                <path d="M 168 290 Q 168 372 240 372 Q 312 372 312 290 L 312 360 Q 290 372 240 372 Q 190 372 168 360 Z" fill="url(#chx-coffee-liq)" opacity="0.9"/>
+                <ellipse cx="240" cy="290" rx="72" ry="6" fill="#3e2723" opacity="0.6"/>
+                <!-- 上半漏斗（沙漏上部）-->
+                <path d="M 130 60 L 350 60 L 280 220 L 200 220 Z" fill="url(#chx-glass)" stroke="#90a4ae" stroke-width="1.5"/>
+                <!-- 厚濾紙（折成厚瓣）-->
+                <path d="M 140 64 L 340 64 L 280 200 L 200 200 Z" fill="rgba(255,250,240,0.95)" stroke="#d7ccc8" stroke-width="1"/>
+                <!-- 厚濾紙摺痕（3 層加厚的特徵）-->
+                <path d="M 175 64 L 215 200" stroke="#bcaaa4" stroke-width="1.2"/>
+                <path d="M 305 64 L 265 200" stroke="#bcaaa4" stroke-width="1.2"/>
+                <path d="M 240 64 L 240 200" stroke="#bcaaa4" stroke-width="0.8" stroke-dasharray="3 3"/>
+                <!-- 咖啡粉床 -->
+                <path d="M 200 168 L 280 168 L 268 198 L 212 198 Z" fill="url(#chx-coffee-liq)"/>
+                <ellipse cx="240" cy="170" rx="40" ry="2.5" fill="#8d6e63" opacity="0.5"/>
+                <!-- 中間頸部 -->
+                <path d="M 200 220 L 280 220 L 280 240 L 200 240 Z" fill="url(#chx-glass)" stroke="#90a4ae" stroke-width="1.5"/>
+                <!-- 木製環腰 -->
+                <rect x="190" y="218" width="100" height="28" fill="url(#chx-wood)" rx="3"/>
+                <!-- 木環紋理 -->
+                <line x1="195" y1="225" x2="285" y2="225" stroke="#3e2723" stroke-width="0.6" opacity="0.4"/>
+                <line x1="195" y1="232" x2="285" y2="232" stroke="#3e2723" stroke-width="0.6" opacity="0.5"/>
+                <line x1="195" y1="240" x2="285" y2="240" stroke="#3e2723" stroke-width="0.6" opacity="0.4"/>
+                <!-- 木環高光 -->
+                <rect x="190" y="220" width="100" height="3" fill="rgba(255,255,255,0.3)" rx="2"/>
+                <!-- 皮繩繫帶 -->
+                <ellipse cx="240" cy="232" rx="52" ry="3" fill="none" stroke="#3e2723" stroke-width="1.5"/>
+                <ellipse cx="240" cy="232" rx="52" ry="3" fill="none" stroke="#5d4037" stroke-width="0.8" stroke-dasharray="2 2"/>
+                <!-- 皮繩結 -->
+                <ellipse cx="290" cy="232" rx="4" ry="3" fill="#3e2723"/>
+                <line x1="293" y1="234" x2="298" y2="245" stroke="#3e2723" stroke-width="1.5" stroke-linecap="round"/>
+                <!-- 杯口（外溢角）-->
+                <path d="M 130 60 Q 160 50 350 60" fill="url(#chx-glass)" stroke="#90a4ae" stroke-width="1.5"/>
+                <ellipse cx="240" cy="60" rx="110" ry="4" fill="rgba(255,255,255,0.4)"/>
+                <!-- 玻璃高光 -->
+                <path d="M 145 70 L 210 195" stroke="rgba(255,255,255,0.5)" stroke-width="2" fill="none"/>
+                <path d="M 165 250 Q 165 360 230 372" stroke="rgba(255,255,255,0.4)" stroke-width="2" fill="none"/>
+                <!-- 標註：木環腰 -->
+                <line x1="190" y1="232" x2="56" y2="234" stroke="#5d4037" stroke-width="1.2" stroke-dasharray="3 2"/>
+                <text x="54" y="230" font-size="12" font-weight="700" fill="#5d4037" text-anchor="end">木製環腰 + 皮繩</text>
+                <text x="54" y="244" font-size="10.5" fill="#5d4037" text-anchor="end">隔熱、好握、招牌</text>
+                <!-- 標註：厚濾紙 -->
+                <line x1="180" y1="120" x2="60" y2="100" stroke="#1565c0" stroke-width="1.2" stroke-dasharray="3 2"/>
+                <text x="58" y="96" font-size="12" font-weight="700" fill="#1565c0" text-anchor="end">3 層厚濾紙</text>
+                <text x="58" y="110" font-size="10.5" fill="#1565c0" text-anchor="end">流速慢、過濾油脂</text>
+                <!-- 標註：沙漏身 -->
+                <line x1="324" y1="320" x2="445" y2="330" stroke="#2e7d32" stroke-width="1.2" stroke-dasharray="3 2"/>
+                <text x="450" y="328" font-size="12" font-weight="700" fill="#2e7d32" text-anchor="end">下半球儲存壺</text>
+                <text x="450" y="342" font-size="10.5" fill="#2e7d32" text-anchor="end">一體成型、無接縫</text>
+                <!-- 標註：杯口外溢角 -->
+                <line x1="335" y1="58" x2="450" y2="50" stroke="#e65100" stroke-width="1.2" stroke-dasharray="3 2"/>
+                <text x="455" y="48" font-size="12" font-weight="700" fill="#e65100" text-anchor="end">外溢角注口</text>
+                <text x="455" y="62" font-size="10.5" fill="#e65100" text-anchor="end">空氣壓力釋放</text>
+            </svg>`;
+
+            // Clever Dripper 大圖（閥門式浸泡）
+            const ENCY_SVG_CLEVER = `<svg viewBox="0 0 480 420" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="clv-plastic" x1="0" y1="0" x2="1" y2="0">
+                        <stop offset="0%" stop-color="rgba(120,144,156,0.35)"/>
+                        <stop offset="50%" stop-color="rgba(207,216,220,0.6)"/>
+                        <stop offset="100%" stop-color="rgba(120,144,156,0.35)"/>
+                    </linearGradient>
+                    <linearGradient id="clv-coffee" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#5d4037"/>
+                        <stop offset="100%" stop-color="#2e1a0e"/>
+                    </linearGradient>
+                    <radialGradient id="clv-shadow" cx="0.5" cy="0.5" r="0.5">
+                        <stop offset="0%" stop-color="rgba(0,0,0,0.28)"/>
+                        <stop offset="100%" stop-color="rgba(0,0,0,0)"/>
+                    </radialGradient>
+                </defs>
+                <ellipse cx="240" cy="372" rx="130" ry="14" fill="url(#clv-shadow)"/>
+                <!-- 後牆深色 -->
+                <path d="M 100 100 L 380 100 L 348 300 L 132 300 Z" fill="#37474f" opacity="0.6"/>
+                <!-- 內部充滿水（浸泡中）-->
+                <path d="M 110 110 L 370 110 L 342 280 L 138 280 Z" fill="#3e2723" opacity="0.85"/>
+                <!-- 水面（高位） -->
+                <ellipse cx="240" cy="118" rx="125" ry="4" fill="#5d4037" opacity="0.9"/>
+                <ellipse cx="240" cy="118" rx="125" ry="2" fill="rgba(140,90,60,0.7)"/>
+                <!-- 內部濾紙（上半，露在水面上）-->
+                <path d="M 116 112 L 364 112 L 340 280 L 140 280 Z" fill="rgba(255,250,240,0.4)" stroke="#d7ccc8" stroke-width="1" opacity="0.6"/>
+                <!-- 咖啡粉床（在水底浸泡）-->
+                <ellipse cx="240" cy="270" rx="100" ry="6" fill="#2e1a0e"/>
+                <ellipse cx="240" cy="268" rx="100" ry="3" fill="#5d4037" opacity="0.7"/>
+                <!-- 外殼塑膠透明 -->
+                <path d="M 100 100 L 380 100 L 350 300 L 130 300 Z" fill="url(#clv-plastic)" stroke="#546e7a" stroke-width="1.5"/>
+                <!-- 杯口厚環 -->
+                <ellipse cx="240" cy="100" rx="140" ry="6" fill="#455a64"/>
+                <ellipse cx="240" cy="100" rx="136" ry="3" fill="#cfd8dc"/>
+                <!-- 把手 -->
+                <path d="M 380 130 Q 415 145 415 180 Q 415 215 380 230" fill="none" stroke="#37474f" stroke-width="6" stroke-linecap="round"/>
+                <!-- 高光 -->
+                <path d="M 110 115 L 138 290" stroke="rgba(255,255,255,0.5)" stroke-width="2" fill="none"/>
+                <!-- 底部閥門框 -->
+                <rect x="130" y="298" width="220" height="20" fill="#455a64" rx="3"/>
+                <!-- 閥門矽膠墊（關閉狀態，圓盤）-->
+                <ellipse cx="240" cy="308" rx="40" ry="5" fill="#212121"/>
+                <ellipse cx="240" cy="305" rx="40" ry="3" fill="#424242"/>
+                <!-- 閥門彈簧頂針 -->
+                <line x1="240" y1="318" x2="240" y2="338" stroke="#9e9e9e" stroke-width="2.5"/>
+                <circle cx="240" cy="340" r="5" fill="#616161"/>
+                <!-- 底座（要放上杯子才會壓開閥門）-->
+                <path d="M 200 318 L 280 318 L 290 358 L 190 358 Z" fill="none" stroke="#37474f" stroke-width="1.5" stroke-dasharray="4 3"/>
+                <text x="240" y="395" font-size="11" fill="#37474f" text-anchor="middle" font-weight="700" font-style="italic">放上杯口才會打開閥門</text>
+                <!-- 標註：閥門 -->
+                <line x1="240" y1="312" x2="430" y2="320" stroke="#1565c0" stroke-width="1.2" stroke-dasharray="3 2"/>
+                <text x="436" y="318" font-size="12" font-weight="700" fill="#1565c0" text-anchor="end">矽膠閥門</text>
+                <text x="436" y="332" font-size="10.5" fill="#1565c0" text-anchor="end">放上杯子才打開</text>
+                <!-- 標註：浸泡水位 -->
+                <line x1="120" y1="118" x2="40" y2="118" stroke="#2e7d32" stroke-width="1.2" stroke-dasharray="3 2"/>
+                <text x="38" y="114" font-size="12" font-weight="700" fill="#2e7d32" text-anchor="end">滿水浸泡</text>
+                <text x="38" y="128" font-size="10.5" fill="#2e7d32" text-anchor="end">3-4 分鐘穩定萃取</text>
+                <!-- 標註：粉床 -->
+                <line x1="160" y1="268" x2="20" y2="262" stroke="#e65100" stroke-width="1.2" stroke-dasharray="3 2"/>
+                <text x="18" y="258" font-size="12" font-weight="700" fill="#e65100" text-anchor="start">粉床整池浸泡</text>
+                <text x="18" y="272" font-size="10.5" fill="#e65100" text-anchor="start">不靠手法、容錯極高</text>
+                <!-- 標註：握把 -->
+                <line x1="418" y1="180" x2="465" y2="170" stroke="#6a1b9a" stroke-width="1.2" stroke-dasharray="3 2"/>
+                <text x="468" y="168" font-size="12" font-weight="700" fill="#6a1b9a" text-anchor="end">隔熱握把</text>
+            </svg>`;
+
+            // Hario Switch 大圖（V60 + 閥門）
+            const ENCY_SVG_SWITCH = `<svg viewBox="0 0 480 420" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="sw-glass" x1="0" y1="0" x2="1" y2="0">
+                        <stop offset="0%" stop-color="rgba(140,170,180,0.5)"/>
+                        <stop offset="50%" stop-color="rgba(220,235,240,0.7)"/>
+                        <stop offset="100%" stop-color="rgba(140,170,180,0.5)"/>
+                    </linearGradient>
+                    <linearGradient id="sw-coffee" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#5d4037"/>
+                        <stop offset="100%" stop-color="#2e1a0e"/>
+                    </linearGradient>
+                    <radialGradient id="sw-shadow" cx="0.5" cy="0.5" r="0.5">
+                        <stop offset="0%" stop-color="rgba(0,0,0,0.28)"/>
+                        <stop offset="100%" stop-color="rgba(0,0,0,0)"/>
+                    </radialGradient>
+                </defs>
+                <ellipse cx="240" cy="372" rx="130" ry="14" fill="url(#sw-shadow)"/>
+                <!-- 後牆 -->
+                <path d="M 90 110 L 390 110 L 244 290 L 236 290 Z" fill="#1c2226" opacity="0.4"/>
+                <!-- 內部水柱 -->
+                <path d="M 100 116 L 380 116 L 244 286 L 236 286 Z" fill="#3e2723" opacity="0.85"/>
+                <!-- 水面 -->
+                <ellipse cx="240" cy="124" rx="135" ry="4" fill="#5d4037" opacity="0.9"/>
+                <!-- 內部濾紙 -->
+                <path d="M 106 118 L 374 118 L 246 286 L 234 286 Z" fill="rgba(255,250,240,0.45)" stroke="#d7ccc8" stroke-width="1" opacity="0.6"/>
+                <!-- 咖啡粉床 -->
+                <path d="M 168 220 L 312 220 L 247 282 L 233 282 Z" fill="url(#sw-coffee)"/>
+                <ellipse cx="240" cy="222" rx="72" ry="3" fill="#8d6e63" opacity="0.5"/>
+                <!-- 玻璃外殼 -->
+                <path d="M 90 110 L 390 110 L 312 220 L 168 220 Z" fill="url(#sw-glass)" stroke="#78909c" stroke-width="1.5"/>
+                <!-- V60 螺旋肋 -->
+                <g stroke="rgba(70,90,100,0.5)" stroke-width="1" fill="none">
+                    <path d="M 110 120 Q 165 165 195 218"/>
+                    <path d="M 150 116 Q 185 165 210 218"/>
+                    <path d="M 190 114 Q 205 165 222 218"/>
+                    <path d="M 230 113 Q 230 165 237 218"/>
+                    <path d="M 270 114 Q 254 165 252 218"/>
+                    <path d="M 310 116 Q 274 165 267 218"/>
+                    <path d="M 350 120 Q 295 165 282 218"/>
+                </g>
+                <!-- 杯口厚環 -->
+                <ellipse cx="240" cy="110" rx="150" ry="6" fill="#455a64"/>
+                <ellipse cx="240" cy="110" rx="146" ry="3.5" fill="#cfd8dc"/>
+                <!-- 高光 -->
+                <path d="M 105 122 L 175 218" stroke="rgba(255,255,255,0.55)" stroke-width="2.5" fill="none"/>
+                <!-- 矽膠底座（含閥門） -->
+                <rect x="160" y="220" width="160" height="24" fill="#212121" rx="3"/>
+                <ellipse cx="240" cy="244" rx="80" ry="4" fill="#0a0a0a"/>
+                <!-- 閥門撥桿（招牌特徵）-->
+                <rect x="318" y="226" width="38" height="12" fill="#37474f" rx="6"/>
+                <circle cx="356" cy="232" r="6" fill="#cfd8dc"/>
+                <circle cx="356" cy="232" r="3" fill="#37474f"/>
+                <!-- 撥桿向上箭頭（開啟）+ 撥桿向下箭頭（關閉）-->
+                <text x="370" y="222" font-size="10" font-weight="700" fill="#2e7d32">▲ 開</text>
+                <text x="370" y="248" font-size="10" font-weight="700" fill="#c62828">▼ 關</text>
+                <!-- 出水（閥門打開時）-->
+                <ellipse cx="240" cy="252" rx="6" ry="2" fill="#0a0404"/>
+                <ellipse cx="240" cy="278" rx="4" ry="6" fill="#5d4037" opacity="0.85"/>
+                <ellipse cx="240" cy="304" rx="3" ry="4" fill="#5d4037" opacity="0.6"/>
+                <!-- 底座支撐 -->
+                <path d="M 220 244 L 260 244 L 268 280 L 212 280 Z" fill="#37474f"/>
+                <!-- 標註：閥門撥桿 -->
+                <line x1="358" y1="232" x2="450" y2="220" stroke="#1565c0" stroke-width="1.2" stroke-dasharray="3 2"/>
+                <text x="455" y="218" font-size="12" font-weight="700" fill="#1565c0" text-anchor="end">閥門撥桿</text>
+                <text x="455" y="232" font-size="10.5" fill="#1565c0" text-anchor="end">上=浸泡 / 下=放流</text>
+                <!-- 標註：螺旋肋 -->
+                <line x1="125" y1="170" x2="32" y2="190" stroke="#e65100" stroke-width="1.2" stroke-dasharray="3 2"/>
+                <text x="30" y="206" font-size="12" font-weight="700" fill="#e65100" text-anchor="end">V60 螺旋肋</text>
+                <text x="30" y="220" font-size="10.5" fill="#e65100" text-anchor="end">同款濾杯結構</text>
+                <!-- 標註：玻璃材質 -->
+                <line x1="380" y1="160" x2="455" y2="148" stroke="#6a1b9a" stroke-width="1.2" stroke-dasharray="3 2"/>
+                <text x="460" y="146" font-size="12" font-weight="700" fill="#6a1b9a" text-anchor="end">耐熱玻璃</text>
+                <text x="460" y="160" font-size="10.5" fill="#6a1b9a" text-anchor="end">看得到萃取狀態</text>
+                <!-- 標註：粉床 -->
+                <line x1="170" y1="240" x2="20" y2="270" stroke="#2e7d32" stroke-width="1.2" stroke-dasharray="3 2"/>
+                <text x="18" y="288" font-size="12" font-weight="700" fill="#2e7d32" text-anchor="start">浸泡 → 放流雙模</text>
+                <text x="18" y="302" font-size="10.5" fill="#2e7d32" text-anchor="start">先浸 2 分鐘再開閥</text>
+            </svg>`;
+
+            // Orea V3/V4 大圖（黑色平底大單孔、極快流）
+            const ENCY_SVG_OREA = `<svg viewBox="0 0 480 420" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="orea-black" x1="0" y1="0" x2="1" y2="0">
+                        <stop offset="0%" stop-color="#0a0a0a"/>
+                        <stop offset="35%" stop-color="#2a2a2a"/>
+                        <stop offset="55%" stop-color="#3a3a3a"/>
+                        <stop offset="80%" stop-color="#1a1a1a"/>
+                        <stop offset="100%" stop-color="#000"/>
+                    </linearGradient>
+                    <linearGradient id="orea-coffee" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#5d4037"/>
+                        <stop offset="100%" stop-color="#2e1a0e"/>
+                    </linearGradient>
+                    <radialGradient id="orea-shadow" cx="0.5" cy="0.5" r="0.5">
+                        <stop offset="0%" stop-color="rgba(0,0,0,0.32)"/>
+                        <stop offset="100%" stop-color="rgba(0,0,0,0)"/>
+                    </radialGradient>
+                </defs>
+                <ellipse cx="240" cy="372" rx="135" ry="14" fill="url(#orea-shadow)"/>
+                <path d="M 100 110 L 380 110 L 350 250 L 130 250 Z" fill="#000"/>
+                <path d="M 108 116 L 372 116 L 344 246 L 136 246 Z" fill="#1a1a1a"/>
+                <rect x="138" y="232" width="204" height="14" fill="#fff8e1" opacity="0.9"/>
+                <rect x="148" y="220" width="184" height="14" fill="url(#orea-coffee)"/>
+                <ellipse cx="240" cy="220" rx="92" ry="2.5" fill="#8d6e63" opacity="0.5"/>
+                <path d="M 100 110 L 380 110 L 350 248 L 130 248 Z" fill="url(#orea-black)" opacity="0.95"/>
+                <g stroke="#3a3a3a" stroke-width="2" opacity="0.7" fill="none">
+                    <line x1="125" y1="120" x2="155" y2="240"/>
+                    <line x1="180" y1="120" x2="190" y2="240"/>
+                    <line x1="240" y1="120" x2="240" y2="240"/>
+                    <line x1="300" y1="120" x2="290" y2="240"/>
+                    <line x1="355" y1="120" x2="325" y2="240"/>
+                </g>
+                <ellipse cx="240" cy="110" rx="142" ry="6" fill="#000"/>
+                <ellipse cx="240" cy="110" rx="138" ry="3.5" fill="#3a3a3a"/>
+                <ellipse cx="240" cy="110" rx="138" ry="2" fill="rgba(255,255,255,0.25)"/>
+                <rect x="130" y="246" width="220" height="6" fill="#0a0a0a"/>
+                <ellipse cx="240" cy="250" rx="22" ry="4" fill="#000"/>
+                <ellipse cx="240" cy="250" rx="20" ry="2.5" fill="#1a1a1a"/>
+                <path d="M 110 122 L 138 240" stroke="rgba(255,255,255,0.3)" stroke-width="2" fill="none"/>
+                <path d="M 215 252 L 265 252 L 270 280 L 210 280 Z" fill="#0a0a0a"/>
+                <ellipse cx="240" cy="280" rx="32" ry="3" fill="#000"/>
+                <rect x="237" y="252" width="6" height="55" fill="#5d4037" opacity="0.7"/>
+                <ellipse cx="240" cy="316" rx="4" ry="5" fill="#5d4037" opacity="0.9"/>
+                <ellipse cx="240" cy="340" rx="3" ry="4" fill="#5d4037" opacity="0.65"/>
+                <line x1="220" y1="252" x2="50" y2="305" stroke="#e65100" stroke-width="1.2" stroke-dasharray="3 2"/>
+                <text x="48" y="320" font-size="13" font-weight="700" fill="#e65100" text-anchor="end">超大單孔</text>
+                <text x="48" y="334" font-size="10.5" fill="#e65100" text-anchor="end">直徑 28mm，極快流</text>
+                <line x1="160" y1="245" x2="20" y2="240" stroke="#1565c0" stroke-width="1.2" stroke-dasharray="3 2"/>
+                <text x="18" y="236" font-size="12" font-weight="700" fill="#1565c0" text-anchor="start">平底結構</text>
+                <text x="18" y="250" font-size="10.5" fill="#1565c0" text-anchor="start">咖啡粉均勻分布</text>
+                <line x1="305" y1="180" x2="450" y2="180" stroke="#2e7d32" stroke-width="1.2" stroke-dasharray="3 2"/>
+                <text x="455" y="176" font-size="12" font-weight="700" fill="#2e7d32" text-anchor="end">少而寬的肋紋</text>
+                <text x="455" y="190" font-size="10.5" fill="#2e7d32" text-anchor="end">最大化排氣空間</text>
+                <line x1="370" y1="120" x2="455" y2="100" stroke="#6a1b9a" stroke-width="1.2" stroke-dasharray="3 2"/>
+                <text x="460" y="98" font-size="12" font-weight="700" fill="#6a1b9a" text-anchor="end">2021 WBrC 冠軍器</text>
+                <text x="460" y="112" font-size="10.5" fill="#6a1b9a" text-anchor="end">Matt Winton 用過</text>
+            </svg>`;
+
+            // April Brewer 大圖（陶瓷平底、寬肋、北歐設計）
+            const ENCY_SVG_APRIL = `<svg viewBox="0 0 480 420" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="apr-cream" x1="0" y1="0" x2="1" y2="0">
+                        <stop offset="0%" stop-color="#bcaaa4"/>
+                        <stop offset="35%" stop-color="#fff"/>
+                        <stop offset="55%" stop-color="#f5ede0"/>
+                        <stop offset="80%" stop-color="#bcaaa4"/>
+                        <stop offset="100%" stop-color="#8d6e63"/>
+                    </linearGradient>
+                    <linearGradient id="apr-coffee" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#5d4037"/>
+                        <stop offset="100%" stop-color="#2e1a0e"/>
+                    </linearGradient>
+                    <radialGradient id="apr-shadow" cx="0.5" cy="0.5" r="0.5">
+                        <stop offset="0%" stop-color="rgba(0,0,0,0.28)"/>
+                        <stop offset="100%" stop-color="rgba(0,0,0,0)"/>
+                    </radialGradient>
+                </defs>
+                <ellipse cx="240" cy="372" rx="130" ry="14" fill="url(#apr-shadow)"/>
+                <path d="M 90 110 L 390 110 L 350 260 L 130 260 Z" fill="#6d4c41"/>
+                <path d="M 98 116 L 382 116 L 344 256 L 136 256 Z" fill="#3e2723"/>
+                <rect x="138" y="242" width="204" height="14" fill="#fff8e1" opacity="0.9"/>
+                <rect x="148" y="232" width="184" height="12" fill="url(#apr-coffee)"/>
+                <ellipse cx="240" cy="232" rx="92" ry="2.5" fill="#8d6e63" opacity="0.5"/>
+                <path d="M 90 110 L 390 110 L 350 258 L 130 258 Z" fill="url(#apr-cream)" opacity="0.96"/>
+                <g stroke="#a1887f" stroke-width="3" opacity="0.7" fill="none">
+                    <line x1="125" y1="118" x2="160" y2="250"/>
+                    <line x1="190" y1="116" x2="200" y2="250"/>
+                    <line x1="240" y1="115" x2="240" y2="250"/>
+                    <line x1="290" y1="116" x2="280" y2="250"/>
+                    <line x1="355" y1="118" x2="320" y2="250"/>
+                </g>
+                <ellipse cx="240" cy="110" rx="150" ry="6" fill="#a1887f"/>
+                <ellipse cx="240" cy="110" rx="146" ry="3.5" fill="#fff"/>
+                <path d="M 105 122 L 138 250" stroke="rgba(255,255,255,0.6)" stroke-width="2.5" fill="none"/>
+                <rect x="130" y="256" width="220" height="5" fill="#8d6e63"/>
+                <ellipse cx="240" cy="261" rx="14" ry="3.5" fill="#0a0404"/>
+                <ellipse cx="240" cy="261" rx="12" ry="2" fill="#1a0a04"/>
+                <path d="M 200 263 L 280 263 L 290 295 L 190 295 Z" fill="#a1887f"/>
+                <ellipse cx="240" cy="295" rx="50" ry="3" fill="#5d4037"/>
+                <ellipse cx="240" cy="308" rx="4" ry="5" fill="#5d4037" opacity="0.85"/>
+                <ellipse cx="240" cy="332" rx="3" ry="4" fill="#5d4037" opacity="0.6"/>
+                <line x1="290" y1="180" x2="450" y2="160" stroke="#1565c0" stroke-width="1.2" stroke-dasharray="3 2"/>
+                <text x="455" y="158" font-size="12" font-weight="700" fill="#1565c0" text-anchor="end">少而寬的內肋</text>
+                <text x="455" y="172" font-size="10.5" fill="#1565c0" text-anchor="end">排氣 + 散熱平衡</text>
+                <line x1="160" y1="256" x2="32" y2="240" stroke="#e65100" stroke-width="1.2" stroke-dasharray="3 2"/>
+                <text x="30" y="236" font-size="12" font-weight="700" fill="#e65100" text-anchor="start">平底錐底</text>
+                <text x="30" y="250" font-size="10.5" fill="#e65100" text-anchor="start">乾淨度 + 甜感兼顧</text>
+                <line x1="370" y1="135" x2="450" y2="115" stroke="#6a1b9a" stroke-width="1.2" stroke-dasharray="3 2"/>
+                <text x="455" y="112" font-size="12" font-weight="700" fill="#6a1b9a" text-anchor="end">丹麥 Patrik Rolf</text>
+                <text x="455" y="126" font-size="10.5" fill="#6a1b9a" text-anchor="end">2020 設計師作品</text>
+                <line x1="120" y1="200" x2="20" y2="200" stroke="#2e7d32" stroke-width="1.2" stroke-dasharray="3 2"/>
+                <text x="18" y="196" font-size="12" font-weight="700" fill="#2e7d32" text-anchor="start">陶瓷釉面</text>
+                <text x="18" y="210" font-size="10.5" fill="#2e7d32" text-anchor="start">蓄熱穩定</text>
+            </svg>`;
+
+            // Melitta 大圖（經典紅塑膠 / 側壁肋小孔）
+            const ENCY_SVG_MELITTA = `<svg viewBox="0 0 480 420" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="mel-red" x1="0" y1="0" x2="1" y2="0">
+                        <stop offset="0%" stop-color="#7d0000"/>
+                        <stop offset="40%" stop-color="#c62828"/>
+                        <stop offset="60%" stop-color="#e53935"/>
+                        <stop offset="100%" stop-color="#7d0000"/>
+                    </linearGradient>
+                    <linearGradient id="mel-coffee" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#5d4037"/>
+                        <stop offset="100%" stop-color="#2e1a0e"/>
+                    </linearGradient>
+                    <radialGradient id="mel-shadow" cx="0.5" cy="0.5" r="0.5">
+                        <stop offset="0%" stop-color="rgba(0,0,0,0.28)"/>
+                        <stop offset="100%" stop-color="rgba(0,0,0,0)"/>
+                    </radialGradient>
+                </defs>
+                <ellipse cx="240" cy="372" rx="125" ry="14" fill="url(#mel-shadow)"/>
+                <path d="M 100 110 L 380 110 L 290 290 L 190 290 Z" fill="#5d0000"/>
+                <path d="M 108 116 L 372 116 L 286 284 L 194 284 Z" fill="#2a1414"/>
+                <path d="M 116 120 L 364 120 L 282 280 L 198 280 Z" fill="rgba(255,250,240,0.92)" stroke="#e0d4b8" stroke-width="1"/>
+                <path d="M 174 220 L 306 220 L 282 274 L 198 274 Z" fill="url(#mel-coffee)"/>
+                <ellipse cx="240" cy="222" rx="66" ry="3" fill="#8d6e63" opacity="0.5"/>
+                <path d="M 100 110 L 380 110 L 290 286 L 190 286 Z" fill="url(#mel-red)" opacity="0.94"/>
+                <g stroke="#3a0808" stroke-width="1.2" opacity="0.65" fill="none">
+                    <line x1="120" y1="124" x2="200" y2="282"/>
+                    <line x1="160" y1="120" x2="216" y2="282"/>
+                    <line x1="200" y1="118" x2="226" y2="282"/>
+                    <line x1="240" y1="116" x2="240" y2="282"/>
+                    <line x1="280" y1="118" x2="254" y2="282"/>
+                    <line x1="320" y1="120" x2="264" y2="282"/>
+                    <line x1="360" y1="124" x2="280" y2="282"/>
+                </g>
+                <ellipse cx="240" cy="110" rx="140" ry="5" fill="#a01818"/>
+                <ellipse cx="240" cy="110" rx="136" ry="3" fill="#3a0808"/>
+                <path d="M 110 120 L 200 280" stroke="rgba(255,205,205,0.5)" stroke-width="2.5" fill="none"/>
+                <path d="M 380 130 Q 410 145 410 175 Q 410 205 380 220" fill="none" stroke="#5d0000" stroke-width="6" stroke-linecap="round"/>
+                <ellipse cx="240" cy="286" rx="3.5" ry="1.5" fill="#0a0404"/>
+                <path d="M 220 286 L 260 286 L 268 312 L 212 312 Z" fill="#5d0000"/>
+                <ellipse cx="240" cy="312" rx="28" ry="3" fill="#3a0808"/>
+                <ellipse cx="240" cy="325" rx="3" ry="4" fill="#5d4037" opacity="0.85"/>
+                <ellipse cx="240" cy="346" rx="2" ry="3" fill="#5d4037" opacity="0.6"/>
+                <line x1="125" y1="200" x2="32" y2="180" stroke="#1565c0" stroke-width="1.2" stroke-dasharray="3 2"/>
+                <text x="30" y="176" font-size="12" font-weight="700" fill="#1565c0" text-anchor="end">側壁豎肋</text>
+                <text x="30" y="190" font-size="10.5" fill="#1565c0" text-anchor="end">引導水流貼壁下行</text>
+                <line x1="248" y1="288" x2="350" y2="320" stroke="#e65100" stroke-width="1.2" stroke-dasharray="3 2"/>
+                <text x="356" y="324" font-size="12" font-weight="700" fill="#e65100" text-anchor="start">單一小孔</text>
+                <text x="356" y="338" font-size="10.5" fill="#e65100" text-anchor="start">流速慢、body 厚</text>
+                <line x1="370" y1="130" x2="455" y2="115" stroke="#6a1b9a" stroke-width="1.2" stroke-dasharray="3 2"/>
+                <text x="460" y="112" font-size="12" font-weight="700" fill="#6a1b9a" text-anchor="end">1908 起點</text>
+                <text x="460" y="126" font-size="10.5" fill="#6a1b9a" text-anchor="end">手沖咖啡發明者</text>
+                <line x1="190" y1="285" x2="20" y2="290" stroke="#2e7d32" stroke-width="1.2" stroke-dasharray="3 2"/>
+                <text x="18" y="286" font-size="12" font-weight="700" fill="#2e7d32" text-anchor="start">梯形小底</text>
+                <text x="18" y="300" font-size="10.5" fill="#2e7d32" text-anchor="start">浸泡感濃郁</text>
+            </svg>`;
+
+            // Fellow Stagg X 大圖（雙層保溫不鏽鋼）
+            const ENCY_SVG_STAGG = `<svg viewBox="0 0 480 420" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="stg-steel" x1="0" y1="0" x2="1" y2="0">
+                        <stop offset="0%" stop-color="#37474f"/>
+                        <stop offset="35%" stop-color="#90a4ae"/>
+                        <stop offset="55%" stop-color="#cfd8dc"/>
+                        <stop offset="80%" stop-color="#78909c"/>
+                        <stop offset="100%" stop-color="#37474f"/>
+                    </linearGradient>
+                    <linearGradient id="stg-coffee" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#5d4037"/>
+                        <stop offset="100%" stop-color="#2e1a0e"/>
+                    </linearGradient>
+                    <radialGradient id="stg-shadow" cx="0.5" cy="0.5" r="0.5">
+                        <stop offset="0%" stop-color="rgba(0,0,0,0.32)"/>
+                        <stop offset="100%" stop-color="rgba(0,0,0,0)"/>
+                    </radialGradient>
+                </defs>
+                <ellipse cx="240" cy="372" rx="130" ry="14" fill="url(#stg-shadow)"/>
+                <path d="M 90 110 L 390 110 L 350 280 L 130 280 Z" fill="url(#stg-steel)" opacity="0.95"/>
+                <path d="M 100 116 L 380 116 L 343 274 L 137 274 Z" fill="#0a0a0a" opacity="0.7"/>
+                <path d="M 106 120 L 374 120 L 338 270 L 142 270 Z" fill="url(#stg-steel)" opacity="0.95"/>
+                <path d="M 114 124 L 366 124 L 332 264 L 148 264 Z" fill="#1a1a1a"/>
+                <rect x="150" y="252" width="180" height="12" fill="#fff8e1" opacity="0.9"/>
+                <rect x="158" y="240" width="164" height="12" fill="url(#stg-coffee)"/>
+                <ellipse cx="240" cy="240" rx="82" ry="2.5" fill="#8d6e63" opacity="0.5"/>
+                <ellipse cx="240" cy="110" rx="150" ry="6" fill="#37474f"/>
+                <ellipse cx="240" cy="110" rx="146" ry="3.5" fill="#eceff1"/>
+                <ellipse cx="240" cy="110" rx="146" ry="2" fill="rgba(255,255,255,0.5)"/>
+                <rect x="125" y="160" width="230" height="10" fill="#1a1a1a" rx="2"/>
+                <text x="240" y="168" font-size="9" fill="#cfd8dc" text-anchor="middle" font-weight="700" letter-spacing="2">FELLOW</text>
+                <g stroke="#37474f" stroke-width="0.8" opacity="0.4">
+                    <line x1="130" y1="180" x2="155" y2="262"/>
+                    <line x1="190" y1="180" x2="200" y2="262"/>
+                    <line x1="240" y1="180" x2="240" y2="262"/>
+                    <line x1="290" y1="180" x2="280" y2="262"/>
+                    <line x1="350" y1="180" x2="325" y2="262"/>
+                </g>
+                <path d="M 100 130 L 145 260" stroke="rgba(255,255,255,0.5)" stroke-width="2.5" fill="none"/>
+                <rect x="140" y="270" width="200" height="6" fill="#37474f"/>
+                <ellipse cx="200" cy="273" rx="3" ry="1.5" fill="#000"/>
+                <ellipse cx="226" cy="273" rx="3" ry="1.5" fill="#000"/>
+                <ellipse cx="254" cy="273" rx="3" ry="1.5" fill="#000"/>
+                <ellipse cx="280" cy="273" rx="3" ry="1.5" fill="#000"/>
+                <path d="M 200 276 L 280 276 L 290 308 L 190 308 Z" fill="#1a1a1a"/>
+                <ellipse cx="240" cy="308" rx="50" ry="3" fill="#0a0a0a"/>
+                <ellipse cx="240" cy="320" rx="4" ry="5" fill="#5d4037" opacity="0.85"/>
+                <ellipse cx="240" cy="343" rx="3" ry="4" fill="#5d4037" opacity="0.6"/>
+                <line x1="100" y1="180" x2="20" y2="200" stroke="#1565c0" stroke-width="1.2" stroke-dasharray="3 2"/>
+                <text x="18" y="216" font-size="12" font-weight="700" fill="#1565c0" text-anchor="start">雙層真空夾層</text>
+                <text x="18" y="230" font-size="10.5" fill="#1565c0" text-anchor="start">保溫降幅 &lt; 1°C/min</text>
+                <line x1="355" y1="165" x2="455" y2="148" stroke="#e65100" stroke-width="1.2" stroke-dasharray="3 2"/>
+                <text x="460" y="146" font-size="12" font-weight="700" fill="#e65100" text-anchor="end">矽膠隔熱圈</text>
+                <text x="460" y="160" font-size="10.5" fill="#e65100" text-anchor="end">不燙手、防滑</text>
+                <line x1="240" y1="275" x2="370" y2="295" stroke="#2e7d32" stroke-width="1.2" stroke-dasharray="3 2"/>
+                <text x="375" y="296" font-size="12" font-weight="700" fill="#2e7d32" text-anchor="start">4 個小孔</text>
+                <text x="375" y="310" font-size="10.5" fill="#2e7d32" text-anchor="start">流速比 Kalita 略快</text>
+                <line x1="370" y1="120" x2="455" y2="100" stroke="#6a1b9a" stroke-width="1.2" stroke-dasharray="3 2"/>
+                <text x="460" y="98" font-size="12" font-weight="700" fill="#6a1b9a" text-anchor="end">2018 Fellow</text>
+                <text x="460" y="112" font-size="10.5" fill="#6a1b9a" text-anchor="end">舊金山設計工作室</text>
+            </svg>`;
+
             const ENCYCLOPEDIA = {
                 dripper: {
                     title: '☕ 手沖濾杯',
@@ -5705,15 +6324,420 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                                 { icon: '🎯', title: '不滿意先動研磨', desc: '味道偏酸 → 細一點延長萃取；偏苦澀 → 粗一點縮短時間。研磨變一檔比改水溫更有感。' }
                             ]
                         },
-                        kalita:  { name: 'Kalita Wave',    tagline: '不鏽鋼平底 + 3 小孔 + 波浪濾紙，新手最容錯的選擇', thumb: () => DRIPPER_SVG.kalita,  status: 'soon' },
-                        origami: { name: 'Origami',        tagline: '日本陶瓷 20 摺，可換 V60 / Kalita 兩種濾紙', thumb: () => DRIPPER_SVG.origami, status: 'soon' },
-                        chemex:  { name: 'Chemex',         tagline: '玻璃沙漏身 + 厚濾紙，1941 年的茶感經典', thumb: () => DRIPPER_SVG.chemex,  status: 'soon' },
-                        clever:  { name: 'Clever Dripper', tagline: '閥門式浸泡 + 過濾雙模，新手與穩定派最愛', thumb: () => DRIPPER_SVG.clever,  status: 'soon' },
-                        switch:  { name: 'Hario Switch',   tagline: 'V60 + 閥門，純濾紙 / 浸泡兩種喝法切換', thumb: () => DRIPPER_SVG.switch,  status: 'soon' },
-                        orea:    { name: 'Orea V3 / V4',   tagline: '英國設計平底大單孔，世界賽常見的極快流速', thumb: () => DRIPPER_SVG.orea,    status: 'soon' },
-                        april:   { name: 'April Brewer',   tagline: 'Patrik Rolf 設計，平底寬肋的甜感快流', thumb: () => DRIPPER_SVG.april,   status: 'soon' },
-                        melitta: { name: 'Melitta 經典',   tagline: '1908 年發明濾紙手沖法，扎實 body 的早餐杯', thumb: () => DRIPPER_SVG.melitta, status: 'soon' },
-                        stagg:   { name: 'Fellow Stagg X', tagline: '雙層保溫 + 穩定流速，現代設計感濾杯', thumb: () => DRIPPER_SVG.stagg,   status: 'soon' }
+                        kalita: {
+                            name: 'Kalita Wave',
+                            tagline: '不鏽鋼平底 + 3 小孔 + 波浪濾紙，新手最容錯的選擇',
+                            thumb: () => DRIPPER_SVG.kalita,
+                            status: 'ready',
+                            heroSvg: ENCY_SVG_KALITA,
+                            subtitle: '平底 + 3 個小孔 + 波浪濾紙的鐵三角，給你最穩定可預期的萃取結果。容錯極高，是新手與「穩定派」的首選。',
+                            chips: [
+                                { text: '平底萃取', class: 'green' },
+                                { text: '波浪濾紙', class: 'warm' },
+                                { text: '3 出水孔', class: 'cool' },
+                                { text: '中等流速' },
+                                { text: '新手友善', class: 'purple' },
+                                { text: '材質：不鏽鋼/陶瓷/玻璃' }
+                            ],
+                            specs: [
+                                { k: '研發者', v: 'Kalita 株式会社（日本）' },
+                                { k: '發售年', v: '1958 起 / Wave 2010' },
+                                { k: '結構', v: '平底 + 3 出水孔' },
+                                { k: '濾紙', v: 'Kalita Wave #155 / #185' },
+                                { k: '建議粉量', v: '18-25g' },
+                                { k: '建議粉水比', v: '1:15 ~ 1:16' }
+                            ],
+                            origin: [
+                                { year: '1958', text: 'Kalita 在日本創立，以梯形濾杯 Kalita 102 起家，與 Melitta 並列日系濾紙手沖兩大流派。' },
+                                { year: '1980s', text: 'Kalita 102 成為日本喫茶店標配，奠定「均勻萃取」的設計哲學。' },
+                                { year: '2010', text: '推出革命性 Wave 系列，平底 + 3 孔 + 波浪紙的鐵三角結構打破 V60 一家獨大局面。' },
+                                { year: '2014-2016', text: '美國第三波咖啡店大量採用 Kalita Wave，被視為「乾淨度」與「穩定度」的代名詞。' },
+                                { year: '至今', text: '不鏽鋼 / 陶瓷 / 玻璃 / 銅版本齊全，常被推薦給手法不穩定或剛入門的人。' }
+                            ],
+                            steps: [
+                                { title: '放波浪濾紙', desc: 'Kalita 專用 #155（1-2 杯）或 #185（2-4 杯）波浪紙不用摺，直接放進濾杯內、輕壓貼底。' },
+                                { title: '燙紙暖杯', desc: '注 200ml 熱水沖洗紙味與預熱濾杯下壺，倒掉熱身水。' },
+                                { title: '中粉略細 + 量粉', desc: '比 V60 細一檔（小富士 3.0、Comandante 20-22 click），1:15 比例。粉量 18-22g 是甜蜜點。' },
+                                { title: 'Bloom 2 倍水', desc: '中心向外慢慢沾濕全粉、約 30-40g 水，等 30 秒讓粉床膨脹釋放 CO₂。' },
+                                { title: '分 2-3 段慢注', desc: '細水柱、注水範圍中心 60% 內，避免碰邊緣。每段間隔 30 秒讓水位下降一半。總時間 3:00-3:30。' }
+                            ],
+                            tips: [
+                                { icon: '💧', title: '一定要用細嘴壺', desc: '水柱粗會把波浪紙打皺、產生 channeling，影響整杯均勻度。Kalita 比 V60 更挑壺。' },
+                                { icon: '🌀', title: '別繞圈太大', desc: '注水盡量在中心 60% 範圍。波浪紙與濾杯壁之間的空氣才是設計重點，邊緣只有空氣不要碰水。' },
+                                { icon: '⚖️', title: '比 V60 細一檔', desc: '平底萃取面積大，相同粉粗度會偏淡。從 V60 切過來建議直接細一格。' },
+                                { icon: '🪣', title: '第一注 spin 一下', desc: 'Bloom 時輕轉杯讓粉床平整化，後續注水才能均勻萃取。' },
+                                { icon: '⏱️', title: '時間寬容度高', desc: '±30 秒杯感差不大，是穩定派最愛。比 V60 容錯多了。' },
+                                { icon: '🍳', title: '陶瓷版要先預熱久', desc: '陶瓷蓄熱穩、但起步較慢。沖前用熱水泡 1 分鐘讓杯壁徹底升溫。' }
+                            ]
+                        },
+                        origami: {
+                            name: 'Origami',
+                            tagline: '日本愛知燒陶瓷 20 摺，可換 V60 或 Kalita 兩種濾紙',
+                            thumb: () => DRIPPER_SVG.origami,
+                            status: 'ready',
+                            heroSvg: ENCY_SVG_ORIGAMI,
+                            subtitle: '日本愛知燒陶瓷工藝結合 20 摺結構，可選用 V60 圓錐紙或 Kalita 波浪紙，靈活度最高的「混血濾杯」。多色版本是 IG 視覺寵兒。',
+                            chips: [
+                                { text: '20 摺鋸齒', class: 'warm' },
+                                { text: '雙用濾紙', class: 'green' },
+                                { text: '陶瓷材質' },
+                                { text: '彩色繽紛', class: 'purple' },
+                                { text: '雙耳設計' },
+                                { text: '中速可調', class: 'cool' }
+                            ],
+                            specs: [
+                                { k: '研發者', v: 'Trinity（日本愛知燒）' },
+                                { k: '發售年', v: '2017' },
+                                { k: '結構', v: '20 摺錐形' },
+                                { k: '濾紙', v: 'V60 圓錐 / Kalita Wave 兩用' },
+                                { k: '建議粉量', v: '15-25g' },
+                                { k: '建議粉水比', v: '1:15 ~ 1:17' }
+                            ],
+                            origin: [
+                                { year: '2017', text: '日本愛知燒陶瓷工藝品牌 Trinity 推出，結合手工摺紙美學與功能性設計。' },
+                                { year: '2018', text: '日本選手 Tetsu Kasuya 在 World Coffee Festival 推薦使用，引起咖啡圈關注。' },
+                                { year: '2019', text: '全球咖啡圈瘋狂收藏多色版本（白/黑/玫瑰金/橙/藍），IG 圖片爆紅。' },
+                                { year: '2020', text: '推出 Origami M（中號）與專用木質支架配件。' },
+                                { year: '至今', text: '設計感與實用性兼顧，是中階玩家換器材的熱門選擇。' }
+                            ],
+                            steps: [
+                                { title: '選濾紙決定流速', desc: 'V60 圓錐紙 → 較快流，呈現酸感與層次；Kalita Wave 紙 → 較慢流，body 較厚甜感明顯。' },
+                                { title: '折濾紙 + 燙紙', desc: '依選用濾紙的方式摺好，必燙紙暖杯。陶瓷散熱快，預熱要充分。' },
+                                { title: '中粉，1:16', desc: '配 V60 紙時粉度同 V60；配 Kalita 紙時粉度同 Kalita（細一檔）。' },
+                                { title: '三段或一刀流注水', desc: '與對應濾紙的標準手法相同。中央 70% 範圍注水。' },
+                                { title: '控時 2:30-3:30', desc: '靠濾紙選擇而非濾杯本體調整流速。聞乾香、再喝。' }
+                            ],
+                            tips: [
+                                { icon: '🎨', title: '顏色不只是好看', desc: '白色經典 / 暖色系蓄熱稍慢 / 深色易顯髒。重實用挑白色或淺色。' },
+                                { icon: '🧱', title: '必搭支架', desc: 'Origami 沒設計支撐結構，需配 wooden holder 或杯口大於 9cm 的杯子。' },
+                                { icon: '🔄', title: '同豆兩種紙都試', desc: '同一支豆 V60 紙偏酸亮、Kalita 紙偏甜厚。學員都建議都試一次。' },
+                                { icon: '🌡️', title: '陶瓷散熱快', desc: '比塑膠散熱快，淺焙建議水溫 +1°C 補償，否則尾段萃取不足。' },
+                                { icon: '🧼', title: '清潔要小心', desc: '陶瓷易碎、邊緣摺角易崩。水洗時別撞到水槽。' },
+                                { icon: '📏', title: '雙耳更穩定', desc: '握雙耳會比單把手 V60 更穩，適合手大或不喜歡熱壺的人。' }
+                            ]
+                        },
+                        chemex: {
+                            name: 'Chemex',
+                            tagline: '1941 年的玻璃沙漏，MoMA 永久收藏的工業設計藝術品',
+                            thumb: () => DRIPPER_SVG.chemex,
+                            status: 'ready',
+                            heroSvg: ENCY_SVG_CHEMEX,
+                            subtitle: '德裔化學家 Peter Schlumbohm 在 1941 年發明的玻璃沙漏，被紐約 MoMA 永久收藏的工業設計傑作。3 層厚濾紙 + 大單孔 = 茶感乾淨度的代名詞。',
+                            chips: [
+                                { text: '1941 年發明', class: 'purple' },
+                                { text: '玻璃沙漏身' },
+                                { text: '木環 + 皮繩', class: 'warm' },
+                                { text: '3 層厚濾紙' },
+                                { text: '大容量 (3-13 杯)', class: 'cool' },
+                                { text: 'MoMA 永久收藏', class: 'green' }
+                            ],
+                            specs: [
+                                { k: '發明者', v: 'Peter Schlumbohm Ph.D（德裔美籍化學家）' },
+                                { k: '發售年', v: '1941' },
+                                { k: '結構', v: '玻璃沙漏一體成型' },
+                                { k: '濾紙', v: 'Chemex 專用 3 層厚濾紙 (Bonded)' },
+                                { k: '容量選擇', v: '3 / 6 / 8 / 10 / 13 杯' },
+                                { k: '建議粉水比', v: '1:16 ~ 1:18' }
+                            ],
+                            origin: [
+                                { year: '1941', text: 'Peter Schlumbohm 為了沖出更乾淨的咖啡，結合化學實驗器材（漏斗 + 燒瓶）設計 Chemex。' },
+                                { year: '1958', text: 'Illinois Institute of Technology 評選為「20 世紀百大設計」之一。' },
+                                { year: '1958', text: '紐約現代藝術博物館 MoMA 將 Chemex 列入永久收藏（至今仍展出）。' },
+                                { year: '2010s', text: '第三波咖啡浪潮重新捧紅 Chemex，世界手沖賽常見冠軍器具。' },
+                                { year: '至今', text: '從 1941 到現在 80 多年，造型完全沒變過，是工業設計史上的奇蹟。' }
+                            ],
+                            steps: [
+                                { title: '折濾紙 + 對位', desc: '專用厚濾紙摺成圓錐形，3 層厚的那一面對著外溢角（注水口）的方向。' },
+                                { title: '充分燙紙', desc: '3 層厚紙紙味重，必須注 300ml 以上熱水沖洗、同時暖玻璃壺、再倒掉。' },
+                                { title: '中粗粉', desc: '比 V60 粗 1 檔（小富士 4.0、Comandante 28-30 click）。30-40g 粉、1:16-1:17 比例。' },
+                                { title: 'Bloom 2 倍水', desc: '注 60-80g 水悶蒸 45 秒（厚紙會吸水延長）。' },
+                                { title: '分段慢注 4-5 分鐘', desc: '中心向外螺旋，注到 600-700g 水。總時間 4:00-5:00 流完都正常（厚紙天生慢）。' }
+                            ],
+                            tips: [
+                                { icon: '🌬️', title: '外溢角不是裝飾', desc: '注水時對準外溢角讓空氣排出，避免氣阻。手把朝右、注口朝左是常見握法。' },
+                                { icon: '📏', title: '粉一定要粗一檔', desc: '流速本身慢，粉再細會嚴重過萃苦澀。從 V60 切過來建議直接粗一格。' },
+                                { icon: '🧪', title: '想喝茶感選 Chemex', desc: '3 層厚紙濾油脂最徹底，body 最薄、口感最像茶湯。淺焙乾淨度爆表。' },
+                                { icon: '🪵', title: '木環會老化', desc: '長期使用木環顏色會深、皮繩會變形。可購買替換木環組保養。' },
+                                { icon: '🧊', title: '冰咖啡神器', desc: '大容量 + 好倒，做冰美式或冷萃稀釋極好。直接 13 杯 Chemex 一壺夠週末。' },
+                                { icon: '🎁', title: '送禮選 Chemex', desc: '造型美、有歷史故事、實用，是咖啡禮物之首。連咖啡白癡都會說好看。' }
+                            ]
+                        },
+                        clever: {
+                            name: 'Clever Dripper',
+                            tagline: '台灣設計閥門式濾杯，浸泡 + 過濾混合萃取的懶人神器',
+                            thumb: () => DRIPPER_SVG.clever,
+                            status: 'ready',
+                            heroSvg: ENCY_SVG_CLEVER,
+                            subtitle: '台灣設計師發明的「閥門式」濾杯，先浸泡 + 後過濾的混合萃取。零手法依賴、結果可預期，是新手與「懶人派」的救星。',
+                            chips: [
+                                { text: '台灣設計', class: 'purple' },
+                                { text: '閥門式雙模', class: 'warm' },
+                                { text: '浸泡萃取', class: 'cool' },
+                                { text: '容錯極高', class: 'green' },
+                                { text: '透明可見' },
+                                { text: '旅行神器' }
+                            ],
+                            specs: [
+                                { k: '研發者', v: 'Mr. Coffee（台灣）' },
+                                { k: '發售年', v: '2008' },
+                                { k: '結構', v: '矩形錐 + 矽膠閥門' },
+                                { k: '濾紙', v: '梯形 #2 / #4' },
+                                { k: '浸泡時間', v: '2-4 分鐘' },
+                                { k: '建議粉水比', v: '1:14 ~ 1:16' }
+                            ],
+                            origin: [
+                                { year: '2007', text: '台灣設計師為了給沒手沖經驗的人也能沖好咖啡而設計，最早叫 "Clever Coffee Dripper"。' },
+                                { year: '2008', text: '透過美國代理 Sweet Maria 進入歐美市場，被精品咖啡圈快速接受。' },
+                                { year: '2010s', text: 'Cup of Excellence 評審多人推薦使用，作為標準化評測器材（消除手法變因）。' },
+                                { year: '2018-2020', text: '居家咖啡熱潮爆紅，被 James Hoffmann 等 YouTuber 推薦給新手。' },
+                                { year: '至今', text: '是「最不挑手法」的濾杯，旅行與辦公室咖啡愛用者首選。' }
+                            ],
+                            steps: [
+                                { title: '燙紙 + 暖杯', desc: '梯形濾紙放入、注熱水沖洗紙味，杯口下放別的杯子接水（閥門此時被頂開）。' },
+                                { title: '倒咖啡粉', desc: '中粉，20-22g 粉配 280-300g 水（比 V60 略稀，因為浸泡萃取效率高）。' },
+                                { title: '一次注滿 + 攪拌', desc: '熱水（92-95°C）一次性倒入，輕攪 1-2 圈讓粉床均勻、避免漂粉。' },
+                                { title: '蓋蓋子浸泡 3 分鐘', desc: '蓋上保溫蓋、看計時器。短於 2 分鐘淡、長於 4 分鐘苦。' },
+                                { title: '放上杯子放流', desc: '把 Clever 放到杯口上，閥門被頂開、咖啡 30-60 秒流完即可飲用。' }
+                            ],
+                            tips: [
+                                { icon: '⏱️', title: '時間是唯一變數', desc: '3 分鐘是甜蜜點。其他變因（粉度、水溫、攪拌）影響都比時間小。' },
+                                { icon: '🔄', title: '注水後輕攪', desc: '1-2 圈讓粉床均勻、減少漂粉浮在表面，浸泡會更徹底。' },
+                                { icon: '🌡️', title: '水溫可拉高', desc: '靜置不會降溫、蓋子保溫，95-96°C 也 OK。淺焙建議拉高出酸甜。' },
+                                { icon: '🪴', title: '比例可稀', desc: '1:15 偏標準、1:14 加重 body、1:16 偏淡像 long black。' },
+                                { icon: '✈️', title: '旅行神器', desc: '塑膠輕、不會碎、配速溶包熱水即可沖出像樣的咖啡。出國必備。' },
+                                { icon: '🆕', title: '不只能沖咖啡', desc: '散裝紅茶、烏龍、抹茶都可以浸泡萃取。家裡只買 Clever 也夠用。' }
+                            ]
+                        },
+                        switch: {
+                            name: 'Hario Switch',
+                            tagline: 'V60 + 閥門撥桿，浸泡與過濾雙模切換的家用神器',
+                            thumb: () => DRIPPER_SVG.switch,
+                            status: 'ready',
+                            heroSvg: ENCY_SVG_SWITCH,
+                            subtitle: 'V60 加上閥門撥桿，可以做純濾紙手沖、也可以浸泡，撥一下就切換兩種喝法。James Hoffmann 力推的「家用萬能解」。',
+                            chips: [
+                                { text: 'V60 + 閥門', class: 'warm' },
+                                { text: '雙模切換', class: 'green' },
+                                { text: '螺旋肋' },
+                                { text: '耐熱玻璃' },
+                                { text: '撥桿開關', class: 'cool' },
+                                { text: 'Hoffmann 推薦', class: 'purple' }
+                            ],
+                            specs: [
+                                { k: '研發者', v: 'Hario 株式会社' },
+                                { k: '發售年', v: '2020' },
+                                { k: '結構', v: 'V60 形 + 矽膠閥門 + 撥桿' },
+                                { k: '容量', v: '300mL（1-2 杯）' },
+                                { k: '浸泡時間', v: '2 分鐘建議' },
+                                { k: '建議粉水比', v: '1:15' }
+                            ],
+                            origin: [
+                                { year: '2018', text: 'Hario 接受市場反饋，希望結合 V60（手沖控制）與 Clever（浸泡穩定）的優點。' },
+                                { year: '2020', text: 'Hario Switch 正式上市，玻璃身 + 矽膠閥門 + 金屬撥桿。' },
+                                { year: '2021', text: 'James Hoffmann 在 YouTube 發布「Ultimate V60 Switch Brew」教學影片，全球瘋狂跟風。' },
+                                { year: '2022', text: '推出陶瓷版本與不同尺寸選擇。' },
+                                { year: '至今', text: 'Hoffmann Switch Method 成為新一代家用標準沖法。' }
+                            ],
+                            steps: [
+                                { title: '撥下撥桿（關閉）', desc: '閥門關閉、進入浸泡模式。注熱水洗濾紙、暖玻璃壺。' },
+                                { title: '撥上放掉熱身水', desc: '撥桿向上開閥讓燙紙水流光，再撥下準備沖煮。' },
+                                { title: '加粉 + 第一注', desc: '中粉 18g + 第一注 60g 水，撥下狀態下浸泡 45 秒。' },
+                                { title: '撥上 + 第二注', desc: '撥上開閥放流的同時，注剩下水量到 270g，水位下降到平再停。' },
+                                { title: '靜待流完', desc: '總時間 2:30-3:00。撥桿向下 = 浸、向上 = 流，靈活混搭。' }
+                            ],
+                            tips: [
+                                { icon: '🌀', title: '先浸後流是精髓', desc: 'Hoffmann 法的核心：用浸泡穩定甜感、用過濾收乾淨度，比純 V60 容錯多。' },
+                                { icon: '🔁', title: '可分段操作', desc: '進階：浸 1 分鐘 → 開閥 30 秒 → 關閉再注 → 開閥放流，控制更細緻。' },
+                                { icon: '🌡️', title: '撥桿會熱', desc: '金屬撥桿會升溫到不能直接捏，撥動時用指甲推或戴指套。' },
+                                { icon: '🪞', title: '玻璃身可觀察', desc: '看得到水位下降速度、判斷流速是否正常、有無 channeling。' },
+                                { icon: '🧼', title: '矽膠閥要清潔', desc: '每次用後拆下沖洗，避免咖啡漬累積異味影響下次風味。' },
+                                { icon: '💎', title: '比 V60 更容錯', desc: '撥桿給你「補救」機會：注水太快可關閥多浸 30 秒、太慢可開閥放掉。' }
+                            ]
+                        },
+                        orea: {
+                            name: 'Orea V3 / V4',
+                            tagline: '英國設計平底大單孔，世界賽常見的極快流速',
+                            thumb: () => DRIPPER_SVG.orea,
+                            status: 'ready',
+                            heroSvg: ENCY_SVG_OREA,
+                            subtitle: '英國 James Gray 設計，平底 + 28mm 大單孔的極端快流結構。萃取受手法（粉度、攪拌）100% 主導，世界賽冠軍最常用器材之一。',
+                            chips: [
+                                { text: '平底結構', class: 'cool' },
+                                { text: '超大單孔', class: 'warm' },
+                                { text: '極快流速', class: 'green' },
+                                { text: '寬間距肋', class: '' },
+                                { text: 'WBrC 賽用', class: 'purple' },
+                                { text: '英國設計' }
+                            ],
+                            specs: [
+                                { k: '研發者', v: 'James Gray (Orea Brewer, 英國)' },
+                                { k: '發售年', v: '2018 (V1) / V3 2020 / V4 2023' },
+                                { k: '結構', v: '平底 + 28mm 大單孔' },
+                                { k: '濾紙', v: 'Orea 平底紙 / Kalita Wave 也可' },
+                                { k: '建議粉量', v: '15-22g' },
+                                { k: '建議粉水比', v: '1:15 ~ 1:16.5' }
+                            ],
+                            origin: [
+                                { year: '2018', text: 'James Gray 在英國推出 Orea V1，目標：給選手「最少限制、最大控制」的器材。' },
+                                { year: '2020', text: 'V3 升級結構，被 World Brewers Cup 選手大量採用。' },
+                                { year: '2021', text: 'Matt Winton 用 Orea V3 拿下世界亞軍，知名度爆漲。' },
+                                { year: '2023', text: 'V4 推出，加入更多濾紙相容性。' },
+                                { year: '至今', text: '是「進階玩家」與「比賽選手」首選，新手不建議因為太挑手法。' }
+                            ],
+                            steps: [
+                                { title: '放平底濾紙', desc: 'Orea 專用平底紙最佳；Kalita Wave 紙也能用但流速會變慢。' },
+                                { title: '充分燙紙', desc: '注熱水沖洗濾紙與暖杯，倒掉熱身水。' },
+                                { title: '中細粉', desc: '比 V60 細 1 檔，因為流速太快需要靠粉度增加阻力。1:15.5 比例。' },
+                                { title: 'Bloom + 強攪拌', desc: '注 2 倍水悶蒸、用攪拌棒或 spin 強力攪 3-5 圈讓粉床均勻。' },
+                                { title: '快速注完 2:00-2:30', desc: '結構超快流，整體時間比 V60 短 30-60 秒。攪拌 + 細粉是核心。' }
+                            ],
+                            tips: [
+                                { icon: '🥄', title: '攪拌是必須', desc: '不攪拌會嚴重萃取不均，粉床鬆散水流速度差太大。Spin + 攪拌棒都用上。' },
+                                { icon: '📏', title: '比 V60 細 1-2 檔', desc: '結構流速太快，粉度必須補償。從 V60 切過來常常細 2 檔才對。' },
+                                { icon: '🎯', title: '世界賽選手最愛', desc: 'Matt Winton、多位 WBrC 冠軍都用過。原因：給操作空間最大。' },
+                                { icon: '🚫', title: '不適合新手', desc: '萃取結果完全靠手法，新手會做得比 V60 還難喝。建議手法穩定後再玩。' },
+                                { icon: '⏱️', title: '時間參考用', desc: '時間不是 Orea 的指標，水位下降速度才是。看流速判斷而非看碼錶。' },
+                                { icon: '💎', title: '搭配淺焙', desc: '快流速 + 細粉 + 強攪拌 = 淺焙花果調最大化呈現。深焙建議用別的濾杯。' }
+                            ]
+                        },
+                        april: {
+                            name: 'April Brewer',
+                            tagline: 'Patrik Rolf 設計，平底寬肋的甜感快流',
+                            thumb: () => DRIPPER_SVG.april,
+                            status: 'ready',
+                            heroSvg: ENCY_SVG_APRIL,
+                            subtitle: '丹麥 Patrik Rolf（April Coffee）設計，平底 + 少而寬的內肋 + 大單孔。介於 Orea 的極快與 Kalita 的中速之間，主打「甜感與乾淨度兼顧」。',
+                            chips: [
+                                { text: '平底錐底', class: 'green' },
+                                { text: '少而寬內肋' },
+                                { text: '陶瓷釉面' },
+                                { text: '快流速', class: 'warm' },
+                                { text: '北歐設計', class: 'cool' },
+                                { text: '甜感主打', class: 'purple' }
+                            ],
+                            specs: [
+                                { k: '研發者', v: 'Patrik Rolf (April Coffee, 丹麥)' },
+                                { k: '發售年', v: '2020' },
+                                { k: '結構', v: '平底 + 寬肋 + 大單孔' },
+                                { k: '濾紙', v: 'April 平底紙 / Kalita 紙也可' },
+                                { k: '建議粉量', v: '15-25g' },
+                                { k: '建議粉水比', v: '1:15.5 ~ 1:16.5' }
+                            ],
+                            origin: [
+                                { year: '2018', text: 'Patrik Rolf（前 WBrC 多次選手）在哥本哈根創立 April Coffee Roasters。' },
+                                { year: '2020', text: 'April Brewer 第一代發售，主打「重現北歐甜感」的萃取設計。' },
+                                { year: '2021', text: '進入歐洲與北美精品咖啡店常設清單，被視為高品質淺焙的好搭檔。' },
+                                { year: '2023', text: '推出旅行版（塑膠版本）與多色限定。' },
+                                { year: '至今', text: '是「設計感」與「甜感」雙重追求者的選擇，價格中高但回饋穩定。' }
+                            ],
+                            steps: [
+                                { title: '放平底濾紙', desc: 'April 專用平底紙最佳；Kalita 紙也行但流速略慢。' },
+                                { title: '燙紙 + 充分暖杯', desc: '陶瓷蓄熱穩、起步慢，至少燙紙 30 秒以上。' },
+                                { title: '中細粉', desc: '比 V60 細 1 檔（Comandante 21-23 click）。1:16 比例。' },
+                                { title: 'Bloom 2 倍水 + spin', desc: 'Bloom 後輕轉杯，讓粉床平整。' },
+                                { title: '兩段或四段注水', desc: '北歐風常用 2 段大水量、總時間 2:30-3:00 完成。' }
+                            ],
+                            tips: [
+                                { icon: '🍯', title: '甜感是賣點', desc: '結構設計就為了讓甜感最大化。同豆比 V60 喝起來更甜更柔。' },
+                                { icon: '🌸', title: '配淺焙花果調', desc: '北歐烘焙風的最佳搭檔。高酸 + 花果調用 April 會最有層次。' },
+                                { icon: '📏', title: '介於 V60 與 Kalita 之間', desc: '比 V60 平穩、比 Kalita 自由。兩邊優點折衷。' },
+                                { icon: '🎨', title: '陶瓷美感', desc: '釉面光澤細緻，很多人收一個只是因為太漂亮。' },
+                                { icon: '🔄', title: '兩段大水量', desc: '北歐傳統：Bloom + 一次大水（120g）+ 一次大水（200g），不是 V60 的多段細注。' },
+                                { icon: '💰', title: '價格較高', desc: '陶瓷版 NT$3000+，但耐用度與設計感支撐得住。長期使用回本快。' }
+                            ]
+                        },
+                        melitta: {
+                            name: 'Melitta 經典',
+                            tagline: '1908 年發明濾紙手沖法，扎實 body 的早餐杯',
+                            thumb: () => DRIPPER_SVG.melitta,
+                            status: 'ready',
+                            heroSvg: ENCY_SVG_MELITTA,
+                            subtitle: '德國家庭主婦 Melitta Bentz 在 1908 年發明濾紙手沖法的祖師爺。梯形小底 + 側壁豎肋 + 1 個小孔，body 扎實如早餐咖啡的經典味道。',
+                            chips: [
+                                { text: '1908 年起源', class: 'purple' },
+                                { text: '梯形小底' },
+                                { text: '側壁豎肋', class: 'cool' },
+                                { text: '單一小孔', class: 'warm' },
+                                { text: '慢流速' },
+                                { text: 'body 扎實', class: 'green' }
+                            ],
+                            specs: [
+                                { k: '創辦人', v: 'Melitta Bentz（德國）' },
+                                { k: '發明年', v: '1908' },
+                                { k: '結構', v: '梯形錐 + 1 出水小孔' },
+                                { k: '濾紙', v: 'Melitta #1 / #2 / #4 梯形紙' },
+                                { k: '建議粉量', v: '15-25g' },
+                                { k: '建議粉水比', v: '1:14 ~ 1:16' }
+                            ],
+                            origin: [
+                                { year: '1908', text: 'Melitta Bentz 用兒子作業簿的吸墨紙 + 銅杯打洞，發明世界第一個濾紙手沖系統，當年就申請專利。' },
+                                { year: '1909', text: 'Melitta 公司在德國 Dresden 成立，是家族企業營運至今 116 年。' },
+                                { year: '1936', text: '推出梯形濾紙與梯形濾杯（沿用至今的形狀）。' },
+                                { year: '1960s', text: '梯形濾杯成為歐美家庭咖啡的標配，從手動演變到電動咖啡機都採用此形。' },
+                                { year: '至今', text: '是手沖咖啡的「祖師爺」，雖然第三波咖啡浪潮捧紅 V60，但 Melitta 仍是傳統與懷舊的代表。' }
+                            ],
+                            steps: [
+                                { title: '折濾紙縫邊', desc: 'Melitta 梯形紙底邊與側邊都要摺邊（兩道摺），才能完美貼合濾杯。' },
+                                { title: '燙紙暖杯', desc: '注熱水沖洗紙味與暖杯。' },
+                                { title: '中粉，1:14 略濃', desc: '比 V60 略細，比例略濃。15-20g 配 220-280g 水。' },
+                                { title: 'Bloom 30 秒', desc: '注 2 倍水悶蒸 30 秒。' },
+                                { title: '緩慢注水 4 分鐘', desc: '小孔流速慢，整體時間 3:30-4:30 都正常。注水可分 2-3 段或一刀流。' }
+                            ],
+                            tips: [
+                                { icon: '☕', title: '想喝早餐杯選 Melitta', desc: 'body 扎實、像濃縮過的飯後咖啡。配牛奶做拿鐵或卡布也很適合。' },
+                                { icon: '🌊', title: '別追求乾淨度', desc: 'Melitta 不是設計來呈現產區層次的，是給你舒服的 body 與飽足感。' },
+                                { icon: '🧓', title: '懷舊感濃厚', desc: '阿嬤、爸媽輩很多用 Melitta，可能是你最熟悉的「家裡的咖啡味道」。' },
+                                { icon: '💧', title: '注水可粗一點', desc: '不像 V60 那麼挑手法，水柱粗細容差大。' },
+                                { icon: '🪴', title: '塑膠版很便宜', desc: 'NT$200 內就能買到，是最實惠的入門濾杯。送禮也適合。' },
+                                { icon: '📜', title: '尊重歷史的選擇', desc: '世界第一個手沖系統。買一個放架上紀念也是有意義的收藏。' }
+                            ]
+                        },
+                        stagg: {
+                            name: 'Fellow Stagg X',
+                            tagline: '雙層真空保溫不鏽鋼，現代設計感的容錯派',
+                            thumb: () => DRIPPER_SVG.stagg,
+                            status: 'ready',
+                            heroSvg: ENCY_SVG_STAGG,
+                            subtitle: '舊金山 Fellow Industries 的設計傑作，雙層真空夾層保溫 + 4 個小孔的不鏽鋼濾杯。現代極簡美學 + 容錯極高，是設計感與功能兼具的選擇。',
+                            chips: [
+                                { text: '雙層真空保溫', class: 'cool' },
+                                { text: '不鏽鋼材質' },
+                                { text: '4 出水小孔', class: 'green' },
+                                { text: '矽膠隔熱圈', class: 'warm' },
+                                { text: '現代設計', class: 'purple' },
+                                { text: '高容錯' }
+                            ],
+                            specs: [
+                                { k: '研發者', v: 'Fellow Industries（舊金山）' },
+                                { k: '發售年', v: '2018' },
+                                { k: '結構', v: '雙層真空夾層 + 4 小孔' },
+                                { k: '濾紙', v: 'Stagg X 專用紙 / Kalita Wave 也可' },
+                                { k: '建議粉量', v: '20-30g' },
+                                { k: '建議粉水比', v: '1:15 ~ 1:16' }
+                            ],
+                            origin: [
+                                { year: '2013', text: 'Fellow Industries 在舊金山成立，創辦人來自 IDEO 設計公司。' },
+                                { year: '2015', text: '首款產品 Stagg Pour-Over Kettle（鶴嘴壺）爆紅，成為咖啡圈設計指標。' },
+                                { year: '2018', text: 'Stagg X 濾杯發售，雙層保溫 + 不鏽鋼 + 矽膠的現代感設計。' },
+                                { year: '2020-2022', text: '進入 IG / Pinterest 咖啡美學主流，被視為「居家咖啡顏值天花板」。' },
+                                { year: '至今', text: '不鏽鋼版是經典，後來推出陶瓷版 Stagg XF。' }
+                            ],
+                            steps: [
+                                { title: '放專用平底紙', desc: 'Stagg X 專用紙或 Kalita Wave 紙都行。輕壓貼底。' },
+                                { title: '燙紙暖杯（重點）', desc: '雙層金屬保溫好但起步慢，必須充分燙紙、暖杯 30 秒以上。' },
+                                { title: '中粉，1:15.5', desc: '比 V60 略細，因為平底萃取面積大。20-25g 是甜蜜點。' },
+                                { title: 'Bloom + 平底 spin', desc: 'Bloom 2 倍水後輕轉杯讓粉床平整化（平底結構需要）。' },
+                                { title: '分段注水 3:00', desc: '中央 60% 範圍、3-4 段注水。雙層保溫讓溫度穩、流速比 Kalita 略快。' }
+                            ],
+                            tips: [
+                                { icon: '🌡️', title: '保溫是最大優勢', desc: '雙層真空夾層讓溫度降幅 < 1°C/min，淺焙尾段萃取力度更穩定。' },
+                                { icon: '🎨', title: '設計感無敵', desc: 'IG 上的咖啡桌大概率有 Stagg。送禮、自用都漂亮。' },
+                                { icon: '⚖️', title: '比 Kalita 略快流', desc: '4 小孔比 Kalita 3 小孔流速快一點，研磨可粗半檔。' },
+                                { icon: '🧤', title: '矽膠圈防燙', desc: '抓握區的黑色矽膠圈讓你能直接拿、不燙手，比陶瓷濾杯方便。' },
+                                { icon: '🚿', title: '清洗超方便', desc: '不鏽鋼一沖就乾淨、不卡咖啡漬，比陶瓷與塑膠都好維護。' },
+                                { icon: '💰', title: '價位中高', desc: 'NT$2500-3500，但耐用度極高。摔不破、用 10 年沒問題。' }
+                            ]
+                        }
                     }
                 },
                 brew: {
