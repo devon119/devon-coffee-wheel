@@ -11175,9 +11175,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 }).join('');
                 const readyCount = Object.values(items).filter(i => i.status === 'ready').length;
                 const totalCount = Object.keys(items).length;
-                const isVariety = (_encyCurrentCat === 'variety' && typeof _renderVarietyTree === 'function');
-                const treeHtml = isVariety ? _renderVarietyTree() : '';
-                const gridSection = isVariety ? '' : `
+                document.getElementById('ency-body').innerHTML = `
                     <div class="ency-section">
                         <h3 class="ency-section-title">${cat.icon} ${cat.title}
                             <span style="font-size:13px; font-weight:600; color:#8d6e63; margin-left:auto;">
@@ -11186,7 +11184,6 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                         </h3>
                         <div class="ency-grid">${cards}</div>
                     </div>`;
-                document.getElementById('ency-body').innerHTML = treeHtml + gridSection;
             }
 
             // ========== 🎯 主視圖切換（工作台 / 學習中心） ==========
