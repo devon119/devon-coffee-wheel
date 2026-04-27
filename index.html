@@ -462,7 +462,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             font-size: 13px !important; padding: 4px 12px !important;
         }
 
-        /* 🌳 豆種樹狀圖 */
+        /* 🌳 豆種真樹狀圖（SVG） */
         .vt-wrap {
             background: linear-gradient(180deg, #fffaf2 0%, #f5ede0 100%);
             border-radius: 16px; padding: 22px 22px 26px;
@@ -475,79 +475,36 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
         }
         .vt-subtitle {
             font-size: 12.5px; color: #8d6e63; text-align: center;
-            margin: 0 0 22px 0; font-style: italic;
+            margin: 0 0 18px 0; font-style: italic;
         }
-        .vt-species {
-            margin-bottom: 18px;
+        .vt-svg-scroll {
+            overflow-x: auto; -webkit-overflow-scrolling: touch;
+            background: rgba(255,255,255,0.4);
+            border-radius: 12px; padding: 12px;
         }
-        .vt-species-title {
-            font-size: 15px; font-weight: 800; color: #fff;
-            padding: 8px 16px; border-radius: 14px;
-            margin: 0 0 12px 0; display: inline-block;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.18);
-            letter-spacing: 1px;
+        .vt-svg-scroll svg { display: block; }
+
+        /* 進場動畫：根 → 物種 → 譜系 → 葉子 */
+        @keyframes vt-pop {
+            from { opacity: 0; transform: scale(0.7); }
+            to { opacity: 1; transform: scale(1); }
         }
-        .vt-species.sp-arabica .vt-species-title { background: linear-gradient(135deg, #2e7d32 0%, #66bb6a 100%); }
-        .vt-species.sp-canephora .vt-species-title { background: linear-gradient(135deg, #5d4037 0%, #8d6e63 100%); }
-        .vt-species.sp-liberica .vt-species-title { background: linear-gradient(135deg, #558b2f 0%, #aed581 100%); }
-        .vt-branches { display: flex; flex-direction: column; gap: 14px; }
-        .vt-branch {
-            background: #fff; border-radius: 12px; padding: 10px 14px 14px;
-            position: relative;
-            box-shadow: 0 2px 8px rgba(93,64,55,0.08);
-            border-left: 5px solid;
-            transition: transform 0.25s, box-shadow 0.25s;
+        @keyframes vt-leaf-in {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
         }
-        .vt-branch:hover { transform: translateX(2px); box-shadow: 0 6px 18px rgba(93,64,55,0.15); }
-        .vt-branch-header {
-            display: flex; align-items: center; gap: 8px;
-            margin-bottom: 10px; font-weight: 800;
-            font-size: 13.5px;
-        }
-        .vt-branch-emoji { font-size: 18px; }
-        .vt-branch-name { letter-spacing: 0.5px; }
-        .vt-branch-meta {
-            margin-left: auto; font-size: 11px; font-weight: 700;
-            padding: 2px 9px; border-radius: 10px;
-            background: rgba(0,0,0,0.05); color: #6d4c41;
-        }
-        .vt-items {
-            display: flex; flex-wrap: wrap; gap: 8px;
-            align-items: stretch;
-        }
-        .vt-item {
-            background: linear-gradient(180deg, #fff 0%, #fdf6e8 100%);
-            border: 1.5px solid #d7ccc8;
-            border-radius: 10px; padding: 7px 13px 8px;
-            cursor: pointer; transition: all 0.2s cubic-bezier(.22,.8,.33,1);
-            display: flex; align-items: center; gap: 6px;
-            font-size: 12.5px; font-weight: 700; color: #3e2723;
-            white-space: nowrap;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-            animation: vt-fade-in 0.5s cubic-bezier(.22,.8,.33,1) backwards;
-        }
-        .vt-item:hover {
-            transform: translateY(-3px) scale(1.03);
-            box-shadow: 0 6px 16px rgba(93,64,55,0.22);
-            border-color: #ff9800; background: linear-gradient(180deg, #fff 0%, #fff3e0 100%);
-        }
-        .vt-item .vt-em { font-size: 16px; }
-        @keyframes vt-fade-in {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .vt-legend {
-            display: flex; flex-wrap: wrap; justify-content: center;
-            gap: 10px; margin-top: 14px; font-size: 11px; color: #6d4c41;
-        }
-        .vt-legend-item { display: flex; align-items: center; gap: 4px; }
-        .vt-legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+        .vt-root-g { animation: vt-pop 0.4s cubic-bezier(.22,.8,.33,1) backwards; transform-origin: center; transform-box: fill-box; }
+        .vt-sp-g { animation: vt-pop 0.4s cubic-bezier(.22,.8,.33,1) backwards; transform-origin: center; transform-box: fill-box; }
+        .vt-branch-g { animation: vt-pop 0.4s cubic-bezier(.22,.8,.33,1) backwards; transform-origin: center; transform-box: fill-box; }
+        .vt-leaf-g { animation: vt-leaf-in 0.35s cubic-bezier(.22,.8,.33,1) backwards; transform-origin: left center; transform-box: fill-box; }
+        .vt-leaf-g:hover rect { fill: #fff3e0; stroke-width: 2.5; }
+        .vt-leaf-g:hover { transform: scale(1.05) translateX(2px); }
+        .vt-leaf-g rect, .vt-leaf-g { transition: all 0.18s ease; }
+
         @media (max-width: 600px) {
-            .vt-wrap { padding: 16px 14px 20px; }
+            .vt-wrap { padding: 16px 12px 20px; }
             .vt-title { font-size: 16px; }
-            .vt-item { padding: 6px 10px; font-size: 11.5px; }
-            .vt-item .vt-em { font-size: 14px; }
-            .vt-branch-name { font-size: 12.5px; }
+            .vt-svg-scroll { padding: 6px; }
         }
 
         /* ========== 📚 沖煮百科 Modal ========== */
@@ -11270,37 +11227,157 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
 
             function _renderVarietyTree() {
                 const items = ENCYCLOPEDIA.variety.items;
-                let stagger = 0;
-                const speciesHtml = VARIETY_TREE.map(sp => {
-                    const branchesHtml = sp.branches.map(br => {
-                        const itemsHtml = br.items.map(it => {
+                // 計算座標：垂直排列葉子（品種），譜系與物種根據其下品種中心
+                const LEAF_H = 32;       // 葉子間距
+                const LEAF_W = 138;      // 葉子寬度
+                const PADDING_TOP = 70;  // 樹頂留白
+                const X_ROOT = 70;
+                const X_SPECIES = 220;
+                const X_BRANCH = 410;
+                const X_LEAF = 620;
+                let cy = PADDING_TOP;
+
+                const leafItems = []; // 每個葉子 {id, em, name, x, y, branchY, branchStroke, branchName}
+                const branchNodes = []; // 譜系 {x, y, name, emoji, stroke, meta, items}
+                const speciesNodes = []; // 物種 {x, y, title, color, gradStart, gradEnd, branches}
+
+                VARIETY_TREE.forEach((sp, spIdx) => {
+                    const spStartY = cy;
+                    const spBranches = [];
+                    sp.branches.forEach(br => {
+                        const brStartY = cy;
+                        const brLeaves = [];
+                        br.items.forEach(it => {
                             const ent = items[it.id];
-                            const name = ent ? ent.name : it.id;
-                            const delay = (stagger++ * 0.04).toFixed(2);
-                            return `<div class="vt-item" style="animation-delay:${delay}s" onclick="showEncyDetail('variety','${it.id}')" title="${ent ? ent.tagline.replace(/"/g,'&quot;') : ''}">
-                                <span class="vt-em">${it.em}</span>
-                                <span>${name}</span>
-                            </div>`;
-                        }).join('');
-                        return `<div class="vt-branch" style="border-left-color:${br.stroke}">
-                            <div class="vt-branch-header" style="color:${br.stroke}">
-                                <span class="vt-branch-emoji">${br.emoji}</span>
-                                <span class="vt-branch-name">${br.name}</span>
-                                <span class="vt-branch-meta">${br.meta}</span>
-                            </div>
-                            <div class="vt-items">${itemsHtml}</div>
-                        </div>`;
-                    }).join('');
-                    return `<div class="vt-species sp-${sp.species}">
-                        <div class="vt-species-title">${sp.title}</div>
-                        <div style="font-size:12px; color:#8d6e63; margin: -8px 0 12px 4px; font-style:italic;">${sp.note}</div>
-                        <div class="vt-branches">${branchesHtml}</div>
-                    </div>`;
+                            const leaf = {
+                                id: it.id, em: it.em,
+                                name: ent ? ent.name : it.id,
+                                tagline: ent ? ent.tagline : '',
+                                x: X_LEAF, y: cy,
+                                branchStroke: br.stroke
+                            };
+                            leafItems.push(leaf);
+                            brLeaves.push(leaf);
+                            cy += LEAF_H;
+                        });
+                        const brY = (brStartY + (cy - LEAF_H)) / 2;
+                        brLeaves.forEach(l => l.branchY = brY);
+                        const brNode = {
+                            x: X_BRANCH, y: brY,
+                            name: br.name, emoji: br.emoji,
+                            stroke: br.stroke, meta: br.meta,
+                            leaves: brLeaves
+                        };
+                        branchNodes.push(brNode);
+                        spBranches.push(brNode);
+                        cy += 8; // 譜系間隔
+                    });
+                    const spY = (spStartY + (cy - LEAF_H - 8)) / 2;
+                    const spColor = sp.species === 'arabica' ? '#2e7d32'
+                                  : sp.species === 'canephora' ? '#5d4037'
+                                  : '#558b2f';
+                    speciesNodes.push({
+                        x: X_SPECIES, y: spY,
+                        title: sp.title, note: sp.note, color: spColor,
+                        branches: spBranches, species: sp.species
+                    });
+                    cy += 22; // 物種間隔
+                });
+
+                const totalH = cy + 50;
+                const rootY = speciesNodes.reduce((s, n) => s + n.y, 0) / speciesNodes.length;
+
+                // 連線：根 → 物種
+                const rootToSp = speciesNodes.map(sp => {
+                    const cx1 = X_ROOT + 30, cy1 = rootY;
+                    const cx2 = sp.x - 32, cy2 = sp.y;
+                    const midX = (cx1 + cx2) / 2;
+                    return `<path d="M ${cx1} ${cy1} C ${midX} ${cy1}, ${midX} ${cy2}, ${cx2} ${cy2}" stroke="#6d4c41" stroke-width="3" fill="none" opacity="0.55" stroke-linecap="round"/>`;
                 }).join('');
+
+                // 連線：物種 → 譜系
+                const spToBranch = speciesNodes.map(sp => {
+                    return sp.branches.map(br => {
+                        const cx1 = sp.x + 35, cy1 = sp.y;
+                        const cx2 = br.x - 8, cy2 = br.y;
+                        const midX = (cx1 + cx2) / 2;
+                        return `<path d="M ${cx1} ${cy1} C ${midX} ${cy1}, ${midX} ${cy2}, ${cx2} ${cy2}" stroke="${br.stroke}" stroke-width="2.5" fill="none" opacity="0.5" stroke-linecap="round"/>`;
+                    }).join('');
+                }).join('');
+
+                // 連線：譜系 → 葉子
+                const branchToLeaf = leafItems.map(l => {
+                    const cx1 = X_BRANCH + 8, cy1 = l.branchY;
+                    const cx2 = l.x - 6, cy2 = l.y + 14;
+                    const midX = (cx1 + cx2) / 2;
+                    return `<path d="M ${cx1} ${cy1} C ${midX} ${cy1}, ${midX} ${cy2}, ${cx2} ${cy2}" stroke="${l.branchStroke}" stroke-width="1.6" fill="none" opacity="0.55" stroke-linecap="round"/>`;
+                }).join('');
+
+                // 葉子（品種卡片）
+                const leavesHtml = leafItems.map((l, idx) => {
+                    const delay = (idx * 0.03 + 0.4).toFixed(2);
+                    const safeTagline = (l.tagline || '').replace(/"/g, '&quot;').replace(/'/g, '&apos;');
+                    return `<g class="vt-leaf-g" style="animation-delay:${delay}s; cursor:pointer" onclick="showEncyDetail('variety','${l.id}')">
+                        <title>${safeTagline}</title>
+                        <rect x="${l.x}" y="${l.y}" width="${LEAF_W}" height="28" rx="14" ry="14"
+                              fill="#fff" stroke="${l.branchStroke}" stroke-width="1.5"
+                              filter="url(#vt-shadow)"/>
+                        <text x="${l.x + 14}" y="${l.y + 19}" font-size="15" pointer-events="none">${l.em}</text>
+                        <text x="${l.x + 36}" y="${l.y + 19}" font-size="12" font-weight="700" fill="#3e2723" pointer-events="none">${l.name}</text>
+                    </g>`;
+                }).join('');
+
+                // 譜系節點
+                const branchesHtml = branchNodes.map((br, idx) => {
+                    const delay = (idx * 0.05 + 0.2).toFixed(2);
+                    return `<g class="vt-branch-g" style="animation-delay:${delay}s">
+                        <rect x="${br.x - 10}" y="${br.y - 14}" width="180" height="28" rx="14" ry="14"
+                              fill="${br.stroke}" opacity="0.15"/>
+                        <rect x="${br.x - 10}" y="${br.y - 14}" width="180" height="28" rx="14" ry="14"
+                              fill="none" stroke="${br.stroke}" stroke-width="2"/>
+                        <text x="${br.x + 4}" y="${br.y + 5}" font-size="14" pointer-events="none">${br.emoji}</text>
+                        <text x="${br.x + 26}" y="${br.y + 5}" font-size="12" font-weight="800" fill="${br.stroke}" pointer-events="none">${br.name}</text>
+                    </g>`;
+                }).join('');
+
+                // 物種節點
+                const speciesHtml = speciesNodes.map((sp, idx) => {
+                    const delay = (idx * 0.1).toFixed(2);
+                    return `<g class="vt-sp-g" style="animation-delay:${delay}s">
+                        <circle cx="${sp.x}" cy="${sp.y}" r="38" fill="${sp.color}" opacity="0.95" filter="url(#vt-shadow)"/>
+                        <circle cx="${sp.x}" cy="${sp.y}" r="38" fill="none" stroke="#fff" stroke-width="3"/>
+                        <text x="${sp.x}" y="${sp.y - 4}" font-size="22" text-anchor="middle">${sp.title.match(/^[^\s]+/)[0]}</text>
+                        <text x="${sp.x}" y="${sp.y + 14}" font-size="10" font-weight="800" fill="#fff" text-anchor="middle">${sp.species === 'arabica' ? 'arabica' : sp.species}</text>
+                    </g>`;
+                }).join('');
+
+                // 根節點
+                const rootHtml = `<g class="vt-root-g">
+                    <circle cx="${X_ROOT}" cy="${rootY}" r="32" fill="#3e2723" filter="url(#vt-shadow)"/>
+                    <circle cx="${X_ROOT}" cy="${rootY}" r="32" fill="none" stroke="#a1887f" stroke-width="2"/>
+                    <text x="${X_ROOT}" y="${rootY + 2}" font-size="20" text-anchor="middle">🌱</text>
+                    <text x="${X_ROOT}" y="${rootY + 18}" font-size="9" font-weight="800" fill="#fff" text-anchor="middle">Coffea</text>
+                </g>`;
+
                 return `<div class="vt-wrap">
                     <h3 class="vt-title">🌳 咖啡豆種血緣樹</h3>
-                    <p class="vt-subtitle">點任一品種卡片進入詳情頁　·　演變從祖先到雜交一目了然</p>
-                    ${speciesHtml}
+                    <p class="vt-subtitle">從根（咖啡屬）→ 物種 → 譜系 → 25 個品種　·　點葉子進詳情</p>
+                    <div class="vt-svg-scroll">
+                        <svg viewBox="0 0 800 ${totalH}" xmlns="http://www.w3.org/2000/svg" style="min-width:760px; width:100%; height:auto;">
+                            <defs>
+                                <filter id="vt-shadow" x="-30%" y="-30%" width="160%" height="160%">
+                                    <feDropShadow dx="0" dy="2" stdDeviation="2.5" flood-color="rgba(93,64,55,0.3)"/>
+                                </filter>
+                            </defs>
+                            ${rootToSp}
+                            ${spToBranch}
+                            ${branchToLeaf}
+                            ${rootHtml}
+                            ${speciesHtml}
+                            ${branchesHtml}
+                            ${leavesHtml}
+                        </svg>
+                    </div>
                 </div>`;
             }
 
