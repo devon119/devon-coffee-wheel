@@ -513,9 +513,90 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
         .vtm-controls .vtm-close { width: 36px; height: 36px; padding: 0; border-radius: 50%; }
         #vtm-zoom-label { color: #fff; font-weight: 800; font-size: 13px; min-width: 50px; text-align: center; }
         .vtm-body {
-            flex: 1; overflow: auto; padding: 30px 20px 60px;
+            flex: 1; overflow: auto; padding: 24px 20px 60px;
             display: flex; justify-content: center; align-items: flex-start;
         }
+        /* 譜系演化圖 viewer 內部 - 純垂直縮排樹 */
+        .vd-tree {
+            font-family: "PingFang TC", "Microsoft JhengHei", sans-serif;
+            font-size: 14px; line-height: 1.6;
+            max-width: 700px; width: 100%;
+            transform-origin: top center;
+        }
+        .vd-item {
+            position: relative;
+            padding: 4px 0;
+            animation: vd-fade 0.35s cubic-bezier(.22,.8,.33,1) backwards;
+        }
+        @keyframes vd-fade {
+            from { opacity: 0; transform: translateY(-4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .vd-children {
+            margin-left: 18px;
+            padding-left: 20px;
+            border-left: 2px solid #a1887f;
+            position: relative;
+            margin-top: 4px;
+        }
+        .vd-children > .vd-item::before {
+            content: ''; position: absolute;
+            left: -20px; top: 16px;
+            width: 18px; height: 2px;
+            background: #a1887f;
+        }
+        .vd-children > .vd-item:last-child::after {
+            content: ''; position: absolute;
+            left: -22px; top: 17px; bottom: 0;
+            width: 4px;
+            background: linear-gradient(180deg, transparent 0%, #fdf9f3 4px, #fdf9f3 100%);
+            pointer-events: none;
+        }
+        .vd-root {
+            display: inline-block;
+            font-size: 16px; font-weight: 900;
+            padding: 6px 18px;
+            background: linear-gradient(135deg, #6d4c41 0%, #3e2723 100%);
+            color: #fff; border-radius: 16px;
+            box-shadow: 0 3px 10px rgba(62,39,35,0.35);
+            letter-spacing: 1px;
+        }
+        .vd-species {
+            display: inline-block;
+            padding: 5px 14px; border-radius: 14px;
+            color: #fff; font-weight: 800; font-size: 14px;
+            box-shadow: 0 2px 7px rgba(0,0,0,0.18);
+            letter-spacing: 0.5px;
+        }
+        .vd-species.sp-arabica { background: linear-gradient(135deg, #2e7d32 0%, #66bb6a 100%); }
+        .vd-species.sp-canephora { background: linear-gradient(135deg, #5d4037 0%, #8d6e63 100%); }
+        .vd-species.sp-liberica { background: linear-gradient(135deg, #558b2f 0%, #aed581 100%); }
+        .vd-branch {
+            display: inline-block;
+            padding: 4px 12px; border-radius: 12px;
+            font-weight: 800; font-size: 13.5px;
+            border: 1.5px solid;
+            background: #fff;
+        }
+        .vd-leaf {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 4px 12px; border-radius: 13px;
+            border: 1.5px solid;
+            background: linear-gradient(180deg, #fff 0%, #fdf6e8 100%);
+            color: #3e2723;
+            font-weight: 700; font-size: 13px;
+            cursor: pointer;
+            transition: all 0.18s cubic-bezier(.22,.8,.33,1);
+            white-space: nowrap;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+        .vd-leaf:hover {
+            transform: translateX(4px);
+            background: linear-gradient(180deg, #fff 0%, #fff3e0 100%);
+            box-shadow: 0 4px 12px rgba(93,64,55,0.2);
+            border-color: #ff9800 !important;
+        }
+        .vd-leaf .tl-em { font-size: 15px; }
         @media (max-width: 600px) {
             .vtm-header { padding: 10px 14px; }
             .vtm-header h2 { font-size: 15px; }
@@ -11308,41 +11389,31 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                             const name = ent ? ent.name : it.id;
                             const tagline = ent ? (ent.tagline || '').replace(/"/g, '&quot;').replace(/'/g, '&#39;') : '';
                             const delay = (staggerIdx++ * 0.02 + 0.3).toFixed(2);
-                            return `<li style="animation-delay:${delay}s">
-                                <div class="ftree-node-wrap">
-                                    <span class="tree-leaf" style="border-color:${br.stroke};"
-                                          onclick="closeVarietyTree(); setTimeout(()=>showEncyDetail('variety','${it.id}'), 250);"
-                                          title="${tagline}">
-                                        <span class="tl-em">${it.em}</span>${name}
-                                    </span>
-                                </div>
-                            </li>`;
+                            return `<div class="vd-item" style="animation-delay:${delay}s">
+                                <span class="vd-leaf" style="border-color:${br.stroke};"
+                                      onclick="closeVarietyTree(); setTimeout(()=>showEncyDetail('variety','${it.id}'), 250);"
+                                      title="${tagline}">
+                                    <span class="tl-em">${it.em}</span>${name}
+                                </span>
+                            </div>`;
                         }).join('');
                         const brDelay = (staggerIdx * 0.02 + 0.2).toFixed(2);
-                        return `<li style="animation-delay:${brDelay}s">
-                            <div class="ftree-node-wrap">
-                                <span class="tree-branch" style="border-color:${br.stroke}; color:${br.stroke};">${br.emoji} ${br.name}</span>
-                            </div>
-                            <ul>${leavesHtml}</ul>
-                        </li>`;
+                        return `<div class="vd-item" style="animation-delay:${brDelay}s">
+                            <span class="vd-branch" style="border-color:${br.stroke}; color:${br.stroke};">${br.emoji} ${br.name}</span>
+                            <div class="vd-children" style="border-left-color:${br.stroke};">${leavesHtml}</div>
+                        </div>`;
                     }).join('');
                     const spDelay = (staggerIdx * 0.02 + 0.1).toFixed(2);
-                    return `<li style="animation-delay:${spDelay}s">
-                        <div class="ftree-node-wrap">
-                            <span class="tree-species sp-${sp.species}">${sp.title}</span>
-                        </div>
-                        <ul>${branchesHtml}</ul>
-                    </li>`;
+                    return `<div class="vd-item" style="animation-delay:${spDelay}s">
+                        <span class="vd-species sp-${sp.species}">${sp.title}</span>
+                        <div class="vd-children">${branchesHtml}</div>
+                    </div>`;
                 }).join('');
-                return `<div class="ftree" id="vtm-tree">
-                    <ul>
-                        <li>
-                            <div class="ftree-node-wrap">
-                                <span class="tree-root-label">🌱 Coffea（咖啡屬）</span>
-                            </div>
-                            <ul>${speciesHtml}</ul>
-                        </li>
-                    </ul>
+                return `<div class="vd-tree" id="vtm-tree">
+                    <div class="vd-item">
+                        <span class="vd-root">🌱 Coffea（咖啡屬）</span>
+                        <div class="vd-children">${speciesHtml}</div>
+                    </div>
                 </div>`;
             }
 
