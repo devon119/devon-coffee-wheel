@@ -462,6 +462,94 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             font-size: 13px !important; padding: 4px 12px !important;
         }
 
+        /* 🌳 豆種樹狀圖 */
+        .vt-wrap {
+            background: linear-gradient(180deg, #fffaf2 0%, #f5ede0 100%);
+            border-radius: 16px; padding: 22px 22px 26px;
+            margin-bottom: 26px; border: 1.5px solid #e7dcc6;
+            position: relative;
+        }
+        .vt-title {
+            font-size: 18px; font-weight: 900; color: #4e342e;
+            text-align: center; margin: 0 0 6px 0; letter-spacing: 1px;
+        }
+        .vt-subtitle {
+            font-size: 12.5px; color: #8d6e63; text-align: center;
+            margin: 0 0 22px 0; font-style: italic;
+        }
+        .vt-species {
+            margin-bottom: 18px;
+        }
+        .vt-species-title {
+            font-size: 15px; font-weight: 800; color: #fff;
+            padding: 8px 16px; border-radius: 14px;
+            margin: 0 0 12px 0; display: inline-block;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.18);
+            letter-spacing: 1px;
+        }
+        .vt-species.sp-arabica .vt-species-title { background: linear-gradient(135deg, #2e7d32 0%, #66bb6a 100%); }
+        .vt-species.sp-canephora .vt-species-title { background: linear-gradient(135deg, #5d4037 0%, #8d6e63 100%); }
+        .vt-species.sp-liberica .vt-species-title { background: linear-gradient(135deg, #558b2f 0%, #aed581 100%); }
+        .vt-branches { display: flex; flex-direction: column; gap: 14px; }
+        .vt-branch {
+            background: #fff; border-radius: 12px; padding: 10px 14px 14px;
+            position: relative;
+            box-shadow: 0 2px 8px rgba(93,64,55,0.08);
+            border-left: 5px solid;
+            transition: transform 0.25s, box-shadow 0.25s;
+        }
+        .vt-branch:hover { transform: translateX(2px); box-shadow: 0 6px 18px rgba(93,64,55,0.15); }
+        .vt-branch-header {
+            display: flex; align-items: center; gap: 8px;
+            margin-bottom: 10px; font-weight: 800;
+            font-size: 13.5px;
+        }
+        .vt-branch-emoji { font-size: 18px; }
+        .vt-branch-name { letter-spacing: 0.5px; }
+        .vt-branch-meta {
+            margin-left: auto; font-size: 11px; font-weight: 700;
+            padding: 2px 9px; border-radius: 10px;
+            background: rgba(0,0,0,0.05); color: #6d4c41;
+        }
+        .vt-items {
+            display: flex; flex-wrap: wrap; gap: 8px;
+            align-items: stretch;
+        }
+        .vt-item {
+            background: linear-gradient(180deg, #fff 0%, #fdf6e8 100%);
+            border: 1.5px solid #d7ccc8;
+            border-radius: 10px; padding: 7px 13px 8px;
+            cursor: pointer; transition: all 0.2s cubic-bezier(.22,.8,.33,1);
+            display: flex; align-items: center; gap: 6px;
+            font-size: 12.5px; font-weight: 700; color: #3e2723;
+            white-space: nowrap;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+            animation: vt-fade-in 0.5s cubic-bezier(.22,.8,.33,1) backwards;
+        }
+        .vt-item:hover {
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: 0 6px 16px rgba(93,64,55,0.22);
+            border-color: #ff9800; background: linear-gradient(180deg, #fff 0%, #fff3e0 100%);
+        }
+        .vt-item .vt-em { font-size: 16px; }
+        @keyframes vt-fade-in {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .vt-legend {
+            display: flex; flex-wrap: wrap; justify-content: center;
+            gap: 10px; margin-top: 14px; font-size: 11px; color: #6d4c41;
+        }
+        .vt-legend-item { display: flex; align-items: center; gap: 4px; }
+        .vt-legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+        @media (max-width: 600px) {
+            .vt-wrap { padding: 16px 14px 20px; }
+            .vt-title { font-size: 16px; }
+            .vt-item { padding: 6px 10px; font-size: 11.5px; }
+            .vt-item .vt-em { font-size: 14px; }
+            .vt-branch-name { font-size: 12.5px; }
+        }
+
         /* ========== 📚 沖煮百科 Modal ========== */
         #encyclopedia-modal {
             position: fixed; inset: 0; z-index: 2080;
@@ -11039,9 +11127,12 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 }).join('');
                 const readyCount = Object.values(items).filter(i => i.status === 'ready').length;
                 const totalCount = Object.keys(items).length;
+                const treeHtml = (_encyCurrentCat === 'variety' && typeof _renderVarietyTree === 'function') ? _renderVarietyTree() : '';
+                const gridTitle = _encyCurrentCat === 'variety' ? '📜 完整列表' : `${cat.icon} ${cat.title}`;
                 document.getElementById('ency-body').innerHTML = `
+                    ${treeHtml}
                     <div class="ency-section">
-                        <h3 class="ency-section-title">${cat.icon} ${cat.title}
+                        <h3 class="ency-section-title">${gridTitle}
                             <span style="font-size:13px; font-weight:600; color:#8d6e63; margin-left:auto;">
                                 ${readyCount} / ${totalCount} 已上線
                             </span>
@@ -11082,6 +11173,136 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 const lv = document.getElementById('learning-view');
                 if (lv && lv.classList.contains('active')) switchMainView('workbench');
             });
+
+            // ========== 🌳 豆種血緣樹（豆種列表頁的視覺化） ==========
+            const VARIETY_TREE = [
+                {
+                    species: 'arabica', title: '🌿 Coffea arabica（阿拉比卡）',
+                    note: '佔全球咖啡約 60-70%、風味豐富多樣',
+                    branches: [
+                        {
+                            name: 'Typica 譜系（祖先）', emoji: '🌱', stroke: '#ff6f00',
+                            meta: '葉門 → 印尼 → 全球',
+                            items: [
+                                { id: 'typica',     em: '🌿' },
+                                { id: 'maragogipe', em: '🍈' }
+                            ]
+                        },
+                        {
+                            name: 'Bourbon 譜系（祖先）', emoji: '🍯', stroke: '#e65100',
+                            meta: '葉門 → Bourbon 島 → 全球',
+                            items: [
+                                { id: 'bourbon', em: '🍯' },
+                                { id: 'caturra', em: '🌳' },
+                                { id: 'pacas',   em: '🌳' }
+                            ]
+                        },
+                        {
+                            name: 'Bourbon × Typica 雜交', emoji: '🔀', stroke: '#f9a825',
+                            meta: '兩大祖先後代、巴西 / 厄瓜多',
+                            items: [
+                                { id: 'mundo_novo', em: '🌿' },
+                                { id: 'catuai',     em: '🌾' },
+                                { id: 'sidra',      em: '🌺' },
+                                { id: 'pacamara',   em: '🍍' }
+                            ]
+                        },
+                        {
+                            name: '抗病雜交（× Timor Hybrid）', emoji: '🛡️', stroke: '#3949ab',
+                            meta: 'Robusta 抗病基因導入、商業主力',
+                            items: [
+                                { id: 'catimor',         em: '⚔️' },
+                                { id: 'castillo',        em: '🛡️' },
+                                { id: 'tabi',            em: '🌟' },
+                                { id: 'marsellesa',      em: '🛡️' },
+                                { id: 'centroamericano', em: '🧬' }
+                            ]
+                        },
+                        {
+                            name: '衣索比亞原生（咖啡老家）', emoji: '🌸', stroke: '#c2185b',
+                            meta: 'Kaffa 高原原生地、千種變異',
+                            items: [
+                                { id: 'ethiopia_heirloom', em: '🌺' },
+                                { id: 'jarc_74',           em: '🌸' },
+                                { id: 'wush_wush',         em: '🌸' },
+                                { id: 'geisha',            em: '🌸' }
+                            ]
+                        },
+                        {
+                            name: '肯亞 SL 系列 / 蘇丹', emoji: '🌅', stroke: '#6a1b9a',
+                            meta: '東非高原、黑醋栗 / 莓果調',
+                            items: [
+                                { id: 'sl28',       em: '🍇' },
+                                { id: 'ruiru_11',   em: '🌾' },
+                                { id: 'batian',     em: '🏔️' },
+                                { id: 'sudan_rume', em: '🌅' }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    species: 'canephora', title: '🌳 Coffea canephora（Robusta）',
+                    note: '佔全球約 30-40%、咖啡因高、義式拼配',
+                    branches: [
+                        {
+                            name: '商業 Robusta', emoji: '💪', stroke: '#5d4037',
+                            meta: '低海拔 / 抗病 / 越南最大產國',
+                            items: [
+                                { id: 'robusta', em: '💪' }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    species: 'liberica', title: '🪵 Coffea liberica（第三大物種）',
+                    note: '稀有商業物種、菲律賓 Barako',
+                    branches: [
+                        {
+                            name: 'Liberica / Excelsa', emoji: '🪵', stroke: '#558b2f',
+                            meta: '木質煙燻 / 菠蘿蜜獨特風味',
+                            items: [
+                                { id: 'liberica', em: '🪵' }
+                            ]
+                        }
+                    ]
+                }
+            ];
+
+            function _renderVarietyTree() {
+                const items = ENCYCLOPEDIA.variety.items;
+                let stagger = 0;
+                const speciesHtml = VARIETY_TREE.map(sp => {
+                    const branchesHtml = sp.branches.map(br => {
+                        const itemsHtml = br.items.map(it => {
+                            const ent = items[it.id];
+                            const name = ent ? ent.name : it.id;
+                            const delay = (stagger++ * 0.04).toFixed(2);
+                            return `<div class="vt-item" style="animation-delay:${delay}s" onclick="showEncyDetail('variety','${it.id}')" title="${ent ? ent.tagline.replace(/"/g,'&quot;') : ''}">
+                                <span class="vt-em">${it.em}</span>
+                                <span>${name}</span>
+                            </div>`;
+                        }).join('');
+                        return `<div class="vt-branch" style="border-left-color:${br.stroke}">
+                            <div class="vt-branch-header" style="color:${br.stroke}">
+                                <span class="vt-branch-emoji">${br.emoji}</span>
+                                <span class="vt-branch-name">${br.name}</span>
+                                <span class="vt-branch-meta">${br.meta}</span>
+                            </div>
+                            <div class="vt-items">${itemsHtml}</div>
+                        </div>`;
+                    }).join('');
+                    return `<div class="vt-species sp-${sp.species}">
+                        <div class="vt-species-title">${sp.title}</div>
+                        <div style="font-size:12px; color:#8d6e63; margin: -8px 0 12px 4px; font-style:italic;">${sp.note}</div>
+                        <div class="vt-branches">${branchesHtml}</div>
+                    </div>`;
+                }).join('');
+                return `<div class="vt-wrap">
+                    <h3 class="vt-title">🌳 咖啡豆種血緣樹</h3>
+                    <p class="vt-subtitle">點任一品種卡片進入詳情頁　·　演變從祖先到雜交一目了然</p>
+                    ${speciesHtml}
+                </div>`;
+            }
 
             // ========== 研磨度對照系統（粒徑 + 實物對照）==========
             const GRIND_REFERENCE = [
