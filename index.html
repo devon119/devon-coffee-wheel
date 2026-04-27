@@ -467,11 +467,60 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             background: transparent;
             padding: 0; margin-bottom: 26px;
             position: relative;
-            /* 突破 parent 寬度限制，使用 viewport 全寬 */
-            width: 100vw;
-            margin-left: calc(-50vw + 50%);
-            box-sizing: border-box;
-            padding-left: 16px; padding-right: 16px;
+        }
+        .vt-open-btn {
+            display: block; width: 100%;
+            background: linear-gradient(135deg, #2e7d32 0%, #66bb6a 100%);
+            color: #fff; border: none;
+            padding: 14px 20px;
+            border-radius: 14px;
+            font-size: 15px; font-weight: 800; letter-spacing: 1.5px;
+            cursor: pointer;
+            box-shadow: 0 4px 14px rgba(46,125,50,0.3);
+            margin-bottom: 22px;
+            transition: all 0.2s;
+        }
+        .vt-open-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 22px rgba(46,125,50,0.45);
+        }
+        /* 🌳 譜系演化圖獨立 modal */
+        #variety-tree-modal {
+            position: fixed; inset: 0; z-index: 2200;
+            background: linear-gradient(180deg, #fdf9f3 0%, #f5ede0 100%);
+            display: none;
+            opacity: 0; transition: opacity 0.25s ease;
+            display: flex; flex-direction: column;
+        }
+        #variety-tree-modal.open {
+            display: flex; opacity: 1;
+        }
+        .vtm-header {
+            background: linear-gradient(180deg, #6d4c41 0%, #5d4037 100%);
+            color: #fff; padding: 14px 22px;
+            display: flex; align-items: center; justify-content: space-between;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            flex-shrink: 0;
+        }
+        .vtm-header h2 { margin: 0; font-size: 18px; font-weight: 900; letter-spacing: 1px; }
+        .vtm-controls { display: flex; gap: 8px; align-items: center; }
+        .vtm-controls button {
+            background: rgba(255,255,255,0.15); border: none; color: #fff;
+            padding: 7px 14px; border-radius: 14px; font-size: 13px; font-weight: 700;
+            cursor: pointer; transition: background 0.15s;
+        }
+        .vtm-controls button:hover { background: rgba(255,255,255,0.3); }
+        .vtm-controls .vtm-close { width: 36px; height: 36px; padding: 0; border-radius: 50%; }
+        #vtm-zoom-label { color: #fff; font-weight: 800; font-size: 13px; min-width: 50px; text-align: center; }
+        .vtm-body {
+            flex: 1; overflow: auto; padding: 30px 20px 60px;
+            display: flex; justify-content: center; align-items: flex-start;
+        }
+        @media (max-width: 600px) {
+            .vtm-header { padding: 10px 14px; }
+            .vtm-header h2 { font-size: 15px; }
+            .vtm-controls button { padding: 5px 10px; font-size: 11.5px; }
+            .vtm-body { padding: 20px 10px 40px; }
         }
         .vt-title {
             font-size: 18px; font-weight: 900; color: #4e342e;
@@ -11175,7 +11224,12 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 }).join('');
                 const readyCount = Object.values(items).filter(i => i.status === 'ready').length;
                 const totalCount = Object.keys(items).length;
+                const treeBtn = (_encyCurrentCat === 'variety') ? `
+                    <button class="vt-open-btn" onclick="openVarietyTree()">
+                        🌳 譜系演化圖（全螢幕）
+                    </button>` : '';
                 document.getElementById('ency-body').innerHTML = `
+                    ${treeBtn}
                     <div class="ency-section">
                         <h3 class="ency-section-title">${cat.icon} ${cat.title}
                             <span style="font-size:13px; font-weight:600; color:#8d6e63; margin-left:auto;">
@@ -11184,6 +11238,112 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                         </h3>
                         <div class="ency-grid">${cards}</div>
                     </div>`;
+            }
+
+            // ========== 🌳 譜系演化圖（獨立全螢幕 viewer） ==========
+            window.openVarietyTree = function() {
+                let modal = document.getElementById('variety-tree-modal');
+                if (!modal) {
+                    modal = document.createElement('div');
+                    modal.id = 'variety-tree-modal';
+                    document.body.appendChild(modal);
+                }
+                modal.innerHTML = `
+                    <div class="vtm-header">
+                        <h2>🌳 咖啡豆種譜系演化圖</h2>
+                        <div class="vtm-controls">
+                            <button onclick="vtZoom(-0.1)" title="縮小">➖</button>
+                            <span id="vtm-zoom-label">100%</span>
+                            <button onclick="vtZoom(0.1)" title="放大">➕</button>
+                            <button onclick="vtZoom(0)" title="自動 fit 寬度">📐 Fit</button>
+                            <button class="vtm-close" onclick="closeVarietyTree()">✕</button>
+                        </div>
+                    </div>
+                    <div class="vtm-body" id="vtm-body">
+                        ${_renderVarietyTreeFamily()}
+                    </div>
+                `;
+                requestAnimationFrame(() => modal.classList.add('open'));
+                document.body.style.overflow = 'hidden';
+                setTimeout(() => vtZoom(0), 100);  // 預設 fit
+            };
+            window.closeVarietyTree = function() {
+                const modal = document.getElementById('variety-tree-modal');
+                if (modal) {
+                    modal.classList.remove('open');
+                    setTimeout(() => modal.remove(), 250);
+                }
+                document.body.style.overflow = '';
+            };
+            let _vtZoomScale = 1;
+            window.vtZoom = function(delta) {
+                const tree = document.getElementById('vtm-tree');
+                const body = document.getElementById('vtm-body');
+                if (!tree || !body) return;
+                if (delta === 0) {
+                    // fit
+                    tree.style.transform = 'none';
+                    const containerW = body.clientWidth - 40;
+                    const treeW = tree.scrollWidth;
+                    if (treeW > containerW) {
+                        _vtZoomScale = (containerW / treeW);
+                    } else {
+                        _vtZoomScale = 1;
+                    }
+                } else {
+                    _vtZoomScale = Math.max(0.3, Math.min(2.0, _vtZoomScale + delta));
+                }
+                tree.style.transform = `scale(${_vtZoomScale})`;
+                tree.style.transformOrigin = 'top center';
+                document.getElementById('vtm-zoom-label').textContent = Math.round(_vtZoomScale * 100) + '%';
+            };
+
+            function _renderVarietyTreeFamily() {
+                const items = ENCYCLOPEDIA.variety.items;
+                let staggerIdx = 0;
+                const speciesHtml = VARIETY_TREE.map(sp => {
+                    const branchesHtml = sp.branches.map(br => {
+                        const leavesHtml = br.items.map(it => {
+                            const ent = items[it.id];
+                            const name = ent ? ent.name : it.id;
+                            const tagline = ent ? (ent.tagline || '').replace(/"/g, '&quot;').replace(/'/g, '&#39;') : '';
+                            const delay = (staggerIdx++ * 0.02 + 0.3).toFixed(2);
+                            return `<li style="animation-delay:${delay}s">
+                                <div class="ftree-node-wrap">
+                                    <span class="tree-leaf" style="border-color:${br.stroke};"
+                                          onclick="closeVarietyTree(); setTimeout(()=>showEncyDetail('variety','${it.id}'), 250);"
+                                          title="${tagline}">
+                                        <span class="tl-em">${it.em}</span>${name}
+                                    </span>
+                                </div>
+                            </li>`;
+                        }).join('');
+                        const brDelay = (staggerIdx * 0.02 + 0.2).toFixed(2);
+                        return `<li style="animation-delay:${brDelay}s">
+                            <div class="ftree-node-wrap">
+                                <span class="tree-branch" style="border-color:${br.stroke}; color:${br.stroke};">${br.emoji} ${br.name}</span>
+                            </div>
+                            <ul>${leavesHtml}</ul>
+                        </li>`;
+                    }).join('');
+                    const spDelay = (staggerIdx * 0.02 + 0.1).toFixed(2);
+                    return `<li style="animation-delay:${spDelay}s">
+                        <div class="ftree-node-wrap">
+                            <span class="tree-species sp-${sp.species}">${sp.title}</span>
+                        </div>
+                        <ul>${branchesHtml}</ul>
+                    </li>`;
+                }).join('');
+                return `<div class="ftree" id="vtm-tree">
+                    <ul>
+                        <li>
+                            <div class="ftree-node-wrap">
+                                <span class="tree-root-label">🌱 Coffea（咖啡屬）</span>
+                            </div>
+                            <ul>${speciesHtml}</ul>
+                        </li>
+                    </ul>
+                </div>`;
             }
 
             // ========== 🎯 主視圖切換（工作台 / 學習中心） ==========
