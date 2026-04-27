@@ -7600,6 +7600,122 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 midLabel: '半乾即剝殼'
             });
 
+            // ========== 烘焙度 hero SVG helper ==========
+            function _encyRoastSvg(opts) {
+                const flavors = (opts.flavors || []).map((f, i) => {
+                    const angles = [-150, -100, -60, 60, 100, 150];
+                    const angle = (angles[i] || 0) * Math.PI / 180;
+                    const cx = 240 + Math.cos(angle) * 165;
+                    const cy = 215 + Math.sin(angle) * 135;
+                    return `<text x="${cx}" y="${cy}" font-size="32" text-anchor="middle">${f}</text>`;
+                }).join('');
+                return `<svg viewBox="0 0 480 420" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <radialGradient id="rs-${opts.id}" cx="0.5" cy="0.4" r="0.7">
+                            <stop offset="0%" stop-color="${opts.bg1}"/>
+                            <stop offset="100%" stop-color="${opts.bg2}"/>
+                        </radialGradient>
+                        <radialGradient id="rb-${opts.id}" cx="0.4" cy="0.4" r="0.7">
+                            <stop offset="0%" stop-color="${opts.beanLight}"/>
+                            <stop offset="100%" stop-color="${opts.beanDark}"/>
+                        </radialGradient>
+                    </defs>
+                    <rect width="480" height="420" fill="url(#rs-${opts.id})" rx="16"/>
+                    <text x="240" y="58" font-size="13" font-weight="800" fill="${opts.tcolor||'#3e2723'}" text-anchor="middle" letter-spacing="3">${opts.subtitle}</text>
+                    <!-- 烘焙度色階（底部）-->
+                    <defs>
+                        <linearGradient id="roast-scale-${opts.id}" x1="0" y1="0" x2="1" y2="0">
+                            <stop offset="0%" stop-color="#d4b896"/>
+                            <stop offset="14%" stop-color="#a17b5a"/>
+                            <stop offset="28%" stop-color="#7c5a3f"/>
+                            <stop offset="42%" stop-color="#5a3e29"/>
+                            <stop offset="56%" stop-color="#3d2818"/>
+                            <stop offset="70%" stop-color="#2a1a0e"/>
+                            <stop offset="84%" stop-color="#1a0a04"/>
+                            <stop offset="100%" stop-color="#0a0404"/>
+                        </linearGradient>
+                    </defs>
+                    <g transform="translate(60 80)">
+                        <rect x="0" y="0" width="360" height="14" fill="url(#roast-scale-${opts.id})" rx="3"/>
+                        <!-- 你在這裡 -->
+                        <polygon points="${opts.scalePos-6},14 ${opts.scalePos+6},14 ${opts.scalePos},22" fill="${opts.tcolor||'#3e2723'}"/>
+                        <text x="${opts.scalePos}" y="34" font-size="10" font-weight="700" fill="${opts.tcolor||'#3e2723'}" text-anchor="middle">${opts.btText}</text>
+                    </g>
+                    <!-- 中央放大豆 -->
+                    <g transform="translate(240 240)">
+                        <ellipse cx="0" cy="0" rx="80" ry="108" fill="url(#rb-${opts.id})"/>
+                        <line x1="0" y1="-103" x2="0" y2="103" stroke="${opts.crackColor||'#1a0a04'}" stroke-width="3"/>
+                        ${opts.oilGloss ? `<ellipse cx="-25" cy="-50" rx="25" ry="42" fill="rgba(255,255,255,0.18)"/>
+                            <ellipse cx="20" cy="40" rx="18" ry="28" fill="rgba(255,255,255,0.12)"/>` : ''}
+                        ${opts.cracks ? '<line x1="-30" y1="-50" x2="-15" y2="-30" stroke="#0a0404" stroke-width="1.5"/><line x1="20" y1="20" x2="30" y2="40" stroke="#0a0404" stroke-width="1.5"/>' : ''}
+                    </g>
+                    ${flavors}
+                    <text x="240" y="380" font-size="24" font-weight="900" fill="${opts.tcolor||'#3e2723'}" text-anchor="middle">${opts.name}</text>
+                    <text x="240" y="400" font-size="12" fill="${opts.tcolor||'#5d4037'}" text-anchor="middle">${opts.tag}</text>
+                </svg>`;
+            }
+
+            const ENCY_RST_CINNAMON = _encyRoastSvg({
+                id: 'cinn', name: 'Cinnamon Roast', subtitle: '極淺焙 · 一爆前', tag: 'BT 196-204°C · Dev 8-12%',
+                btText: '一爆前', scalePos: 30,
+                bg1: '#fff8e1', bg2: '#ffe082',
+                beanLight: '#d4b896', beanDark: '#a17b5a', crackColor: '#5d4037',
+                flavors: ['🌸', '🍋', '🍑', '🌿', '🥒', '🌾']
+            });
+            const ENCY_RST_CITY = _encyRoastSvg({
+                id: 'city', name: 'City Roast', subtitle: '淺焙 · 一爆中尾', tag: 'BT 205-210°C · Dev 12-16%',
+                btText: '一爆中', scalePos: 80,
+                bg1: '#fff3e0', bg2: '#ffcc80',
+                beanLight: '#a17b5a', beanDark: '#7c5a3f', crackColor: '#3e2723',
+                flavors: ['🍓', '🍒', '🍇', '🌸', '🍋', '🍯']
+            });
+            const ENCY_RST_CITY_PLUS = _encyRoastSvg({
+                id: 'cityp', name: 'City+', subtitle: '淺中焙 · 一二爆之間', tag: 'BT 211-216°C · Dev 16-20%',
+                btText: '黃金區', scalePos: 130,
+                bg1: '#fff3e0', bg2: '#ffb74d',
+                beanLight: '#7c5a3f', beanDark: '#5a3e29', crackColor: '#3e2723',
+                flavors: ['🍯', '🍑', '🍫', '🍇', '🌰', '🍷']
+            });
+            const ENCY_RST_FULL_CITY = _encyRoastSvg({
+                id: 'fc', name: 'Full City', subtitle: '中焙 · 二爆前', tag: 'BT 217-222°C · Dev 20-24%',
+                btText: '二爆前', scalePos: 175,
+                bg1: '#efebe9', bg2: '#bcaaa4',
+                beanLight: '#5a3e29', beanDark: '#3d2818', crackColor: '#2e1a0e',
+                flavors: ['🍫', '🌰', '🥜', '🍞', '🍪', '🥃']
+            });
+            const ENCY_RST_FULL_CITY_PLUS = _encyRoastSvg({
+                id: 'fcp', name: 'Full City+', subtitle: '中深焙 · 二爆初期', tag: 'BT 223-227°C · Dev 22-26%',
+                btText: '二爆始', scalePos: 220,
+                bg1: '#efebe9', bg2: '#8d6e63',
+                beanLight: '#3d2818', beanDark: '#2a1a0e', crackColor: '#1a0a04',
+                oilGloss: true,
+                flavors: ['🍫', '🌑', '🥃', '🌰', '🍪', '🥖']
+            });
+            const ENCY_RST_VIENNA = _encyRoastSvg({
+                id: 'vie', name: 'Vienna', subtitle: '深焙 · 二爆中', tag: 'BT 228-232°C · Dev 24-28%',
+                btText: '二爆中', scalePos: 260,
+                bg1: '#d7ccc8', bg2: '#6d4c41', tcolor: '#fff',
+                beanLight: '#2a1a0e', beanDark: '#1a0a04', crackColor: '#0a0404',
+                oilGloss: true, cracks: true,
+                flavors: ['🔥', '🌰', '🍫', '🥃', '🍞', '🍪']
+            });
+            const ENCY_RST_FRENCH = _encyRoastSvg({
+                id: 'fr', name: 'French', subtitle: '極深焙 · 二爆密集', tag: 'BT 233-238°C · Dev 26-30%',
+                btText: '二爆密', scalePos: 305,
+                bg1: '#bcaaa4', bg2: '#3e2723', tcolor: '#fff',
+                beanLight: '#1a0a04', beanDark: '#0a0a0a', crackColor: '#000',
+                oilGloss: true, cracks: true,
+                flavors: ['🌑', '🔥', '🥃', '⚫', '🌰', '🪵']
+            });
+            const ENCY_RST_ITALIAN = _encyRoastSvg({
+                id: 'it', name: 'Italian', subtitle: '炭焙 · 二爆末', tag: 'BT 240°C+ · Dev 30%+',
+                btText: '炭焙', scalePos: 350,
+                bg1: '#8d6e63', bg2: '#1a1a1a', tcolor: '#fff',
+                beanLight: '#0a0a0a', beanDark: '#000', crackColor: '#000',
+                oilGloss: true, cracks: true,
+                flavors: ['⚫', '🌑', '🔥', '🪵', '💀', '⚫']
+            });
+
             const ENCYCLOPEDIA = {
                 history: {
                     title: '📜 咖啡起源與歷史',
@@ -8539,14 +8655,284 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                     title: '🔥 烘焙度',
                     icon: '🔥',
                     items: {
-                        cinnamon:    { name: 'Cinnamon Roast',    tagline: '極淺焙：明亮酸質，花果調主導', emoji: '🌸', status: 'soon' },
-                        city:        { name: 'City Roast',        tagline: '淺焙：第三波精品的最愛', emoji: '🍋', status: 'soon' },
-                        city_plus:   { name: 'City+',             tagline: '淺中焙：酸甜平衡的黃金', emoji: '🍑', status: 'soon' },
-                        full_city:   { name: 'Full City',         tagline: '中焙：均衡、巧克力與堅果', emoji: '🍫', status: 'soon' },
-                        full_city_plus: { name: 'Full City+',     tagline: '中深焙：油光出現、苦甜', emoji: '🌰', status: 'soon' },
-                        vienna:      { name: 'Vienna',            tagline: '深焙：焦糖與煙燻', emoji: '🔥', status: 'soon' },
-                        french:      { name: 'French',            tagline: '極深焙：苦感主導、義式拼配用', emoji: '🌑', status: 'soon' },
-                        italian:     { name: 'Italian',           tagline: '炭焙：燒焦邊緣，傳統義式', emoji: '⚫', status: 'soon' }
+                        cinnamon: {
+                            name: 'Cinnamon Roast', tagline: '極淺焙 · 一爆前 · 花果調主導',
+                            emoji: '🌸', status: 'ready', heroSvg: ENCY_RST_CINNAMON,
+                            subtitle: '極淺焙、一爆（First Crack）開始前停止烘焙。豆色淺褐如肉桂、表面乾燥無油光。最大化保留原豆的花果酸質、適合突顯衣索比亞、Geisha 等明亮品種。但容易出現生青、草青等瑕疵風味。',
+                            chips: [
+                                { text: '一爆前停止', class: 'green' },
+                                { text: 'BT 196-204°C', class: 'cool' },
+                                { text: 'Dev 8-12%', class: 'warm' },
+                                { text: '極明亮酸', class: 'purple' },
+                                { text: '花果香' },
+                                { text: '無油光' }
+                            ],
+                            specs: [
+                                { k: '英文名', v: 'Cinnamon Roast / Light Roast' },
+                                { k: '結束時機', v: '一爆（FC）開始前 / 始入即停' },
+                                { k: 'BT 溫度', v: '196-204°C' },
+                                { k: 'Dev 比例', v: '8-12%（極短）' },
+                                { k: '豆色', v: '淺褐（接近肉桂色）' },
+                                { k: '適合品種', v: '衣索比亞 / Geisha / SL28' }
+                            ],
+                            origin: [
+                                { year: 'Agtron 數值', text: 'Agtron 95-105（最淺）。豆表完全乾燥、無油脂滲出。' },
+                                { year: '化學變化', text: '梅納反應剛起步、焦糖化未開始、原豆糖分與酸大量保留。' },
+                                { year: '北歐風潮', text: '2010s 北歐烘焙圈推崇極淺焙、強調「呈現原豆風味」、與義式深焙形成兩極。' }
+                            ],
+                            originTitle: '🔬 烘焙化學',
+                            tipsTitle: '☕ 風味與沖煮建議',
+                            tips: [
+                                { icon: '🌸', title: '花果香炸裂', desc: '茉莉、白桃、檸檬、佛手柑、葡萄柚等明亮花果調，是極淺焙的招牌。' },
+                                { icon: '🌿', title: '生青風險', desc: '烘太淺豆心沒熟透，會有「青豆、草青、土腥」等不討喜風味。淺焙不等於好喝。' },
+                                { icon: '☕', title: '沖煮 細粉低溫', desc: 'Lance Hedrick 法（極細粉 + 低溫 88°C + 強攪拌）最能突破淺焙堅硬密度。' },
+                                { icon: '🚫', title: '不適合義式', desc: '極淺焙做 espresso 會超酸澀。極淺焙幾乎只用於手沖。' },
+                                { icon: '⏰', title: '養豆 14-21 天', desc: '極淺焙豆 CO₂ 排氣慢、剛烘好太活躍，建議養豆 14-21 天再喝。' }
+                            ]
+                        },
+                        city: {
+                            name: 'City Roast', tagline: '淺焙 · 一爆中尾 · 第三波最愛',
+                            emoji: '🍋', status: 'ready', heroSvg: ENCY_RST_CITY,
+                            subtitle: '淺焙的代表，一爆中段到結束停止。豆色為淺中褐、無油光。是第三波精品咖啡圈的標準烘焙度，能完整呈現產區、品種、處理法的細微差異，是手沖最常用的焙度。',
+                            chips: [
+                                { text: '第三波標準', class: 'green' },
+                                { text: 'BT 205-210°C', class: 'cool' },
+                                { text: 'Dev 12-16%', class: 'warm' },
+                                { text: '酸甜平衡', class: 'purple' },
+                                { text: '無油光' },
+                                { text: '手沖主流' }
+                            ],
+                            specs: [
+                                { k: '英文名', v: 'City Roast / Medium-Light' },
+                                { k: '結束時機', v: '一爆中段到一爆結束' },
+                                { k: 'BT 溫度', v: '205-210°C' },
+                                { k: 'Dev 比例', v: '12-16%（淺）' },
+                                { k: '豆色', v: '淺中褐（Agtron 75-85）' },
+                                { k: '適合品種', v: '所有阿拉比卡（最廣泛）' }
+                            ],
+                            origin: [
+                                { year: '名字由來', text: 'City Roast 起源於 1970s 美國，當時城市裡的咖啡店流行的標準烘焙度。' },
+                                { year: '化學變化', text: '梅納反應主導、焦糖化開始、原豆酸減弱但甜感開始浮現。' },
+                                { year: '第三波', text: '2002 年第三波咖啡浪潮把 City Roast 定為精品咖啡的黃金標準、能呈現最多產區特色。' }
+                            ],
+                            originTitle: '🔬 烘焙化學',
+                            tipsTitle: '☕ 風味與沖煮建議',
+                            tips: [
+                                { icon: '🍒', title: '紅果調 + 微甜', desc: '紅櫻桃、紅葡萄、葡萄柚、紅蘋果。比 Cinnamon 多了甜感，但花香略減。' },
+                                { icon: '⚖️', title: '平衡黃金區', desc: '酸甜苦的平衡點，不會太酸（生青）也不會太甜（甜膩），是「咖啡標準味」。' },
+                                { icon: '☕', title: '沖煮 百搭', desc: '三段式 / 四六法 / Hoffmann 都行。City Roast 對手法最寬容、最不易失敗。' },
+                                { icon: '🌍', title: '產區辨識', desc: 'City Roast 是「能喝出衣索比亞像衣索比亞、肯亞像肯亞」的最佳焙度。' },
+                                { icon: '⏰', title: '養豆 7-14 天', desc: '淺焙 CO₂ 排氣慢，建議養豆 7-14 天最佳，最長 1 個月內喝完。' }
+                            ]
+                        },
+                        city_plus: {
+                            name: 'City+', tagline: '淺中焙 · 一二爆之間 · 黃金區',
+                            emoji: '🍑', status: 'ready', heroSvg: ENCY_RST_CITY_PLUS,
+                            subtitle: '一爆結束到二爆前的淺中焙區間，俗稱「黃金時刻」。豆色為中褐、表面仍乾燥。酸質減弱但甜感顯著、巧克力堅果調開始出現。是手沖最受歡迎的焙度之一、也適合奶咖。',
+                            chips: [
+                                { text: '黃金區', class: 'warm' },
+                                { text: 'BT 211-216°C', class: 'cool' },
+                                { text: 'Dev 16-20%', class: 'green' },
+                                { text: '甜感突出', class: 'purple' },
+                                { text: '無油光' },
+                                { text: '手沖最愛' }
+                            ],
+                            specs: [
+                                { k: '英文名', v: 'City Plus / Medium' },
+                                { k: '結束時機', v: '一爆結束後 30 秒到二爆前' },
+                                { k: 'BT 溫度', v: '211-216°C' },
+                                { k: 'Dev 比例', v: '16-20%（中）' },
+                                { k: '豆色', v: '中褐（Agtron 65-75）' },
+                                { k: '適合品種', v: '中南美洲 Bourbon / Caturra / Catuai' }
+                            ],
+                            origin: [
+                                { year: '黃金時刻', text: 'C+ 是業界俗稱的「黃金時刻」，因為酸甜平衡、苦感未現、層次最豐富。' },
+                                { year: '化學變化', text: '焦糖化主導、梅納反應穩定、糖分轉化為焦糖香、酸質減弱。' },
+                                { year: '日系派系', text: '日本喫茶店傳統偏愛 City+ 到 Full City 之間，圓潤甜感與適度 body。' }
+                            ],
+                            originTitle: '🔬 烘焙化學',
+                            tipsTitle: '☕ 風味與沖煮建議',
+                            tips: [
+                                { icon: '🍯', title: '紅糖蜂蜜甜', desc: 'C+ 招牌：紅糖、蜂蜜、焦糖、太妃糖等強烈甜感。配 Bourbon / 蜜處理豆最對味。' },
+                                { icon: '🍫', title: '巧克力初現', desc: '巧克力、堅果、果乾調開始出現。比 City 更圓潤、比 Full City 更有亮度。' },
+                                { icon: '☕', title: '沖煮 一刀流甜', desc: 'C+ 適合一刀流或四六法（後段加重），把甜感放到最大。' },
+                                { icon: '🥛', title: '可做奶咖', desc: 'C+ 是少數淺焙能做奶咖的焙度（C 配奶會太酸），是「手沖 / 義式兩用」焙度。' },
+                                { icon: '⏰', title: '養豆 5-10 天', desc: '中焙 CO₂ 排氣較快，5-10 天就能達到風味甜蜜點。' }
+                            ]
+                        },
+                        full_city: {
+                            name: 'Full City', tagline: '中焙 · 二爆前 · 平衡的代表',
+                            emoji: '🍫', status: 'ready', heroSvg: ENCY_RST_FULL_CITY,
+                            subtitle: '中焙的標準，烘到二爆（Second Crack）開始前停止。豆色為中深褐、表面剛開始有微油光。巧克力、堅果調主導，酸感被壓抑、甜感與 body 最厚實。是日本喫茶店與精品奶咖的黃金焙度。',
+                            chips: [
+                                { text: '二爆前', class: 'green' },
+                                { text: 'BT 217-222°C', class: 'cool' },
+                                { text: 'Dev 20-24%', class: 'warm' },
+                                { text: '巧克力堅果', class: 'purple' },
+                                { text: '微油光' },
+                                { text: '日系最愛' }
+                            ],
+                            specs: [
+                                { k: '英文名', v: 'Full City / Medium-Dark' },
+                                { k: '結束時機', v: '二爆（SC）開始前' },
+                                { k: 'BT 溫度', v: '217-222°C' },
+                                { k: 'Dev 比例', v: '20-24%' },
+                                { k: '豆色', v: '中深褐（Agtron 55-65）' },
+                                { k: '適合品種', v: '巴西 Catuai / Caturra / 印尼曼特寧' }
+                            ],
+                            origin: [
+                                { year: '名字由來', text: 'Full City = 完整的 City Roast，比 City 更深、更接近義式風格的中段。' },
+                                { year: '化學變化', text: '焦糖化進入後期、梅納終止、開始進入熱解（Pyrolysis）反應。' },
+                                { year: '日系傳統', text: '日本喫茶店傳統偏愛 Full City，平衡 body 與甜感、不過度苦澀。' }
+                            ],
+                            originTitle: '🔬 烘焙化學',
+                            tipsTitle: '☕ 風味與沖煮建議',
+                            tips: [
+                                { icon: '🍫', title: '巧克力堅果', desc: 'Full City 招牌：黑巧克力、烤堅果、烤麵包、紅糖。圓潤厚實的成熟風味。' },
+                                { icon: '🥛', title: '奶咖最佳', desc: '配奶（拿鐵 / 卡布）最完美的焙度。淺焙會酸、深焙會苦，Full City 剛剛好。' },
+                                { icon: '☕', title: '沖煮 一刀流', desc: '一刀流 / 三段式都行。研磨可以略粗（中焙萃取容易），水溫 92°C 即可。' },
+                                { icon: '🇮🇩', title: '配印尼曼特寧', desc: '濕剝處理的印尼豆配 Full City 最對味，土壤雪松與巧克力的完美結合。' },
+                                { icon: '⏰', title: '養豆 3-7 天', desc: '中焙 CO₂ 排氣快，3-7 天就達甜蜜點，2 週內喝完最佳。' }
+                            ]
+                        },
+                        full_city_plus: {
+                            name: 'Full City+', tagline: '中深焙 · 二爆初期 · 油光出現',
+                            emoji: '🌰', status: 'ready', heroSvg: ENCY_RST_FULL_CITY_PLUS,
+                            subtitle: '進入二爆但尚未密集的中深焙。豆色明顯轉深、表面油光開始浮現。苦感初現、巧克力轉為更深的可可、煙燻調開始。是「義式拼配」的常見焙度，body 厚實。',
+                            chips: [
+                                { text: '二爆初期', class: 'warm' },
+                                { text: 'BT 223-227°C', class: 'cool' },
+                                { text: 'Dev 22-26%', class: 'green' },
+                                { text: '深巧克力', class: 'purple' },
+                                { text: '油光出現' },
+                                { text: 'body 厚' }
+                            ],
+                            specs: [
+                                { k: '英文名', v: 'Full City Plus / Dark Medium' },
+                                { k: '結束時機', v: '二爆開始後 30-60 秒' },
+                                { k: 'BT 溫度', v: '223-227°C' },
+                                { k: 'Dev 比例', v: '22-26%' },
+                                { k: '豆色', v: '深褐（Agtron 45-55）' },
+                                { k: '適合用途', v: '義式拼配、Mocha 摩卡壺' }
+                            ],
+                            origin: [
+                                { year: '化學變化', text: '熱解反應主導、油脂從豆內溢出、揮發性香氣大量產生（煙燻、焦糖香）。' },
+                                { year: '義式起點', text: 'FC+ 是義式咖啡的最淺端，很多現代第三波義式店用這個焙度做 Espresso。' }
+                            ],
+                            originTitle: '🔬 烘焙化學',
+                            tipsTitle: '☕ 風味與沖煮建議',
+                            tips: [
+                                { icon: '🌰', title: '深巧克力 + 煙燻', desc: 'FC+ 招牌：深巧克力、可可粉、煙燻、烤橡木。比 Full City 更厚重。' },
+                                { icon: '☕', title: '義式拼配主力', desc: '現代第三波義式店常用 FC+ 做 Espresso 基底，比 French 不那麼苦但仍有 body。' },
+                                { icon: '🥛', title: '濃郁奶咖', desc: '配奶做拿鐵 / 摩卡很對味，咖啡味比 Full City 更明顯、不會被牛奶蓋掉。' },
+                                { icon: '🚫', title: '別深焙非洲豆', desc: '衣索比亞、肯亞等明亮花果豆烘到 FC+ 會浪費，深焙專用巴西、印尼、巴拿馬等。' }
+                            ]
+                        },
+                        vienna: {
+                            name: 'Vienna', tagline: '深焙 · 二爆中 · 焦糖煙燻',
+                            emoji: '🔥', status: 'ready', heroSvg: ENCY_RST_VIENNA,
+                            subtitle: '深焙的標準，二爆密集進行中。豆色深褐近黑、表面油光明顯。焦糖、煙燻、烤堅果味主導，原豆風味幾乎消失、被烘焙風味取代。是傳統義式咖啡與摩卡壺的標準焙度。',
+                            chips: [
+                                { text: '二爆中', class: 'warm' },
+                                { text: 'BT 228-232°C', class: 'cool' },
+                                { text: 'Dev 24-28%', class: 'green' },
+                                { text: '焦糖煙燻', class: 'purple' },
+                                { text: '明顯油光' },
+                                { text: '傳統義式' }
+                            ],
+                            specs: [
+                                { k: '英文名', v: 'Vienna Roast / Dark' },
+                                { k: '結束時機', v: '二爆中段（密集爆裂）' },
+                                { k: 'BT 溫度', v: '228-232°C' },
+                                { k: 'Dev 比例', v: '24-28%' },
+                                { k: '豆色', v: '深褐（Agtron 35-45）' },
+                                { k: '名字由來', v: '維也納咖啡館傳統焙度（19 世紀）' }
+                            ],
+                            origin: [
+                                { year: '名字由來', text: 'Vienna Roast 起源於 19 世紀維也納咖啡館，當時主流深焙風格。' },
+                                { year: '化學變化', text: '熱解反應劇烈、二爆是纖維質碎裂的聲音、油脂大量湧出豆面。' },
+                                { year: '原豆風味消失', text: '到 Vienna 焙度，原豆的酸質、花果香、產區特色幾乎完全消失，被烘焙風味取代。' }
+                            ],
+                            originTitle: '🔬 烘焙化學',
+                            tipsTitle: '☕ 風味與沖煮建議',
+                            tips: [
+                                { icon: '🔥', title: '焦糖煙燻', desc: 'Vienna 招牌：強烈焦糖、煙燻、烤橡木、黑糖。原豆細節幾乎全失。' },
+                                { icon: '☕', title: '義式 / 摩卡壺最佳', desc: 'Vienna 是傳統義式 Espresso 與摩卡壺的標準焙度，body 厚 Crema 多。' },
+                                { icon: '🥛', title: '配奶天作之合', desc: '深焙 + 牛奶 + 糖 = 經典拿鐵 / 卡布奇諾。Vienna 的苦感被牛奶平衡剛好。' },
+                                { icon: '🚫', title: '不適合手沖', desc: 'Vienna 手沖會苦澀過萃。除非降水溫到 88°C 並粗研磨，否則不建議。' },
+                                { icon: '⚠️', title: '別買精品手沖', desc: '精品咖啡店買到 Vienna 焙度的「手沖豆」是浪費錢，深焙就買大眾義式豆即可。' }
+                            ]
+                        },
+                        french: {
+                            name: 'French', tagline: '極深焙 · 二爆密集 · 苦感主導',
+                            emoji: '🌑', status: 'ready', heroSvg: ENCY_RST_FRENCH,
+                            subtitle: '極深焙、二爆末期接近結束。豆色黑褐、表面油光豐厚。苦感主導、焦糖味、煙燻味、燒焦邊緣。是法式義式咖啡（如咖啡牛奶 Café au lait）的標準焙度，但精品圈幾乎不用。',
+                            chips: [
+                                { text: '二爆密集', class: 'warm' },
+                                { text: 'BT 233-238°C', class: 'cool' },
+                                { text: 'Dev 26-30%', class: 'green' },
+                                { text: '苦感主導', class: 'purple' },
+                                { text: '油光豐厚' },
+                                { text: '法式咖啡' }
+                            ],
+                            specs: [
+                                { k: '英文名', v: 'French Roast / Very Dark' },
+                                { k: '結束時機', v: '二爆密集到接近結束' },
+                                { k: 'BT 溫度', v: '233-238°C' },
+                                { k: 'Dev 比例', v: '26-30%' },
+                                { k: '豆色', v: '黑褐（Agtron 25-35）' },
+                                { k: '主要用途', v: 'Café au lait / 速溶咖啡基底' }
+                            ],
+                            origin: [
+                                { year: '名字由來', text: 'French Roast 起源於 19 世紀法國咖啡館的深焙風格，配大量牛奶與糖。' },
+                                { year: '化學變化', text: '焦糖化進入碳化、糖分大量損失、苦感主導、咖啡因略減（深焙咖啡因比淺焙低 10-15%）。' },
+                                { year: '美國 Diner 文化', text: '20 世紀美國餐館流行用 French Roast，深焙苦感掩蓋豆子品質差。' }
+                            ],
+                            originTitle: '🔬 烘焙化學',
+                            tipsTitle: '☕ 風味與沖煮建議',
+                            tips: [
+                                { icon: '🌑', title: '苦感主導', desc: 'French Roast 招牌：強烈苦感、燒焦、煙燻。原豆細節 100% 消失、所有品種喝起來都類似。' },
+                                { icon: '☕', title: '只用配奶', desc: 'French Roast 直接喝會苦到舌頭麻。配大量牛奶 + 糖（拿鐵 / 摩卡）才合理。' },
+                                { icon: '🚫', title: '精品不用', desc: '第三波精品咖啡圈幾乎不用 French Roast，認為「掩蓋豆子個性」。' },
+                                { icon: '⚠️', title: '咖啡因略低', desc: '深焙咖啡因比淺焙低 10-15%（高溫破壞）。想提神反而要喝淺焙。' },
+                                { icon: '🥛', title: 'Café au lait', desc: '法式 Café au lait（咖啡 + 等量熱奶）就是 French Roast 配大量牛奶的早餐喝法。' }
+                            ]
+                        },
+                        italian: {
+                            name: 'Italian', tagline: '炭焙 · 二爆末 · 燒焦邊緣',
+                            emoji: '⚫', status: 'ready', heroSvg: ENCY_RST_ITALIAN,
+                            subtitle: '極端深焙、接近碳化。豆色全黑、表面油光最豐厚甚至滴出。風味只剩焦炭、煙燻、苦感、橡膠味。是傳統南義（拿坡里）義式咖啡的招牌焙度，但全球精品圈幾乎絕跡。',
+                            chips: [
+                                { text: '二爆末段', class: 'warm' },
+                                { text: 'BT 240°C+', class: 'cool' },
+                                { text: 'Dev 30%+', class: 'green' },
+                                { text: '炭化邊緣', class: 'purple' },
+                                { text: '油光滴出' },
+                                { text: '南義傳統' }
+                            ],
+                            specs: [
+                                { k: '英文名', v: 'Italian Roast / Espresso Roast / Very Very Dark' },
+                                { k: '結束時機', v: '二爆密集結束、接近碳化' },
+                                { k: 'BT 溫度', v: '240°C 以上' },
+                                { k: 'Dev 比例', v: '30% 以上' },
+                                { k: '豆色', v: '全黑（Agtron 25 以下）' },
+                                { k: '主要產區', v: '義大利南部（拿坡里 / 西西里）傳統' }
+                            ],
+                            origin: [
+                                { year: '名字由來', text: 'Italian Roast 起源於南義拿坡里傳統 Espresso 文化，當地咖啡是強烈苦感的代表。' },
+                                { year: '化學變化', text: '糖分幾乎全失、進入碳化、油脂滴落、酸質完全消失、只剩苦與煙燻。' },
+                                { year: '南北差異', text: '北義（米蘭）偏 Vienna 焙度、南義（拿坡里）偏 Italian。是義大利咖啡的南北分野。' }
+                            ],
+                            originTitle: '🔬 烘焙化學',
+                            tipsTitle: '☕ 風味與沖煮建議',
+                            tips: [
+                                { icon: '⚫', title: '炭化邊緣', desc: 'Italian Roast 是「快要燒焦」的咖啡，喝起來像在喝煙燻木炭。' },
+                                { icon: '☕', title: '只能義式 + 大量糖', desc: '南義習慣 Espresso 加 1-2 顆糖中和苦感。直接喝是現代人很難接受的。' },
+                                { icon: '🚫', title: '精品幾乎絕跡', desc: '第三波咖啡浪潮認為 Italian Roast 「破壞豆子品質」、現代精品店幾乎不做。' },
+                                { icon: '🌍', title: '文化象徵', desc: 'Italian Roast 是文化遺產而非品質標竿，去義大利南部喝是體驗、不是日常。' },
+                                { icon: '⚠️', title: '保存期短', desc: '極深焙 + 表面油光 = 快速氧化變質。Italian Roast 開封後 1 週就要喝完。' }
+                            ]
+                        }
                     }
                 },
                 dripper: {
