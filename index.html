@@ -462,7 +462,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             font-size: 13px !important; padding: 4px 12px !important;
         }
 
-        /* 🌳 豆種真樹狀圖（SVG） */
+        /* 🌳 豆種真樹狀圖（縮排 + L 連線） */
         .vt-wrap {
             background: linear-gradient(180deg, #fffaf2 0%, #f5ede0 100%);
             border-radius: 16px; padding: 22px 22px 26px;
@@ -477,34 +477,105 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             font-size: 12.5px; color: #8d6e63; text-align: center;
             margin: 0 0 18px 0; font-style: italic;
         }
-        .vt-svg-scroll {
-            overflow-x: auto; -webkit-overflow-scrolling: touch;
-            background: rgba(255,255,255,0.4);
-            border-radius: 12px; padding: 12px;
+        .vt-tree {
+            font-family: "PingFang TC", "Microsoft JhengHei", sans-serif;
+            font-size: 14px; line-height: 1.6;
+            padding: 16px 18px;
+            background: rgba(255,255,255,0.5);
+            border-radius: 12px;
         }
-        .vt-svg-scroll svg { display: block; }
-
-        /* 進場動畫：根 → 物種 → 譜系 → 葉子 */
-        @keyframes vt-pop {
-            from { opacity: 0; transform: scale(0.7); }
-            to { opacity: 1; transform: scale(1); }
+        .vt-tree .tree-root-label {
+            font-size: 17px; font-weight: 900;
+            color: #3e2723;
+            display: inline-block;
+            padding: 4px 14px;
+            background: linear-gradient(135deg, #6d4c41 0%, #3e2723 100%);
+            color: #fff; border-radius: 14px;
+            box-shadow: 0 2px 6px rgba(62,39,35,0.3);
         }
-        @keyframes vt-leaf-in {
-            from { opacity: 0; transform: translateX(-10px); }
+        .tree-item {
+            position: relative;
+            padding: 4px 0;
+            animation: tree-fade 0.4s cubic-bezier(.22,.8,.33,1) backwards;
+        }
+        @keyframes tree-fade {
+            from { opacity: 0; transform: translateX(-6px); }
             to { opacity: 1; transform: translateX(0); }
         }
-        .vt-root-g { animation: vt-pop 0.4s cubic-bezier(.22,.8,.33,1) backwards; transform-origin: center; transform-box: fill-box; }
-        .vt-sp-g { animation: vt-pop 0.4s cubic-bezier(.22,.8,.33,1) backwards; transform-origin: center; transform-box: fill-box; }
-        .vt-branch-g { animation: vt-pop 0.4s cubic-bezier(.22,.8,.33,1) backwards; transform-origin: center; transform-box: fill-box; }
-        .vt-leaf-g { animation: vt-leaf-in 0.35s cubic-bezier(.22,.8,.33,1) backwards; transform-origin: left center; transform-box: fill-box; }
-        .vt-leaf-g:hover rect { fill: #fff3e0; stroke-width: 2.5; }
-        .vt-leaf-g:hover { transform: scale(1.05) translateX(2px); }
-        .vt-leaf-g rect, .vt-leaf-g { transition: all 0.18s ease; }
-
+        .tree-children {
+            margin-left: 16px;
+            padding-left: 18px;
+            border-left: 2px solid #a1887f;
+            position: relative;
+        }
+        .tree-children > .tree-item::before {
+            content: '';
+            position: absolute;
+            left: -18px;
+            top: 16px;
+            width: 16px;
+            height: 2px;
+            background: #a1887f;
+        }
+        /* 最後一個子節點：把上方殘留的豎線蓋掉 */
+        .tree-children > .tree-item:last-child {
+            position: relative;
+        }
+        .tree-children > .tree-item:last-child::after {
+            content: '';
+            position: absolute;
+            left: -20px;
+            top: 17px;
+            bottom: 0;
+            width: 4px;
+            background: #fff;
+            background: linear-gradient(rgba(255,255,255,0) 0%, rgba(255,250,242,1) 4px, rgba(245,237,224,1) 100%);
+            pointer-events: none;
+        }
+        .tree-species {
+            display: inline-block;
+            padding: 4px 14px; border-radius: 14px;
+            color: #fff; font-weight: 800; font-size: 14.5px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.18);
+            letter-spacing: 0.5px;
+        }
+        .tree-species.sp-arabica { background: linear-gradient(135deg, #2e7d32 0%, #66bb6a 100%); }
+        .tree-species.sp-canephora { background: linear-gradient(135deg, #5d4037 0%, #8d6e63 100%); }
+        .tree-species.sp-liberica { background: linear-gradient(135deg, #558b2f 0%, #aed581 100%); }
+        .tree-branch {
+            display: inline-block;
+            padding: 3px 12px; border-radius: 12px;
+            font-weight: 800; font-size: 13.5px;
+            border: 1.5px solid;
+            background: #fff;
+        }
+        .tree-leaf {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 4px 12px 4px 12px; border-radius: 14px;
+            border: 1.5px solid;
+            background: linear-gradient(180deg, #fff 0%, #fdf6e8 100%);
+            color: #3e2723;
+            font-weight: 700; font-size: 13px;
+            cursor: pointer;
+            transition: all 0.18s cubic-bezier(.22,.8,.33,1);
+            white-space: nowrap;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+        .tree-leaf:hover {
+            transform: translateX(4px) scale(1.04);
+            background: linear-gradient(180deg, #fff 0%, #fff3e0 100%);
+            box-shadow: 0 4px 12px rgba(93,64,55,0.2);
+            border-color: #ff9800 !important;
+        }
+        .tree-leaf .tl-em { font-size: 16px; }
         @media (max-width: 600px) {
-            .vt-wrap { padding: 16px 12px 20px; }
+            .vt-wrap { padding: 16px 10px 20px; }
             .vt-title { font-size: 16px; }
-            .vt-svg-scroll { padding: 6px; }
+            .vt-tree { padding: 12px 10px; font-size: 13px; }
+            .tree-children { margin-left: 10px; padding-left: 14px; }
+            .tree-species { font-size: 13px; padding: 3px 10px; }
+            .tree-branch { font-size: 12.5px; padding: 2px 9px; }
+            .tree-leaf { font-size: 12px; padding: 3px 9px; }
         }
 
         /* ========== 📚 沖煮百科 Modal ========== */
@@ -11226,6 +11297,49 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             ];
 
             function _renderVarietyTree() {
+                const items = ENCYCLOPEDIA.variety.items;
+                let staggerIdx = 0;
+                const speciesHtml = VARIETY_TREE.map(sp => {
+                    const branchesHtml = sp.branches.map(br => {
+                        const leavesHtml = br.items.map(it => {
+                            const ent = items[it.id];
+                            const name = ent ? ent.name : it.id;
+                            const tagline = ent ? (ent.tagline || '').replace(/"/g, '&quot;').replace(/'/g, '&#39;') : '';
+                            const delay = (staggerIdx++ * 0.025).toFixed(2);
+                            return `<div class="tree-item" style="animation-delay:${delay}s">
+                                <span class="tree-leaf" style="border-color:${br.stroke}; color:#3e2723;"
+                                      onclick="showEncyDetail('variety','${it.id}')" title="${tagline}">
+                                    <span class="tl-em">${it.em}</span>${name}
+                                </span>
+                            </div>`;
+                        }).join('');
+                        const brDelay = (staggerIdx * 0.025).toFixed(2);
+                        return `<div class="tree-item" style="animation-delay:${brDelay}s">
+                            <span class="tree-branch" style="border-color:${br.stroke}; color:${br.stroke};">${br.emoji} ${br.name}</span>
+                            <div class="tree-children" style="border-left-color:${br.stroke};">${leavesHtml}</div>
+                        </div>`;
+                    }).join('');
+                    const spDelay = (staggerIdx * 0.025).toFixed(2);
+                    return `<div class="tree-item" style="animation-delay:${spDelay}s">
+                        <span class="tree-species sp-${sp.species}">${sp.title}</span>
+                        <div class="tree-children">${branchesHtml}</div>
+                    </div>`;
+                }).join('');
+
+                return `<div class="vt-wrap">
+                    <h3 class="vt-title">🌳 咖啡豆種血緣樹</h3>
+                    <p class="vt-subtitle">根（咖啡屬）→ 物種 → 譜系 → 25 個品種　·　點葉子進詳情頁</p>
+                    <div class="vt-tree">
+                        <div class="tree-item">
+                            <span class="tree-root-label">🌱 Coffea（咖啡屬）</span>
+                            <div class="tree-children">${speciesHtml}</div>
+                        </div>
+                    </div>
+                </div>`;
+            }
+
+            // 舊 SVG 樹保留作為備份（不再呼叫）
+            function _renderVarietyTree_OLD() {
                 const items = ENCYCLOPEDIA.variety.items;
                 // 上往下垂直 layout，葉子水平展開（兄弟並排）
                 const LEAF_W = 130;
