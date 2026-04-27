@@ -6844,6 +6844,276 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 <text x="18" y="302" font-size="10.5" fill="#6a1b9a" text-anchor="start">巧克力 + 焦糖風</text>
             </svg>`;
 
+            // ========== 手沖手法 9 款 SVG（俯視注水軌跡 + 時間軸）==========
+            // 共用底圖：俯視 V60 + 時間軸 frame
+            function _encyMethodSvg(opts) {
+                const { title, pours, timeline, info } = opts;
+                // pours: 注水點 [{cx, cy, num, color, label}]
+                // timeline: [{start_pct, width_pct, color, fill, text}]
+                // info: { left1, left2, right1, right2 }
+                const poursMarkup = pours.map(p =>
+                    `<circle cx="${p.cx}" cy="${p.cy}" r="${p.r||7}" fill="${p.color}" stroke="#fff" stroke-width="2"/>` +
+                    `<text x="${p.cx}" y="${p.cy+3.5}" font-size="10" font-weight="900" fill="#fff" text-anchor="middle">${p.num}</text>` +
+                    (p.label ? `<text x="${p.lx||p.cx}" y="${p.ly||p.cy+22}" font-size="9.5" font-weight="700" fill="${p.color}" text-anchor="middle">${p.label}</text>` : '')
+                ).join('');
+                let tx = 0;
+                const tlMarkup = timeline.map(t => {
+                    const x = 40 + t.start_pct * 4;
+                    const w = t.width_pct * 4;
+                    const fillColor = t.fill || '#fff';
+                    const strokeColor = t.color || '#5d4037';
+                    return `<rect x="${x}" y="290" width="${w}" height="22" fill="${fillColor}" stroke="${strokeColor}" stroke-width="1.5" rx="3"/>` +
+                        `<text x="${x + w/2}" y="305" font-size="10.5" font-weight="700" fill="${strokeColor}" text-anchor="middle">${t.text}</text>`;
+                }).join('');
+                return `<svg viewBox="0 0 480 420" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <radialGradient id="m-bed" cx="0.5" cy="0.5" r="0.5">
+                            <stop offset="0%" stop-color="#8d6e63"/>
+                            <stop offset="100%" stop-color="#5d4037"/>
+                        </radialGradient>
+                    </defs>
+                    <text x="240" y="28" font-size="15" font-weight="800" fill="#3e2723" text-anchor="middle">${title}</text>
+                    <!-- 俯視 V60 -->
+                    <g transform="translate(140, 50)">
+                        <circle cx="100" cy="100" r="92" fill="#fffaf3" stroke="#a1887f" stroke-width="2"/>
+                        <g stroke="#bcaaa4" stroke-width="0.8" opacity="0.55" fill="none">
+                            <circle cx="100" cy="100" r="82"/>
+                            <circle cx="100" cy="100" r="68"/>
+                            <circle cx="100" cy="100" r="54"/>
+                            <circle cx="100" cy="100" r="38"/>
+                            <circle cx="100" cy="100" r="22"/>
+                        </g>
+                        <circle cx="100" cy="100" r="62" fill="url(#m-bed)" opacity="0.55"/>
+                        <circle cx="100" cy="100" r="3" fill="#3e2723"/>
+                        ${poursMarkup}
+                    </g>
+                    <!-- 時間軸 -->
+                    <line x1="40" y1="282" x2="440" y2="282" stroke="#3e2723" stroke-width="1.5"/>
+                    <text x="40" y="278" font-size="9" fill="#5d4037">0:00</text>
+                    <text x="440" y="278" font-size="9" fill="#5d4037" text-anchor="end">${opts.totalTime || '3:00'}</text>
+                    ${tlMarkup}
+                    <!-- 底部資訊 -->
+                    <text x="40" y="345" font-size="11.5" font-weight="700" fill="#5d4037">${info.left1}</text>
+                    <text x="40" y="362" font-size="11" fill="#5d4037">${info.left2}</text>
+                    <text x="440" y="345" font-size="11.5" font-weight="700" fill="#5d4037" text-anchor="end">${info.right1}</text>
+                    <text x="440" y="362" font-size="11" fill="#5d4037" text-anchor="end">${info.right2}</text>
+                    ${opts.extra || ''}
+                </svg>`;
+            }
+
+            const ENCY_SVG_M_CLASSIC3 = _encyMethodSvg({
+                title: '三段式（Classic 3-Pour）',
+                totalTime: '3:00',
+                pours: [
+                    { cx: 100, cy: 100, num: '1', color: '#ff9800', label: 'Bloom 中心' },
+                    { cx: 140, cy: 100, num: '2', color: '#1976d2', label: '中段螺旋', lx: 165, ly: 100 },
+                    { cx: 100, cy: 60,  num: '3', color: '#388e3c', label: '後段大圈', lx: 100, ly: 38 }
+                ],
+                timeline: [
+                    { start_pct: 0,  width_pct: 25, fill: '#fff3e0', color: '#bf360c', text: 'Bloom 30g · 30s' },
+                    { start_pct: 25, width_pct: 30, fill: '#e3f2fd', color: '#0d47a1', text: '中段 100g · 60s' },
+                    { start_pct: 55, width_pct: 30, fill: '#e8f5e9', color: '#1b5e20', text: '後段 120g · 60s' },
+                    { start_pct: 85, width_pct: 15, fill: '#f5f5f5', color: '#616161', text: '流完' }
+                ],
+                info: {
+                    left1: '總水 250g · 1:15',
+                    left2: '節奏：穩定、間隔 30 秒',
+                    right1: '水溫 92-94°C',
+                    right2: '適合：新手 / 各種焙度'
+                }
+            });
+
+            const ENCY_SVG_M_SINGLE = _encyMethodSvg({
+                title: '一刀流（Single Pour）',
+                totalTime: '3:30',
+                pours: [
+                    { cx: 100, cy: 100, num: '1', color: '#ff9800', label: 'Bloom' },
+                    { cx: 100, cy: 100, num: '2', color: '#0288d1', r: 16, label: '一次注滿', lx: 100, ly: 130 }
+                ],
+                timeline: [
+                    { start_pct: 0,  width_pct: 25, fill: '#fff3e0', color: '#bf360c', text: 'Bloom 30s' },
+                    { start_pct: 25, width_pct: 25, fill: '#e1f5fe', color: '#01579b', text: '一刀注滿' },
+                    { start_pct: 50, width_pct: 50, fill: '#f5f5f5', color: '#616161', text: '靜待流完 (慢)' }
+                ],
+                info: {
+                    left1: '總水 280g · 1:16',
+                    left2: '節奏：粗水柱、不停手',
+                    right1: '水溫 92-93°C',
+                    right2: '適合：濃郁 body 派'
+                },
+                extra: `<text x="240" y="392" font-size="10.5" font-style="italic" fill="#8d6e63" text-anchor="middle">「Bloom 後一次注滿，研磨需略粗避免堵塞」</text>`
+            });
+
+            const ENCY_SVG_M_KASUYA = _encyMethodSvg({
+                title: '四六法（粕谷哲 · 2016 WBrC 冠軍）',
+                totalTime: '3:30',
+                pours: [
+                    { cx: 100, cy: 100, num: '1', color: '#ff9800', label: '酸甜', lx: 60, ly: 100 },
+                    { cx: 100, cy: 100, num: '2', color: '#fb8c00', label: '濃淡', lx: 140, ly: 100 },
+                    { cx: 100, cy: 100, num: '3', color: '#1976d2', label: '', r: 10 },
+                    { cx: 100, cy: 100, num: '4', color: '#1565c0', label: '', r: 10 },
+                    { cx: 100, cy: 100, num: '5', color: '#0d47a1', label: '', r: 10 }
+                ],
+                timeline: [
+                    { start_pct: 0,  width_pct: 12, fill: '#fff3e0', color: '#e65100', text: '#1' },
+                    { start_pct: 12, width_pct: 14, fill: '#fff8e1', color: '#ff6f00', text: '#2' },
+                    { start_pct: 28, width_pct: 22, fill: '#e3f2fd', color: '#0d47a1', text: '#3' },
+                    { start_pct: 50, width_pct: 22, fill: '#e3f2fd', color: '#0d47a1', text: '#4' },
+                    { start_pct: 72, width_pct: 22, fill: '#e3f2fd', color: '#0d47a1', text: '#5' }
+                ],
+                info: {
+                    left1: '總水 300g · 5 段',
+                    left2: '前 40% (#1+#2)：決定酸甜',
+                    right1: '水溫 92°C',
+                    right2: '後 60% (#3-5)：決定濃淡'
+                },
+                extra: `<text x="240" y="392" font-size="10.5" font-style="italic" fill="#8d6e63" text-anchor="middle">「想酸 → #1 多倒；想濃 → 後 60% 分越多段」</text>
+                <line x1="40" y1="262" x2="120" y2="262" stroke="#e65100" stroke-width="3"/>
+                <text x="80" y="258" font-size="9" font-weight="700" fill="#e65100" text-anchor="middle">前 40%</text>
+                <line x1="124" y1="262" x2="440" y2="262" stroke="#0d47a1" stroke-width="3"/>
+                <text x="282" y="258" font-size="9" font-weight="700" fill="#0d47a1" text-anchor="middle">後 60%</text>`
+            });
+
+            const ENCY_SVG_M_MATTW = _encyMethodSvg({
+                title: 'Matt Winton 冠軍配方（2015 WBrC）',
+                totalTime: '2:30',
+                pours: [
+                    { cx: 100, cy: 100, num: '1', color: '#ff9800', label: 'Bloom' },
+                    { cx: 100, cy: 100, num: '2', color: '#d84315', r: 12 },
+                    { cx: 100, cy: 100, num: '3', color: '#c62828', r: 12 },
+                    { cx: 100, cy: 100, num: '4', color: '#b71c1c', r: 12 }
+                ],
+                timeline: [
+                    { start_pct: 0,  width_pct: 16, fill: '#fff3e0', color: '#e65100', text: 'Bloom' },
+                    { start_pct: 16, width_pct: 25, fill: '#ffebee', color: '#c62828', text: '#2 大水' },
+                    { start_pct: 41, width_pct: 25, fill: '#ffebee', color: '#c62828', text: '#3 大水' },
+                    { start_pct: 66, width_pct: 25, fill: '#ffebee', color: '#c62828', text: '#4 大水' },
+                    { start_pct: 91, width_pct: 9,  fill: '#f5f5f5', color: '#616161', text: '完' }
+                ],
+                info: {
+                    left1: '總水 220g · 短時大水',
+                    left2: '4 段、每段大水量',
+                    right1: '水溫 95°C（高溫）',
+                    right2: '研磨：中細（短時補萃）'
+                },
+                extra: `<text x="240" y="392" font-size="10.5" font-style="italic" fill="#8d6e63" text-anchor="middle">「高溫 + 大水量 + 短時 = 強烈高頻萃取」</text>`
+            });
+
+            const ENCY_SVG_M_LANCE = _encyMethodSvg({
+                title: 'Lance Hedrick 高磨低溫（淺焙解法）',
+                totalTime: '4:30',
+                pours: [
+                    { cx: 100, cy: 100, num: '1', color: '#0288d1', label: 'Bloom + 強攪' },
+                    { cx: 100, cy: 100, num: '2', color: '#01579b', r: 14, label: '主萃 + Spin', lx: 100, ly: 138 }
+                ],
+                timeline: [
+                    { start_pct: 0,  width_pct: 20, fill: '#e1f5fe', color: '#01579b', text: 'Bloom 攪拌' },
+                    { start_pct: 20, width_pct: 25, fill: '#b3e5fc', color: '#01579b', text: '一次注 + Spin' },
+                    { start_pct: 45, width_pct: 55, fill: '#f5f5f5', color: '#616161', text: '靜待流完（很慢、約 4 分鐘）' }
+                ],
+                info: {
+                    left1: '總水 250g · 1:16',
+                    left2: '研磨：極細（比 V60 細 2 檔）',
+                    right1: '水溫 88°C（低）',
+                    right2: '適合：堅硬淺焙、瑰夏'
+                },
+                extra: `<text x="240" y="392" font-size="10.5" font-style="italic" fill="#8d6e63" text-anchor="middle">「細粉 + 低溫 + 強攪：突破淺焙堅硬密度」</text>
+                <text x="50" y="240" font-size="20">🌀</text>
+                <text x="320" y="240" font-size="20">❄️</text>`
+            });
+
+            const ENCY_SVG_M_HOFFMANN = _encyMethodSvg({
+                title: 'Hoffmann Ultimate V60',
+                totalTime: '3:00',
+                pours: [
+                    { cx: 100, cy: 100, num: '1', color: '#ff9800', label: 'Bloom + Swirl' },
+                    { cx: 100, cy: 100, num: '2', color: '#1976d2', r: 14, label: '60% 水 + Spin', lx: 100, ly: 142 }
+                ],
+                timeline: [
+                    { start_pct: 0,  width_pct: 15, fill: '#fff3e0', color: '#bf360c', text: 'Bloom' },
+                    { start_pct: 15, width_pct: 5,  fill: '#fffde7', color: '#f57f17', text: '搖' },
+                    { start_pct: 20, width_pct: 30, fill: '#e3f2fd', color: '#0d47a1', text: '#2 60% 水' },
+                    { start_pct: 50, width_pct: 30, fill: '#e3f2fd', color: '#0d47a1', text: '#3 40% 水' },
+                    { start_pct: 80, width_pct: 5,  fill: '#fffde7', color: '#f57f17', text: 'spin' },
+                    { start_pct: 85, width_pct: 15, fill: '#f5f5f5', color: '#616161', text: '完' }
+                ],
+                info: {
+                    left1: '總水 250g · 1:16.7',
+                    left2: 'Bloom 後搖晃讓粉床平整',
+                    right1: '水溫 95°C',
+                    right2: '結束前小 spin 整粉床'
+                },
+                extra: `<text x="240" y="392" font-size="10.5" font-style="italic" fill="#8d6e63" text-anchor="middle">「Bloom + Swirl + 兩段大水 + 結尾 Spin = 乾淨度極高」</text>`
+            });
+
+            const ENCY_SVG_M_RAO = _encyMethodSvg({
+                title: 'Scott Rao 連續注水',
+                totalTime: '3:00',
+                pours: [
+                    { cx: 100, cy: 100, num: '1', color: '#ff9800', label: 'Bloom 5s' },
+                    { cx: 100, cy: 100, num: '2', color: '#7b1fa2', r: 14, label: '一條連續水柱', lx: 100, ly: 142 }
+                ],
+                timeline: [
+                    { start_pct: 0,  width_pct: 8,  fill: '#fff3e0', color: '#bf360c', text: 'Bloom' },
+                    { start_pct: 8,  width_pct: 67, fill: '#f3e5f5', color: '#6a1b9a', text: '連續注水（不停）· 維持水位高度' },
+                    { start_pct: 75, width_pct: 25, fill: '#f5f5f5', color: '#616161', text: '靜待流完' }
+                ],
+                info: {
+                    left1: '總水 250g · 1:16',
+                    left2: '不分段、水位維持穩定',
+                    right1: '水溫 93°C',
+                    right2: '研磨：中粗（維持流速）'
+                },
+                extra: `<text x="240" y="392" font-size="10.5" font-style="italic" fill="#8d6e63" text-anchor="middle">「不斷流 = 濾床均勻、水位穩 = 萃取一致」</text>`
+            });
+
+            const ENCY_SVG_M_TETSU_ICE = _encyMethodSvg({
+                title: '冰手沖（Iced Pour-Over · 急冷）',
+                totalTime: '3:00',
+                pours: [
+                    { cx: 100, cy: 100, num: '1', color: '#ff9800', label: 'Bloom' },
+                    { cx: 100, cy: 100, num: '2', color: '#42a5f5', r: 12, label: '熱萃' },
+                    { cx: 100, cy: 100, num: '3', color: '#1565c0', r: 12 }
+                ],
+                timeline: [
+                    { start_pct: 0,  width_pct: 15, fill: '#fff3e0', color: '#bf360c', text: 'Bloom' },
+                    { start_pct: 15, width_pct: 25, fill: '#e3f2fd', color: '#0d47a1', text: '熱注 #2' },
+                    { start_pct: 40, width_pct: 25, fill: '#e3f2fd', color: '#0d47a1', text: '熱注 #3' },
+                    { start_pct: 65, width_pct: 35, fill: '#e1f5fe', color: '#01579b', text: '滴落 → 冰塊（即時冷卻）' }
+                ],
+                info: {
+                    left1: '總水 100g 熱 + 冰塊 80g',
+                    left2: '冰塊放下壺、熱萃直接落上',
+                    right1: '水溫 95°C',
+                    right2: '比例：1:14（先扣冰水量）'
+                },
+                extra: `<text x="50" y="380" font-size="22">🧊</text>
+                <text x="80" y="380" font-size="22">🧊</text>
+                <text x="110" y="380" font-size="22">🧊</text>
+                <text x="240" y="392" font-size="10.5" font-style="italic" fill="#8d6e63" text-anchor="middle">「熱萃 + 冰塊急冷 = 鮮香炸裂、酸質明亮」</text>`
+            });
+
+            const ENCY_SVG_M_CONC = _encyMethodSvg({
+                title: '濃縮式 1:10（Strong Concentrate）',
+                totalTime: '2:00',
+                pours: [
+                    { cx: 100, cy: 100, num: '1', color: '#ff9800', label: 'Bloom（少）' },
+                    { cx: 100, cy: 100, num: '2', color: '#5d4037', r: 14, label: '小水量', lx: 100, ly: 142 }
+                ],
+                timeline: [
+                    { start_pct: 0,  width_pct: 20, fill: '#fff3e0', color: '#bf360c', text: 'Bloom 20g' },
+                    { start_pct: 20, width_pct: 35, fill: '#efebe9', color: '#3e2723', text: '一次注 130g' },
+                    { start_pct: 55, width_pct: 45, fill: '#f5f5f5', color: '#616161', text: '靜待流完' }
+                ],
+                info: {
+                    left1: '總水 150g · 粉 15g · 1:10',
+                    left2: '水量刻意減半',
+                    right1: '水溫 91°C（略低）',
+                    right2: '濃縮做底、稀釋或加奶'
+                },
+                extra: `<text x="240" y="392" font-size="10.5" font-style="italic" fill="#8d6e63" text-anchor="middle">「小水量 = 強濃度、適合做冰美式底或加冰塊稀釋」</text>`
+            });
+
             const ENCYCLOPEDIA = {
                 dripper: {
                     title: '☕ 手沖濾杯',
@@ -7643,15 +7913,403 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                     title: '🥇 手沖手法',
                     icon: '🌀',
                     items: {
-                        classic_3:    { name: '三段式',         tagline: '悶蒸 → 中段 → 後段，新手最友善', emoji: '3️⃣', status: 'soon' },
-                        single_pour:  { name: '一刀流',         tagline: '悶蒸後一次注滿，保留 body 與甜感', emoji: '🔪', status: 'soon' },
-                        kasuya_46:    { name: '四六法',         tagline: '粕谷哲 2016 WBrC 冠軍配方，5 段控酸甜濃淡', emoji: '4️⃣', status: 'soon' },
-                        matt_winton:  { name: 'Matt Winton',    tagline: '2015 WBrC 冠軍，高溫短時大水量', emoji: '🥇', status: 'soon' },
-                        lance_hi:     { name: 'Lance Hedrick',  tagline: '極細研磨 + 低溫 + 強攪拌，淺焙堅硬豆解法', emoji: '❄️', status: 'soon' },
-                        hoffmann_ult: { name: 'Hoffmann Ultimate V60', tagline: 'James Hoffmann 推薦，乾淨度極高', emoji: '🌀', status: 'soon' },
-                        scott_rao:    { name: 'Scott Rao 連續注水', tagline: '不斷流維持水位，技術門檻較高', emoji: '🎯', status: 'soon' },
-                        tetsu_ice:    { name: '冰手沖',         tagline: '40% 冰塊 + 60% 熱水急冷，鮮香爆炸', emoji: '🧊', status: 'soon' },
-                        strong_conc:  { name: '濃縮式 1:10',    tagline: '小水量放大濃度，適合做冰美式底', emoji: '💪', status: 'soon' }
+                        classic_3: {
+                            name: '三段式（Classic）',
+                            tagline: '悶蒸 → 中段 → 後段，新手最友善的傳統手法',
+                            emoji: '3️⃣',
+                            status: 'ready',
+                            heroSvg: ENCY_SVG_M_CLASSIC3,
+                            subtitle: '最經典、最容易學的 V60 手法。Bloom + 中段 + 後段三次注水，每段間隔 30 秒讓水位下降一半，總時間 2:30-3:00。是所有手沖新手的第一步。',
+                            chips: [
+                                { text: '3 段注水', class: 'green' },
+                                { text: '節奏穩定', class: 'cool' },
+                                { text: '新手友善', class: 'warm' },
+                                { text: '通用各種濾杯' },
+                                { text: '中粉', class: 'purple' },
+                                { text: '1:15' }
+                            ],
+                            specs: [
+                                { k: '注水段數', v: '3 段' },
+                                { k: '水溫', v: '92-94°C' },
+                                { k: '粉度', v: '中粉（小富士 3.5）' },
+                                { k: '粉水比', v: '1:15（15g 粉 / 250g 水）' },
+                                { k: '總時間', v: '2:30 ~ 3:00' },
+                                { k: '難度', v: '★☆☆☆☆ 入門' }
+                            ],
+                            origin: [
+                                { year: '1960s', text: '日本喫茶店傳統濾紙手沖手法，當時還沒有「分段」的精確說法。' },
+                                { year: '2000s', text: '隨 V60 普及，三段式成為日本與台灣手沖教學的標準起點。' },
+                                { year: '至今', text: '是全球咖啡學校、咖啡證照培訓的標準手法。所有進階手法都從這裡演化。' }
+                            ],
+                            steps: [
+                                { title: 'Bloom 30g 水', desc: '從中心向外螺旋沾濕全粉、約 2 倍粉重水量，等 30 秒讓 CO₂ 釋放、粉床膨脹。' },
+                                { title: '中段 100g 水', desc: '中心向外螺旋注、再回中心。注完等 30-40 秒讓水位降到一半。' },
+                                { title: '後段 120g 水', desc: '中心向外大圈注、再回。讓總水量達到 250g。' },
+                                { title: '靜待流完', desc: '不再注水、等剩餘水流光。總時間 2:30-3:00 之間最佳。' },
+                                { title: '輕轉杯 + 喝', desc: '轉杯讓粉床平整、聞乾香、喝。' }
+                            ],
+                            tips: [
+                                { icon: '⏱️', title: '節奏比水量重要', desc: '每段間隔 30-40 秒、水位下降一半再續，比精準量水重要。' },
+                                { icon: '🎯', title: '中央 70% 範圍', desc: '注水永遠別碰濾紙邊緣。中心向外螺旋、再回中心是基本動作。' },
+                                { icon: '⚖️', title: '不滿意先動研磨', desc: '酸 → 細一檔；苦 → 粗一檔。比改變手法更直接有感。' },
+                                { icon: '🌡️', title: '水溫優先調整', desc: '酸不夠 → 拉高 1-2°C；苦澀 → 降 1-2°C。每杯豆都要試一輪找甜蜜點。' },
+                                { icon: '👋', title: '水柱越細越好', desc: '細水柱萃取均勻、酸質乾淨。粗水柱攪拌力強、body 厚但易過萃。' },
+                                { icon: '📚', title: '練 30 杯再換手法', desc: '同支豆三段式練 30 杯以上、再去碰其他手法，會比較知道差別在哪。' }
+                            ]
+                        },
+                        single_pour: {
+                            name: '一刀流（Single Pour）',
+                            tagline: '悶蒸後一次注滿，保留 body 與甜感',
+                            emoji: '🔪',
+                            status: 'ready',
+                            heroSvg: ENCY_SVG_M_SINGLE,
+                            subtitle: 'Bloom 後一次性注滿全部水量，不分段。粉床長時間浸泡、保留最厚 body 與甜感。需要研磨略粗避免堵塞。',
+                            chips: [
+                                { text: '1 次注滿', class: 'green' },
+                                { text: 'Body 厚實', class: 'warm' },
+                                { text: '甜感突出', class: 'cool' },
+                                { text: '研磨略粗', class: 'purple' },
+                                { text: '1:16' },
+                                { text: '濾杯：V60 / Stagg' }
+                            ],
+                            specs: [
+                                { k: '注水段數', v: '1 段（Bloom + 一次注完）' },
+                                { k: '水溫', v: '92-93°C' },
+                                { k: '粉度', v: '中粗粉（比三段式粗 1 檔）' },
+                                { k: '粉水比', v: '1:16（17.5g 粉 / 280g 水）' },
+                                { k: '總時間', v: '3:00 ~ 4:00（本身較慢）' },
+                                { k: '難度', v: '★★☆☆☆' }
+                            ],
+                            origin: [
+                                { year: '1990s', text: '日本傳統濾紙派的「一気に」（一口氣注完）手法，源自簡化精神。' },
+                                { year: '2010s', text: 'James Hoffmann 等 YouTuber 推廣後成為「家用慵懶派」最愛。' },
+                                { year: '至今', text: '是想喝甜感不想學複雜手法的人的首選。' }
+                            ],
+                            steps: [
+                                { title: 'Bloom 35g 水', desc: '中心向外慢慢沾濕全粉、約 2 倍粉重水量、等 30 秒。' },
+                                { title: '一次注 245g 水', desc: '不間斷的中央向外大圈注、約 30-40 秒注完，水柱可粗一點增加攪拌。' },
+                                { title: '輕攪一圈', desc: '注完用攪拌棒輕攪一圈讓粉床均勻。' },
+                                { title: '靜待流完', desc: '不再做動作、等水流完。總時間 3:30-4:00 都正常（一次注水會慢）。' },
+                                { title: '喝', desc: 'body 比三段式厚、甜感更突出、酸質較收斂。' }
+                            ],
+                            tips: [
+                                { icon: '📏', title: '研磨一定要粗一檔', desc: '不分段 = 水長時間滯留粉床、用 V60 三段的粉度會堵塞 + 過萃。' },
+                                { icon: '💧', title: '水柱可粗', desc: '一刀流不像三段那麼細膩、水柱粗一點增加攪拌反而更均勻。' },
+                                { icon: '🥄', title: '注完輕攪', desc: '注完用攪拌棒或濾杯本身搖一下、讓粉床均勻沉降避免空泡。' },
+                                { icon: '🍯', title: 'body 最厚的選擇', desc: '想喝厚實 body、巧克力甜感、堅果調的人選一刀流會比三段對味。' },
+                                { icon: '🚫', title: '不適合淺焙', desc: '淺焙堅硬密度需要分段 + 高頻萃取、一刀流會偏淡無花果調。' },
+                                { icon: '⏰', title: '時間別在意', desc: '一刀流總時間 3:30-4:00 正常、別跟三段式比 2:30。流速本身慢就是慢。' }
+                            ]
+                        },
+                        kasuya_46: {
+                            name: '四六法（粕谷哲 · 2016 WBrC 冠軍）',
+                            tagline: '5 段注水、40%/60% 分區，可調酸甜與濃淡',
+                            emoji: '4️⃣',
+                            status: 'ready',
+                            heroSvg: ENCY_SVG_M_KASUYA,
+                            subtitle: '日本選手粕谷哲（Tetsu Kasuya）以四六法拿下 2016 World Brewers Cup 冠軍。前 40% 兩段決定酸甜平衡、後 60% 三段決定濃淡，5 段共 300g 水。',
+                            chips: [
+                                { text: '5 段注水', class: 'warm' },
+                                { text: '40/60 分區', class: 'green' },
+                                { text: '可調酸甜', class: 'cool' },
+                                { text: '可調濃淡', class: 'purple' },
+                                { text: '2016 WBrC 冠軍' },
+                                { text: '1:15' }
+                            ],
+                            specs: [
+                                { k: '發明者', v: '粕谷哲 Tetsu Kasuya（日本）' },
+                                { k: '冠軍年', v: '2016 World Brewers Cup' },
+                                { k: '注水段數', v: '5 段（前 2 段 + 後 3 段）' },
+                                { k: '水溫', v: '92°C' },
+                                { k: '粉水比', v: '1:15（20g 粉 / 300g 水）' },
+                                { k: '總時間', v: '3:30' }
+                            ],
+                            origin: [
+                                { year: '2014', text: '粕谷哲開始研究日本傳統手沖、發現「前後分區」可獨立調整酸甜與濃淡。' },
+                                { year: '2016', text: '在 World Brewers Cup 用四六法拿下世界冠軍、震驚全球咖啡圈。' },
+                                { year: '2017', text: '在 YouTube 公開示範影片、500 萬次以上觀看、引爆全球家用四六法熱潮。' },
+                                { year: '至今', text: '是 V60 最廣為流傳的進階手法、世界各地咖啡店與家用都常見。' }
+                            ],
+                            steps: [
+                                { title: '#1 注 60g（酸甜・酸傾向）', desc: '0:00 注 60g 水、想酸亮就維持 60g、想甜柔可以加到 70g。等 45 秒。' },
+                                { title: '#2 注 60g（酸甜・甜傾向）', desc: '0:45 再注 60g（共 120g）。前 40% 完成、酸甜走向已定。等 45 秒。' },
+                                { title: '#3 注 60g（濃淡・第 1）', desc: '1:30 注 60g（共 180g）。等水位下降一半（約 30 秒）。' },
+                                { title: '#4 注 60g（濃淡・第 2）', desc: '2:00 注 60g（共 240g）。' },
+                                { title: '#5 注 60g（濃淡・第 3）', desc: '2:30 注 60g（共 300g）。靜待流完到 3:30。' }
+                            ],
+                            tips: [
+                                { icon: '🍋', title: '想酸 → #1 多倒', desc: '#1 注 70g、#2 注 50g（總 120 不變）、會讓酸質更亮。' },
+                                { icon: '🍯', title: '想甜 → #2 多倒', desc: '#1 注 50g、#2 注 70g、會讓甜感與圓潤更突出。' },
+                                { icon: '💪', title: '想濃 → 後 3 段細分', desc: '#3-5 各 60g 是基本、可拆成 #3-7 各 36g、濃度更高。' },
+                                { icon: '🌊', title: '想淡 → 後 3 段合併', desc: '#3-5 合併成 2 段（90g + 90g）、流速快、濃度低、像茶湯。' },
+                                { icon: '⏱️', title: '節奏比水量重要', desc: '每段水位下降到一半再續、不要看碼錶硬要 45 秒。' },
+                                { icon: '🎓', title: '看粕谷哲 YouTube', desc: '官方影片有完整示範、節奏感與水流方式跟著做最快學會。' }
+                            ]
+                        },
+                        matt_winton: {
+                            name: 'Matt Winton 冠軍配方',
+                            tagline: '2015 WBrC 冠軍，高溫短時大水量',
+                            emoji: '🥇',
+                            status: 'ready',
+                            heroSvg: ENCY_SVG_M_MATTW,
+                            subtitle: '英國選手 Matt Winton 拿下 2015 World Brewers Cup 冠軍的配方。高溫 95°C + 大水量 + 4 段短時 = 強烈高頻萃取，挖出豆子最深的層次。',
+                            chips: [
+                                { text: '2015 WBrC 冠軍', class: 'purple' },
+                                { text: '高溫 95°C', class: 'warm' },
+                                { text: '4 段大水', class: 'cool' },
+                                { text: '短時萃取（2:30）', class: 'green' },
+                                { text: '中細粉' },
+                                { text: '1:15' }
+                            ],
+                            specs: [
+                                { k: '冠軍', v: 'Matt Winton（英國）' },
+                                { k: '冠軍年', v: '2015 World Brewers Cup' },
+                                { k: '注水段數', v: '4 段（短間隔大水量）' },
+                                { k: '水溫', v: '95°C（高溫）' },
+                                { k: '粉水比', v: '1:15（15g 粉 / 220g 水）' },
+                                { k: '總時間', v: '2:00 ~ 2:30（短）' }
+                            ],
+                            origin: [
+                                { year: '2014', text: 'Matt Winton 在英國咖啡圈以「高頻大水萃取」技術出名。' },
+                                { year: '2015', text: '在世界手沖賽用此配方拿下冠軍、驚艷全球。' },
+                                { year: '至今', text: '是淺焙瑰夏與精品高酸豆的最強配方、適合進階玩家。' }
+                            ],
+                            steps: [
+                                { title: 'Bloom 30g 水（0-20s）', desc: 'Bloom 量比一般少、目的是不要拖時間。中心螺旋沾濕全粉。' },
+                                { title: '#2 注 60g 水（20-40s）', desc: '大水量快速注、水柱粗一點。' },
+                                { title: '#3 注 60g 水（45-65s）', desc: '不等水位完全降、看到中心開始下降就接著注。' },
+                                { title: '#4 注 70g 水（70-90s）', desc: '最後一段、總水達 220g。' },
+                                { title: '靜待流完（2:00-2:30）', desc: '高溫 + 大水 + 短時 = 流速本身就快、別怕沒到 3 分鐘。' }
+                            ],
+                            tips: [
+                                { icon: '🌡️', title: '95°C 是核心', desc: '低於 95°C 就失去這配方的意義、不夠強的萃取力突顯不了豆子。' },
+                                { icon: '💧', title: '大水量是關鍵', desc: '每段 60-70g 是基本、不要按三段式的細水柱來操作。' },
+                                { icon: '⏱️', title: '不等水位降', desc: '看到中心水面開始下降就接著注、目標是維持水位高度。' },
+                                { icon: '🌸', title: '配淺焙瑰夏最炸', desc: '高酸花果調豆種能被高頻萃取激出來、巧克力深焙別用。' },
+                                { icon: '🎯', title: '只 2:30 結束', desc: '別覺得太短、Matt Winton 配方就是要短時間爆出風味。' },
+                                { icon: '⚠️', title: '研磨要中細', desc: '時間短、需要靠粉度補萃取量。比三段式細 1 檔。' }
+                            ]
+                        },
+                        lance_hi: {
+                            name: 'Lance Hedrick 高磨低溫',
+                            tagline: '極細研磨 + 低溫 + 強攪拌，淺焙堅硬豆解法',
+                            emoji: '❄️',
+                            status: 'ready',
+                            heroSvg: ENCY_SVG_M_LANCE,
+                            subtitle: 'Lance Hedrick（前 USBC 選手 / WBrC 美國代表 / YouTube 咖啡科學家）的招牌沖法。極細粉 + 88°C 低溫 + 強攪拌 + Spin，專破淺焙瑰夏的堅硬密度。',
+                            chips: [
+                                { text: '極細粉', class: 'cool' },
+                                { text: '低溫 88°C', class: 'purple' },
+                                { text: '強攪拌', class: 'warm' },
+                                { text: 'Spin 收尾', class: 'green' },
+                                { text: '淺焙專用' },
+                                { text: '1:16' }
+                            ],
+                            specs: [
+                                { k: '推廣者', v: 'Lance Hedrick（美國 USBC / WBrC 選手）' },
+                                { k: '注水段數', v: '2 段（Bloom + 一次注 + Spin）' },
+                                { k: '水溫', v: '88°C（低）' },
+                                { k: '粉度', v: '極細（比 V60 細 2 檔，Comandante 18-20）' },
+                                { k: '粉水比', v: '1:16（15g 粉 / 240g 水）' },
+                                { k: '總時間', v: '4:00 ~ 5:00（細粉慢流）' }
+                            ],
+                            origin: [
+                                { year: '2018', text: 'Lance Hedrick 在 YouTube 開始發布咖啡科學影片、以「實驗導向」聞名。' },
+                                { year: '2020', text: '推出「淺焙堅硬豆解法」影片、突破傳統「淺焙要高溫」的觀念。' },
+                                { year: '至今', text: '是淺焙非洲豆 / 瑰夏專家、影片觀看數百萬。獨樹一格的科學派代表。' }
+                            ],
+                            steps: [
+                                { title: 'Bloom 30g + 強攪拌', desc: 'Bloom 後用攪拌棒在粉床中央旋轉 5-8 圈、徹底浸潤每顆細粉。等 45 秒。' },
+                                { title: '一次注 210g 水 + Spin', desc: '不分段、一次粗水柱注完。注完用湯匙在中央 spin 3-5 圈、整理粉床。' },
+                                { title: '靜待流完（很慢）', desc: '極細粉導致流速慢、總時間 4-5 分鐘正常。別擔心、低溫 + 細粉組合反而不易過萃。' },
+                                { title: '輕搖杯 + 喝', desc: '出來會非常乾淨、酸質明亮、瑰夏的花果調炸出來。' }
+                            ]
+                            ,
+                            tips: [
+                                { icon: '🪨', title: '專破淺焙堅硬豆', desc: '正常方法沖瑰夏會「硬硬的、酸而不甜」、Lance 法能突破密度釋放甜感。' },
+                                { icon: '🌡️', title: '低溫不是錯', desc: '一般人覺得淺焙要高溫、Lance 反其道用低溫 + 細粉補償萃取力、結果更甜更乾淨。' },
+                                { icon: '🌀', title: '攪拌是核心', desc: 'Bloom 攪拌 + 主萃 Spin 缺一不可、極細粉不攪會嚴重萃取不均。' },
+                                { icon: '⚠️', title: '不適合深焙', desc: '深焙細粉 + 低溫會嚴重萃取不足、變成酸澀無味。深焙要走 Matt Winton 路線。' },
+                                { icon: '⏰', title: '4-5 分鐘正常', desc: '別覺得太慢、細粉 + 低溫天生流速就慢。看流速判斷而非碼錶。' },
+                                { icon: '🎬', title: '看 Lance YouTube', desc: '頻道 "Lance Hedrick" 有完整科學示範、看一次勝過看 10 個 tips。' }
+                            ]
+                        },
+                        hoffmann_ult: {
+                            name: 'Hoffmann Ultimate V60',
+                            tagline: 'James Hoffmann 推薦，乾淨度極高',
+                            emoji: '🌀',
+                            status: 'ready',
+                            heroSvg: ENCY_SVG_M_HOFFMANN,
+                            subtitle: 'James Hoffmann（英國咖啡冠軍 / YouTube 教父 / 「The World Atlas of Coffee」作者）的 V60 招牌手法。Bloom + Swirl + 兩段大水 + 結尾 Spin、乾淨度極高。',
+                            chips: [
+                                { text: 'James Hoffmann', class: 'purple' },
+                                { text: 'Swirl + Spin', class: 'warm' },
+                                { text: '2 段大水', class: 'cool' },
+                                { text: '乾淨度爆表', class: 'green' },
+                                { text: '1:16.7' },
+                                { text: '中粉' }
+                            ],
+                            specs: [
+                                { k: '推廣者', v: 'James Hoffmann（2007 WBrC 冠軍）' },
+                                { k: '注水段數', v: '2 段（60% + 40%）' },
+                                { k: '水溫', v: '95°C' },
+                                { k: '粉度', v: '中粉（同三段式）' },
+                                { k: '粉水比', v: '1:16.7（30g 粉 / 500g 水）' },
+                                { k: '總時間', v: '3:00 ~ 3:30' }
+                            ],
+                            origin: [
+                                { year: '2007', text: 'James Hoffmann 拿下 World Barista Championship 冠軍、是英國咖啡圈的教父級人物。' },
+                                { year: '2014', text: '出版「The World Atlas of Coffee」、成為全球咖啡圈的聖經書。' },
+                                { year: '2018', text: 'YouTube 頻道開設、發布的 Ultimate V60 影片觀看數突破千萬。' },
+                                { year: '至今', text: '是現代家用 V60 最有影響力的標準手法、Switch 也有專屬版本。' }
+                            ],
+                            steps: [
+                                { title: 'Bloom 60g 水（0-15s）', desc: '注 60g 水（2 倍粉重）、輕轉杯（Swirl）讓粉床平整、等 45 秒。' },
+                                { title: '#2 注 240g 水（45-75s）', desc: '從中心向外 spiral 注水、目標 60% 總水量（共 300g）。' },
+                                { title: '#3 注 200g 水（90-120s）', desc: '剩下 40%（200g）、可細水柱穩定注完。' },
+                                { title: '結尾 Spin', desc: '注完用湯匙在中央 spin 1 圈、整理粉床、避免粉牆殘留。' },
+                                { title: '靜待流完（2:30-3:30）', desc: '總時間在 3 分鐘左右、結果乾淨度非常高。' }
+                            ],
+                            tips: [
+                                { icon: '🌀', title: 'Swirl 是 Bloom 的關鍵', desc: 'Bloom 後輕搖整個 V60、讓水均勻分布粉床、不留乾粉。是 Hoffmann 法的招牌。' },
+                                { icon: '🥄', title: 'Spin 是收尾', desc: '結尾用湯匙在中央 spin 1 圈、把濾紙上殘留的粉沖回中央、避免咖啡粉牆殘留。' },
+                                { icon: '⚖️', title: '比例 1:16.7 是甜蜜點', desc: 'Hoffmann 算過很多次、30g 粉 / 500g 水是甜感與強度的平衡點。' },
+                                { icon: '🌡️', title: '95°C 高溫', desc: '比三段式 92°C 高、配合 Swirl + Spin 確保萃取力夠。' },
+                                { icon: '📺', title: '看官方影片', desc: 'YouTube 搜 "James Hoffmann Ultimate V60"、20 分鐘影片講透每個細節。' },
+                                { icon: '✨', title: '乾淨度天花板', desc: '想喝最乾淨、層次最清晰的杯感、Hoffmann 法是家用最佳選擇。' }
+                            ]
+                        },
+                        scott_rao: {
+                            name: 'Scott Rao 連續注水',
+                            tagline: '不斷流維持水位，技術門檻較高',
+                            emoji: '🎯',
+                            status: 'ready',
+                            heroSvg: ENCY_SVG_M_RAO,
+                            subtitle: 'Scott Rao（美國咖啡作家 /「The Coffee Roaster Companion」）推廣的連續注水法。Bloom 後不分段、用細水柱維持水位高度不間斷注水、濾床均勻。',
+                            chips: [
+                                { text: 'Scott Rao', class: 'purple' },
+                                { text: '連續水柱', class: 'warm' },
+                                { text: '不分段', class: 'cool' },
+                                { text: '水位穩定', class: 'green' },
+                                { text: '需要好壺' },
+                                { text: '1:16' }
+                            ],
+                            specs: [
+                                { k: '推廣者', v: 'Scott Rao（美國咖啡作家）' },
+                                { k: '注水段數', v: '1 段（連續不停）' },
+                                { k: '水溫', v: '93°C' },
+                                { k: '粉度', v: '中粗（維持流速）' },
+                                { k: '粉水比', v: '1:16（17g 粉 / 270g 水）' },
+                                { k: '總時間', v: '2:30 ~ 3:00' }
+                            ],
+                            origin: [
+                                { year: '2008', text: 'Scott Rao 出版「The Professional Barista Handbook」、成為咖啡技術書的標準。' },
+                                { year: '2010s', text: '推廣「連續注水」概念、強調濾床穩定性比分段更重要。' },
+                                { year: '至今', text: '是技術派與量化派的代表、需要極穩定的水柱控制能力。' }
+                            ],
+                            steps: [
+                                { title: 'Bloom 30g 水（5s）', desc: 'Bloom 量略少、時間也短（5 秒就好、不等 30s）。' },
+                                { title: '連續注水 240g（5s-2:30）', desc: '一條細水柱不間斷、從中心向外、再回中心、維持水位高度約 1.5cm 始終穩定。' },
+                                { title: '達總水量停止', desc: '注到 270g 停手、不要再做動作。' },
+                                { title: '靜待流完', desc: '總時間 2:30-3:00、結束。' },
+                                { title: '喝', desc: '濾床均勻萃取、乾淨且風味集中。' }
+                            ],
+                            tips: [
+                                { icon: '🎯', title: '水位高度是核心', desc: '維持粉床上水位約 1.5cm、不太高（萃取慢）也不太低（粉床乾）。靠水柱粗細調整。' },
+                                { icon: '💧', title: '需要好的細嘴壺', desc: 'Fellow Stagg / Brewista / Hario Buono 都行、水柱要極穩定才能維持水位。' },
+                                { icon: '⚠️', title: '技術門檻高', desc: '連續 2 分鐘穩定水柱不是新手能做的、建議三段式練熟再來挑戰。' },
+                                { icon: '📏', title: '研磨略粗', desc: '連續注水 = 整體萃取力強、研磨要略粗（V60 三段式的下一檔）避免過萃。' },
+                                { icon: '🥄', title: '別 spin / 別搖', desc: 'Scott Rao 強調「不要動」、Bloom 不 swirl、結尾不 spin、讓粉床自然萃取。' },
+                                { icon: '📚', title: '看 Rao 的書', desc: '「The Coffee Roaster Companion」與「Pour-Over Coffee」是技術派必讀。' }
+                            ]
+                        },
+                        tetsu_ice: {
+                            name: '冰手沖（Iced Pour-Over）',
+                            tagline: '40% 冰塊 + 60% 熱水急冷，鮮香爆炸',
+                            emoji: '🧊',
+                            status: 'ready',
+                            heroSvg: ENCY_SVG_M_TETSU_ICE,
+                            subtitle: '日本選手粕谷哲也推廣的「Iced Pour-Over」。下壺先放總水量 40% 的冰塊、用 60% 熱水做高濃度萃取、滴落瞬間被冰塊急冷、鮮香鎖住、酸質明亮。',
+                            chips: [
+                                { text: '熱萃急冷', class: 'cool' },
+                                { text: '40% 冰塊', class: 'green' },
+                                { text: '60% 熱水', class: 'warm' },
+                                { text: '鮮香炸裂', class: 'purple' },
+                                { text: '夏天首選' },
+                                { text: '1:14' }
+                            ],
+                            specs: [
+                                { k: '推廣者', v: '日本咖啡圈（粕谷哲等）' },
+                                { k: '注水段數', v: '3 段（同三段式但水量減）' },
+                                { k: '水溫', v: '95°C（高）' },
+                                { k: '粉度', v: '中細粉（補萃）' },
+                                { k: '比例', v: '15g 粉 / 100g 熱水 + 80g 冰塊（總 1:12）' },
+                                { k: '總時間', v: '2:30 ~ 3:00' }
+                            ],
+                            origin: [
+                                { year: '日本傳統', text: '日本喫茶店夏季標配、用熱萃急冷取代冷萃的緩慢、鮮香差別大。' },
+                                { year: '2010s', text: '隨手沖文化全球化、Iced Pour-Over 進入歐美咖啡店夏季菜單。' },
+                                { year: '至今', text: '夏季手沖必學、跟冷萃並列為最常見的冰咖啡做法。' }
+                            ],
+                            steps: [
+                                { title: '下壺放冰塊', desc: '下壺直接放總水量 40% 重的冰塊（80g）、別用大冰塊（融太慢）、小冰塊或碎冰最佳。' },
+                                { title: 'V60 上裝粉 + Bloom', desc: '15g 中細粉、用 95°C 熱水 30g Bloom、等 30 秒。' },
+                                { title: '#2 注 35g 水', desc: '中心向外螺旋、等 30 秒。' },
+                                { title: '#3 注 35g 水', desc: '完成總水量 100g 熱水。' },
+                                { title: '滴落 → 冰塊融化稀釋', desc: '熱萃液滴下時被冰塊急冷、冰塊也融化稀釋成正常飲用濃度。輕搖均勻、加冰倒入新杯。' }
+                            ],
+                            tips: [
+                                { icon: '🧊', title: '冰塊大小很重要', desc: '小冰塊或碎冰融得慢、慢慢吸熱讓咖啡液逐漸冷卻、急凍效果最佳。大冰塊太硬。' },
+                                { icon: '🌡️', title: '熱水必須 95°C', desc: '熱水溫度高才能補償後續被冰稀釋的萃取強度。低於 92°C 會偏淡無味。' },
+                                { icon: '⚖️', title: '比例要算', desc: '熱水 + 冰塊融化的水 = 總飲用量。100g 熱 + 80g 冰塊 = 約 180g 飲用。1:12 比例濃。' },
+                                { icon: '🌸', title: '配淺焙花果調', desc: '高溫 + 急冷會把花果香鎖住、淺焙日曬豆與瑰夏最炸。深焙不適合。' },
+                                { icon: '🆚', title: 'vs 冷萃', desc: '冰手沖：3 分鐘、鮮香明亮、酸質高；冷萃：12-24 小時、低酸甜感、巧克力調。完全不同方向。' },
+                                { icon: '🆕', title: '加冰再喝', desc: '萃取完搖均勻、新杯加冰塊倒入、喝起來才夠冰冷、口感才像店裡的冰咖啡。' }
+                            ]
+                        },
+                        strong_conc: {
+                            name: '濃縮式 1:10（Strong Concentrate）',
+                            tagline: '小水量放大濃度，適合做冰美式底',
+                            emoji: '💪',
+                            status: 'ready',
+                            heroSvg: ENCY_SVG_M_CONC,
+                            subtitle: '刻意減少水量到 1:10、放大濃度。萃取出來像迷你義式 espresso、用來做冰美式底、加奶做拿鐵、或加冰水稀釋成「自家手沖 long black」。',
+                            chips: [
+                                { text: '1:10 濃縮', class: 'green' },
+                                { text: '小水量', class: 'warm' },
+                                { text: '稀釋飲用', class: 'cool' },
+                                { text: '冰美式底', class: 'purple' },
+                                { text: '加奶神器' },
+                                { text: '中粉略粗' }
+                            ],
+                            specs: [
+                                { k: '注水段數', v: '2 段（Bloom + 一次注完）' },
+                                { k: '水溫', v: '91°C（略低避免過萃）' },
+                                { k: '粉度', v: '中粉（與三段式相同）' },
+                                { k: '粉水比', v: '1:10（15g 粉 / 150g 水）' },
+                                { k: '總時間', v: '2:00（短）' },
+                                { k: '飲用方式', v: '稀釋 1:1 或加奶' }
+                            ],
+                            origin: [
+                                { year: '日本派', text: '日本喫茶店傳統「濃いコーヒー」、用小水量做濃縮咖啡、適合配甜點。' },
+                                { year: '2010s', text: '隨第三波咖啡浪潮、濃縮式 V60 成為「家用無義式機」的替代解法。' },
+                                { year: '至今', text: '是想喝強度但沒義式機的人首選、也是冰美式 / 冰拿鐵的家用底配方。' }
+                            ],
+                            steps: [
+                                { title: 'Bloom 20g 水', desc: '注 20g 水悶蒸 30 秒（量比一般少）。' },
+                                { title: '一次注 130g 水', desc: '一次注完總水量 150g、慢慢注 30 秒。' },
+                                { title: '靜待流完', desc: '總時間 2 分鐘、出來液量約 100-120g（被粉吸了一些）。' },
+                                { title: '稀釋或加奶', desc: '加 100g 冰水做冰美式 / 加 100g 鮮奶做拿鐵 / 直接喝是強烈濃縮飲。' }
+                            ],
+                            tips: [
+                                { icon: '🧊', title: '冰美式底配方', desc: '濃縮液 + 等量冰水 + 加冰塊 = 家用冰美式、強度與咖啡店的差不多。' },
+                                { icon: '🥛', title: '拿鐵替代', desc: '濃縮液 100g + 燕麥奶 / 鮮奶 200g = 拿鐵。沒義式機也能做家用奶咖。' },
+                                { icon: '⚖️', title: '比例可調', desc: '1:10 是基礎、1:8 更強（做雙倍冰美式）、1:12 偏淡（想直接喝強杯）。' },
+                                { icon: '🌡️', title: '水溫降一點', desc: '91°C 比一般低、因為小水量集中萃取、高溫易出苦澀。' },
+                                { icon: '🚫', title: '別直接當咖啡喝', desc: '1:10 太濃、直接喝舌頭會麻。設計就是要稀釋的、別省這一步。' },
+                                { icon: '☕', title: '深焙最對味', desc: '巧克力堅果調的深焙豆稀釋後最像店裡的美式、淺焙稀釋會變酸偏弱。' }
+                            ]
+                        }
                     }
                 }
             };
