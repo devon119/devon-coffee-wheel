@@ -1421,47 +1421,73 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             transition: transform 0.15s;
         }
         .ui-controls:hover { transform: scale(1.08); background: #efebe9; }
-        /* 🎯 主視圖切換 tab bar（工作台 / 學習中心） */
+        /* 🎯 主視圖頁籤（工作台 / 學習中心） */
         #main-tabs {
-            position: fixed; top: 14px; left: 50%; transform: translateX(-50%);
+            position: fixed; top: 0; left: 50%; transform: translateX(-50%);
             z-index: 600;
-            background: #fdf9f3; border-radius: 24px;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.18);
-            padding: 4px; display: flex; gap: 0;
-            border: 1.5px solid #e7dcc6;
+            display: flex; gap: 0; align-items: flex-start;
+            padding-top: 8px;
         }
         .main-tab {
-            padding: 8px 20px; border-radius: 20px; font-weight: 800;
-            font-size: 14px; cursor: pointer;
-            border: none; background: transparent; color: #6d4c41;
-            transition: all 0.25s; letter-spacing: 0.5px;
-            display: flex; align-items: center; gap: 6px; white-space: nowrap;
+            padding: 11px 28px 14px; min-width: 130px;
+            background: #ede4d2; color: #6d4c41;
+            border: 1.5px solid #c9bfa8; border-bottom: none;
+            border-radius: 16px 16px 0 0;
+            font-weight: 800; font-size: 14.5px; letter-spacing: 1px;
+            cursor: pointer; position: relative;
+            transition: all 0.3s cubic-bezier(.22,.8,.33,1);
+            display: flex; align-items: center; gap: 8px; justify-content: center;
+            white-space: nowrap;
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.06);
+            margin: 0 -1px;
         }
-        .main-tab:hover:not(.active) { background: rgba(141, 110, 99, 0.1); }
+        .main-tab:hover:not(.active) {
+            background: #f5ede0; transform: translateY(-2px);
+        }
+        .main-tab.active {
+            color: #fff; padding-top: 14px; padding-bottom: 17px; min-width: 150px;
+            font-size: 15.5px;
+            border-color: transparent;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.18);
+            z-index: 2;
+            transform: translateY(-3px);
+        }
         .main-tab.active.tab-workbench {
-            background: linear-gradient(135deg, #5d4037 0%, #8d6e63 100%);
-            color: #fff; box-shadow: 0 2px 8px rgba(93,64,55,0.35);
+            background: linear-gradient(180deg, #6d4c41 0%, #5d4037 100%);
         }
         .main-tab.active.tab-learning {
-            background: linear-gradient(135deg, #6a1b9a 0%, #ab47bc 100%);
-            color: #fff; box-shadow: 0 2px 8px rgba(106,27,154,0.35);
+            background: linear-gradient(180deg, #8e24aa 0%, #6a1b9a 100%);
+        }
+        /* 頁籤底部與 view 視覺連接 */
+        .main-tab.active::after {
+            content: ''; position: absolute;
+            left: 0; right: 0; bottom: -1px; height: 2px;
+            background: inherit;
         }
         @media (max-width: 600px) {
-            #main-tabs { top: 10px; }
-            .main-tab { padding: 7px 13px; font-size: 12.5px; }
+            .main-tab { padding: 10px 16px 12px; min-width: 0; font-size: 13px; letter-spacing: 0.5px; }
+            .main-tab.active { padding: 12px 18px 14px; min-width: 0; font-size: 13.5px; }
             .main-tab .mt-text { display: none; }
         }
-        /* 🎓 學習中心 inline view（從工作台底層上滑）*/
-        #learning-view {
-            position: fixed; inset: 0; z-index: 100;
-            background: linear-gradient(180deg, #fdf9f3 0%, #f5ede0 100%);
-            overflow-y: auto; padding: 75px 24px 40px;
-            box-sizing: border-box;
-            transform: translateY(100%); opacity: 0;
-            transition: transform 0.4s cubic-bezier(.22,.8,.33,1), opacity 0.3s;
-            visibility: hidden;
+        /* 🎯 兩個主視圖（工作台 / 學習中心）共用切換邏輯 */
+        #app-layout {
+            transition: opacity 0.3s ease;
         }
-        #learning-view.active { transform: translateY(0); opacity: 1; visibility: visible; }
+        #app-layout.tab-hidden {
+            opacity: 0; pointer-events: none; visibility: hidden;
+        }
+        #learning-view {
+            position: fixed; inset: 0; z-index: 50;
+            background: linear-gradient(180deg, #fdf9f3 0%, #f5ede0 100%);
+            overflow-y: auto; padding: 72px 24px 40px;
+            box-sizing: border-box;
+            opacity: 0; visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0s linear 0.3s;
+        }
+        #learning-view.active {
+            opacity: 1; visibility: visible;
+            transition: opacity 0.3s ease, visibility 0s;
+        }
         .lv-container { max-width: 880px; margin: 0 auto; }
         .lv-header {
             text-align: center; margin-bottom: 32px;
@@ -10379,13 +10405,16 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             // ========== 🎯 主視圖切換（工作台 / 學習中心） ==========
             window.switchMainView = function(view) {
                 const lv = document.getElementById('learning-view');
+                const wb = document.getElementById('app-layout');
                 const tabWb = document.querySelector('.main-tab.tab-workbench');
                 const tabLh = document.querySelector('.main-tab.tab-learning');
                 if (view === 'learning') {
+                    if (wb) wb.classList.add('tab-hidden');
                     lv.classList.add('active');
                     tabLh.classList.add('active');
                     tabWb.classList.remove('active');
                 } else {
+                    if (wb) wb.classList.remove('tab-hidden');
                     lv.classList.remove('active');
                     tabWb.classList.add('active');
                     tabLh.classList.remove('active');
