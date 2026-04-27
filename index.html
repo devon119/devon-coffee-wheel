@@ -6913,6 +6913,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
 
             const ENCY_SVG_M_CLASSIC3 = _encyMethodSvg({
                 animKey: 'classic_3', totalSec: 180,
+                streamWidth: 4, streamLabel: '中細水柱（鶴嘴壺）', motionType: 'spiral',
                 title: '三段式（Classic 3-Pour）',
                 totalTime: '3:00',
                 pours: [
@@ -6936,6 +6937,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
 
             const ENCY_SVG_M_SINGLE = _encyMethodSvg({
                 animKey: 'single_pour', totalSec: 210,
+                streamWidth: 8, streamLabel: '粗水柱（一次注滿）', motionType: 'center',
                 title: '一刀流（Single Pour）',
                 totalTime: '3:30',
                 pours: [
@@ -6958,6 +6960,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
 
             const ENCY_SVG_M_KASUYA = _encyMethodSvg({
                 animKey: 'kasuya_46', totalSec: 210,
+                streamWidth: 5, streamLabel: '中水柱（穩定節奏）', motionType: 'spiral',
                 title: '四六法（粕谷哲 · 2016 WBrC 冠軍）',
                 totalTime: '3:30',
                 pours: [
@@ -6989,6 +6992,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
 
             const ENCY_SVG_M_MATTW = _encyMethodSvg({
                 animKey: 'matt_winton', totalSec: 150,
+                streamWidth: 8, streamLabel: '粗水柱大水量', motionType: 'circle',
                 title: 'Matt Winton 冠軍配方（2015 WBrC）',
                 totalTime: '2:30',
                 pours: [
@@ -7015,6 +7019,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
 
             const ENCY_SVG_M_LANCE = _encyMethodSvg({
                 animKey: 'lance_hi', totalSec: 270,
+                streamWidth: 3, streamLabel: '細水柱 + Spin', motionType: 'spin',
                 title: 'Lance Hedrick 高磨低溫（淺焙解法）',
                 totalTime: '4:30',
                 pours: [
@@ -7039,6 +7044,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
 
             const ENCY_SVG_M_HOFFMANN = _encyMethodSvg({
                 animKey: 'hoffmann_ult', totalSec: 180,
+                streamWidth: 5, streamLabel: '中水柱 + Swirl', motionType: 'spiral',
                 title: 'Hoffmann Ultimate V60',
                 totalTime: '3:00',
                 pours: [
@@ -7064,6 +7070,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
 
             const ENCY_SVG_M_RAO = _encyMethodSvg({
                 animKey: 'scott_rao', totalSec: 180,
+                streamWidth: 3, streamLabel: '極細水柱（不間斷）', motionType: 'continuous',
                 title: 'Scott Rao 連續注水',
                 totalTime: '3:00',
                 pours: [
@@ -7086,6 +7093,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
 
             const ENCY_SVG_M_TETSU_ICE = _encyMethodSvg({
                 animKey: 'tetsu_ice', totalSec: 180,
+                streamWidth: 5, streamLabel: '中水柱（熱萃急冷）', motionType: 'spiral',
                 title: '冰手沖（Iced Pour-Over · 急冷）',
                 totalTime: '3:00',
                 pours: [
@@ -7245,6 +7253,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
 
             const ENCY_SVG_M_CONC = _encyMethodSvg({
                 animKey: 'strong_conc', totalSec: 120,
+                streamWidth: 4, streamLabel: '中細水柱（小水量）', motionType: 'center',
                 title: '濃縮式 1:10（Strong Concentrate）',
                 totalTime: '2:00',
                 pours: [
@@ -10227,18 +10236,25 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 const data = METHOD_ANIM_DATA[methodKey];
                 if (!data) return '<div style="padding:30px;text-align:center;color:#888;">此手法尚無動畫資料</div>';
                 const totalSec = data.totalSec || 180;
+                const streamW = data.streamWidth || 4;
+                const streamLabel = data.streamLabel || '中水柱';
+                const motionLabel = ({
+                    spiral:     '🌀 中心 → 外螺旋 → 中心',
+                    center:     '⚪ 中心定點注水',
+                    circle:     '⭕ 大圓繞圈',
+                    continuous: '➰ 連續螺旋（不停手）',
+                    spin:       '🌪️ 注水 + 結尾 Spin'
+                })[data.motionType || 'spiral'];
                 const stageBars = (data.timeline || []).map((t, i) => {
                     const x = 40 + t.start_pct * 4;
                     const w = t.width_pct * 4;
                     const fillColor = t.fill || '#fff';
                     const strokeColor = t.color || '#5d4037';
                     const safeText = String(t.text).replace(/[<>]/g,'');
-                    return `<rect data-stage-idx="${i}" class="ma-stage-bar" x="${x}" y="380" width="${w}" height="22" fill="${fillColor}" stroke="${strokeColor}" stroke-width="1.5" rx="3"/>` +
-                           `<text x="${x + w/2}" y="395" font-size="9.5" font-weight="700" fill="${strokeColor}" text-anchor="middle" pointer-events="none">${safeText}</text>`;
+                    return `<rect data-stage-idx="${i}" class="ma-stage-bar" x="${x}" y="430" width="${w}" height="22" fill="${fillColor}" stroke="${strokeColor}" stroke-width="1.5" rx="3"/>` +
+                           `<text x="${x + w/2}" y="445" font-size="9.5" font-weight="700" fill="${strokeColor}" text-anchor="middle" pointer-events="none">${safeText}</text>`;
                 }).join('');
-                const pourDots = (data.pours || []).map((p, i) =>
-                    `<circle id="ma-pour-${i}" cx="${140+p.cx}" cy="${80+p.cy}" r="0" fill="${p.color}" stroke="#fff" stroke-width="2" opacity="0"/>`).join('');
-                return `<svg id="m-anim-svg" viewBox="0 0 480 480" xmlns="http://www.w3.org/2000/svg">
+                return `<svg id="m-anim-svg" viewBox="0 0 480 470" xmlns="http://www.w3.org/2000/svg">
                     <defs>
                         <radialGradient id="ma-bed" cx="0.5" cy="0.5" r="0.5">
                             <stop offset="0%" stop-color="#a1887f"/>
@@ -10249,15 +10265,25 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                             <stop offset="100%" stop-color="rgba(62, 39, 35, 0.7)"/>
                         </radialGradient>
                         <linearGradient id="ma-stream" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0%" stop-color="rgba(180, 230, 250, 0.7)"/>
-                            <stop offset="100%" stop-color="rgba(141, 110, 99, 0.85)"/>
+                            <stop offset="0%" stop-color="rgba(180, 230, 250, 0.85)"/>
+                            <stop offset="100%" stop-color="rgba(141, 110, 99, 0.95)"/>
                         </linearGradient>
                     </defs>
                     <text x="240" y="22" font-size="14" font-weight="800" fill="#3e2723" text-anchor="middle">${data.title}</text>
                     <text id="ma-clock" x="240" y="46" font-size="20" font-weight="900" fill="#bf360c" text-anchor="middle">00:00 / ${_formatTimeMS(totalSec)}</text>
                     <rect x="40" y="58" width="400" height="6" fill="#efebe9" rx="3"/>
                     <rect id="ma-progress" x="40" y="58" width="0" height="6" fill="#e65100" rx="3"/>
-                    <g transform="translate(140 80)">
+                    <!-- 注水模式 + 水柱粗細 標示卡 -->
+                    <g transform="translate(0 76)">
+                        <rect x="20" y="0" width="200" height="38" fill="#fff3e0" stroke="#e65100" stroke-width="1.5" rx="6"/>
+                        <text x="120" y="15" font-size="10" font-weight="700" fill="#bf360c" text-anchor="middle">注水路徑</text>
+                        <text x="120" y="31" font-size="11" font-weight="800" fill="#3e2723" text-anchor="middle">${motionLabel}</text>
+                        <rect x="260" y="0" width="200" height="38" fill="#e3f2fd" stroke="#1976d2" stroke-width="1.5" rx="6"/>
+                        <text x="365" y="15" font-size="10" font-weight="700" fill="#0d47a1" text-anchor="middle">水柱粗細</text>
+                        <text x="365" y="31" font-size="11" font-weight="800" fill="#3e2723" text-anchor="middle">${streamLabel}</text>
+                        <line x1="285" y1="6" x2="285" y2="32" stroke="url(#ma-stream)" stroke-width="${streamW}" stroke-linecap="round"/>
+                    </g>
+                    <g transform="translate(140 130)">
                         <circle cx="100" cy="100" r="92" fill="#fffaf3" stroke="#a1887f" stroke-width="2"/>
                         <g stroke="#bcaaa4" stroke-width="0.8" opacity="0.55" fill="none">
                             <circle cx="100" cy="100" r="82"/><circle cx="100" cy="100" r="68"/>
@@ -10266,24 +10292,28 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                         </g>
                         <circle id="ma-bed" cx="100" cy="100" r="62" fill="url(#ma-bed)" opacity="0.7"/>
                         <circle id="ma-water" cx="100" cy="100" r="0" fill="url(#ma-water)"/>
-                        <circle id="ma-rip1" cx="100" cy="100" r="0" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="2" opacity="0"/>
-                        <circle id="ma-rip2" cx="100" cy="100" r="0" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="1.8" opacity="0"/>
-                        <line id="ma-stream" x1="100" y1="-20" x2="100" y2="80" stroke="url(#ma-stream)" stroke-width="0" stroke-linecap="round"/>
+                        <!-- 注水軌跡 path（累積） -->
+                        <path id="ma-trail" d="M 100 100" stroke="rgba(33, 150, 243, 0.5)" stroke-width="2" fill="none" stroke-linecap="round"/>
+                        <circle id="ma-rip1" cx="100" cy="100" r="0" fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="2.5" opacity="0"/>
+                        <circle id="ma-rip2" cx="100" cy="100" r="0" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="2" opacity="0"/>
+                        <line id="ma-stream" x1="100" y1="-30" x2="100" y2="80" stroke="url(#ma-stream)" stroke-width="0" stroke-linecap="round"/>
                         <g id="ma-bubbles" opacity="0">
-                            <circle cx="80" cy="90" r="3" fill="rgba(255,255,255,0.7)"/>
-                            <circle cx="120" cy="85" r="2.5" fill="rgba(255,255,255,0.7)"/>
-                            <circle cx="100" cy="115" r="3.5" fill="rgba(255,255,255,0.7)"/>
-                            <circle cx="85" cy="120" r="2" fill="rgba(255,255,255,0.7)"/>
-                            <circle cx="125" cy="118" r="2.8" fill="rgba(255,255,255,0.7)"/>
-                            <circle cx="115" cy="95" r="2" fill="rgba(255,255,255,0.7)"/>
+                            <circle cx="80" cy="90" r="3" fill="rgba(255,255,255,0.8)"/>
+                            <circle cx="120" cy="85" r="2.5" fill="rgba(255,255,255,0.8)"/>
+                            <circle cx="100" cy="115" r="3.5" fill="rgba(255,255,255,0.8)"/>
+                            <circle cx="85" cy="120" r="2" fill="rgba(255,255,255,0.8)"/>
+                            <circle cx="125" cy="118" r="2.8" fill="rgba(255,255,255,0.8)"/>
+                            <circle cx="115" cy="95" r="2" fill="rgba(255,255,255,0.8)"/>
                         </g>
-                        <circle id="ma-center" cx="100" cy="100" r="0" fill="#fff" opacity="0"/>
+                        <!-- 移動中的注水點標記（雙圈 + 中心點） -->
+                        <circle id="ma-pourpoint" cx="100" cy="100" r="0" fill="#fff" stroke="#1565c0" stroke-width="2.5" opacity="0"/>
+                        <circle id="ma-pourpoint-inner" cx="100" cy="100" r="0" fill="#1976d2" opacity="0"/>
                     </g>
-                    <text id="ma-stage" x="240" y="320" font-size="15" font-weight="800" fill="#5d4037" text-anchor="middle">準備開始...</text>
-                    <text id="ma-action" x="240" y="342" font-size="12" fill="#8d6e63" text-anchor="middle" font-style="italic"></text>
-                    <line x1="40" y1="372" x2="440" y2="372" stroke="#3e2723" stroke-width="1.5"/>
+                    <text id="ma-stage" x="240" y="358" font-size="15" font-weight="800" fill="#5d4037" text-anchor="middle">準備開始...</text>
+                    <text id="ma-action" x="240" y="380" font-size="12" fill="#8d6e63" text-anchor="middle" font-style="italic"></text>
+                    <text id="ma-pos" x="240" y="402" font-size="11" font-weight="700" fill="#1565c0" text-anchor="middle"></text>
+                    <line x1="40" y1="422" x2="440" y2="422" stroke="#3e2723" stroke-width="1.5"/>
                     ${stageBars}
-                    ${pourDots}
                 </svg>`;
             }
 
@@ -10342,31 +10372,123 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 const isPour = /注|段|刀|連續|spin|Spin|搖/.test(stageText);
                 const isWait = /流|完|靜|待/.test(stageText);
 
+                // 計算注水點位置（依 motionType 與當前階段）
+                const motion = data.motionType || 'spiral';
+                let dx = 0, dy = 0;
+                if (isPour || isBloom) {
+                    // 用一個累積時間作為運動參數（讓 spiral 看得出方向感）
+                    const t = realSec * 1.2; // 圈速
+                    if (motion === 'center' || isBloom) {
+                        // Bloom：中心輕微擴散 (5px 內)
+                        const r = isBloom ? 6 + Math.sin(realSec * 2) * 4 : 0;
+                        dx = Math.cos(realSec * 3) * r;
+                        dy = Math.sin(realSec * 3) * r;
+                    } else if (motion === 'circle') {
+                        // 大圓繞，半徑 35-45
+                        const radius = 38 + Math.sin(realSec * 0.5) * 4;
+                        dx = Math.cos(t * 1.5) * radius;
+                        dy = Math.sin(t * 1.5) * radius;
+                    } else if (motion === 'continuous') {
+                        // 連續螺旋慢移
+                        const radius = 30 + Math.sin(t * 0.6) * 15;
+                        dx = Math.cos(t * 1.0) * radius;
+                        dy = Math.sin(t * 1.0) * radius;
+                    } else if (motion === 'spin') {
+                        // 階段內：第一段定點細注、結尾段快 spin
+                        const isLastStage = (currentIdx === timeline.length - 2 || currentIdx === timeline.length - 1);
+                        const radius = isLastStage ? (35 + Math.sin(realSec * 4) * 5) : 5;
+                        const speed = isLastStage ? 4 : 0.5;
+                        dx = Math.cos(t * speed) * radius;
+                        dy = Math.sin(t * speed) * radius;
+                    } else {
+                        // spiral：中心 → 外 → 中心循環（每階段一輪）
+                        // 用階段內進度 (0-1) 控制半徑：0→1→0
+                        const stageProgress = currentStage
+                            ? (pct - currentStage.start_pct) / currentStage.width_pct
+                            : 0;
+                        const radius = Math.sin(stageProgress * Math.PI) * 45 + 5;
+                        dx = Math.cos(t * 2) * radius;
+                        dy = Math.sin(t * 2) * radius;
+                    }
+                }
+                const px = 100 + dx, py = 100 + dy;
+
+                // 移動水柱與注水點
                 const stream = document.getElementById('ma-stream');
                 const rip1 = document.getElementById('ma-rip1');
                 const rip2 = document.getElementById('ma-rip2');
-                const center = document.getElementById('ma-center');
+                const pourpt = document.getElementById('ma-pourpoint');
+                const pourptIn = document.getElementById('ma-pourpoint-inner');
+                const baseStreamW = data.streamWidth || 4;
                 if (isPour || isBloom) {
-                    if (stream) stream.setAttribute('stroke-width', String(4 + Math.sin(realSec * 6) * 1.2));
+                    if (stream) {
+                        stream.setAttribute('x1', String(px));
+                        stream.setAttribute('x2', String(px));
+                        stream.setAttribute('y1', String(py - 130));
+                        stream.setAttribute('y2', String(py - 5));
+                        // 水柱粗細隨 sin 微微脈動，但保持 baseStreamW 為基準
+                        stream.setAttribute('stroke-width', String(baseStreamW + Math.sin(realSec * 8) * 0.6));
+                    }
+                    if (pourpt) {
+                        pourpt.setAttribute('cx', String(px));
+                        pourpt.setAttribute('cy', String(py));
+                        pourpt.setAttribute('r', '10');
+                        pourpt.setAttribute('opacity', '0.9');
+                    }
+                    if (pourptIn) {
+                        pourptIn.setAttribute('cx', String(px));
+                        pourptIn.setAttribute('cy', String(py));
+                        pourptIn.setAttribute('r', String(4 + Math.sin(realSec * 8) * 1.5));
+                        pourptIn.setAttribute('opacity', '1');
+                    }
+                    // 漣漪在注水點周圍
                     const ripT = (realSec * 1.5) % 1;
                     if (rip1) {
-                        rip1.setAttribute('r', String(8 + ripT * 35));
-                        rip1.setAttribute('opacity', String(0.7 - ripT * 0.7));
+                        rip1.setAttribute('cx', String(px));
+                        rip1.setAttribute('cy', String(py));
+                        rip1.setAttribute('r', String(8 + ripT * 28));
+                        rip1.setAttribute('opacity', String(0.8 - ripT * 0.8));
                     }
                     const r2t = ((realSec * 1.5) + 0.5) % 1;
                     if (rip2) {
-                        rip2.setAttribute('r', String(8 + r2t * 35));
-                        rip2.setAttribute('opacity', String(0.6 - r2t * 0.6));
+                        rip2.setAttribute('cx', String(px));
+                        rip2.setAttribute('cy', String(py));
+                        rip2.setAttribute('r', String(8 + r2t * 28));
+                        rip2.setAttribute('opacity', String(0.65 - r2t * 0.65));
                     }
-                    if (center) {
-                        center.setAttribute('r', String(5 + Math.sin(realSec * 8) * 2));
-                        center.setAttribute('opacity', '0.85');
+                    // 累積軌跡 path
+                    const trail = document.getElementById('ma-trail');
+                    if (trail) {
+                        const cur = trail.getAttribute('d') || `M ${px} ${py}`;
+                        // 限制累積長度避免太長
+                        const segments = cur.split('L');
+                        let newD = cur + ` L ${px.toFixed(1)} ${py.toFixed(1)}`;
+                        if (segments.length > 80) {
+                            // 重置為當前點，避免 path 過長
+                            newD = `M ${px.toFixed(1)} ${py.toFixed(1)}`;
+                        }
+                        trail.setAttribute('d', newD);
                     }
                 } else {
                     if (stream) stream.setAttribute('stroke-width', '0');
                     if (rip1) rip1.setAttribute('opacity', '0');
                     if (rip2) rip2.setAttribute('opacity', '0');
-                    if (center) center.setAttribute('opacity', '0');
+                    if (pourpt) pourpt.setAttribute('opacity', '0');
+                    if (pourptIn) pourptIn.setAttribute('opacity', '0');
+                }
+                // 顯示注水點位置標示
+                const posEl = document.getElementById('ma-pos');
+                if (posEl) {
+                    if (isPour || isBloom) {
+                        const r = Math.sqrt(dx*dx + dy*dy);
+                        let posText = '中心';
+                        if (r > 40) posText = '🎯 邊緣外圈（注意別碰濾紙）';
+                        else if (r > 20) posText = '🌀 中圈（粉床主萃取區）';
+                        else if (r > 8) posText = '🔘 中心區';
+                        posEl.textContent = posText;
+                    } else {
+                        posEl.textContent = '';
+                    }
                 }
 
                 const water = document.getElementById('ma-water');
