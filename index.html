@@ -4144,24 +4144,29 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
 
             // ⚙️ 研磨度 scale
             function _renderGrindScale(params) {
-                // 從 params.grind 字串抽序號（0-6）
-                const scale = ['極細(義式)', '細(摩卡/短縮)', '中細偏細', '中細', '中', '中粗', '粗(法壓/冷萃)'];
-                let idx = 3;
-                for (let i = 0; i < scale.length; i++) if (String(params.grind || '').includes(scale[i])) { idx = i; break; }
-                const pct = (idx / (scale.length - 1)) * 100;
+                // 從 params.grind 字串對應到 GRIND_REFERENCE 的 7 級 id
+                const grindStr = String(params.grind || '');
+                let levelId = 'medium'; // 預設
+                if (grindStr.includes('極細')) levelId = 'extra_fine';
+                else if (grindStr.includes('粗(法壓') || grindStr.includes('粗 (法壓') || grindStr.includes('極粗')) levelId = 'coarse';
+                else if (grindStr.includes('中粗')) levelId = 'medium_coarse';
+                else if (grindStr.includes('中細偏細')) levelId = 'medium_fine';
+                else if (grindStr.includes('中細')) levelId = 'medium_fine';
+                else if (grindStr.includes('細(摩卡') || grindStr.includes('細 (摩卡')) levelId = 'fine';
+                else if (grindStr.includes('細')) levelId = 'fine';
+                else if (grindStr.includes('中')) levelId = 'medium';
                 const grindAdjs = (params.adjustments || []).filter(a => a.axis === 'grind');
                 const cum = grindAdjs.reduce((s, a) => s + a.delta, 0);
+                const level = GRIND_REFERENCE.find(g => g.id === levelId);
                 return `
-                <div class="viz-card">
-                    <div class="viz-card-title">⚙️ 研磨度</div>
-                    <div class="viz-grind-bar">
-                        <div class="viz-grind-marker" style="left: ${pct}%;"></div>
+                <div class="viz-card" style="grid-column: 1 / -1;">
+                    <div class="viz-card-title">⚙️ 研磨度對照（${level ? level.name + ' · ' + level.um : '—'}）</div>
+                    <div style="font-size:13px; color:#5d4037; margin: 6px 0 8px 0; line-height:1.6;">
+                        當前研磨度：<strong style="color:#bf360c">${_escHtml(grindStr || '—')}</strong>
+                        ${level ? '，粒徑相當於 <strong style="color:#bf360c">' + level.ref + '</strong>' : ''}
                     </div>
-                    <div class="viz-grind-labels">
-                        <span>極細</span><span>細</span><span>中細</span><span>中</span><span>中粗</span><span>粗</span>
-                    </div>
-                    <div class="viz-grind-current">${_escHtml(params.grind || '—')}</div>
-                    <div class="viz-grind-note">累計調整 ${cum>0?'+':''}${cum} 級${grindAdjs.length ? '（' + grindAdjs.map(a => (a.delta>0?'+':'') + a.delta + ' ' + a.stage).join('、') + '）' : ''}</div>
+                    ${_renderGrindReference(levelId)}
+                    <div class="viz-grind-note" style="margin-top:8px;">累計調整 ${cum>0?'+':''}${cum} 級${grindAdjs.length ? '（' + grindAdjs.map(a => (a.delta>0?'+':'') + a.delta + ' ' + a.stage).join('、') + '）' : ''}</div>
                 </div>`;
             }
 
@@ -9431,6 +9436,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                         pour_over: {
                             name: '手沖濾紙',
                             tagline: '手動控制每一注，最能呈現產區與處理法層次',
+                            grindLevel: 'medium',
                             emoji: '☕',
                             status: 'ready',
                             heroSvg: ENCY_SVG_POUROVER,
@@ -9477,6 +9483,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                         espresso: {
                             name: '義式濃縮 (Espresso)',
                             tagline: '9 bar 高壓 25-30 秒，濃縮油脂與甜感的精華',
+                            grindLevel: 'fine',
                             emoji: '⚡',
                             status: 'ready',
                             heroSvg: ENCY_SVG_ESPRESSO,
@@ -9523,6 +9530,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                         french_press: {
                             name: '法式濾壓 (French Press)',
                             tagline: '完全浸泡 4 分鐘，body 最厚、保留全油脂',
+                            grindLevel: 'coarse',
                             emoji: '🫖',
                             status: 'ready',
                             heroSvg: ENCY_SVG_FRENCH,
@@ -9569,6 +9577,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                         aeropress: {
                             name: '愛樂壓 (AeroPress)',
                             tagline: 'Alan Adler 2005 發明，浸泡 + 加壓的混合萃取',
+                            grindLevel: 'medium_fine',
                             emoji: '💨',
                             status: 'ready',
                             heroSvg: ENCY_SVG_AERO,
@@ -9615,6 +9624,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                         moka: {
                             name: '摩卡壺 (Moka Pot)',
                             tagline: '1933 年義大利家家戶戶的爐火濃縮',
+                            grindLevel: 'medium_fine',
                             emoji: '🔥',
                             status: 'ready',
                             heroSvg: ENCY_SVG_MOKA,
@@ -9661,6 +9671,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                         siphon: {
                             name: '虹吸壺 (Siphon)',
                             tagline: '蒸氣壓 + 浸泡 + 過濾的科學儀器美學',
+                            grindLevel: 'medium',
                             emoji: '🧪',
                             status: 'ready',
                             heroSvg: ENCY_SVG_SIPHON,
@@ -9707,6 +9718,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                         cold_brew: {
                             name: '冷萃 (Cold Brew)',
                             tagline: '冷水 8-24 小時慢萃，極低酸、巧克力甜感',
+                            grindLevel: 'coarse',
                             emoji: '🧊',
                             status: 'ready',
                             heroSvg: ENCY_SVG_COLDBREW,
@@ -9759,6 +9771,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                         classic_3: {
                             name: '三段式（Classic）',
                             tagline: '悶蒸 → 中段 → 後段，新手最友善的傳統手法',
+                            grindLevel: 'medium',
                             emoji: '3️⃣',
                             status: 'ready',
                             heroSvg: ENCY_SVG_M_CLASSIC3,
@@ -9803,6 +9816,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                         single_pour: {
                             name: '一刀流（Single Pour）',
                             tagline: '悶蒸後一次注滿，保留 body 與甜感',
+                            grindLevel: 'medium_coarse',
                             emoji: '🔪',
                             status: 'ready',
                             heroSvg: ENCY_SVG_M_SINGLE,
@@ -9847,6 +9861,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                         kasuya_46: {
                             name: '四六法（粕谷哲 · 2016 WBrC 冠軍）',
                             tagline: '5 段注水、40%/60% 分區，可調酸甜與濃淡',
+                            grindLevel: 'medium',
                             emoji: '4️⃣',
                             status: 'ready',
                             heroSvg: ENCY_SVG_M_KASUYA,
@@ -9892,6 +9907,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                         matt_winton: {
                             name: 'Matt Winton 冠軍配方',
                             tagline: '2015 WBrC 冠軍，高溫短時大水量',
+                            grindLevel: 'medium_fine',
                             emoji: '🥇',
                             status: 'ready',
                             heroSvg: ENCY_SVG_M_MATTW,
@@ -9936,6 +9952,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                         lance_hi: {
                             name: 'Lance Hedrick 高磨低溫',
                             tagline: '極細研磨 + 低溫 + 強攪拌，淺焙堅硬豆解法',
+                            grindLevel: 'fine',
                             emoji: '❄️',
                             status: 'ready',
                             heroSvg: ENCY_SVG_M_LANCE,
@@ -9980,6 +9997,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                         hoffmann_ult: {
                             name: 'Hoffmann Ultimate V60',
                             tagline: 'James Hoffmann 推薦，乾淨度極高',
+                            grindLevel: 'medium',
                             emoji: '🌀',
                             status: 'ready',
                             heroSvg: ENCY_SVG_M_HOFFMANN,
@@ -10025,6 +10043,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                         scott_rao: {
                             name: 'Scott Rao 連續注水',
                             tagline: '不斷流維持水位，技術門檻較高',
+                            grindLevel: 'medium_coarse',
                             emoji: '🎯',
                             status: 'ready',
                             heroSvg: ENCY_SVG_M_RAO,
@@ -10069,6 +10088,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                         tetsu_ice: {
                             name: '冰手沖（Iced Pour-Over）',
                             tagline: '40% 冰塊 + 60% 熱水急冷，鮮香爆炸',
+                            grindLevel: 'medium_fine',
                             emoji: '🧊',
                             status: 'ready',
                             heroSvg: ENCY_SVG_M_TETSU_ICE,
@@ -10113,6 +10133,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                         strong_conc: {
                             name: '濃縮式 1:10（Strong Concentrate）',
                             tagline: '小水量放大濃度，適合做冰美式底',
+                            grindLevel: 'medium',
                             emoji: '💪',
                             status: 'ready',
                             heroSvg: ENCY_SVG_M_CONC,
@@ -10217,6 +10238,81 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                         </h3>
                         <div class="ency-grid">${cards}</div>
                     </div>`;
+            }
+
+            // ========== 研磨度對照系統（粒徑 + 實物對照）==========
+            const GRIND_REFERENCE = [
+                { id: 'extra_fine',    name: '極細',  um: '100-200μm',  ref: '麵粉 / 糖粉',     refEmoji: '🌾', uses: 'Ibrik 土耳其',  dotR: 0.7, dotN: 24, color: '#5d4037' },
+                { id: 'fine',          name: '細',    um: '300-500μm',  ref: '細砂糖 / 食鹽',   refEmoji: '🧂', uses: 'Espresso 義式', dotR: 1.4, dotN: 18, color: '#5d4037' },
+                { id: 'medium_fine',   name: '中細',  um: '500-700μm',  ref: '細海鹽',           refEmoji: '🧂', uses: 'AeroPress',     dotR: 2.2, dotN: 14, color: '#5d4037' },
+                { id: 'medium',        name: '中',    um: '700-900μm',  ref: '二砂糖 / 粗鹽',   refEmoji: '🍯', uses: 'V60 手沖',      dotR: 3.0, dotN: 11, color: '#5d4037' },
+                { id: 'medium_coarse', name: '中粗',  um: '900-1100μm', ref: '粗砂糖 / 黑胡椒粒', refEmoji: '🌶️', uses: 'Chemex / 一刀流', dotR: 4.0, dotN: 9,  color: '#5d4037' },
+                { id: 'coarse',        name: '粗',    um: '1100-1400μm', ref: '粗海鹽 / 黃豆粒', refEmoji: '🌰', uses: '法壓 / 冷萃',  dotR: 5.5, dotN: 7,  color: '#5d4037' },
+                { id: 'extra_coarse',  name: '極粗',  um: '1400μm+',     ref: '米粒 / 玉米粒',   refEmoji: '🌽', uses: 'Cold Brew 24h', dotR: 7.5, dotN: 5,  color: '#5d4037' }
+            ];
+
+            function _renderGrindDots(level) {
+                const items = [];
+                const cx = 0, cy = 0;
+                const positions = [
+                    [-12, -8], [10, -10], [-5, 5], [14, 4], [-15, 8], [3, -3],
+                    [8, 12], [-10, 14], [-2, 16], [16, 14], [-18, -2], [12, -16],
+                    [-8, -14], [4, 10], [-14, -10], [10, 18], [0, -12], [-6, 0],
+                    [18, -6], [-3, 22], [8, -18], [16, 0], [-16, 18], [6, 22]
+                ];
+                for (let i = 0; i < level.dotN; i++) {
+                    const p = positions[i % positions.length];
+                    const jitterX = ((i * 13) % 10) - 5;
+                    const jitterY = ((i * 7) % 10) - 5;
+                    items.push(`<circle cx="${cx + p[0] + jitterX*0.4}" cy="${cy + p[1] + jitterY*0.4}" r="${level.dotR}" fill="${level.color}" opacity="0.85"/>`);
+                }
+                return items.join('');
+            }
+
+            function _renderGrindReference(currentLevelId, opts) {
+                opts = opts || {};
+                const compact = opts.compact || false;
+                const cardW = compact ? 88 : 100;
+                const totalW = cardW * 7 + 30;
+                const h = compact ? 200 : 230;
+                return `<div style="overflow-x:auto; -webkit-overflow-scrolling:touch; padding: 4px 0 8px;">
+                    <svg viewBox="0 0 ${totalW} ${h}" xmlns="http://www.w3.org/2000/svg" style="min-width:680px; width:100%; height:auto;">
+                        ${GRIND_REFERENCE.map((g, i) => {
+                            const x = 15 + i * cardW + cardW/2;
+                            const isCurrent = g.id === currentLevelId;
+                            return `
+                                <g transform="translate(${x} 0)">
+                                    ${isCurrent ? `<rect x="${-cardW/2 + 4}" y="6" width="${cardW - 8}" height="${h - 14}" fill="rgba(255,183,77,0.22)" stroke="#e65100" stroke-width="2.5" rx="8"/>` : `<rect x="${-cardW/2 + 4}" y="6" width="${cardW - 8}" height="${h - 14}" fill="rgba(255,255,255,0.5)" stroke="#d7ccc8" stroke-width="1" rx="8"/>`}
+                                    <text x="0" y="26" font-size="12" font-weight="900" fill="${isCurrent ? '#bf360c' : '#3e2723'}" text-anchor="middle">${g.name}</text>
+                                    <text x="0" y="42" font-size="9.5" font-weight="700" fill="#5d4037" text-anchor="middle">${g.um}</text>
+                                    <!-- 粉粒視覺 -->
+                                    <g transform="translate(0 80)">
+                                        <rect x="-32" y="-24" width="64" height="48" fill="#fffaf3" stroke="#bcaaa4" stroke-width="0.8" rx="4"/>
+                                        ${_renderGrindDots(g)}
+                                    </g>
+                                    <text x="0" y="138" font-size="22" text-anchor="middle">${g.refEmoji}</text>
+                                    <text x="0" y="156" font-size="9.5" font-weight="700" fill="#5d4037" text-anchor="middle">${g.ref}</text>
+                                    <text x="0" y="172" font-size="9" font-style="italic" fill="#8d6e63" text-anchor="middle">${g.uses}</text>
+                                    ${isCurrent ? `<text x="0" y="195" font-size="11" font-weight="900" fill="#e65100" text-anchor="middle">▼ 你在這</text>` : ''}
+                                </g>
+                            `;
+                        }).join('')}
+                    </svg>
+                </div>`;
+            }
+
+            function _grindLevelHtml(item) {
+                if (!item.grindLevel) return '';
+                const level = GRIND_REFERENCE.find(g => g.id === item.grindLevel);
+                if (!level) return '';
+                return `<div class="ency-block">
+                    <h3 class="ency-block-title">📏 研磨度對照（${level.name} · ${level.um}）</h3>
+                    <p style="font-size:13px; color:#6d4c41; margin:0 0 10px 0; line-height:1.6;">
+                        粒徑大小相當於 <strong style="color:#bf360c">${level.ref}</strong>。
+                        粗細對照表中你的位置已用橘色標示，可拿身邊的對照物實際比對。
+                    </p>
+                    ${_renderGrindReference(item.grindLevel)}
+                </div>`;
             }
 
             // ========== 手沖手法 step-by-step 注水動畫 ==========
@@ -10651,6 +10747,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                         <h3 class="ency-block-title">📋 規格一覽</h3>
                         <div class="ency-specs">${specs}</div>
                     </div>` : ''}
+                    ${_grindLevelHtml(it)}
                     ${origin ? `<div class="ency-block">
                         <h3 class="ency-block-title">${it.originTitle || '📜 發明起源'}</h3>
                         <div class="ency-timeline">${origin}</div>
