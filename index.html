@@ -6273,6 +6273,577 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 <text x="460" y="112" font-size="10.5" fill="#6a1b9a" text-anchor="end">舊金山設計工作室</text>
             </svg>`;
 
+            // ========== 沖煮方式 7 款 SVG ==========
+
+            // 手沖濾紙（場景：鶴嘴壺 + V60 + 下壺）
+            const ENCY_SVG_POUROVER = `<svg viewBox="0 0 480 420" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="po-kettle" x1="0" y1="0" x2="1" y2="0">
+                        <stop offset="0%" stop-color="#37474f"/>
+                        <stop offset="50%" stop-color="#90a4ae"/>
+                        <stop offset="100%" stop-color="#37474f"/>
+                    </linearGradient>
+                    <linearGradient id="po-glass" x1="0" y1="0" x2="1" y2="0">
+                        <stop offset="0%" stop-color="rgba(180,200,210,0.5)"/>
+                        <stop offset="50%" stop-color="rgba(225,235,240,0.7)"/>
+                        <stop offset="100%" stop-color="rgba(180,200,210,0.5)"/>
+                    </linearGradient>
+                    <radialGradient id="po-shadow" cx="0.5" cy="0.5" r="0.5">
+                        <stop offset="0%" stop-color="rgba(0,0,0,0.3)"/>
+                        <stop offset="100%" stop-color="rgba(0,0,0,0)"/>
+                    </radialGradient>
+                </defs>
+                <ellipse cx="240" cy="395" rx="160" ry="14" fill="url(#po-shadow)"/>
+                <!-- 鶴嘴壺（左側） -->
+                <ellipse cx="100" cy="115" rx="48" ry="12" fill="#37474f"/>
+                <path d="M 60 115 L 60 175 Q 60 200 100 200 Q 140 200 140 175 L 140 115 Z" fill="url(#po-kettle)"/>
+                <!-- 鶴嘴壺把手 -->
+                <path d="M 142 130 Q 175 138 175 165 Q 175 185 142 192" fill="none" stroke="#37474f" stroke-width="6" stroke-linecap="round"/>
+                <!-- 鶴嘴（細長注水嘴）-->
+                <path d="M 140 125 Q 175 128 200 165 Q 205 175 195 178" fill="none" stroke="#90a4ae" stroke-width="5" stroke-linecap="round"/>
+                <path d="M 142 127 Q 173 130 198 165 Q 202 173 196 175" fill="none" stroke="#cfd8dc" stroke-width="2.5" stroke-linecap="round"/>
+                <!-- 細水柱 -->
+                <path d="M 198 178 Q 200 200 220 230 Q 235 245 240 260" stroke="#5d4037" stroke-width="2.5" fill="none" opacity="0.85"/>
+                <path d="M 198 178 Q 200 200 220 230 Q 235 245 240 260" stroke="rgba(255,255,255,0.5)" stroke-width="1" fill="none"/>
+                <!-- V60 濾杯 -->
+                <path d="M 180 250 L 320 250 L 252 320 L 248 320 Z" fill="#c62828" opacity="0.93"/>
+                <ellipse cx="250" cy="250" rx="70" ry="3" fill="#7d0000"/>
+                <!-- 螺旋肋 -->
+                <g stroke="#5d0000" stroke-width="0.8" opacity="0.5" fill="none">
+                    <path d="M 195 256 Q 230 285 250 318"/>
+                    <path d="M 230 252 Q 240 285 250 318"/>
+                    <path d="M 270 252 Q 260 285 250 318"/>
+                    <path d="M 305 256 Q 270 285 250 318"/>
+                </g>
+                <!-- V60 把手 -->
+                <path d="M 320 260 Q 340 268 340 280 Q 340 295 320 300" fill="none" stroke="#7d0000" stroke-width="4" stroke-linecap="round"/>
+                <!-- 滴落 -->
+                <ellipse cx="250" cy="335" rx="3" ry="4" fill="#5d4037" opacity="0.9"/>
+                <ellipse cx="250" cy="350" rx="2" ry="3" fill="#5d4037" opacity="0.6"/>
+                <!-- 下壺玻璃壺 -->
+                <path d="M 195 360 L 305 360 Q 320 360 320 372 L 320 388 Q 320 395 305 395 L 195 395 Q 180 395 180 388 L 180 372 Q 180 360 195 360 Z" fill="url(#po-glass)" stroke="#90a4ae" stroke-width="1.5"/>
+                <!-- 下壺咖啡液 -->
+                <rect x="186" y="375" width="128" height="18" fill="#3e2723" opacity="0.9" rx="2"/>
+                <!-- 下壺把手 -->
+                <path d="M 320 365 Q 340 372 340 380 Q 340 390 320 392" fill="none" stroke="#37474f" stroke-width="4" stroke-linecap="round"/>
+                <!-- 標註 -->
+                <line x1="100" y1="130" x2="35" y2="100" stroke="#1565c0" stroke-width="1.2" stroke-dasharray="3 2"/>
+                <text x="32" y="96" font-size="12" font-weight="700" fill="#1565c0" text-anchor="end">手沖鶴嘴壺</text>
+                <text x="32" y="110" font-size="10.5" fill="#1565c0" text-anchor="end">細嘴控制水柱</text>
+                <line x1="200" y1="195" x2="60" y2="220" stroke="#e65100" stroke-width="1.2" stroke-dasharray="3 2"/>
+                <text x="58" y="218" font-size="12" font-weight="700" fill="#e65100" text-anchor="end">細水柱注水</text>
+                <text x="58" y="232" font-size="10.5" fill="#e65100" text-anchor="end">手控節奏與粗細</text>
+                <line x1="320" y1="285" x2="445" y2="270" stroke="#2e7d32" stroke-width="1.2" stroke-dasharray="3 2"/>
+                <text x="450" y="268" font-size="12" font-weight="700" fill="#2e7d32" text-anchor="end">濾杯 + 濾紙</text>
+                <text x="450" y="282" font-size="10.5" fill="#2e7d32" text-anchor="end">過濾油脂、層次清晰</text>
+                <line x1="320" y1="385" x2="445" y2="380" stroke="#6a1b9a" stroke-width="1.2" stroke-dasharray="3 2"/>
+                <text x="450" y="378" font-size="12" font-weight="700" fill="#6a1b9a" text-anchor="end">下壺承接</text>
+                <text x="450" y="392" font-size="10.5" fill="#6a1b9a" text-anchor="end">2-4 分鐘完成</text>
+            </svg>`;
+
+            // 義式濃縮 Espresso（Group head + portafilter + 雙 shot）
+            const ENCY_SVG_ESPRESSO = `<svg viewBox="0 0 480 420" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="esp-chrome" x1="0" y1="0" x2="1" y2="0">
+                        <stop offset="0%" stop-color="#37474f"/>
+                        <stop offset="40%" stop-color="#90a4ae"/>
+                        <stop offset="50%" stop-color="#fff"/>
+                        <stop offset="60%" stop-color="#cfd8dc"/>
+                        <stop offset="100%" stop-color="#37474f"/>
+                    </linearGradient>
+                    <linearGradient id="esp-shot" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#3e2723"/>
+                        <stop offset="100%" stop-color="#1a0a04"/>
+                    </linearGradient>
+                    <linearGradient id="esp-crema" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#bf6f3d"/>
+                        <stop offset="100%" stop-color="#8d4a1f"/>
+                    </linearGradient>
+                    <radialGradient id="esp-shadow" cx="0.5" cy="0.5" r="0.5">
+                        <stop offset="0%" stop-color="rgba(0,0,0,0.3)"/>
+                        <stop offset="100%" stop-color="rgba(0,0,0,0)"/>
+                    </radialGradient>
+                </defs>
+                <ellipse cx="240" cy="395" rx="170" ry="14" fill="url(#esp-shadow)"/>
+                <!-- Group Head（咖啡機水嘴）-->
+                <rect x="170" y="60" width="140" height="60" fill="url(#esp-chrome)" rx="6"/>
+                <rect x="180" y="68" width="120" height="44" fill="#37474f" rx="4"/>
+                <!-- Group Head 螺紋 -->
+                <line x1="190" y1="76" x2="290" y2="76" stroke="#90a4ae" stroke-width="0.6"/>
+                <line x1="190" y1="84" x2="290" y2="84" stroke="#90a4ae" stroke-width="0.6"/>
+                <line x1="190" y1="100" x2="290" y2="100" stroke="#90a4ae" stroke-width="0.6"/>
+                <!-- Portafilter 把手（向左伸出）-->
+                <rect x="180" y="120" width="120" height="22" fill="#37474f" rx="3"/>
+                <ellipse cx="240" cy="120" rx="60" ry="6" fill="#cfd8dc"/>
+                <ellipse cx="240" cy="120" rx="56" ry="3" fill="#37474f"/>
+                <!-- Portafilter 把手 -->
+                <rect x="40" y="125" width="140" height="14" fill="#5d4037" rx="7"/>
+                <rect x="40" y="125" width="20" height="14" fill="#3e2723" rx="7"/>
+                <!-- Portafilter 籃內咖啡粉 -->
+                <ellipse cx="240" cy="138" rx="50" ry="3" fill="#5d4037"/>
+                <!-- 雙 spout（流出 espresso 雙股）-->
+                <rect x="220" y="140" width="6" height="14" fill="#cfd8dc"/>
+                <rect x="254" y="140" width="6" height="14" fill="#cfd8dc"/>
+                <!-- Espresso 雙股流（Mouse tail）-->
+                <path d="M 223 154 Q 222 200 218 250 L 224 250" stroke="url(#esp-shot)" stroke-width="3.5" fill="url(#esp-shot)"/>
+                <path d="M 257 154 Q 258 200 262 250 L 256 250" stroke="url(#esp-shot)" stroke-width="3.5" fill="url(#esp-shot)"/>
+                <!-- 雙 espresso 杯 -->
+                <!-- 左杯 -->
+                <path d="M 165 250 L 245 250 L 235 320 Q 235 330 220 330 L 195 330 Q 180 330 180 320 Z" fill="#fff" stroke="#bcaaa4" stroke-width="1.5"/>
+                <ellipse cx="207" cy="250" rx="40" ry="4" fill="#fff"/>
+                <ellipse cx="207" cy="252" rx="38" ry="2.5" fill="url(#esp-crema)"/>
+                <path d="M 173 258 L 240 258 L 230 318 Q 230 326 218 326 L 195 326 Q 183 326 183 318 Z" fill="url(#esp-shot)" opacity="0.95"/>
+                <ellipse cx="207" cy="252" rx="34" ry="3" fill="url(#esp-crema)"/>
+                <!-- Crema 紋路 -->
+                <ellipse cx="207" cy="252" rx="20" ry="1.5" fill="#bf6f3d" opacity="0.7"/>
+                <!-- 杯把 -->
+                <path d="M 245 270 Q 265 275 265 290 Q 265 305 245 310" fill="none" stroke="#bcaaa4" stroke-width="3"/>
+                <!-- 右杯 -->
+                <path d="M 235 250 L 315 250 L 305 320 Q 305 330 290 330 L 265 330 Q 250 330 250 320 Z" fill="#fff" stroke="#bcaaa4" stroke-width="1.5"/>
+                <ellipse cx="277" cy="250" rx="40" ry="4" fill="#fff"/>
+                <ellipse cx="277" cy="252" rx="38" ry="2.5" fill="url(#esp-crema)"/>
+                <path d="M 243 258 L 310 258 L 300 318 Q 300 326 288 326 L 265 326 Q 253 326 253 318 Z" fill="url(#esp-shot)" opacity="0.95"/>
+                <ellipse cx="277" cy="252" rx="34" ry="3" fill="url(#esp-crema)"/>
+                <ellipse cx="277" cy="252" rx="20" ry="1.5" fill="#bf6f3d" opacity="0.7"/>
+                <!-- 杯把 -->
+                <path d="M 315 270 Q 335 275 335 290 Q 335 305 315 310" fill="none" stroke="#bcaaa4" stroke-width="3"/>
+                <!-- 杯墊 -->
+                <ellipse cx="240" cy="338" rx="120" ry="6" fill="#8d6e63" opacity="0.4"/>
+                <!-- 蒸氣 -->
+                <path d="M 200 245 Q 195 230 205 218 Q 215 210 210 200" fill="none" stroke="rgba(200,200,200,0.6)" stroke-width="1.8" stroke-linecap="round"/>
+                <path d="M 270 245 Q 275 230 265 218 Q 255 210 260 200" fill="none" stroke="rgba(200,200,200,0.6)" stroke-width="1.8" stroke-linecap="round"/>
+                <!-- 標註 -->
+                <line x1="240" y1="60" x2="380" y2="40" stroke="#1565c0" stroke-width="1.2" stroke-dasharray="3 2"/>
+                <text x="385" y="38" font-size="12" font-weight="700" fill="#1565c0" text-anchor="start">9 bar 高壓</text>
+                <text x="385" y="52" font-size="10.5" fill="#1565c0" text-anchor="start">93°C 熱水穿透</text>
+                <line x1="50" y1="132" x2="20" y2="100" stroke="#e65100" stroke-width="1.2" stroke-dasharray="3 2"/>
+                <text x="18" y="96" font-size="12" font-weight="700" fill="#e65100" text-anchor="start">Portafilter</text>
+                <text x="18" y="110" font-size="10.5" fill="#e65100" text-anchor="start">把手 + 粉籃</text>
+                <line x1="240" y1="180" x2="445" y2="170" stroke="#2e7d32" stroke-width="1.2" stroke-dasharray="3 2"/>
+                <text x="450" y="168" font-size="12" font-weight="700" fill="#2e7d32" text-anchor="end">25-30 秒萃取</text>
+                <text x="450" y="182" font-size="10.5" fill="#2e7d32" text-anchor="end">1:2 比例（18g 粉/36g 液）</text>
+                <line x1="207" y1="252" x2="60" y2="270" stroke="#6a1b9a" stroke-width="1.2" stroke-dasharray="3 2"/>
+                <text x="58" y="280" font-size="12" font-weight="700" fill="#6a1b9a" text-anchor="end">Crema 油脂層</text>
+                <text x="58" y="294" font-size="10.5" fill="#6a1b9a" text-anchor="end">壓力萃取的招牌</text>
+            </svg>`;
+
+            // 法式濾壓 French Press
+            const ENCY_SVG_FRENCH = `<svg viewBox="0 0 480 420" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="fp-glass" x1="0" y1="0" x2="1" y2="0">
+                        <stop offset="0%" stop-color="rgba(170,195,210,0.45)"/>
+                        <stop offset="50%" stop-color="rgba(225,240,245,0.7)"/>
+                        <stop offset="100%" stop-color="rgba(150,180,200,0.5)"/>
+                    </linearGradient>
+                    <linearGradient id="fp-coffee" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#5d4037"/>
+                        <stop offset="100%" stop-color="#2e1a0e"/>
+                    </linearGradient>
+                    <linearGradient id="fp-steel" x1="0" y1="0" x2="1" y2="0">
+                        <stop offset="0%" stop-color="#37474f"/>
+                        <stop offset="50%" stop-color="#cfd8dc"/>
+                        <stop offset="100%" stop-color="#37474f"/>
+                    </linearGradient>
+                    <radialGradient id="fp-shadow" cx="0.5" cy="0.5" r="0.5">
+                        <stop offset="0%" stop-color="rgba(0,0,0,0.28)"/>
+                        <stop offset="100%" stop-color="rgba(0,0,0,0)"/>
+                    </radialGradient>
+                </defs>
+                <ellipse cx="240" cy="395" rx="120" ry="12" fill="url(#fp-shadow)"/>
+                <!-- 玻璃壺身（直筒）-->
+                <rect x="160" y="120" width="160" height="260" fill="url(#fp-glass)" stroke="#78909c" stroke-width="1.5" rx="4"/>
+                <!-- 內部咖啡液（下半）-->
+                <rect x="170" y="180" width="140" height="195" fill="url(#fp-coffee)" opacity="0.9" rx="2"/>
+                <!-- 浸泡的粉末懸浮 -->
+                <g fill="#5d4037" opacity="0.5">
+                    <circle cx="195" cy="220" r="1.2"/>
+                    <circle cx="215" cy="245" r="1"/>
+                    <circle cx="245" cy="230" r="1.4"/>
+                    <circle cx="270" cy="260" r="1"/>
+                    <circle cx="290" cy="240" r="1.2"/>
+                    <circle cx="200" cy="280" r="1.3"/>
+                    <circle cx="240" cy="290" r="1"/>
+                    <circle cx="280" cy="285" r="1.4"/>
+                </g>
+                <!-- 金屬框架（壺體外圍）-->
+                <rect x="155" y="115" width="170" height="270" fill="none" stroke="url(#fp-steel)" stroke-width="3" rx="5"/>
+                <!-- 杯口 -->
+                <ellipse cx="240" cy="120" rx="80" ry="6" fill="#37474f"/>
+                <ellipse cx="240" cy="120" rx="76" ry="3.5" fill="#cfd8dc"/>
+                <!-- 把手（側面） -->
+                <path d="M 320 170 Q 360 175 360 240 Q 360 300 320 305" fill="none" stroke="#37474f" stroke-width="6" stroke-linecap="round"/>
+                <path d="M 322 175 Q 355 180 355 240 Q 355 295 322 300" fill="none" stroke="#5d4037" stroke-width="3" stroke-linecap="round"/>
+                <!-- 不鏽鋼壓桿（上方） -->
+                <rect x="232" y="40" width="16" height="80" fill="url(#fp-steel)"/>
+                <ellipse cx="240" cy="40" rx="22" ry="6" fill="#37474f"/>
+                <ellipse cx="240" cy="40" rx="22" ry="3" fill="#90a4ae"/>
+                <!-- 壓桿握把 -->
+                <ellipse cx="240" cy="34" rx="30" ry="6" fill="#cfd8dc"/>
+                <ellipse cx="240" cy="34" rx="30" ry="3" fill="#fff"/>
+                <!-- 金屬濾網（在中段、剛被壓下示意）-->
+                <rect x="166" y="175" width="148" height="6" fill="#90a4ae"/>
+                <line x1="170" y1="178" x2="312" y2="178" stroke="#37474f" stroke-width="0.5"/>
+                <!-- 濾網孔（小點）-->
+                <g fill="#37474f">
+                    <circle cx="180" cy="178" r="0.6"/><circle cx="190" cy="178" r="0.6"/><circle cx="200" cy="178" r="0.6"/>
+                    <circle cx="210" cy="178" r="0.6"/><circle cx="220" cy="178" r="0.6"/><circle cx="230" cy="178" r="0.6"/>
+                    <circle cx="240" cy="178" r="0.6"/><circle cx="250" cy="178" r="0.6"/><circle cx="260" cy="178" r="0.6"/>
+                    <circle cx="270" cy="178" r="0.6"/><circle cx="280" cy="178" r="0.6"/><circle cx="290" cy="178" r="0.6"/>
+                    <circle cx="300" cy="178" r="0.6"/>
+                </g>
+                <!-- 玻璃高光 -->
+                <line x1="170" y1="135" x2="170" y2="370" stroke="rgba(255,255,255,0.5)" stroke-width="2"/>
+                <!-- 標註：壓桿 -->
+                <line x1="240" y1="50" x2="380" y2="50" stroke="#1565c0" stroke-width="1.2" stroke-dasharray="3 2"/>
+                <text x="385" y="48" font-size="12" font-weight="700" fill="#1565c0" text-anchor="start">不鏽鋼壓桿</text>
+                <text x="385" y="62" font-size="10.5" fill="#1565c0" text-anchor="start">浸泡完慢慢下壓</text>
+                <!-- 標註：金屬濾網 -->
+                <line x1="166" y1="178" x2="50" y2="178" stroke="#e65100" stroke-width="1.2" stroke-dasharray="3 2"/>
+                <text x="48" y="176" font-size="12" font-weight="700" fill="#e65100" text-anchor="end">金屬濾網</text>
+                <text x="48" y="190" font-size="10.5" fill="#e65100" text-anchor="end">不濾油脂、body 厚</text>
+                <!-- 標註：浸泡液 -->
+                <line x1="320" y1="280" x2="445" y2="290" stroke="#2e7d32" stroke-width="1.2" stroke-dasharray="3 2"/>
+                <text x="450" y="288" font-size="12" font-weight="700" fill="#2e7d32" text-anchor="end">完全浸泡 4 分鐘</text>
+                <text x="450" y="302" font-size="10.5" fill="#2e7d32" text-anchor="end">最大化萃取與 body</text>
+                <!-- 標註：1929 -->
+                <line x1="160" y1="370" x2="20" y2="375" stroke="#6a1b9a" stroke-width="1.2" stroke-dasharray="3 2"/>
+                <text x="18" y="372" font-size="12" font-weight="700" fill="#6a1b9a" text-anchor="start">1929 義大利專利</text>
+                <text x="18" y="386" font-size="10.5" fill="#6a1b9a" text-anchor="start">法國品牌 Bodum 推廣</text>
+            </svg>`;
+
+            // 愛樂壓 AeroPress（圓筒 + 活塞 + 濾蓋）
+            const ENCY_SVG_AERO = `<svg viewBox="0 0 480 420" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="aer-tube" x1="0" y1="0" x2="1" y2="0">
+                        <stop offset="0%" stop-color="rgba(120,130,140,0.45)"/>
+                        <stop offset="50%" stop-color="rgba(220,225,230,0.7)"/>
+                        <stop offset="100%" stop-color="rgba(120,130,140,0.45)"/>
+                    </linearGradient>
+                    <linearGradient id="aer-coffee" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#5d4037"/>
+                        <stop offset="100%" stop-color="#2e1a0e"/>
+                    </linearGradient>
+                    <linearGradient id="aer-rubber" x1="0" y1="0" x2="1" y2="0">
+                        <stop offset="0%" stop-color="#37474f"/>
+                        <stop offset="50%" stop-color="#616161"/>
+                        <stop offset="100%" stop-color="#37474f"/>
+                    </linearGradient>
+                    <radialGradient id="aer-shadow" cx="0.5" cy="0.5" r="0.5">
+                        <stop offset="0%" stop-color="rgba(0,0,0,0.28)"/>
+                        <stop offset="100%" stop-color="rgba(0,0,0,0)"/>
+                    </radialGradient>
+                </defs>
+                <ellipse cx="240" cy="395" rx="100" ry="12" fill="url(#aer-shadow)"/>
+                <!-- 主圓筒（中段、半透明）-->
+                <rect x="200" y="140" width="80" height="180" fill="url(#aer-tube)" stroke="#78909c" stroke-width="1.5" rx="2"/>
+                <!-- 內部咖啡液 -->
+                <rect x="206" y="200" width="68" height="118" fill="url(#aer-coffee)" opacity="0.92"/>
+                <!-- 活塞（黑色橡膠塞、在筒內中段）-->
+                <rect x="200" y="180" width="80" height="20" fill="url(#aer-rubber)"/>
+                <ellipse cx="240" cy="180" rx="40" ry="3" fill="#1a1a1a"/>
+                <ellipse cx="240" cy="200" rx="40" ry="3" fill="#1a1a1a"/>
+                <!-- 活塞桿（從活塞往上延伸出筒） -->
+                <rect x="232" y="40" width="16" height="140" fill="url(#aer-tube)" stroke="#78909c" stroke-width="1"/>
+                <!-- 活塞桿頂部握把（圓形） -->
+                <ellipse cx="240" cy="38" rx="30" ry="6" fill="#37474f"/>
+                <ellipse cx="240" cy="38" rx="30" ry="3" fill="#cfd8dc"/>
+                <!-- 圓筒底部濾蓋 -->
+                <rect x="195" y="320" width="90" height="14" fill="#37474f" rx="3"/>
+                <ellipse cx="240" cy="320" rx="45" ry="3" fill="#0a0a0a"/>
+                <ellipse cx="240" cy="334" rx="45" ry="3" fill="#212121"/>
+                <!-- 濾蓋下面的咖啡液滴出 -->
+                <ellipse cx="240" cy="345" rx="8" ry="3" fill="#5d4037" opacity="0.9"/>
+                <ellipse cx="240" cy="358" rx="5" ry="6" fill="#5d4037" opacity="0.85"/>
+                <ellipse cx="240" cy="375" rx="3" ry="4" fill="#5d4037" opacity="0.65"/>
+                <!-- 杯口 -->
+                <rect x="195" y="135" width="90" height="10" fill="#37474f" rx="2"/>
+                <ellipse cx="240" cy="135" rx="45" ry="3" fill="#cfd8dc"/>
+                <!-- 圓筒刻度線 -->
+                <g stroke="#37474f" stroke-width="0.7" opacity="0.6">
+                    <line x1="200" y1="220" x2="208" y2="220"/>
+                    <text x="195" y="223" font-size="8" fill="#37474f" text-anchor="end">4</text>
+                    <line x1="200" y1="245" x2="208" y2="245"/>
+                    <text x="195" y="248" font-size="8" fill="#37474f" text-anchor="end">3</text>
+                    <line x1="200" y1="270" x2="208" y2="270"/>
+                    <text x="195" y="273" font-size="8" fill="#37474f" text-anchor="end">2</text>
+                    <line x1="200" y1="295" x2="208" y2="295"/>
+                    <text x="195" y="298" font-size="8" fill="#37474f" text-anchor="end">1</text>
+                </g>
+                <!-- 高光 -->
+                <line x1="207" y1="150" x2="207" y2="315" stroke="rgba(255,255,255,0.5)" stroke-width="2"/>
+                <!-- 標註：活塞桿 -->
+                <line x1="240" y1="60" x2="380" y2="60" stroke="#1565c0" stroke-width="1.2" stroke-dasharray="3 2"/>
+                <text x="385" y="58" font-size="12" font-weight="700" fill="#1565c0" text-anchor="start">活塞桿（手動下壓）</text>
+                <text x="385" y="72" font-size="10.5" fill="#1565c0" text-anchor="start">慢慢推 30 秒壓出</text>
+                <!-- 標註：橡膠塞 -->
+                <line x1="200" y1="190" x2="60" y2="170" stroke="#e65100" stroke-width="1.2" stroke-dasharray="3 2"/>
+                <text x="58" y="166" font-size="12" font-weight="700" fill="#e65100" text-anchor="end">橡膠活塞</text>
+                <text x="58" y="180" font-size="10.5" fill="#e65100" text-anchor="end">氣密形成壓力</text>
+                <!-- 標註：濾蓋 -->
+                <line x1="285" y1="328" x2="445" y2="320" stroke="#2e7d32" stroke-width="1.2" stroke-dasharray="3 2"/>
+                <text x="450" y="318" font-size="12" font-weight="700" fill="#2e7d32" text-anchor="end">微紙濾蓋</text>
+                <text x="450" y="332" font-size="10.5" fill="#2e7d32" text-anchor="end">過濾粉感、保留油脂</text>
+                <!-- 標註：2005 Alan Adler -->
+                <line x1="200" y1="270" x2="40" y2="280" stroke="#6a1b9a" stroke-width="1.2" stroke-dasharray="3 2"/>
+                <text x="38" y="278" font-size="12" font-weight="700" fill="#6a1b9a" text-anchor="end">2005 Alan Adler</text>
+                <text x="38" y="292" font-size="10.5" fill="#6a1b9a" text-anchor="end">史丹福工程教授</text>
+            </svg>`;
+
+            // 摩卡壺 Moka Pot（八角型 + 三層結構剖面）
+            const ENCY_SVG_MOKA = `<svg viewBox="0 0 480 420" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="mok-alum" x1="0" y1="0" x2="1" y2="0">
+                        <stop offset="0%" stop-color="#37474f"/>
+                        <stop offset="20%" stop-color="#90a4ae"/>
+                        <stop offset="50%" stop-color="#cfd8dc"/>
+                        <stop offset="80%" stop-color="#90a4ae"/>
+                        <stop offset="100%" stop-color="#37474f"/>
+                    </linearGradient>
+                    <linearGradient id="mok-flame" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#ffeb3b"/>
+                        <stop offset="50%" stop-color="#ff9800"/>
+                        <stop offset="100%" stop-color="#e53935"/>
+                    </linearGradient>
+                    <linearGradient id="mok-coffee" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#5d4037"/>
+                        <stop offset="100%" stop-color="#2e1a0e"/>
+                    </linearGradient>
+                    <radialGradient id="mok-shadow" cx="0.5" cy="0.5" r="0.5">
+                        <stop offset="0%" stop-color="rgba(0,0,0,0.32)"/>
+                        <stop offset="100%" stop-color="rgba(0,0,0,0)"/>
+                    </radialGradient>
+                </defs>
+                <ellipse cx="240" cy="395" rx="120" ry="12" fill="url(#mok-shadow)"/>
+                <!-- 火焰 -->
+                <g opacity="0.85">
+                    <path d="M 195 360 Q 195 340 205 335 Q 210 325 215 335 Q 220 320 225 335 Q 235 325 240 340 Q 245 325 255 335 Q 260 320 265 335 Q 270 325 275 335 Q 285 340 285 360 Z" fill="url(#mok-flame)"/>
+                </g>
+                <!-- 上室（咖啡室、八角形上半）-->
+                <path d="M 175 100 L 305 100 L 320 130 L 315 200 L 165 200 L 160 130 Z" fill="url(#mok-alum)" opacity="0.95"/>
+                <!-- 八角面光影 -->
+                <line x1="200" y1="105" x2="195" y2="195" stroke="#37474f" stroke-width="0.8" opacity="0.6"/>
+                <line x1="240" y1="100" x2="240" y2="195" stroke="#37474f" stroke-width="0.8" opacity="0.5"/>
+                <line x1="280" y1="105" x2="285" y2="195" stroke="#37474f" stroke-width="0.8" opacity="0.6"/>
+                <!-- 上室內部（咖啡）-->
+                <path d="M 180 160 L 300 160 L 295 195 L 185 195 Z" fill="url(#mok-coffee)" opacity="0.92"/>
+                <!-- 咖啡表面 -->
+                <ellipse cx="240" cy="160" rx="60" ry="2.5" fill="#a1887f" opacity="0.6"/>
+                <!-- 蒸氣噴口（中央管） -->
+                <rect x="234" y="135" width="12" height="30" fill="#37474f"/>
+                <ellipse cx="240" cy="135" rx="6" ry="2" fill="#0a0a0a"/>
+                <!-- 蓋子 -->
+                <ellipse cx="240" cy="100" rx="65" ry="6" fill="#37474f"/>
+                <ellipse cx="240" cy="100" rx="60" ry="4" fill="#90a4ae"/>
+                <!-- 蓋子把手球 -->
+                <circle cx="240" cy="86" r="9" fill="#1a1a1a"/>
+                <circle cx="240" cy="84" r="6" fill="#424242"/>
+                <!-- 中段（粉籃接合處）-->
+                <rect x="160" y="200" width="160" height="20" fill="url(#mok-alum)" opacity="0.96"/>
+                <!-- 中央粉籃（剖面看到）-->
+                <path d="M 200 200 L 280 200 L 275 240 L 205 240 Z" fill="#5d4037" opacity="0.92"/>
+                <ellipse cx="240" cy="200" rx="40" ry="2" fill="#3e2723"/>
+                <!-- 粉籃漏斗管（向下）-->
+                <rect x="234" y="240" width="12" height="50" fill="#90a4ae"/>
+                <!-- 下室（鍋爐、八角形下半）-->
+                <path d="M 165 220 L 315 220 L 320 260 L 305 340 L 175 340 L 160 260 Z" fill="url(#mok-alum)" opacity="0.95"/>
+                <!-- 下室面光影 -->
+                <line x1="195" y1="225" x2="190" y2="335" stroke="#37474f" stroke-width="0.8" opacity="0.6"/>
+                <line x1="240" y1="220" x2="240" y2="340" stroke="#37474f" stroke-width="0.8" opacity="0.5"/>
+                <line x1="285" y1="225" x2="290" y2="335" stroke="#37474f" stroke-width="0.8" opacity="0.6"/>
+                <!-- 下室內部水位 -->
+                <path d="M 175 300 L 305 300 L 305 340 L 175 340 Z" fill="rgba(120,160,200,0.5)"/>
+                <ellipse cx="240" cy="300" rx="60" ry="2" fill="#90caf9"/>
+                <!-- 安全閥 -->
+                <circle cx="305" cy="280" r="4" fill="#37474f"/>
+                <circle cx="305" cy="280" r="2" fill="#cfd8dc"/>
+                <!-- 把手（黑色塑膠）-->
+                <path d="M 320 240 Q 365 245 365 290 Q 365 320 320 322" fill="none" stroke="#1a1a1a" stroke-width="8" stroke-linecap="round"/>
+                <path d="M 322 245 Q 360 250 360 290 Q 360 318 322 320" fill="none" stroke="#424242" stroke-width="3" stroke-linecap="round"/>
+                <!-- 蒸氣壓力箭頭（從下往上） -->
+                <path d="M 240 290 L 240 240" stroke="#e53935" stroke-width="2" fill="none" marker-end="url(#mok-arrow)" stroke-dasharray="4 3"/>
+                <defs>
+                    <marker id="mok-arrow" markerWidth="10" markerHeight="10" refX="5" refY="3" orient="auto">
+                        <polygon points="0 0, 6 3, 0 6" fill="#e53935"/>
+                    </marker>
+                </defs>
+                <!-- 標註：蓋子 -->
+                <line x1="245" y1="86" x2="380" y2="60" stroke="#1565c0" stroke-width="1.2" stroke-dasharray="3 2"/>
+                <text x="385" y="58" font-size="12" font-weight="700" fill="#1565c0" text-anchor="start">上室咖啡</text>
+                <text x="385" y="72" font-size="10.5" fill="#1565c0" text-anchor="start">壓力推上來累積</text>
+                <!-- 標註：粉籃 -->
+                <line x1="200" y1="220" x2="50" y2="220" stroke="#e65100" stroke-width="1.2" stroke-dasharray="3 2"/>
+                <text x="48" y="218" font-size="12" font-weight="700" fill="#e65100" text-anchor="end">中央粉籃</text>
+                <text x="48" y="232" font-size="10.5" fill="#e65100" text-anchor="end">細粉、不要壓緊</text>
+                <!-- 標註：水室 + 安全閥 -->
+                <line x1="305" y1="282" x2="445" y2="278" stroke="#2e7d32" stroke-width="1.2" stroke-dasharray="3 2"/>
+                <text x="450" y="276" font-size="12" font-weight="700" fill="#2e7d32" text-anchor="end">下室水 + 安全閥</text>
+                <text x="450" y="290" font-size="10.5" fill="#2e7d32" text-anchor="end">水位不要過閥</text>
+                <!-- 標註：火焰 -->
+                <line x1="240" y1="350" x2="100" y2="370" stroke="#bf360c" stroke-width="1.2" stroke-dasharray="3 2"/>
+                <text x="98" y="368" font-size="12" font-weight="700" fill="#bf360c" text-anchor="end">中小火加熱</text>
+                <text x="98" y="382" font-size="10.5" fill="#bf360c" text-anchor="end">3-5 分鐘出咖啡</text>
+                <!-- 標註：1933 Bialetti -->
+                <line x1="160" y1="130" x2="20" y2="115" stroke="#6a1b9a" stroke-width="1.2" stroke-dasharray="3 2"/>
+                <text x="18" y="112" font-size="12" font-weight="700" fill="#6a1b9a" text-anchor="start">1933 Bialetti</text>
+                <text x="18" y="126" font-size="10.5" fill="#6a1b9a" text-anchor="start">義大利家家戶戶</text>
+            </svg>`;
+
+            // 虹吸壺 Siphon
+            const ENCY_SVG_SIPHON = `<svg viewBox="0 0 480 420" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="sip-glass" x1="0" y1="0" x2="1" y2="0">
+                        <stop offset="0%" stop-color="rgba(170,200,210,0.45)"/>
+                        <stop offset="50%" stop-color="rgba(225,240,245,0.75)"/>
+                        <stop offset="100%" stop-color="rgba(150,180,200,0.5)"/>
+                    </linearGradient>
+                    <linearGradient id="sip-coffee" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#5d4037"/>
+                        <stop offset="100%" stop-color="#3e2723"/>
+                    </linearGradient>
+                    <linearGradient id="sip-flame" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#ffeb3b"/>
+                        <stop offset="50%" stop-color="#ff9800"/>
+                        <stop offset="100%" stop-color="#3949ab"/>
+                    </linearGradient>
+                    <radialGradient id="sip-shadow" cx="0.5" cy="0.5" r="0.5">
+                        <stop offset="0%" stop-color="rgba(0,0,0,0.28)"/>
+                        <stop offset="100%" stop-color="rgba(0,0,0,0)"/>
+                    </radialGradient>
+                </defs>
+                <ellipse cx="240" cy="395" rx="100" ry="12" fill="url(#sip-shadow)"/>
+                <!-- 上球（咖啡腔）-->
+                <ellipse cx="240" cy="115" rx="80" ry="65" fill="url(#sip-glass)" stroke="#78909c" stroke-width="1.5"/>
+                <!-- 上球咖啡液 -->
+                <path d="M 175 130 Q 240 175 305 130 Q 305 165 240 175 Q 175 165 175 130" fill="url(#sip-coffee)" opacity="0.92"/>
+                <ellipse cx="240" cy="135" rx="62" ry="6" fill="#a1887f" opacity="0.4"/>
+                <!-- 上球頂蓋 -->
+                <rect x="225" y="50" width="30" height="10" fill="#37474f" rx="2"/>
+                <circle cx="240" cy="48" r="6" fill="#1a1a1a"/>
+                <!-- 蒸氣管 -->
+                <rect x="232" y="170" width="16" height="80" fill="url(#sip-glass)" stroke="#78909c" stroke-width="1"/>
+                <!-- 過濾片（在連接處） -->
+                <rect x="220" y="170" width="40" height="6" fill="#90a4ae"/>
+                <line x1="222" y1="173" x2="258" y2="173" stroke="#37474f" stroke-width="0.4"/>
+                <!-- 下球（水室）-->
+                <circle cx="240" cy="290" r="65" fill="url(#sip-glass)" stroke="#78909c" stroke-width="1.5"/>
+                <!-- 下球（水位低、因為大部分被推上去了）-->
+                <path d="M 180 320 Q 240 340 300 320 L 300 350 Q 240 360 180 350 Z" fill="rgba(120,160,200,0.55)"/>
+                <ellipse cx="240" cy="320" rx="55" ry="3" fill="#90caf9"/>
+                <!-- 下球連管 -->
+                <rect x="232" y="240" width="16" height="20" fill="url(#sip-glass)" stroke="#78909c" stroke-width="1"/>
+                <!-- 下球底支架 -->
+                <path d="M 200 350 L 280 350 L 290 380 L 190 380 Z" fill="#37474f" opacity="0.85"/>
+                <!-- 鹵素燈 / 酒精燈 -->
+                <ellipse cx="240" cy="380" rx="35" ry="6" fill="#90a4ae"/>
+                <rect x="220" y="380" width="40" height="14" fill="#cfd8dc"/>
+                <!-- 火焰 -->
+                <path d="M 225 384 Q 222 372 232 367 Q 235 360 240 367 Q 245 360 248 367 Q 258 372 255 384 Z" fill="url(#sip-flame)" opacity="0.9"/>
+                <!-- 蒸氣 -->
+                <path d="M 200 100 Q 195 80 205 65 Q 215 55 210 40" fill="none" stroke="rgba(200,200,200,0.55)" stroke-width="1.6" stroke-linecap="round"/>
+                <path d="M 280 100 Q 285 80 275 65 Q 265 55 270 40" fill="none" stroke="rgba(200,200,200,0.55)" stroke-width="1.6" stroke-linecap="round"/>
+                <!-- 玻璃高光 -->
+                <path d="M 175 100 Q 175 130 200 160" stroke="rgba(255,255,255,0.5)" stroke-width="2" fill="none"/>
+                <path d="M 185 250 Q 185 290 220 340" stroke="rgba(255,255,255,0.45)" stroke-width="2" fill="none"/>
+                <!-- 攪拌棒（在咖啡液中、斜插）-->
+                <line x1="180" y1="115" x2="270" y2="60" stroke="#5d4037" stroke-width="2.5" stroke-linecap="round"/>
+                <circle cx="270" cy="60" r="4" fill="#3e2723"/>
+                <!-- 標註：上球咖啡腔 -->
+                <line x1="320" y1="115" x2="455" y2="100" stroke="#1565c0" stroke-width="1.2" stroke-dasharray="3 2"/>
+                <text x="460" y="98" font-size="12" font-weight="700" fill="#1565c0" text-anchor="end">上球咖啡腔</text>
+                <text x="460" y="112" font-size="10.5" fill="#1565c0" text-anchor="end">水被蒸氣推上來浸泡</text>
+                <!-- 標註：過濾片 -->
+                <line x1="220" y1="173" x2="80" y2="180" stroke="#e65100" stroke-width="1.2" stroke-dasharray="3 2"/>
+                <text x="78" y="178" font-size="12" font-weight="700" fill="#e65100" text-anchor="end">布 / 玻璃過濾片</text>
+                <text x="78" y="192" font-size="10.5" fill="#e65100" text-anchor="end">咖啡通過時被濾</text>
+                <!-- 標註：下球 -->
+                <line x1="305" y1="290" x2="455" y2="280" stroke="#2e7d32" stroke-width="1.2" stroke-dasharray="3 2"/>
+                <text x="460" y="278" font-size="12" font-weight="700" fill="#2e7d32" text-anchor="end">下球水室</text>
+                <text x="460" y="292" font-size="10.5" fill="#2e7d32" text-anchor="end">關火後抽真空回流</text>
+                <!-- 標註：火源 -->
+                <line x1="240" y1="384" x2="100" y2="390" stroke="#bf360c" stroke-width="1.2" stroke-dasharray="3 2"/>
+                <text x="98" y="388" font-size="12" font-weight="700" fill="#bf360c" text-anchor="end">酒精燈 / 鹵素燈</text>
+                <!-- 標註：1840 -->
+                <line x1="160" y1="60" x2="30" y2="55" stroke="#6a1b9a" stroke-width="1.2" stroke-dasharray="3 2"/>
+                <text x="28" y="52" font-size="12" font-weight="700" fill="#6a1b9a" text-anchor="start">1840 德國發明</text>
+                <text x="28" y="66" font-size="10.5" fill="#6a1b9a" text-anchor="start">日本喫茶店發揚光大</text>
+            </svg>`;
+
+            // 冷萃 Cold Brew
+            const ENCY_SVG_COLDBREW = `<svg viewBox="0 0 480 420" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="cb-glass" x1="0" y1="0" x2="1" y2="0">
+                        <stop offset="0%" stop-color="rgba(170,200,210,0.45)"/>
+                        <stop offset="50%" stop-color="rgba(225,240,245,0.7)"/>
+                        <stop offset="100%" stop-color="rgba(150,180,200,0.5)"/>
+                    </linearGradient>
+                    <linearGradient id="cb-coffee" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#3e2723"/>
+                        <stop offset="100%" stop-color="#1a0a04"/>
+                    </linearGradient>
+                    <linearGradient id="cb-ice" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="rgba(255,255,255,0.85)"/>
+                        <stop offset="100%" stop-color="rgba(180,210,225,0.6)"/>
+                    </linearGradient>
+                    <radialGradient id="cb-shadow" cx="0.5" cy="0.5" r="0.5">
+                        <stop offset="0%" stop-color="rgba(0,0,0,0.28)"/>
+                        <stop offset="100%" stop-color="rgba(0,0,0,0)"/>
+                    </radialGradient>
+                </defs>
+                <ellipse cx="240" cy="395" rx="120" ry="12" fill="url(#cb-shadow)"/>
+                <!-- 冷萃壺主體（直筒玻璃） -->
+                <rect x="160" y="80" width="160" height="300" fill="url(#cb-glass)" stroke="#78909c" stroke-width="1.5" rx="6"/>
+                <!-- 內部冷萃液（深色） -->
+                <rect x="170" y="180" width="140" height="195" fill="url(#cb-coffee)" opacity="0.93"/>
+                <!-- 內部不鏽鋼濾筒（中央懸浮）-->
+                <rect x="195" y="115" width="90" height="170" fill="rgba(150,170,180,0.4)" stroke="#78909c" stroke-width="1.5" rx="3"/>
+                <!-- 濾筒內咖啡粉 -->
+                <rect x="200" y="140" width="80" height="135" fill="#5d4037" opacity="0.95"/>
+                <ellipse cx="240" cy="140" rx="40" ry="3" fill="#3e2723"/>
+                <!-- 濾筒孔洞點點 -->
+                <g fill="#37474f" opacity="0.6">
+                    <circle cx="200" cy="160" r="0.8"/><circle cx="200" cy="180" r="0.8"/>
+                    <circle cx="200" cy="200" r="0.8"/><circle cx="200" cy="220" r="0.8"/>
+                    <circle cx="200" cy="240" r="0.8"/><circle cx="200" cy="260" r="0.8"/>
+                    <circle cx="280" cy="160" r="0.8"/><circle cx="280" cy="180" r="0.8"/>
+                    <circle cx="280" cy="200" r="0.8"/><circle cx="280" cy="220" r="0.8"/>
+                    <circle cx="280" cy="240" r="0.8"/><circle cx="280" cy="260" r="0.8"/>
+                </g>
+                <!-- 濾筒提把（頂部） -->
+                <rect x="225" y="105" width="30" height="10" fill="#37474f" rx="2"/>
+                <ellipse cx="240" cy="105" rx="18" ry="3" fill="#cfd8dc"/>
+                <!-- 蓋子 -->
+                <rect x="155" y="76" width="170" height="12" fill="#37474f" rx="3"/>
+                <ellipse cx="240" cy="76" rx="80" ry="3" fill="#cfd8dc"/>
+                <!-- 把手（側面）-->
+                <path d="M 320 130 Q 360 138 360 220 Q 360 300 320 308" fill="none" stroke="#37474f" stroke-width="6" stroke-linecap="round"/>
+                <!-- 出水龍頭（底部側面）-->
+                <rect x="318" y="350" width="35" height="14" fill="#cfd8dc"/>
+                <rect x="345" y="345" width="10" height="24" fill="#37474f" rx="2"/>
+                <circle cx="350" cy="345" r="5" fill="#cfd8dc"/>
+                <!-- 玻璃高光 -->
+                <path d="M 170 90 L 170 365" stroke="rgba(255,255,255,0.55)" stroke-width="2.5"/>
+                <!-- 冰塊 emoji 元素（頂部裝飾） -->
+                <text x="50" y="80" font-size="32" opacity="0.7">🧊</text>
+                <text x="100" y="100" font-size="20" opacity="0.5">❄️</text>
+                <text x="380" y="80" font-size="32" opacity="0.7">🧊</text>
+                <!-- 標註：濾筒 -->
+                <line x1="195" y1="200" x2="60" y2="200" stroke="#1565c0" stroke-width="1.2" stroke-dasharray="3 2"/>
+                <text x="58" y="198" font-size="12" font-weight="700" fill="#1565c0" text-anchor="end">不鏽鋼濾筒</text>
+                <text x="58" y="212" font-size="10.5" fill="#1565c0" text-anchor="end">粉浸在水中、透膜萃取</text>
+                <!-- 標註：冷萃液 -->
+                <line x1="320" y1="280" x2="445" y2="278" stroke="#2e7d32" stroke-width="1.2" stroke-dasharray="3 2"/>
+                <text x="450" y="276" font-size="12" font-weight="700" fill="#2e7d32" text-anchor="end">冷萃液（深色）</text>
+                <text x="450" y="290" font-size="10.5" fill="#2e7d32" text-anchor="end">8-24 小時冷藏</text>
+                <!-- 標註：龍頭 -->
+                <line x1="355" y1="358" x2="440" y2="370" stroke="#e65100" stroke-width="1.2" stroke-dasharray="3 2"/>
+                <text x="445" y="368" font-size="12" font-weight="700" fill="#e65100" text-anchor="end">出水龍頭</text>
+                <text x="445" y="382" font-size="10.5" fill="#e65100" text-anchor="end">直接接杯</text>
+                <!-- 標註：低酸高甜 -->
+                <line x1="160" y1="280" x2="20" y2="290" stroke="#6a1b9a" stroke-width="1.2" stroke-dasharray="3 2"/>
+                <text x="18" y="288" font-size="12" font-weight="700" fill="#6a1b9a" text-anchor="start">低酸高甜</text>
+                <text x="18" y="302" font-size="10.5" fill="#6a1b9a" text-anchor="start">巧克力 + 焦糖風</text>
+            </svg>`;
+
             const ENCYCLOPEDIA = {
                 dripper: {
                     title: '☕ 手沖濾杯',
@@ -6744,13 +7315,328 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                     title: '🍯 沖煮方式',
                     icon: '☕',
                     items: {
-                        pour_over:    { name: '手沖濾紙',  tagline: '手動控制每一注，最能呈現產區與處理法層次', emoji: '☕', status: 'soon' },
-                        espresso:     { name: '義式濃縮',  tagline: '9 bar 高壓 25-30 秒，濃縮油脂與甜感的精華', emoji: '⚡', status: 'soon' },
-                        french_press: { name: '法式濾壓',  tagline: '完全浸泡 4 分鐘，body 最厚、保留全油脂', emoji: '🫖', status: 'soon' },
-                        aeropress:    { name: '愛樂壓',    tagline: 'Alan Adler 2005 發明，浸泡 + 加壓的混合萃取', emoji: '💨', status: 'soon' },
-                        moka:         { name: '摩卡壺',    tagline: '1933 年義大利家家戶戶的爐火濃縮', emoji: '🔥', status: 'soon' },
-                        siphon:       { name: '虹吸壺',    tagline: '蒸氣壓 + 浸泡 + 過濾的科學儀器美學', emoji: '🧪', status: 'soon' },
-                        cold_brew:    { name: '冷萃',      tagline: '冷水 8-24 小時慢萃，極低酸、巧克力甜感', emoji: '🧊', status: 'soon' }
+                        pour_over: {
+                            name: '手沖濾紙',
+                            tagline: '手動控制每一注，最能呈現產區與處理法層次',
+                            emoji: '☕',
+                            status: 'ready',
+                            heroSvg: ENCY_SVG_POUROVER,
+                            subtitle: '濾紙手沖是「最自由也最考驗手法」的沖煮方式。透過鶴嘴壺的水柱、節奏、溫度，把咖啡風味的所有層次揉進杯裡。第三波咖啡浪潮的代表沖法。',
+                            chips: [
+                                { text: '濾紙過濾', class: 'green' },
+                                { text: '手控節奏', class: 'warm' },
+                                { text: '層次最豐富', class: 'cool' },
+                                { text: '2-4 分鐘' },
+                                { text: '中粉', class: 'purple' },
+                                { text: '1:15 ~ 1:17' }
+                            ],
+                            specs: [
+                                { k: '萃取原理', v: '濾紙過濾 + 重力滴流' },
+                                { k: '水溫', v: '88-95°C' },
+                                { k: '粉度', v: '中粉（小富士 3-3.5）' },
+                                { k: '粉水比', v: '1:15 ~ 1:17' },
+                                { k: '萃取時間', v: '2:30 ~ 4:00' },
+                                { k: '裝備門檻', v: '低（鶴嘴壺 + 濾杯 + 紙）' }
+                            ],
+                            origin: [
+                                { year: '1908', text: 'Melitta Bentz 在德國發明濾紙手沖法，是手沖咖啡的起源。' },
+                                { year: '1941', text: 'Chemex 玻璃沙漏在美國推出，手沖開始有設計感與儀式感。' },
+                                { year: '2005', text: 'Hario V60 推出，60° 圓錐 + 螺旋肋的革命結構讓手沖進入精品時代。' },
+                                { year: '2010', text: 'World Brewers Cup 成立，手沖成為國際賽事項目。' },
+                                { year: '至今', text: '十幾種濾杯 + 上百種手法的繁榮生態，是精品咖啡愛好者的入門首選。' }
+                            ],
+                            steps: [
+                                { title: '選濾杯 + 手法', desc: 'V60 / Kalita / Chemex / Origami... 每款濾杯都對應不同手法（見「沖煮百科 → 濾杯」）。' },
+                                { title: '燙紙 + 暖杯', desc: '注熱水沖洗紙味、預熱濾杯與下壺。被熱身水洗掉的紙味會直接體現在風味上。' },
+                                { title: '中粉 + 量粉', desc: '15-25g 粉是常見區間。研磨度依濾杯與手法調整。' },
+                                { title: 'Bloom 悶蒸', desc: '第一注 2 倍粉重的水，等 30-45 秒讓 CO₂ 釋放、粉床膨脹。' },
+                                { title: '分段或一刀流注水', desc: '中央 70% 範圍、別碰濾紙。控時 2:30-3:30，太快粗化、太慢過萃。' }
+                            ],
+                            tips: [
+                                { icon: '🎯', title: '水溫決定酸甜', desc: '94°C 拉酸度與香氣、92°C 平衡、88-90°C 收斂酸放大甜。淺焙建議高、深焙降。' },
+                                { icon: '⚖️', title: '不滿意先動研磨', desc: '味道偏酸 → 細一檔；偏苦澀 → 粗一檔。比改水溫更直覺有感。' },
+                                { icon: '💧', title: '水柱越穩越好', desc: '細嘴鶴嘴壺是手沖核心，水柱穩定才能萃取均勻。預算優先在這。' },
+                                { icon: '🚫', title: '別碰濾紙邊緣', desc: '注水到濾紙會 channeling、繞過粉床、味道淡。永遠中央 70% 內。' },
+                                { icon: '🌀', title: '第一注決定 70%', desc: '前 60 秒的萃取濃度約決定整杯走向。第一注沒做好後面難救。' },
+                                { icon: '📚', title: '挑一款濾杯練熟', desc: '別一次買 5 款。挑 V60 或 Kalita 練 30 杯以上、再換別款比較會更有感。' }
+                            ]
+                        },
+                        espresso: {
+                            name: '義式濃縮 (Espresso)',
+                            tagline: '9 bar 高壓 25-30 秒，濃縮油脂與甜感的精華',
+                            emoji: '⚡',
+                            status: 'ready',
+                            heroSvg: ENCY_SVG_ESPRESSO,
+                            subtitle: '9 bar 高壓熱水在 25-30 秒內穿過 18-22g 細粉，產出 36-44g 濃縮咖啡 + 上層金棕色 Crema 油脂。是所有奶咖（拿鐵/卡布/瑪奇朵）的基底。',
+                            chips: [
+                                { text: '9 bar 高壓', class: 'warm' },
+                                { text: '25-30 秒', class: 'cool' },
+                                { text: '93°C 水溫' },
+                                { text: '1:2 比例 (18g/36g)', class: 'green' },
+                                { text: 'Crema 招牌', class: 'purple' },
+                                { text: '極細粉' }
+                            ],
+                            specs: [
+                                { k: '壓力', v: '9 bar' },
+                                { k: '水溫', v: '92-94°C' },
+                                { k: '粉量', v: '18-22g（雙份）' },
+                                { k: '萃取量', v: '36-44g（1:2 比例）' },
+                                { k: '時間', v: '25-30 秒' },
+                                { k: '裝備門檻', v: '高（半自動義式機 + 磨豆機 + 配件）' }
+                            ],
+                            origin: [
+                                { year: '1884', text: '義大利人 Angelo Moriondo 申請第一個蒸氣壓咖啡機專利，但是大型營業用。' },
+                                { year: '1901', text: 'Luigi Bezzera 發明單杯萃取機，奠定 Espresso 概念。' },
+                                { year: '1948', text: 'Achille Gaggia 發明彈簧活塞拉桿機，9 bar 標準誕生、Crema 第一次出現。' },
+                                { year: '1961', text: 'FAEMA E61 上市，第一台電動泵浦機，Group head 結構沿用至今 60 多年。' },
+                                { year: '至今', text: '從義大利吧台文化擴散到全球，是現代咖啡店與奶咖的核心。' }
+                            ],
+                            steps: [
+                                { title: '極細研磨 + 量粉', desc: '極細粉（接近細砂糖），18-22g 進 portafilter 雙籃。' },
+                                { title: '布粉 + 壓粉', desc: '撥粉均勻、壓粉器垂直 30 lb 壓力下壓，讓粉床平整密實。' },
+                                { title: '裝上 Group head', desc: '把 portafilter 鎖上機台水嘴。' },
+                                { title: '萃取 25-30 秒', desc: '按下萃取鈕，9 bar 壓力推熱水穿過粉床。前 5-8 秒 pre-infusion + 主萃取。' },
+                                { title: '看 Crema + 試味', desc: '理想 36-44g 液重 + 金棕色 Crema 持久 1-2 分鐘。觀察 spout 流速與顏色判斷萃取。' }
+                            ],
+                            tips: [
+                                { icon: '⚖️', title: '比例是核心', desc: '18g 進 → 36g 出（Ratio 1:2）是「義式黃金比例」。改變比例 = 改變濃度與走向。' },
+                                { icon: '⏱️', title: '時間調研磨', desc: '萃取 < 22 秒 = 太快、研磨太粗；> 32 秒 = 太慢、研磨太細。每天開機都要重新調。' },
+                                { icon: '🎨', title: 'Crema 看新鮮度', desc: 'Crema 要金棕色、持久 1 分鐘以上。淺色 = 萃取不足；深褐色 = 過萃。' },
+                                { icon: '🌡️', title: '預熱要徹底', desc: 'Group head + portafilter + 杯子都要熱。冷的會讓萃取下降 5°C 影響甜感。' },
+                                { icon: '🥛', title: '奶咖的基底', desc: 'Espresso 是拿鐵/卡布/Flat White 的根基。Espresso 不好，後面奶都救不回來。' },
+                                { icon: '💰', title: '裝備預算', desc: '入門半自動 NT$15,000-30,000、磨豆機 NT$10,000+、配件 NT$3,000+。長期投資。' }
+                            ]
+                        },
+                        french_press: {
+                            name: '法式濾壓 (French Press)',
+                            tagline: '完全浸泡 4 分鐘，body 最厚、保留全油脂',
+                            emoji: '🫖',
+                            status: 'ready',
+                            heroSvg: ENCY_SVG_FRENCH,
+                            subtitle: '玻璃壺 + 金屬濾網 + 不鏽鋼壓桿。咖啡粉與熱水完全浸泡 4 分鐘，再下壓金屬濾網分離。不濾油脂、body 最厚實的沖煮法。',
+                            chips: [
+                                { text: '完全浸泡', class: 'cool' },
+                                { text: '4 分鐘', class: 'warm' },
+                                { text: '金屬濾網' },
+                                { text: 'Body 最厚', class: 'green' },
+                                { text: '保留全油脂', class: 'purple' },
+                                { text: '粗粉' }
+                            ],
+                            specs: [
+                                { k: '萃取原理', v: '完全浸泡 + 金屬濾網分離' },
+                                { k: '水溫', v: '92-95°C' },
+                                { k: '粉度', v: '粗粉（海鹽顆粒）' },
+                                { k: '粉水比', v: '1:15 ~ 1:18' },
+                                { k: '浸泡時間', v: '4 分鐘標準' },
+                                { k: '裝備門檻', v: '極低（壺 + 熱水）' }
+                            ],
+                            origin: [
+                                { year: '1929', text: '義大利人 Attilio Calimani 取得法壓壺專利，最早是金屬製。' },
+                                { year: '1958', text: '瑞士人 Faliero Bondanini 改良設計、法國工廠生產，"French Press" 名字定型。' },
+                                { year: '1980s', text: '丹麥品牌 Bodum 全球推廣，玻璃版本變家家戶戶必備。' },
+                                { year: '2000s', text: '雖然第三波咖啡浪潮捧紅手沖，但法壓仍是咖啡愛好者的入門首選。' },
+                                { year: '至今', text: '是「最寬容」的沖法之一，也常用於泡茶、燕麥奶起泡。' }
+                            ],
+                            steps: [
+                                { title: '預熱壺體', desc: '注熱水暖壺、倒掉。冷的玻璃壺會讓萃取溫度下降 5-10°C。' },
+                                { title: '粗粉 + 量粉', desc: '粗粉（海鹽大小、Comandante 30+ click），25-30g 配 400-500g 水（1:16）。' },
+                                { title: '注水 + 攪拌', desc: '一次性注熱水到 80% 滿，輕攪 1-2 圈讓粉床均勻沉降。' },
+                                { title: '蓋上濾網蓋 + 計時 4 分鐘', desc: '蓋子 + 壓桿放上但不下壓，等 4 分鐘讓粉完整浸泡。' },
+                                { title: '緩慢下壓 30 秒', desc: '壓桿用 30 秒慢慢下壓到底（速度太快會擾粉、出現粉感）。倒出後別讓壺內繼續泡。' }
+                            ],
+                            tips: [
+                                { icon: '🌡️', title: '預熱壺體很重要', desc: '玻璃比金屬熱容大，冷壺會嚴重壓低萃取溫度。先燙壺再下粉。' },
+                                { icon: '📏', title: '一定要粗粉', desc: '細粉會穿過濾網、喝起來像泥沙。粗粉是法壓的核心，別省這一步。' },
+                                { icon: '⏱️', title: '4 分鐘是甜蜜點', desc: '短於 3 分鐘 = 萃取不足偏酸；長於 5 分鐘 = 過萃苦澀。計時器必備。' },
+                                { icon: '👋', title: '壓桿慢慢推', desc: '30 秒推到底是黃金速度。太快會擾動粉床、把粉打飛起來、味道粗糙。' },
+                                { icon: '🥄', title: '別讓壺內繼續泡', desc: '壓完馬上倒出，留壺內會持續萃取變苦。倒不完倒到別的容器保溫。' },
+                                { icon: '🌿', title: '不只能沖咖啡', desc: '泡散裝紅茶、烏龍、香草茶、做奶泡都可以。家裡萬用器材。' }
+                            ]
+                        },
+                        aeropress: {
+                            name: '愛樂壓 (AeroPress)',
+                            tagline: 'Alan Adler 2005 發明，浸泡 + 加壓的混合萃取',
+                            emoji: '💨',
+                            status: 'ready',
+                            heroSvg: ENCY_SVG_AERO,
+                            subtitle: '史丹福工程教授 Alan Adler 發明的圓筒活塞萃取器。浸泡 + 加壓兩段萃取、可正可倒、可玩 1000 種配方。是露營、辦公室、宿舍的咖啡神器。',
+                            chips: [
+                                { text: '2005 發明', class: 'purple' },
+                                { text: '浸泡 + 加壓', class: 'warm' },
+                                { text: '正向 / 倒置', class: 'cool' },
+                                { text: '微紙過濾' },
+                                { text: '60-90 秒', class: 'green' },
+                                { text: '塑膠輕便' }
+                            ],
+                            specs: [
+                                { k: '發明者', v: 'Alan Adler（史丹福工程教授）' },
+                                { k: '發售年', v: '2005' },
+                                { k: '結構', v: '圓筒 + 橡膠活塞 + 微紙濾蓋' },
+                                { k: '粉度', v: '中細粉' },
+                                { k: '粉水比', v: '1:15 ~ 1:13（濃稀皆可）' },
+                                { k: '時間', v: '60-90 秒' }
+                            ],
+                            origin: [
+                                { year: '2004', text: 'Alan Adler 在實驗中發現浸泡 + 加壓能在短時間做出乾淨的咖啡，於史丹福設計工程系研發。' },
+                                { year: '2005', text: 'AeroPress 正式上市，3000 美金研發成本、第一年只賣 4000 個。' },
+                                { year: '2008', text: '挪威 Tim Wendelboe 等冠軍選手在比賽用 AeroPress、世界冠軍 World AeroPress Championship 開賽。' },
+                                { year: '2010s', text: '全球露營者、辦公室咖啡愛好者、宿舍咖啡迷的首選。' },
+                                { year: '至今', text: '已賣超過 800 萬個。AeroPress XL（雙倍容量）、Go（旅行版）、Premium（金屬版）齊全。' }
+                            ],
+                            steps: [
+                                { title: '組裝 + 燙紙', desc: '濾紙放濾蓋、注熱水沖紙味。倒置法則濾蓋先不裝。' },
+                                { title: '中細粉 + 量粉', desc: '中細粉（比 V60 細），15-18g 配 200-250g 水（1:13-1:15）。' },
+                                { title: '注水 + 攪拌', desc: '注熱水（85-90°C 偏低）到指定刻度，輕攪 5-10 秒讓粉浸潤。' },
+                                { title: '浸泡 1-2 分鐘', desc: '蓋上活塞但不下壓，浸泡時間依配方（1 分鐘出酸、2 分鐘出甜）。' },
+                                { title: '慢推 30 秒', desc: '活塞用 30 秒慢慢下推、聽到「噗」聲表示空氣到、停。' }
+                            ],
+                            tips: [
+                                { icon: '🔄', title: '正向 vs 倒置', desc: '正向：簡單、適合新手；倒置：浸泡時間長更好控、適合進階配方。' },
+                                { icon: '🌡️', title: '低水溫是特色', desc: 'AeroPress 用 80-90°C 比手沖低，能突顯甜感、減少苦澀。' },
+                                { icon: '🥄', title: '攪拌很重要', desc: '注水後 5-10 秒輕攪讓粉床均勻浸潤，避免空泡。' },
+                                { icon: '📜', title: '萬種配方可玩', desc: 'World AeroPress Championship 每年都有新冠軍配方，網路有上百種食譜。' },
+                                { icon: '✈️', title: '旅行神器', desc: '塑膠輕、不會碎、配套小、可拆裝。露營、出國、辦公室必備。' },
+                                { icon: '☕', title: '稀釋可做美式', desc: 'AeroPress 用濃配方（1:8）+ 兌水可做美式咖啡，味道穩定。' }
+                            ]
+                        },
+                        moka: {
+                            name: '摩卡壺 (Moka Pot)',
+                            tagline: '1933 年義大利家家戶戶的爐火濃縮',
+                            emoji: '🔥',
+                            status: 'ready',
+                            heroSvg: ENCY_SVG_MOKA,
+                            subtitle: '1933 年 Bialetti 發明的爐火濃縮咖啡壺，三層結構（下水 + 中粉 + 上咖啡），靠蒸氣壓推熱水穿過咖啡粉。義大利家家戶戶、近 90 年的廚房經典。',
+                            chips: [
+                                { text: '1933 Bialetti', class: 'purple' },
+                                { text: '爐火加熱', class: 'warm' },
+                                { text: '蒸氣壓萃取', class: 'cool' },
+                                { text: '3-5 bar' },
+                                { text: '八角形經典', class: 'green' },
+                                { text: '鋁/不鏽鋼' }
+                            ],
+                            specs: [
+                                { k: '發明者', v: 'Alfonso Bialetti（義大利）' },
+                                { k: '發售年', v: '1933' },
+                                { k: '結構', v: '下水室 + 中粉籃 + 上咖啡室' },
+                                { k: '壓力', v: '3-5 bar（介於手沖與義式之間）' },
+                                { k: '容量', v: '1 / 3 / 6 / 9 / 12 杯版本' },
+                                { k: '粉度', v: '中細粉（比手沖細、比義式粗）' }
+                            ],
+                            origin: [
+                                { year: '1933', text: 'Alfonso Bialetti 在義大利 Crusinallo 鋁工廠發明摩卡壺，名字 "Moka" 取自葉門 Mocha 港。' },
+                                { year: '1950s', text: '兒子 Renato Bialetti 推出八角形造型 + 「老頭子」logo，全球熱賣。' },
+                                { year: '至今', text: 'Bialetti 公司賣出超過 3 億個摩卡壺，是義大利家庭咖啡的代名詞。' },
+                                { year: '2016', text: 'Renato 過世後骨灰被裝進巨型摩卡壺安葬，成為咖啡史佳話。' },
+                                { year: '至今', text: '從鋁製經典到不鏽鋼版本（適用電磁爐）齊全，是入門最便宜的「義式風格」沖法。' }
+                            ],
+                            steps: [
+                                { title: '下室加水到安全閥下', desc: '注熱水（不是冷水）到下室、水位千萬不要過安全閥（過了會爆）。' },
+                                { title: '中央粉籃裝粉', desc: '中細粉（比 V60 細、比義式粗）裝滿粉籃、刮平、不要壓緊（會堵）。' },
+                                { title: '組裝鎖緊', desc: '上下室鎖緊、用毛巾包墊（壺體會燙）。' },
+                                { title: '中小火加熱', desc: '把蓋子打開、中小火（約 3-5 分鐘）。火太大會燒底、過萃苦。' },
+                                { title: '聽到「咕嚕」聲關火', desc: '上室開始有聲音 + 顏色變淡 = 萃取結束、立刻關火、底下用濕毛巾降溫避免續萃。' }
+                            ],
+                            tips: [
+                                { icon: '💧', title: '一定要熱水', desc: '冷水加熱久 = 蒸氣壓不對 + 咖啡過熱燒糊。直接用 90°C 熱水注下室。' },
+                                { icon: '🔥', title: '中小火不要大', desc: '大火會燒乾下室 + 推力過猛苦澀爆掉。中小火慢慢加熱 3-5 分鐘最佳。' },
+                                { icon: '🥄', title: '粉別壓緊', desc: '摩卡壺粉籃別像義式那樣壓粉，鬆鬆放就好。壓緊會堵、推不動。' },
+                                { icon: '⏰', title: '聽聲音關火', desc: '上室「咕嚕咕嚕」聲變細 + 顏色變淺黃 = 該關火了。慢半步就會苦。' },
+                                { icon: '🧊', title: '降溫止萃', desc: '關火後用濕毛巾包住下室快速降溫、停止繼續萃取，避免後段苦澀進杯。' },
+                                { icon: '🥛', title: '配奶最好', desc: '摩卡壺出來的本來就濃，配熱奶（1:1 或 1:2）做家用拿鐵很適合。' }
+                            ]
+                        },
+                        siphon: {
+                            name: '虹吸壺 (Siphon)',
+                            tagline: '蒸氣壓 + 浸泡 + 過濾的科學儀器美學',
+                            emoji: '🧪',
+                            status: 'ready',
+                            heroSvg: ENCY_SVG_SIPHON,
+                            subtitle: '上下球玻璃 + 過濾片 + 火源的科學儀器美學沖法。下球水被加熱推上、上球咖啡浸泡、關火後抽真空回流。日本喫茶店的儀式感代表。',
+                            chips: [
+                                { text: '1840 年發明', class: 'purple' },
+                                { text: '玻璃儀器美學', class: 'cool' },
+                                { text: '蒸氣壓推', class: 'warm' },
+                                { text: '完全浸泡', class: 'green' },
+                                { text: '抽真空回流' },
+                                { text: '中粉' }
+                            ],
+                            specs: [
+                                { k: '萃取原理', v: '蒸氣壓推上 + 浸泡 + 真空回流' },
+                                { k: '水溫', v: '90-95°C（沸騰後降溫）' },
+                                { k: '粉度', v: '中粉' },
+                                { k: '粉水比', v: '1:13 ~ 1:15' },
+                                { k: '浸泡時間', v: '60-90 秒' },
+                                { k: '熱源', v: '酒精燈 / 鹵素燈 / 卡式爐' }
+                            ],
+                            origin: [
+                                { year: '1840', text: '德國 Loeff Berlin 發明第一個雙球玻璃虹吸萃取器，最早是科學實驗用。' },
+                                { year: '1841', text: '法國 Madame Vassieux 改良為咖啡器具、申請專利、流行於歐洲沙龍。' },
+                                { year: '1925', text: '日本河野敏夫的 Kono 公司開始製造日式虹吸壺，注重儀式感與工藝。' },
+                                { year: '1950s-1980s', text: '日本喫茶店黃金時代，虹吸壺成為「咖啡達人」的象徵器材。' },
+                                { year: '至今', text: 'Hario 是全球虹吸壺最大品牌，台灣與日本喫茶店仍是主流，年輕一輩重新捧紅這種儀式感沖法。' }
+                            ],
+                            steps: [
+                                { title: '下球加熱水', desc: '注 90°C 熱水到下球（用熱水加速、冷水太久）。' },
+                                { title: '裝過濾片 + 上球', desc: '過濾片（布或玻璃球）塞進蒸氣管底部、上球插入下球準備好。' },
+                                { title: '加熱至水推上', desc: '酒精燈或鹵素燈加熱，水被蒸氣推到上球（約 1-2 分鐘）。' },
+                                { title: '加粉 + 攪拌', desc: '粉倒入上球、用攪拌棒輕推 5-10 下讓粉床均勻浸泡。計時 60-90 秒。' },
+                                { title: '關火 + 真空回流', desc: '時間到關火、下球冷卻產生真空、咖啡液被吸回下球（30-60 秒）。倒入杯子飲用。' }
+                            ],
+                            tips: [
+                                { icon: '🔥', title: '熱源穩定是關鍵', desc: '鹵素燈最穩定、酒精燈最有儀式感、卡式爐最便宜。穩定 = 萃取均勻。' },
+                                { icon: '🥄', title: '攪拌力道要輕', desc: '粉倒入後攪拌 5-10 下就夠、太用力會把粉打散導致過萃。' },
+                                { icon: '⏱️', title: '60-90 秒是標準', desc: '太短萃取不足、太長過萃苦。淺焙拉長到 90 秒、深焙縮到 60 秒。' },
+                                { icon: '🧼', title: '布過濾片要保養', desc: '布過濾片用完馬上洗淨晾乾、放冰箱避免發霉。發霉會直接毀掉風味。' },
+                                { icon: '🎭', title: '儀式感無敵', desc: '客人面前現沖虹吸壺是社交殺手、看蒸氣推水回流的瞬間有戲劇性。' },
+                                { icon: '⚠️', title: '玻璃要小心', desc: '上下球玻璃很脆、突然冷卻會炸裂。回流後讓它自然冷卻、別碰冷水。' }
+                            ]
+                        },
+                        cold_brew: {
+                            name: '冷萃 (Cold Brew)',
+                            tagline: '冷水 8-24 小時慢萃，極低酸、巧克力甜感',
+                            emoji: '🧊',
+                            status: 'ready',
+                            heroSvg: ENCY_SVG_COLDBREW,
+                            subtitle: '完全用冷水（不加熱）長時間浸泡 8-24 小時。低溫慢萃只取出咖啡的甜感、巧克力、堅果調，幾乎不出酸。是夏天的清爽神器、保存性也最高。',
+                            chips: [
+                                { text: '冷水萃取', class: 'cool' },
+                                { text: '8-24 小時', class: 'warm' },
+                                { text: '極低酸', class: 'green' },
+                                { text: '高甜感' },
+                                { text: '可冰箱保存 7 天', class: 'purple' },
+                                { text: '粗粉' }
+                            ],
+                            specs: [
+                                { k: '萃取原理', v: '冷水長時間浸泡' },
+                                { k: '水溫', v: '室溫或冰水' },
+                                { k: '粉度', v: '粗粉（比法壓略細）' },
+                                { k: '粉水比', v: '1:8（濃縮，喝時加水）' },
+                                { k: '時間', v: '8-24 小時' },
+                                { k: '保存', v: '冰箱 5-7 天' }
+                            ],
+                            origin: [
+                                { year: '17 世紀', text: '日本京都的「Kyoto Style」冰滴咖啡誕生，是最早的冷萃形式（單滴慢落）。' },
+                                { year: '1960s', text: '美國 Toddy 公司推出家用冷萃壺，浸泡式冷萃進入主流。' },
+                                { year: '2010s', text: 'Stumptown / Blue Bottle 等精品咖啡店瓶裝冷萃熱賣，全美爆紅。' },
+                                { year: '2015-2020', text: 'Starbucks 推出 Nitro Cold Brew（氮氣冷萃），夏季限定銷售爆衝。' },
+                                { year: '至今', text: '是夏天最大宗的咖啡產品、便利商店瓶裝、咖啡店現點都有。' }
+                            ],
+                            steps: [
+                                { title: '粗粉 + 量粉', desc: '粗粉（比法壓略細），50g 配 400g 水（1:8 濃縮、稀釋喝）。' },
+                                { title: '裝入濾筒 / 棉布袋', desc: '不鏽鋼濾筒或棉布袋裝粉，避免粉散在水中（懶人法可不過濾、用法壓壓）。' },
+                                { title: '注冷水 + 浸泡', desc: '室溫水或冷藏水注入、攪拌 1 圈讓粉沾濕、蓋上。' },
+                                { title: '冷藏 12-24 小時', desc: '冰箱冷藏 12 小時是甜蜜點、最長 24 小時。室溫浸 8 小時也行但會輕微酸。' },
+                                { title: '過濾 + 稀釋', desc: '取出濾筒、咖啡液裝瓶冷藏。喝時加水或冰塊稀釋（1:1 或 1:2 看口味）。' }
+                            ],
+                            tips: [
+                                { icon: '⏱️', title: '12-16 小時最甜', desc: '太短（< 8h）萃取不足平淡、太長（> 24h）開始出土味與澀感。12-16 小時是甜蜜點。' },
+                                { icon: '🍫', title: '選深焙與蜜處理', desc: '深焙、蜜處理、日曬豆會出最強的巧克力甜感與堅果調。淺焙會被冷萃壓抑特性。' },
+                                { icon: '📏', title: '粉粗一檔', desc: '長時間浸泡，粉太細會過萃出土味。粗粉（比法壓略細）最佳。' },
+                                { icon: '🧊', title: '稀釋喝才對', desc: '1:8 是濃縮配方、直接喝太重。加冰水稀釋到 1:12-1:14 是正常飲用濃度。' },
+                                { icon: '🥛', title: '加奶超讚', desc: '冷萃 + 燕麥奶 / 鮮奶 = 夏天最強冰拿鐵。咖啡店的招牌品項。' },
+                                { icon: '🗓️', title: '一次做一週', desc: '冷藏可放 5-7 天。週末做一大壺、週間每天喝、超方便。' }
+                            ]
+                        }
                     }
                 },
                 method: {
