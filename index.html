@@ -495,11 +495,12 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             flex: 1; font-size: 22px; font-weight: 800; display: flex; gap: 10px; align-items: center;
             letter-spacing: 0.5px;
         }
-        .ency-tabs { display: flex; gap: 6px; }
+        .ency-tabs { display: flex; gap: 5px; flex-wrap: wrap; flex: 1 1 auto; min-width: 0; overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 2px; }
         .ency-tab {
             background: rgba(255,255,255,0.12); border: none; color: #fff;
-            padding: 7px 14px; border-radius: 16px; font-size: 13px;
+            padding: 6px 11px; border-radius: 14px; font-size: 12.5px;
             cursor: pointer; transition: background .15s, transform .15s; font-weight: 600;
+            white-space: nowrap; flex-shrink: 0;
         }
         .ency-tab:hover { background: rgba(255,255,255,0.22); }
         .ency-tab.active { background: #ffb74d; color: #3e2723; }
@@ -2020,9 +2021,13 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 <button class="ency-back" id="ency-back-btn" onclick="encyBack()" style="display:none">← 返回</button>
                 <span class="ency-title-text" id="ency-title">📚 沖煮百科</span>
                 <div class="ency-tabs" id="ency-tabs">
-                    <button class="ency-tab active" data-cat="dripper" onclick="encySwitchCat('dripper')">濾杯</button>
-                    <button class="ency-tab" data-cat="brew" onclick="encySwitchCat('brew')">沖煮方式</button>
-                    <button class="ency-tab" data-cat="method" onclick="encySwitchCat('method')">手沖手法</button>
+                    <button class="ency-tab active" data-cat="history" onclick="encySwitchCat('history')">📜 起源</button>
+                    <button class="ency-tab" data-cat="variety" onclick="encySwitchCat('variety')">🌱 豆種</button>
+                    <button class="ency-tab" data-cat="process" onclick="encySwitchCat('process')">🔄 處理法</button>
+                    <button class="ency-tab" data-cat="roast" onclick="encySwitchCat('roast')">🔥 烘焙度</button>
+                    <button class="ency-tab" data-cat="dripper" onclick="encySwitchCat('dripper')">🔻 濾杯</button>
+                    <button class="ency-tab" data-cat="brew" onclick="encySwitchCat('brew')">☕ 沖煮</button>
+                    <button class="ency-tab" data-cat="method" onclick="encySwitchCat('method')">🌀 手法</button>
                 </div>
                 <button class="ency-close" onclick="closeEncyclopedia()" aria-label="關閉百科">✕</button>
             </div>
@@ -7093,6 +7098,138 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 <text x="240" y="392" font-size="10.5" font-style="italic" fill="#8d6e63" text-anchor="middle">「熱萃 + 冰塊急冷 = 鮮香炸裂、酸質明亮」</text>`
             });
 
+            // ========== 咖啡起源 hero SVG helper ==========
+            function _encyHistoryHero(opts) {
+                return `<svg viewBox="0 0 480 420" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="hh-${opts.id}" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stop-color="${opts.bg1}"/>
+                            <stop offset="100%" stop-color="${opts.bg2}"/>
+                        </linearGradient>
+                    </defs>
+                    <rect width="480" height="420" fill="url(#hh-${opts.id})" rx="16"/>
+                    ${opts.deco || ''}
+                    <text x="240" y="${opts.ey||245}" font-size="${opts.size||150}" text-anchor="middle" dominant-baseline="middle">${opts.emoji}</text>
+                    <text x="240" y="68" font-size="13" font-weight="800" fill="${opts.tcolor||'#5d4037'}" text-anchor="middle" letter-spacing="3">${opts.era}</text>
+                    <text x="240" y="378" font-size="19" font-weight="800" fill="${opts.tcolor||'#5d4037'}" text-anchor="middle">${opts.title}</text>
+                    ${opts.subtext ? `<text x="240" y="398" font-size="12" fill="${opts.tcolor||'#8d6e63'}" text-anchor="middle" font-style="italic">${opts.subtext}</text>` : ''}
+                </svg>`;
+            }
+
+            const ENCY_HIST_KALDI = _encyHistoryHero({
+                id: 'kaldi', emoji: '🐐', era: '850 AD · 衣索比亞', title: 'Kaldi 牧羊人傳說',
+                subtext: '紅色果實的覺醒',
+                bg1: '#fff8e1', bg2: '#ffd54f',
+                deco: `<path d="M 0 320 L 80 220 L 150 280 L 220 200 L 290 270 L 360 230 L 430 290 L 480 250 L 480 420 L 0 420 Z" fill="#8d6e63" opacity="0.35"/>
+                <text x="60" y="120" font-size="36">🍒</text>
+                <text x="400" y="120" font-size="36">🍒</text>
+                <text x="80" y="320" font-size="24">🐐</text>
+                <text x="380" y="340" font-size="20">🐐</text>`
+            });
+
+            const ENCY_HIST_MOCHA = _encyHistoryHero({
+                id: 'mocha', emoji: '⛵', era: '15 世紀 · 葉門', title: 'Mocha 港的覺醒',
+                subtext: '世界第一個咖啡貿易中心',
+                bg1: '#bbdefb', bg2: '#1976d2', tcolor: '#fff',
+                deco: `<path d="M 0 340 Q 120 320 240 340 Q 360 360 480 340 L 480 420 L 0 420 Z" fill="#0d47a1" opacity="0.5"/>
+                <path d="M 0 360 Q 120 340 240 360 Q 360 380 480 360 L 480 420 L 0 420 Z" fill="#01579b" opacity="0.6"/>
+                <text x="60" y="100" font-size="32">☪️</text>
+                <text x="400" y="100" font-size="32">☪️</text>
+                <text x="80" y="370" font-size="24">🚢</text>
+                <text x="380" y="390" font-size="22">⚓</text>`
+            });
+
+            const ENCY_HIST_OTTOMAN = _encyHistoryHero({
+                id: 'ottoman', emoji: '🕌', era: '1554 · 君士坦丁堡', title: '鄂圖曼帝國土耳其咖啡',
+                subtext: '世界第一家咖啡館誕生',
+                bg1: '#fce4ec', bg2: '#8e24aa', tcolor: '#fff',
+                deco: `<text x="60" y="100" font-size="34">🌙</text>
+                <text x="400" y="100" font-size="34">⭐</text>
+                <text x="40" y="380" font-size="28">☕</text>
+                <text x="420" y="380" font-size="28">☕</text>
+                <path d="M 100 360 Q 240 340 380 360" stroke="#4a148c" stroke-width="2" fill="none" opacity="0.5"/>`
+            });
+
+            const ENCY_HIST_EUROPE = _encyHistoryHero({
+                id: 'europe', emoji: '🏛️', era: '1645-1683 · 歐洲', title: '咖啡館革命',
+                subtext: '威尼斯 → 倫敦 → 維也納',
+                bg1: '#efebe9', bg2: '#5d4037', tcolor: '#fff',
+                deco: `<text x="50" y="120" font-size="32">📜</text>
+                <text x="410" y="120" font-size="32">🪶</text>
+                <text x="50" y="380" font-size="28">☕</text>
+                <text x="410" y="380" font-size="28">📚</text>
+                <path d="M 80 350 L 80 380 M 100 350 L 100 380 M 380 350 L 380 380 M 400 350 L 400 380" stroke="#3e2723" stroke-width="2"/>`
+            });
+
+            const ENCY_HIST_COLONIAL = _encyHistoryHero({
+                id: 'colonial', emoji: '🌎', era: '1727 · 巴西首株', title: '殖民帝國的咖啡傳播',
+                subtext: '巴西 / 印尼 / 牙買加 / 中美洲',
+                bg1: '#e8f5e9', bg2: '#2e7d32', tcolor: '#fff',
+                deco: `<text x="50" y="120" font-size="34">🌿</text>
+                <text x="410" y="120" font-size="34">🌴</text>
+                <text x="50" y="380" font-size="26">🍃</text>
+                <text x="410" y="380" font-size="26">☕</text>
+                <text x="120" y="100" font-size="24">🇧🇷</text>
+                <text x="350" y="100" font-size="24">🇮🇩</text>`
+            });
+
+            const ENCY_HIST_INDUSTRIAL = _encyHistoryHero({
+                id: 'industrial', emoji: '⚙️', era: '1884 · 義大利', title: '工業革命與義式機誕生',
+                subtext: 'Moriondo / Bezzera / Bialetti',
+                bg1: '#eceff1', bg2: '#37474f', tcolor: '#fff',
+                deco: `<text x="50" y="120" font-size="34">⚡</text>
+                <text x="410" y="120" font-size="34">💨</text>
+                <text x="50" y="380" font-size="28">🔧</text>
+                <text x="410" y="380" font-size="28">🛠️</text>
+                <text x="100" y="100" font-size="24">⚙️</text>
+                <text x="370" y="100" font-size="24">⚙️</text>`
+            });
+
+            const ENCY_HIST_WAVE1 = _encyHistoryHero({
+                id: 'wave1', emoji: '📺', era: '20 世紀初 · 全球', title: '第一波 · 速溶咖啡時代',
+                subtext: 'Nescafé / Maxwell House / 二戰普及',
+                bg1: '#fff3e0', bg2: '#e65100', tcolor: '#fff',
+                deco: `<text x="50" y="120" font-size="34">📻</text>
+                <text x="410" y="120" font-size="34">🎙️</text>
+                <text x="50" y="380" font-size="28">🥫</text>
+                <text x="410" y="380" font-size="28">🪖</text>
+                <text x="240" y="160" font-size="24" text-anchor="middle">📺📺📺</text>`
+            });
+
+            const ENCY_HIST_WAVE2 = _encyHistoryHero({
+                id: 'wave2', emoji: '🌟', era: '1971 · 西雅圖', title: '第二波 · 星巴克連鎖革命',
+                subtext: 'Howard Schultz / 拿鐵卡布全球化',
+                bg1: '#e8f5e9', bg2: '#00695c', tcolor: '#fff',
+                deco: `<text x="50" y="120" font-size="34">🥛</text>
+                <text x="410" y="120" font-size="34">☕</text>
+                <text x="50" y="380" font-size="28">🏪</text>
+                <text x="410" y="380" font-size="28">🌐</text>
+                <text x="240" y="160" font-size="22" text-anchor="middle">⭐⭐⭐</text>`
+            });
+
+            const ENCY_HIST_WAVE3 = _encyHistoryHero({
+                id: 'wave3', emoji: '⚗️', era: '2002 · 全球', title: '第三波 · 精品咖啡浪潮',
+                subtext: 'Direct Trade / 產地 / 處理法 / 沖煮',
+                bg1: '#fce4ec', bg2: '#c2185b', tcolor: '#fff',
+                deco: `<text x="50" y="120" font-size="34">🌱</text>
+                <text x="410" y="120" font-size="34">🍒</text>
+                <text x="50" y="380" font-size="28">📊</text>
+                <text x="410" y="380" font-size="28">🏆</text>
+                <text x="100" y="100" font-size="22">🔻</text>
+                <text x="370" y="100" font-size="22">🥄</text>`
+            });
+
+            const ENCY_HIST_WAVE4 = _encyHistoryHero({
+                id: 'wave4', emoji: '🔬', era: '2020s · 未來進行式', title: '第四波 · 科學與永續',
+                subtext: 'TDS / 厭氧 / 直貿 / 氣候挑戰',
+                bg1: '#e1f5fe', bg2: '#0277bd', tcolor: '#fff',
+                deco: `<text x="50" y="120" font-size="34">🧬</text>
+                <text x="410" y="120" font-size="34">🌍</text>
+                <text x="50" y="380" font-size="28">🤖</text>
+                <text x="410" y="380" font-size="28">🌡️</text>
+                <text x="240" y="160" font-size="20" text-anchor="middle">📡 ⚡ 🧪</text>`
+            });
+
             const ENCY_SVG_M_CONC = _encyMethodSvg({
                 title: '濃縮式 1:10（Strong Concentrate）',
                 totalTime: '2:00',
@@ -7115,6 +7252,425 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             });
 
             const ENCYCLOPEDIA = {
+                history: {
+                    title: '📜 咖啡起源與歷史',
+                    icon: '📜',
+                    items: {
+                        kaldi: {
+                            name: '9 世紀 · 衣索比亞牧羊人傳說',
+                            tagline: 'Kaldi 與會跳舞的羊：人類發現咖啡的起點',
+                            emoji: '🐐',
+                            status: 'ready',
+                            heroSvg: ENCY_HIST_KALDI,
+                            subtitle: '相傳公元 850 年左右，衣索比亞 Kaffa 高原的牧羊人 Kaldi 發現他的羊群吃了某種紅色果實後變得異常活潑、整夜跳躍。他好奇嚐了一顆，從此世界多了一種神奇的飲料。「咖啡」（Coffee）這個字據信就源於 "Kaffa"。',
+                            chips: [
+                                { text: '衣索比亞起源', class: 'green' },
+                                { text: 'Kaffa 高原' },
+                                { text: '850 AD', class: 'purple' },
+                                { text: '牧羊人傳說', class: 'warm' },
+                                { text: 'Coffea arabica 原生地', class: 'cool' }
+                            ],
+                            specs: [
+                                { k: '地點', v: '衣索比亞 Kaffa 高原（咖啡名字來源）' },
+                                { k: '年代', v: '約公元 850 年' },
+                                { k: '主角', v: 'Kaldi 牧羊人（傳說人物）' },
+                                { k: '事件', v: '發現紅色咖啡果實使羊群興奮' },
+                                { k: '物種', v: 'Coffea arabica（阿拉比卡原生種）' }
+                            ],
+                            origin: [
+                                { year: '~850 AD', text: 'Kaldi 觀察羊群吃紅色果實後整夜不睡，好奇親自嚐試，感受到清醒效果。' },
+                                { year: '帶回村落', text: 'Kaldi 把果實帶給附近的修士，修士初試覺得苦澀，丟入火中。' },
+                                { year: '香氣覺醒', text: '咖啡豆被烤後散發出濃郁香氣，修士改用磨碎泡水喝，從此夜禱可保持清醒。' },
+                                { year: '口耳相傳', text: '消息傳遍衣索比亞高原，咖啡成為當地原住民的祭祀與社交飲品。' },
+                                { year: '傳奇化', text: '雖然 Kaldi 故事可能是後人附會，但衣索比亞作為咖啡發源地的事實已被植物學證實。' }
+                            ],
+                            originTitle: '📖 傳說與考證',
+                            tipsTitle: '🌍 歷史意義',
+                            tips: [
+                                { icon: '🌍', title: '咖啡名字的由來', desc: 'Kaffa 高原 → Qahwa（阿拉伯語）→ Kahve（土耳其）→ Caffe（義大利）→ Coffee（英語）。' },
+                                { icon: '🌱', title: '阿拉比卡原生地', desc: '衣索比亞高原至今仍是 Coffea arabica 的原始基因庫，種植超過 1000 種野生品系。' },
+                                { icon: '🏆', title: '為什麼非洲豆好喝', desc: '原生地的高海拔 + 多樣基因 + 火山土壤，成就衣索比亞、肯亞豆種的明亮果酸與花香。' },
+                                { icon: '🎭', title: '咖啡儀式 (Bunna)', desc: '至今衣索比亞家家戶戶仍有完整的咖啡儀式：現烘現磨現煮，是文化的中心。' }
+                            ]
+                        },
+                        mocha: {
+                            name: '15 世紀 · Mocha 港的覺醒',
+                            tagline: '葉門蘇菲教派與全球第一個咖啡貿易中心',
+                            emoji: '⛵',
+                            status: 'ready',
+                            heroSvg: ENCY_HIST_MOCHA,
+                            subtitle: '15 世紀葉門的蘇菲派伊斯蘭僧侶為了在夜禱中保持清醒，從衣索比亞引進咖啡並開始有系統地種植。葉門紅海邊的 Mocha（穆哈）港成為世界第一個咖啡商業出口中心，「Mocha」也成了深焙巧克力咖啡的代名詞。',
+                            chips: [
+                                { text: '葉門', class: 'cool' },
+                                { text: '蘇菲教派' },
+                                { text: 'Mocha 港', class: 'green' },
+                                { text: '商業化開端', class: 'warm' },
+                                { text: '15 世紀', class: 'purple' }
+                            ],
+                            specs: [
+                                { k: '地點', v: '葉門（紅海邊）' },
+                                { k: '年代', v: '15 世紀（1400s）' },
+                                { k: '關鍵人物', v: '蘇菲派僧侶 / Mocha 商人' },
+                                { k: '事件', v: '咖啡商業化栽培、Mocha 港出口貿易' },
+                                { k: '影響', v: '咖啡進入伊斯蘭世界與歐洲的轉運站' }
+                            ],
+                            origin: [
+                                { year: '1400s 初', text: '蘇菲派僧侶 Sheikh Omar 把咖啡從衣索比亞帶到葉門 Mocha 地區、開始系統化栽培。' },
+                                { year: '1450s', text: '葉門咖啡進入麥加，成為朝聖者帶回家鄉的「神聖飲品」。' },
+                                { year: '1470s', text: 'Mocha 港逐漸發展成全球咖啡貿易中心，葉門控制全球咖啡供應幾乎一個世紀。' },
+                                { year: '貿易管制', text: '葉門禁止出口未烘焙的咖啡豆（防止被偷種），所有出口豆都要先煮過或烘過。' },
+                                { year: '1670s', text: '印度朝聖者 Baba Budan 偷藏 7 顆咖啡生豆出葉門、種在印度，打破葉門壟斷。' }
+                            ],
+                            originTitle: '📖 進程細節',
+                            tipsTitle: '🌍 歷史意義',
+                            tips: [
+                                { icon: '🍫', title: 'Mocha = 巧克力咖啡', desc: '因為早期 Mocha 港運出的葉門深焙豆帶有自然巧克力風味，後人就把「巧克力 + 咖啡」叫做 Mocha。' },
+                                { icon: '🕌', title: '宗教與咖啡綁定', desc: '蘇菲派把咖啡定位為夜禱專用「神聖飲料」，咖啡因此進入伊斯蘭神聖儀式。' },
+                                { icon: '🌐', title: '全球貿易第一站', desc: 'Mocha 港是咖啡從非洲走向世界的第一個商業節點，所有後來的咖啡帝國都從這裡出發。' },
+                                { icon: '🌱', title: '葉門 Bourbon 種源', desc: '葉門的咖啡基因池後來經過殖民傳播，發展出 Typica、Bourbon 兩大主流品種，影響全球。' }
+                            ]
+                        },
+                        ottoman: {
+                            name: '1554 · 鄂圖曼帝國土耳其咖啡',
+                            tagline: '世界第一家咖啡館誕生於君士坦丁堡',
+                            emoji: '🕌',
+                            status: 'ready',
+                            heroSvg: ENCY_HIST_OTTOMAN,
+                            subtitle: '1554 年，兩位敘利亞商人 Hakam 與 Shams 在鄂圖曼帝國首都君士坦丁堡（今伊斯坦堡）開設世界第一家咖啡館 "Kiva Han"。鄂圖曼宮廷把咖啡推向藝術形式，銅壺 ibrik 慢煮法成為土耳其咖啡的招牌至今 470 年沒變。',
+                            chips: [
+                                { text: '1554 君士坦丁堡', class: 'purple' },
+                                { text: '世界第一家咖啡館' },
+                                { text: 'Ibrik 銅壺', class: 'warm' },
+                                { text: '鄂圖曼帝國', class: 'cool' },
+                                { text: '土耳其咖啡', class: 'green' }
+                            ],
+                            specs: [
+                                { k: '地點', v: '君士坦丁堡（今伊斯坦堡）' },
+                                { k: '年代', v: '1554 年' },
+                                { k: '關鍵店家', v: 'Kiva Han（世界第一家咖啡館）' },
+                                { k: '沖煮法', v: 'Ibrik / Cezve 銅壺極細粉慢煮' },
+                                { k: '影響', v: '把咖啡從宗教飲品轉為社交藝術' }
+                            ],
+                            origin: [
+                                { year: '1554', text: 'Hakam 與 Shams 在君士坦丁堡 Tahtakale 開設 "Kiva Han"，世界第一家正式咖啡館。' },
+                                { year: '1555', text: '咖啡館迅速擴散到帝國各城市，成為男性聚會、下棋、聽詩、政治討論的場所。' },
+                                { year: '1633', text: 'Murad IV 蘇丹一度全面禁咖啡（怕政治集會），違者處死，但禁令很快廢除。' },
+                                { year: '咖啡儀式化', text: '宮廷發展出嚴格的咖啡禮儀：銅壺、銅杯、糖、玫瑰水、占卜杯底渣。' },
+                                { year: '至今', text: '土耳其咖啡 2013 年被列入 UNESCO 非物質文化遺產，是「文化等級」的咖啡技藝。' }
+                            ],
+                            originTitle: '📖 進程細節',
+                            tipsTitle: '🌍 歷史意義',
+                            tips: [
+                                { icon: '☕', title: '咖啡館 = 智慧之家', desc: '土耳其人稱咖啡館為 "Mektep-i Irfan"（智慧學校），是男性社交與政治啟蒙的中心。' },
+                                { icon: '🔮', title: '杯底占卜', desc: '土耳其咖啡喝完後杯底剩咖啡渣，倒蓋杯盤等冷卻，再看渣的形狀算命。流傳至今。' },
+                                { icon: '🥛', title: '從不加奶', desc: '正統土耳其咖啡不加奶、只加糖（無糖 Sade、半糖 Az、全糖 Şekerli），體驗純粹的苦甜對比。' },
+                                { icon: '👰', title: '提親儀式', desc: '土耳其傳統提親時，新娘要煮咖啡給新郎家人喝。如果加鹽 = 不喜歡，加糖 = 同意。' }
+                            ]
+                        },
+                        europe: {
+                            name: '17 世紀 · 咖啡進入歐洲',
+                            tagline: '威尼斯 → 倫敦 → 維也納，咖啡館改變歐洲',
+                            emoji: '🏛️',
+                            status: 'ready',
+                            heroSvg: ENCY_HIST_EUROPE,
+                            subtitle: '17 世紀咖啡從伊斯蘭世界進入歐洲，引爆歐洲的咖啡館革命。倫敦的咖啡館是現代股市與保險業的誕生地（Lloyd\'s Coffee House），維也納則因 1683 年戰勝鄂圖曼留下大批咖啡豆而誕生維也納咖啡館文化。',
+                            chips: [
+                                { text: '1645 威尼斯', class: 'purple' },
+                                { text: '1652 倫敦', class: 'cool' },
+                                { text: '1683 維也納', class: 'warm' },
+                                { text: '咖啡館革命', class: 'green' },
+                                { text: '股市保險誕生地' }
+                            ],
+                            specs: [
+                                { k: '威尼斯', v: '1645 第一家咖啡館' },
+                                { k: '倫敦', v: '1652 第一家（希臘人 Pasqua Rosée）' },
+                                { k: '維也納', v: '1683 戰利品咖啡豆' },
+                                { k: '巴黎', v: '1672 第一家咖啡館' },
+                                { k: '影響', v: '啟蒙運動與商業革命的溫床' }
+                            ],
+                            origin: [
+                                { year: '1600 教皇祝福', text: '教皇 Clement VIII 嚐了咖啡，覺得太美味不能讓異教徒獨享，正式「祝福咖啡」。' },
+                                { year: '1645 威尼斯', text: '威尼斯成為歐洲第一個有咖啡館的城市，從此咖啡進入歐洲主流。' },
+                                { year: '1652 倫敦', text: '希臘移民 Pasqua Rosée 在倫敦開第一家咖啡館，倫敦在 50 年內爆發到 3000 家咖啡館。' },
+                                { year: '1683 維也納', text: '波蘭軍隊擊退鄂圖曼軍、繳獲大批咖啡豆，移民 Kolschitzky 用這些豆開設維也納第一家咖啡館，發明「加奶 + 蜂蜜」的維也納咖啡。' },
+                                { year: '1688 Lloyd\'s', text: 'Edward Lloyd 在倫敦開的咖啡館成為航海保險仲介聚會地，是現代 Lloyd\'s of London 保險集團的起點。' }
+                            ],
+                            originTitle: '📖 進程細節',
+                            tipsTitle: '🌍 歷史意義',
+                            tips: [
+                                { icon: '💼', title: '咖啡館誕生股市', desc: '倫敦 Jonathan\'s Coffee House 是 1698 年第一個股票交易處的所在地，現代股市的源頭。' },
+                                { icon: '🛡️', title: '咖啡館誕生保險', desc: 'Lloyd\'s Coffee House 是現代海上保險集團 Lloyd\'s of London 的起點。' },
+                                { icon: '📰', title: '咖啡館 = 報紙', desc: '17 世紀沒網路，咖啡館是訊息交換中心，倫敦每家咖啡館都訂多種報紙供客人閱讀。' },
+                                { icon: '🎼', title: '巴哈的咖啡頌', desc: '1735 年 J.S. Bach 寫了「咖啡清唱劇 BWV 211」歌頌咖啡的美好，是音樂史趣事。' }
+                            ]
+                        },
+                        colonial: {
+                            name: '18 世紀 · 殖民帝國的咖啡傳播',
+                            tagline: '巴西、印尼、牙買加：咖啡帝國的全球版圖',
+                            emoji: '🌎',
+                            status: 'ready',
+                            heroSvg: ENCY_HIST_COLONIAL,
+                            subtitle: '葡萄牙、荷蘭、法國等殖民強權把咖啡帶到熱帶殖民地大規模種植。1727 年巴西種下第一株咖啡、1696 年荷蘭把咖啡引入爪哇，從此咖啡從稀有奢侈品變成全球大宗商品，「咖啡帶」（Coffee Belt）正式形成。',
+                            chips: [
+                                { text: '1696 印尼爪哇', class: 'cool' },
+                                { text: '1727 巴西', class: 'green' },
+                                { text: '咖啡帶形成', class: 'warm' },
+                                { text: '奴隸種植園', class: 'purple' },
+                                { text: '荷蘭/法國/葡萄牙殖民' }
+                            ],
+                            specs: [
+                                { k: '印尼', v: '1696 荷蘭引入爪哇（Java）' },
+                                { k: '巴西', v: '1727 Francisco de Mello Palheta 引種' },
+                                { k: '牙買加', v: '1728 引入藍山（Blue Mountain）' },
+                                { k: '中美洲', v: '1740-1800 哥倫比亞 / 哥斯大黎加' },
+                                { k: '主要勞動力', v: '殖民地原住民與非洲奴隸' }
+                            ],
+                            origin: [
+                                { year: '1696 爪哇', text: '荷蘭東印度公司把葉門咖啡種帶入印尼爪哇，開始大規模種植，"Java" 變成咖啡代名詞。' },
+                                { year: '1714 法國', text: '阿姆斯特丹市長送一株咖啡苗給法王路易十四，這株「皇家咖啡樹」是後來法屬殖民地咖啡的祖先。' },
+                                { year: '1727 巴西', text: 'Francisco de Mello Palheta 從法屬圭亞那「外交手段」（傳說是用情感說服總督夫人）取得咖啡種，種在巴西帕拉州。' },
+                                { year: '1820s', text: '巴西成為全球最大咖啡生產國（至今 200 年沒變），咖啡 = 巴西經濟命脈。' },
+                                { year: '黑暗面', text: '殖民咖啡園仰賴黑奴勞動。光是巴西就引進 400 萬黑奴從事咖啡種植，是咖啡史最黑暗的一頁。' }
+                            ],
+                            originTitle: '📖 進程細節',
+                            tipsTitle: '🌍 歷史意義',
+                            tips: [
+                                { icon: '🌱', title: 'Typica 與 Bourbon', desc: '殖民傳播過程中，葉門原始基因分化為 Typica（印尼-巴西路線）和 Bourbon（留尼旺島-中南美洲路線）兩大主流。' },
+                                { icon: '🇧🇷', title: '巴西的咖啡霸權', desc: '從 1820 年至今巴西一直是全球最大咖啡生產國，產量佔全球 30-40%，價格全靠它。' },
+                                { icon: '⛓️', title: '不能忘記的黑奴史', desc: '咖啡在 19 世紀的全球擴張，建立在數百萬非洲奴隸的勞動之上，這是必須面對的歷史。' },
+                                { icon: '🏔️', title: '咖啡帶 (Coffee Belt)', desc: '南北回歸線之間（赤道 ±25°）的熱帶高海拔區形成「咖啡帶」，從巴西到印尼、衣索比亞到夏威夷都在這帶上。' }
+                            ]
+                        },
+                        industrial: {
+                            name: '19 世紀 · 工業革命與義式機誕生',
+                            tagline: '從手工沖煮到機器萃取的科技革命',
+                            emoji: '⚙️',
+                            status: 'ready',
+                            heroSvg: ENCY_HIST_INDUSTRIAL,
+                            subtitle: '19 世紀工業革命同時改變咖啡的生產與消費方式。1884 年義大利人 Moriondo 發明第一台蒸氣壓咖啡機、1908 年德國 Melitta Bentz 發明濾紙手沖、1933 年 Bialetti 發明摩卡壺。咖啡從「東方奢侈品」變成歐美工人階級的日常燃料。',
+                            chips: [
+                                { text: '1884 第一台義式機', class: 'warm' },
+                                { text: '1908 濾紙手沖', class: 'green' },
+                                { text: '1933 摩卡壺', class: 'cool' },
+                                { text: '工業革命', class: 'purple' },
+                                { text: '科技驅動消費' }
+                            ],
+                            specs: [
+                                { k: '1884 義式機', v: 'Angelo Moriondo（義大利）首個蒸氣壓專利' },
+                                { k: '1901 單杯機', v: 'Luigi Bezzera 改良為咖啡店用單杯機' },
+                                { k: '1908 濾紙手沖', v: 'Melitta Bentz（德國）家庭主婦發明濾紙' },
+                                { k: '1929 法式濾壓', v: 'Attilio Calimani（義大利）法壓壺專利' },
+                                { k: '1933 摩卡壺', v: 'Alfonso Bialetti 發明八角型爐火濃縮壺' }
+                            ],
+                            origin: [
+                                { year: '1818', text: '英國人 Laurens 發明 percolator（滲透式咖啡壺），廣泛用於美國家庭。' },
+                                { year: '1884 義式機', text: 'Angelo Moriondo 在 Turin 申請第一台「蒸氣壓咖啡機」專利，是義式機的祖先。' },
+                                { year: '1901', text: 'Luigi Bezzera 改良為單杯萃取機，後由 Pavoni 公司量產。' },
+                                { year: '1908 Melitta', text: '德國家庭主婦 Melitta Bentz 不滿意當時的咖啡渣口感，用兒子作業簿吸墨紙做出濾紙，發明手沖法。' },
+                                { year: '1933 Bialetti', text: 'Alfonso Bialetti 在義大利鋁工廠發明摩卡壺，讓家家戶戶都能煮出義式風格濃縮，售出超過 3 億個。' }
+                            ],
+                            originTitle: '📖 進程細節',
+                            tipsTitle: '🌍 歷史意義',
+                            tips: [
+                                { icon: '🏭', title: '工業 = 平民化', desc: '工業革命前咖啡是貴族奢侈品；之後變成工廠工人的早餐燃料，咖啡消費量爆炸成長。' },
+                                { icon: '☕', title: 'Espresso 的誕生', desc: '"Espresso" 義文意為「快速」、針對忙碌的義大利吧台文化設計：30 秒一杯、站著喝。' },
+                                { icon: '👩', title: '家庭主婦改變世界', desc: 'Melitta Bentz 不是咖啡專家、只是個不爽渣感的家庭主婦，發明改變百年咖啡史。' },
+                                { icon: '⚡', title: '電動泵浦的革命', desc: '1947 Achille Gaggia 發明彈簧活塞拉桿機 → 9 bar 標準誕生 → 1961 FAEMA E61 第一台電動泵浦機。' }
+                            ]
+                        },
+                        wave1: {
+                            name: '20 世紀初 · 第一波 · 速溶咖啡',
+                            tagline: '量產 + 二戰 = 咖啡走進全球家庭',
+                            emoji: '📺',
+                            status: 'ready',
+                            heroSvg: ENCY_HIST_WAVE1,
+                            subtitle: '20 世紀初的「第一波咖啡」是「量產 + 便利性」的時代。1901 年日本 Satori Kato 發明速溶咖啡技術、1938 年 Nescafé 量產、二戰美軍每天配給速溶咖啡，戰後變成全球家庭日用品。咖啡品質不再是重點、便利性才是。',
+                            chips: [
+                                { text: '1901 速溶發明', class: 'warm' },
+                                { text: '1938 Nescafé', class: 'cool' },
+                                { text: '二戰軍用普及', class: 'purple' },
+                                { text: '量產 / 便利性', class: 'green' },
+                                { text: '失去風土特色' }
+                            ],
+                            specs: [
+                                { k: '1901 速溶', v: 'Satori Kato（日本旅美科學家）首次發明可溶咖啡' },
+                                { k: '1903 真空包', v: 'Maxwell House 推出真空鐵罐包裝' },
+                                { k: '1938 Nescafé', v: '雀巢公司大規模量產可溶咖啡' },
+                                { k: '1944 二戰', v: '美軍每日配給速溶咖啡，戰後普及全球' },
+                                { k: '1971 K-Cup 早期', v: '辦公室膠囊咖啡概念開始' }
+                            ],
+                            origin: [
+                                { year: '1901', text: '旅美日本化學家加藤 Satori 在芝加哥商展發表第一款速溶咖啡技術。' },
+                                { year: '1903', text: 'Maxwell House 推出真空密封鐵罐包裝，咖啡保鮮期延長。' },
+                                { year: '1938', text: '雀巢公司用噴霧乾燥技術量產可溶咖啡 Nescafé，是商業速溶的起點。' },
+                                { year: '1942-1945', text: '二戰美軍每天配給 Nescafé，士兵戰後回家把這個習慣帶進家庭。' },
+                                { year: '1950s-1960s', text: '美國家庭主婦廣告：「即沖即喝、節省時間」，咖啡 = 主婦勳章。' }
+                            ],
+                            originTitle: '📖 進程細節',
+                            tipsTitle: '🌍 歷史意義',
+                            tips: [
+                                { icon: '🪖', title: '二戰是分水嶺', desc: '美軍每日配給的速溶咖啡讓全球幾百萬人習慣每天喝咖啡，戰後內化成家庭習慣。' },
+                                { icon: '⚡', title: '便利 > 風味', desc: '第一波的核心價值是「方便」，不是好喝。一勺粉一杯水即可，犧牲所有風土特色。' },
+                                { icon: '🌐', title: '全球均一化', desc: '速溶咖啡讓「咖啡的味道」全球統一化，剝奪了產地、處理法、烘焙度的個性。' },
+                                { icon: '↩️', title: '反作用力萌芽', desc: '速溶過於均一化，催生 1970s 後第二波「重新發現咖啡風味」的反動。' }
+                            ]
+                        },
+                        wave2: {
+                            name: '20 世紀末 · 第二波 · 星巴克連鎖',
+                            tagline: '1971 西雅圖：拿鐵與卡布的全球化',
+                            emoji: '🌟',
+                            status: 'ready',
+                            heroSvg: ENCY_HIST_WAVE2,
+                            subtitle: '1971 年三位老師在西雅圖開了 Starbucks 賣烘焙咖啡豆。1980 年代 Howard Schultz 把義式咖啡店模式引入連鎖、發明 Frappuccino、推廣拿鐵與卡布奇諾，把美國從速溶咖啡升級到「義式咖啡奶飲料」全民風潮。咖啡終於開始注重「品味」。',
+                            chips: [
+                                { text: '1971 Starbucks', class: 'green' },
+                                { text: 'Howard Schultz', class: 'purple' },
+                                { text: '拿鐵 / 卡布', class: 'warm' },
+                                { text: '連鎖店全球化', class: 'cool' },
+                                { text: '義式咖啡平民化' }
+                            ],
+                            specs: [
+                                { k: '1971', v: 'Starbucks 創立於西雅圖（最早只賣豆子）' },
+                                { k: '1986', v: 'Howard Schultz 主導義式咖啡店模式' },
+                                { k: '1992', v: 'Starbucks 上市，全球擴張開始' },
+                                { k: '1995 Frappuccino', v: '冰沙咖啡風潮席捲全球' },
+                                { k: '2000s', v: '全球 36000+ 家分店' }
+                            ],
+                            origin: [
+                                { year: '1971', text: '三位老師（Jerry Baldwin / Zev Siegl / Gordon Bowker）在西雅圖派克市場開了 Starbucks，最早只賣咖啡豆與器具。' },
+                                { year: '1982-1986', text: 'Howard Schultz 加入後到義大利出差、被米蘭咖啡吧台文化震撼，回美國推動咖啡店模式。' },
+                                { year: '1987', text: 'Schultz 買下 Starbucks 並擴張，把焦點從「賣豆子」改成「賣空間 + 義式咖啡」。' },
+                                { year: '1992', text: 'Starbucks 上市，從 165 家分店在 10 年內擴張到 3500 家。' },
+                                { year: '至今', text: '全球 36000+ 家分店、咖啡業界最大企業。也催生了 Tim Hortons、Costa、Peet\'s 等競爭對手。' }
+                            ],
+                            originTitle: '📖 進程細節',
+                            tipsTitle: '🌍 歷史意義',
+                            tips: [
+                                { icon: '🥛', title: '奶咖時代', desc: '第二波讓拿鐵、卡布奇諾、摩卡、Frappuccino 成為西方主流，「咖啡」 = 「咖啡牛奶」。' },
+                                { icon: '🌐', title: '全球品牌時代', desc: '咖啡第一次成為全球性「品牌」，星巴克 Logo 變成跟麥當勞同等級的辨識符號。' },
+                                { icon: '🪑', title: '第三空間概念', desc: 'Schultz 提出咖啡店是「家 / 公司之外的第三空間」，定義了現代咖啡店的社交功能。' },
+                                { icon: '↩️', title: '反作用力', desc: '第二波的「奶咖糖漿主義」掩蓋了咖啡本味，催生 2000s 後第三波「回歸黑咖啡」的反動。' }
+                            ]
+                        },
+                        wave3: {
+                            name: '21 世紀初 · 第三波 · 精品咖啡',
+                            tagline: '2002 ~ 至今：產地 × 處理法 × 烘焙 × 沖煮',
+                            emoji: '⚗️',
+                            status: 'ready',
+                            heroSvg: ENCY_HIST_WAVE3,
+                            subtitle: '2002 年 Trish Skeie 提出「Third Wave Coffee」概念，把咖啡看作精品葡萄酒：強調豆子的產地、品種、處理法、烘焙、沖煮。直接貿易（Direct Trade）取代中間商、World Brewers Cup 等國際賽事興起、手沖回歸主流、咖啡終於變成「值得品鑑的飲料」。',
+                            chips: [
+                                { text: '2002 概念提出', class: 'purple' },
+                                { text: '產地 × 處理法', class: 'green' },
+                                { text: 'Direct Trade', class: 'warm' },
+                                { text: 'WBrC 賽事', class: 'cool' },
+                                { text: '手沖回歸' },
+                                { text: '咖啡品鑑學' }
+                            ],
+                            specs: [
+                                { k: '概念提出', v: '2002 年挪威烘焙師 Trish Skeie' },
+                                { k: '代表店', v: 'Stumptown / Intelligentsia / Counter Culture（美國三巨頭）' },
+                                { k: '日本派', v: 'Onibus / Glitch / Maruyama 等小批量精品店' },
+                                { k: '北歐派', v: 'Tim Wendelboe / La Cabra / The Coffee Collective' },
+                                { k: '國際賽事', v: 'World Brewers Cup / Barista Championship' }
+                            ],
+                            origin: [
+                                { year: '1999 Cup of Excellence', text: '巴西開始 Cup of Excellence 比賽，第一次有系統地評選與拍賣精品咖啡豆，價格幾倍於商業豆。' },
+                                { year: '2002', text: '挪威烘焙師 Trish Skeie 在 Roasters Guild 雜誌發表「The Third Wave of Coffee」一文，正式提出概念。' },
+                                { year: '2003-2010', text: 'Stumptown / Intelligentsia / Counter Culture 等獨立精品店興起，強調「single origin、淺焙、產地透明」。' },
+                                { year: '2010 WBrC', text: 'World Brewers Cup 開賽，手沖正式變成國際運動，粕谷哲、Matt Winton 等選手紅遍全球。' },
+                                { year: '2015-2020', text: 'V60 / 鶴嘴壺 / 磨豆機 / 烘焙機家用化、咖啡愛好者人均裝備預算飆升。' }
+                            ],
+                            originTitle: '📖 進程細節',
+                            tipsTitle: '🌍 歷史意義',
+                            tips: [
+                                { icon: '🍷', title: '咖啡如葡萄酒', desc: '第三波把咖啡品鑑提升到葡萄酒等級：產地、品種、處理、年份都會明確標示在豆袋上。' },
+                                { icon: '🤝', title: 'Direct Trade', desc: '取代不透明的中間商收購，烘焙商直接到產地與農民談價，農民收益翻倍、品質也提升。' },
+                                { icon: '🌸', title: '淺焙革命', desc: '第三波重新定義「好咖啡」：淺焙突顯果酸花香、深焙過時。雖然之後又有反思但確實重塑風潮。' },
+                                { icon: '📱', title: 'YouTube 教育', desc: 'Hoffmann / Lance Hedrick / 各國冠軍選手讓咖啡知識民主化，家用玩家技術飆升。' }
+                            ]
+                        },
+                        wave4: {
+                            name: '現在 · 第四波 · 科學與永續',
+                            tagline: 'TDS / 厭氧發酵 / 直貿 / 氣候挑戰',
+                            emoji: '🔬',
+                            status: 'ready',
+                            heroSvg: ENCY_HIST_WAVE4,
+                            subtitle: '2020 年代起的「第四波」是科學量化 + 永續發展的時代。TDS 折射計、Refractometer 等工具讓咖啡萃取從感性走向科學；厭氧發酵、二氧化碳浸漬等實驗性處理法興起；氣候變遷對咖啡帶構成史上最大威脅；AI 與機器學習開始進入烘焙與杯測。',
+                            chips: [
+                                { text: 'TDS 量化', class: 'cool' },
+                                { text: '厭氧發酵', class: 'warm' },
+                                { text: '直貿透明', class: 'green' },
+                                { text: '氣候威脅', class: 'purple' },
+                                { text: 'AI 進入咖啡' }
+                            ],
+                            specs: [
+                                { k: '科學量化', v: 'TDS / Refractometer / 萃取率公式' },
+                                { k: '新處理法', v: '厭氧 / 二氧化碳浸漬 / 雙重發酵 / 厭氧蜜處理' },
+                                { k: '永續議題', v: '氣候變遷 / 公平貿易 / 碳足跡' },
+                                { k: '科技工具', v: 'AI 杯測 / 機器學習烘焙曲線 / 穩定電子壺' },
+                                { k: '挑戰', v: '阿拉比卡產地 2050 年可能減半' }
+                            ],
+                            origin: [
+                                { year: '2008 SCAA', text: 'SCAA 推出 Brewing Control Chart，把萃取率（Extraction Yield）與濃度（TDS）量化，咖啡萃取進入科學時代。' },
+                                { year: '2010s', text: '哥倫比亞、巴拿馬、衣索比亞開始實驗厭氧發酵與二氧化碳浸漬，創造前所未有的水果調風味。' },
+                                { year: '2018-2020', text: 'Lance Hedrick / Scott Rao / James Hoffmann 等 YouTuber 用科學方法重新解釋萃取，傳統手法面臨重新驗證。' },
+                                { year: '2020s', text: '氣候變遷使阿拉比卡產區海拔上升要求變高，科學家警告 2050 年阿拉比卡可種植區可能減半。' },
+                                { year: '至今', text: 'AI 進入烘焙曲線預測、處理法基因改良、杯測自動化。咖啡與科技深度融合的時代。' }
+                            ],
+                            originTitle: '📖 進程細節',
+                            tipsTitle: '🌍 歷史意義',
+                            tips: [
+                                { icon: '🔬', title: '量化是核心', desc: '第四波最大特徵：「感性描述」+「科學量化」並存。TDS 折射計、E61 機台水溫感測器都是工具。' },
+                                { icon: '🧪', title: '處理法大實驗', desc: '厭氧、二氧化碳浸漬、酒桶熟成、麝香貓、雙重發酵...產地端正在做風味的瘋狂實驗。' },
+                                { icon: '🌡️', title: '氣候是最大威脅', desc: '阿拉比卡需要 18-22°C 涼爽氣候，全球暖化使許多現有產地不再適合，咖啡帶正向更高海拔遷移。' },
+                                { icon: '🤖', title: 'AI 即將顛覆', desc: 'AI 烘焙曲線預測、AI 杯測、AI 沖煮配方推薦正在被開發。咖啡的下一個十年將是科技驅動。' },
+                                { icon: '🌍', title: '永續是責任', desc: '咖啡仰賴熱帶國家小農，氣候 + 公平 + 碳足跡是這代咖啡人不能逃避的責任。' }
+                            ]
+                        }
+                    }
+                },
+                variety: {
+                    title: '🌱 咖啡豆種',
+                    icon: '🌱',
+                    items: {
+                        typica:    { name: 'Typica',           tagline: '所有阿拉比卡的祖先，平衡乾淨', emoji: '🌿', status: 'soon' },
+                        bourbon:   { name: 'Bourbon',          tagline: '甜感與圓潤的黃金品種', emoji: '🍯', status: 'soon' },
+                        geisha:    { name: 'Geisha (Gesha)',   tagline: '巴拿馬翡翠莊園 2004 年驚艷世界', emoji: '🌸', status: 'soon' },
+                        sl28:      { name: 'SL28 / SL34',      tagline: '肯亞黑醋栗酸的代名詞', emoji: '🍇', status: 'soon' },
+                        pacamara:  { name: 'Pacamara',         tagline: '薩爾瓦多巨型豆 / 熱帶水果調', emoji: '🍍', status: 'soon' },
+                        caturra:   { name: 'Caturra',          tagline: 'Bourbon 變種、矮株高產', emoji: '🌳', status: 'soon' },
+                        catuai:    { name: 'Catuai',           tagline: 'Caturra × Mundo Novo 巴西主力', emoji: '🌾', status: 'soon' },
+                        ethiopia_heirloom: { name: 'Ethiopia Heirloom', tagline: '衣索比亞原生混合品系，花果香炸裂', emoji: '🌺', status: 'soon' },
+                        robusta:   { name: 'Robusta',          tagline: '高咖啡因 / 低成本 / 義式拼配主力', emoji: '💪', status: 'soon' }
+                    }
+                },
+                process: {
+                    title: '🔄 咖啡處理法',
+                    icon: '🔄',
+                    items: {
+                        washed:    { name: '水洗 (Washed)',         tagline: '乾淨、明亮、酸質清晰，精品主流', emoji: '💧', status: 'soon' },
+                        natural:   { name: '日曬 (Natural)',        tagline: '果實完整曬乾，水果調與發酵感', emoji: '☀️', status: 'soon' },
+                        honey:     { name: '蜜處理 (Honey)',        tagline: '介於水洗與日曬，分黃/紅/黑蜜', emoji: '🍯', status: 'soon' },
+                        anaerobic: { name: '厭氧發酵 (Anaerobic)',  tagline: '密封發酵：藍莓、酒香、實驗風味', emoji: '🍷', status: 'soon' },
+                        carbonic:  { name: '二氧化碳浸漬',          tagline: '葡萄酒釀造法移植：強烈水果發酵', emoji: '🫧', status: 'soon' },
+                        wet_hulled:{ name: '濕剝 (Wet-Hulled)',     tagline: '印尼曼特寧獨有，土壤香草巧克力', emoji: '🌋', status: 'soon' }
+                    }
+                },
+                roast: {
+                    title: '🔥 烘焙度',
+                    icon: '🔥',
+                    items: {
+                        cinnamon:    { name: 'Cinnamon Roast',    tagline: '極淺焙：明亮酸質，花果調主導', emoji: '🌸', status: 'soon' },
+                        city:        { name: 'City Roast',        tagline: '淺焙：第三波精品的最愛', emoji: '🍋', status: 'soon' },
+                        city_plus:   { name: 'City+',             tagline: '淺中焙：酸甜平衡的黃金', emoji: '🍑', status: 'soon' },
+                        full_city:   { name: 'Full City',         tagline: '中焙：均衡、巧克力與堅果', emoji: '🍫', status: 'soon' },
+                        full_city_plus: { name: 'Full City+',     tagline: '中深焙：油光出現、苦甜', emoji: '🌰', status: 'soon' },
+                        vienna:      { name: 'Vienna',            tagline: '深焙：焦糖與煙燻', emoji: '🔥', status: 'soon' },
+                        french:      { name: 'French',            tagline: '極深焙：苦感主導、義式拼配用', emoji: '🌑', status: 'soon' },
+                        italian:     { name: 'Italian',           tagline: '炭焙：燒焦邊緣，傳統義式', emoji: '⚫', status: 'soon' }
+                    }
+                },
                 dripper: {
                     title: '☕ 手沖濾杯',
                     icon: '🔻',
@@ -8314,10 +8870,10 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 }
             };
 
-            let _encyCurrentCat = 'dripper';
+            let _encyCurrentCat = 'history';
 
             window.openEncyclopedia = function(cat) {
-                _encyCurrentCat = cat || 'dripper';
+                _encyCurrentCat = cat || 'history';
                 document.querySelectorAll('.ency-tab').forEach(t => t.classList.toggle('active', t.dataset.cat === _encyCurrentCat));
                 _encyRenderList();
                 document.getElementById('ency-back-btn').style.display = 'none';
@@ -8421,15 +8977,15 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                         <div class="ency-specs">${specs}</div>
                     </div>` : ''}
                     ${origin ? `<div class="ency-block">
-                        <h3 class="ency-block-title">📜 發明起源</h3>
+                        <h3 class="ency-block-title">${it.originTitle || '📜 發明起源'}</h3>
                         <div class="ency-timeline">${origin}</div>
                     </div>` : ''}
                     ${steps ? `<div class="ency-block">
-                        <h3 class="ency-block-title">🛠️ 操作步驟</h3>
+                        <h3 class="ency-block-title">${it.stepsTitle || '🛠️ 操作步驟'}</h3>
                         <div class="ency-steps">${steps}</div>
                     </div>` : ''}
                     ${tips ? `<div class="ency-block">
-                        <h3 class="ency-block-title">💡 美味小方法</h3>
+                        <h3 class="ency-block-title">${it.tipsTitle || '💡 美味小方法'}</h3>
                         <div class="ency-tips">${tips}</div>
                     </div>` : ''}
                 `;
