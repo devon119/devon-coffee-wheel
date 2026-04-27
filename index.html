@@ -11084,18 +11084,18 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 }).join('');
                 const readyCount = Object.values(items).filter(i => i.status === 'ready').length;
                 const totalCount = Object.keys(items).length;
-                const treeHtml = (_encyCurrentCat === 'variety' && typeof _renderVarietyTree === 'function') ? _renderVarietyTree() : '';
-                const gridTitle = _encyCurrentCat === 'variety' ? '📜 完整列表' : `${cat.icon} ${cat.title}`;
-                document.getElementById('ency-body').innerHTML = `
-                    ${treeHtml}
+                const isVariety = (_encyCurrentCat === 'variety' && typeof _renderVarietyTree === 'function');
+                const treeHtml = isVariety ? _renderVarietyTree() : '';
+                const gridSection = isVariety ? '' : `
                     <div class="ency-section">
-                        <h3 class="ency-section-title">${gridTitle}
+                        <h3 class="ency-section-title">${cat.icon} ${cat.title}
                             <span style="font-size:13px; font-weight:600; color:#8d6e63; margin-left:auto;">
                                 ${readyCount} / ${totalCount} 已上線
                             </span>
                         </h3>
                         <div class="ency-grid">${cards}</div>
                     </div>`;
+                document.getElementById('ency-body').innerHTML = treeHtml + gridSection;
             }
 
             // ========== 🎯 主視圖切換（工作台 / 學習中心） ==========
@@ -11227,69 +11227,73 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
 
             function _renderVarietyTree() {
                 const items = ENCYCLOPEDIA.variety.items;
-                // 上往下垂直 layout
-                const LEAF_W = 138;        // 葉子寬度
-                const LEAF_H = 26;         // 葉子高度
-                const LEAF_GAP = 6;        // 葉子間距
-                const COL_W = 158;         // 每個譜系欄寬
-                const Y_ROOT = 50;
-                const Y_SPECIES = 165;
-                const Y_BRANCH = 295;
-                const Y_LEAVES_START = 380;
+                // 上往下垂直 layout，葉子水平展開（兄弟並排）
+                const LEAF_W = 130;
+                const LEAF_H = 30;
+                const LEAF_GAP_X = 14;     // 同譜系下葉子之間的間距
+                const BRANCH_GAP = 36;     // 譜系之間的間距
+                const SPECIES_GAP = 80;    // 物種之間的間距
+                const Y_ROOT = 60;
+                const Y_SPECIES = 200;
+                const Y_BRANCH = 350;
+                const Y_LEAVES = 460;
 
-                // 譜系按出現順序橫向排列
+                // 從左到右計算每個葉子 x，譜系/物種 x = 其下子節點中心
+                let cursorX = 60;
+                const leafItems = [];
                 const allBranches = [];
-                VARIETY_TREE.forEach(sp => {
-                    sp.branches.forEach(br => {
-                        allBranches.push({ ...br, species: sp.species });
+                const speciesNodes = [];
+
+                VARIETY_TREE.forEach((sp, spIdx) => {
+                    const spStartX = cursorX;
+                    const spBranches = [];
+                    sp.branches.forEach((br, brIdx) => {
+                        const brStartX = cursorX;
+                        const brLeaves = [];
+                        br.items.forEach(it => {
+                            const ent = items[it.id];
+                            const leaf = {
+                                id: it.id, em: it.em,
+                                name: ent ? ent.name : it.id,
+                                tagline: ent ? ent.tagline : '',
+                                x: cursorX, y: Y_LEAVES,
+                                branchStroke: br.stroke
+                            };
+                            leafItems.push(leaf);
+                            brLeaves.push(leaf);
+                            cursorX += LEAF_W + LEAF_GAP_X;
+                        });
+                        const brEndX = cursorX - LEAF_GAP_X;
+                        const brCenterX = (brStartX + brEndX + LEAF_W) / 2;
+                        const brNode = {
+                            x: brCenterX, y: Y_BRANCH,
+                            name: br.name, emoji: br.emoji,
+                            stroke: br.stroke, meta: br.meta,
+                            leaves: brLeaves, species: sp.species
+                        };
+                        allBranches.push(brNode);
+                        spBranches.push(brNode);
+                        brLeaves.forEach(l => { l.branchX = brNode.x; l.branchY = brNode.y; });
+                        // 譜系後 gap
+                        cursorX += BRANCH_GAP - LEAF_GAP_X;
                     });
-                });
-                const totalCols = allBranches.length;
-                const totalW = totalCols * COL_W + 80;
-
-                // 計算每個譜系 x（中心）
-                allBranches.forEach((br, i) => {
-                    br.x = 40 + i * COL_W + COL_W / 2;
-                    br.y = Y_BRANCH;
-                });
-
-                // 物種 x = 其下譜系 x 平均
-                const speciesNodes = VARIETY_TREE.map(sp => {
-                    const myBranches = allBranches.filter(b => b.species === sp.species);
-                    const avgX = myBranches.reduce((s, b) => s + b.x, 0) / myBranches.length;
+                    const spEndX = cursorX - BRANCH_GAP;
+                    const spCenterX = (spStartX + spEndX + LEAF_W) / 2;
                     const color = sp.species === 'arabica' ? '#2e7d32'
                                 : sp.species === 'canephora' ? '#5d4037'
                                 : '#558b2f';
-                    return {
-                        x: avgX, y: Y_SPECIES,
+                    speciesNodes.push({
+                        x: spCenterX, y: Y_SPECIES,
                         title: sp.title, note: sp.note, color,
-                        species: sp.species,
-                        branches: myBranches
-                    };
-                });
-
-                const rootX = totalW / 2;
-
-                // 葉子座標：每個譜系下方垂直排列
-                const leafItems = [];
-                let maxLeafY = Y_LEAVES_START;
-                allBranches.forEach(br => {
-                    br.items.forEach((it, leafIdx) => {
-                        const ent = items[it.id];
-                        const ly = Y_LEAVES_START + leafIdx * (LEAF_H + LEAF_GAP);
-                        leafItems.push({
-                            id: it.id, em: it.em,
-                            name: ent ? ent.name : it.id,
-                            tagline: ent ? ent.tagline : '',
-                            x: br.x - LEAF_W / 2, y: ly,
-                            branchX: br.x, branchY: br.y,
-                            branchStroke: br.stroke
-                        });
-                        if (ly + LEAF_H > maxLeafY) maxLeafY = ly + LEAF_H;
+                        species: sp.species, branches: spBranches
                     });
+                    spBranches.forEach(b => { b.spX = spCenterX; });
+                    cursorX += SPECIES_GAP - BRANCH_GAP;
                 });
 
-                const totalH = maxLeafY + 40;
+                const totalW = cursorX + 60;
+                const totalH = Y_LEAVES + LEAF_H + 50;
+                const rootX = totalW / 2;
 
                 // 連線：根 → 物種（垂直 Bezier，上往下）
                 const rootToSp = speciesNodes.map(sp => {
@@ -11314,7 +11318,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                     const x1 = l.branchX, y1 = l.branchY + 14;
                     const x2 = l.x + LEAF_W / 2, y2 = l.y;
                     const midY = (y1 + y2) / 2;
-                    return `<path d="M ${x1} ${y1} C ${x1} ${midY}, ${x2} ${midY}, ${x2} ${y2}" stroke="${l.branchStroke}" stroke-width="1.4" fill="none" opacity="0.5" stroke-linecap="round"/>`;
+                    return `<path d="M ${x1} ${y1} C ${x1} ${midY}, ${x2} ${midY}, ${x2} ${y2}" stroke="${l.branchStroke}" stroke-width="2" fill="none" opacity="0.65" stroke-linecap="round"/>`;
                 }).join('');
 
                 // 葉子
@@ -11323,11 +11327,11 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                     const safeTagline = (l.tagline || '').replace(/"/g, '&quot;').replace(/'/g, '&apos;');
                     return `<g class="vt-leaf-g" style="animation-delay:${delay}s; cursor:pointer" onclick="showEncyDetail('variety','${l.id}')">
                         <title>${safeTagline}</title>
-                        <rect x="${l.x}" y="${l.y}" width="${LEAF_W}" height="${LEAF_H}" rx="13" ry="13"
-                              fill="#fff" stroke="${l.branchStroke}" stroke-width="1.5"
+                        <rect x="${l.x}" y="${l.y}" width="${LEAF_W}" height="${LEAF_H}" rx="15" ry="15"
+                              fill="#fff" stroke="${l.branchStroke}" stroke-width="1.8"
                               filter="url(#vt-shadow)"/>
-                        <text x="${l.x + 12}" y="${l.y + 18}" font-size="14" pointer-events="none">${l.em}</text>
-                        <text x="${l.x + 32}" y="${l.y + 18}" font-size="11.5" font-weight="700" fill="#3e2723" pointer-events="none">${l.name}</text>
+                        <text x="${l.x + 14}" y="${l.y + 21}" font-size="16" pointer-events="none">${l.em}</text>
+                        <text x="${l.x + 36}" y="${l.y + 20}" font-size="12" font-weight="700" fill="#3e2723" pointer-events="none">${l.name}</text>
                     </g>`;
                 }).join('');
 
@@ -11368,7 +11372,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                     <h3 class="vt-title">🌳 咖啡豆種血緣樹</h3>
                     <p class="vt-subtitle">由上而下：根（咖啡屬）→ 物種 → 譜系 → 25 個品種葉子　·　點葉子進詳情</p>
                     <div class="vt-svg-scroll">
-                        <svg viewBox="0 0 ${totalW} ${totalH}" xmlns="http://www.w3.org/2000/svg" style="min-width:1100px; width:100%; height:auto;">
+                        <svg viewBox="0 0 ${totalW} ${totalH}" xmlns="http://www.w3.org/2000/svg" style="min-width:${totalW}px; height:auto;">
                             <defs>
                                 <filter id="vt-shadow" x="-30%" y="-30%" width="160%" height="160%">
                                     <feDropShadow dx="0" dy="2" stdDeviation="2.5" flood-color="rgba(93,64,55,0.3)"/>
