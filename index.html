@@ -462,6 +462,214 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             font-size: 13px !important; padding: 4px 12px !important;
         }
 
+        /* ========== 📚 沖煮百科 Modal ========== */
+        #encyclopedia-modal {
+            position: fixed; inset: 0; z-index: 2080;
+            background: rgba(20, 15, 10, 0.65); backdrop-filter: blur(8px);
+            display: none; overflow-y: auto; padding: 24px 16px;
+            box-sizing: border-box;
+            opacity: 0; transition: opacity 0.25s ease-out;
+        }
+        #encyclopedia-modal.open { display: block; opacity: 1; }
+        #encyclopedia-modal .ency-card {
+            max-width: 1080px; margin: 0 auto; background: #fdf9f3;
+            border-radius: 20px; box-shadow: 0 30px 100px rgba(0,0,0,0.4);
+            overflow: hidden;
+            transform: translateY(24px) scale(0.985); opacity: 0;
+            transition: transform 0.3s cubic-bezier(.22,.8,.33,1), opacity 0.25s ease-out;
+        }
+        #encyclopedia-modal.open .ency-card { transform: translateY(0) scale(1); opacity: 1; }
+        .ency-header {
+            padding: 20px 28px;
+            background: linear-gradient(135deg, #2e1a0e 0%, #5d4037 60%, #6d4c41 100%);
+            color: #fff; display: flex; align-items: center; gap: 14px;
+            border-bottom: 3px solid #8d6e63;
+        }
+        .ency-back {
+            background: rgba(255,255,255,0.15); border: none; color: #fff;
+            padding: 7px 14px; border-radius: 18px; font-size: 14px;
+            cursor: pointer; transition: background .15s; font-weight: 600;
+        }
+        .ency-back:hover { background: rgba(255,255,255,0.3); }
+        .ency-title-text {
+            flex: 1; font-size: 22px; font-weight: 800; display: flex; gap: 10px; align-items: center;
+            letter-spacing: 0.5px;
+        }
+        .ency-tabs { display: flex; gap: 6px; }
+        .ency-tab {
+            background: rgba(255,255,255,0.12); border: none; color: #fff;
+            padding: 7px 14px; border-radius: 16px; font-size: 13px;
+            cursor: pointer; transition: background .15s, transform .15s; font-weight: 600;
+        }
+        .ency-tab:hover { background: rgba(255,255,255,0.22); }
+        .ency-tab.active { background: #ffb74d; color: #3e2723; }
+        .ency-close {
+            background: rgba(255,255,255,0.15); border: none; color: #fff;
+            width: 38px; height: 38px; border-radius: 50%; font-size: 19px; cursor: pointer;
+            transition: background 0.15s;
+        }
+        .ency-close:hover { background: rgba(255,255,255,0.3); }
+        .ency-body { padding: 28px 30px 36px; min-height: 500px; }
+
+        /* ── 列表 grid ── */
+        .ency-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 18px;
+        }
+        .ency-card-item {
+            background: #fff; border-radius: 14px; padding: 16px 16px 18px;
+            cursor: pointer; box-shadow: 0 2px 10px rgba(93,64,55,0.08);
+            transition: transform .2s, box-shadow .2s;
+            display: flex; flex-direction: column; gap: 10px;
+            position: relative; overflow: hidden;
+        }
+        .ency-card-item:hover {
+            transform: translateY(-3px); box-shadow: 0 10px 28px rgba(93,64,55,0.18);
+        }
+        .ency-card-item.coming-soon { opacity: 0.55; cursor: default; }
+        .ency-card-item.coming-soon:hover { transform: none; box-shadow: 0 2px 10px rgba(93,64,55,0.08); }
+        .ency-card-item .ency-thumb {
+            width: 100%; aspect-ratio: 1.2 / 1; background: linear-gradient(180deg, #fffaf3 0%, #f5ede0 100%);
+            border-radius: 10px; display: flex; align-items: center; justify-content: center;
+            border: 1px solid #efe5d3;
+        }
+        .ency-card-item .ency-thumb svg { width: 88%; height: 88%; }
+        .ency-card-item .ency-name { font-size: 16px; font-weight: 800; color: #3e2723; }
+        .ency-card-item .ency-tagline { font-size: 12.5px; color: #795548; line-height: 1.55; min-height: 36px; }
+        .ency-card-item .ency-soon-badge {
+            position: absolute; top: 10px; right: 10px;
+            background: #fff3e0; color: #e65100; font-size: 11px; font-weight: 700;
+            padding: 3px 9px; border-radius: 10px;
+        }
+        .ency-section-title {
+            font-size: 17px; font-weight: 800; color: #5d4037;
+            margin: 0 0 14px 0; padding-bottom: 8px;
+            border-bottom: 2px solid #d7ccc8; display: flex; align-items: center; gap: 8px;
+        }
+        .ency-section { margin-bottom: 28px; }
+        .ency-section:last-child { margin-bottom: 0; }
+
+        /* ── 詳情頁 ── */
+        .ency-detail-hero {
+            background: linear-gradient(180deg, #fffaf2 0%, #f5ede0 100%);
+            border-radius: 16px; padding: 24px;
+            display: grid; grid-template-columns: 1.05fr 1fr; gap: 26px;
+            align-items: center; margin-bottom: 26px;
+            box-shadow: inset 0 0 0 1px #efe5d3;
+        }
+        .ency-detail-hero .ency-hero-svg {
+            width: 100%; aspect-ratio: 1.15 / 1; display: flex; align-items: center; justify-content: center;
+        }
+        .ency-detail-hero .ency-hero-svg svg { width: 100%; height: 100%; }
+        .ency-detail-hero .ency-meta h2 {
+            margin: 0 0 6px 0; font-size: 26px; color: #3e2723; font-weight: 900; letter-spacing: 0.5px;
+        }
+        .ency-detail-hero .ency-meta .ency-subtitle {
+            font-size: 14.5px; color: #8d6e63; margin-bottom: 14px; line-height: 1.6;
+        }
+        .ency-chip-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+        .ency-chip {
+            background: #fff; border: 1.5px solid #d7ccc8; color: #5d4037;
+            padding: 4px 12px; border-radius: 14px; font-size: 12.5px; font-weight: 700;
+        }
+        .ency-chip.warm { background: #fff3e0; border-color: #ffb74d; color: #e65100; }
+        .ency-chip.cool { background: #e3f2fd; border-color: #64b5f6; color: #1565c0; }
+        .ency-chip.green { background: #e8f5e9; border-color: #66bb6a; color: #2e7d32; }
+        .ency-chip.purple { background: #f3e5f5; border-color: #ab47bc; color: #6a1b9a; }
+
+        .ency-block { margin-bottom: 26px; }
+        .ency-block-title {
+            font-size: 17px; font-weight: 800; color: #4e342e;
+            margin: 0 0 12px 0; display: flex; align-items: center; gap: 8px;
+        }
+
+        /* 起源 timeline */
+        .ency-timeline { position: relative; padding-left: 26px; }
+        .ency-timeline::before {
+            content: ''; position: absolute; left: 8px; top: 8px; bottom: 8px;
+            width: 2px; background: linear-gradient(180deg, #ffb74d 0%, #8d6e63 100%); border-radius: 1px;
+        }
+        .ency-tl-item { position: relative; padding-bottom: 14px; }
+        .ency-tl-item:last-child { padding-bottom: 0; }
+        .ency-tl-item::before {
+            content: ''; position: absolute; left: -22px; top: 6px;
+            width: 12px; height: 12px; border-radius: 50%;
+            background: #ffb74d; border: 2px solid #fff;
+            box-shadow: 0 0 0 1.5px #ffb74d;
+        }
+        .ency-tl-year {
+            font-size: 13px; font-weight: 800; color: #e65100;
+            margin-bottom: 2px; letter-spacing: 0.5px;
+        }
+        .ency-tl-text { font-size: 14.5px; color: #4e342e; line-height: 1.7; }
+
+        /* 操作步驟卡片 */
+        .ency-steps { display: grid; grid-template-columns: 1fr; gap: 10px; }
+        .ency-step {
+            display: grid; grid-template-columns: 56px 1fr; gap: 14px; align-items: center;
+            background: #fff; border-radius: 12px; padding: 14px 16px;
+            border: 1.5px solid #efe5d3;
+            transition: transform .15s, box-shadow .15s;
+        }
+        .ency-step:hover { transform: translateX(3px); box-shadow: 0 6px 18px rgba(93,64,55,0.1); }
+        .ency-step-num {
+            background: linear-gradient(135deg, #6d4c41 0%, #8d6e63 100%);
+            color: #fff; width: 44px; height: 44px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 20px; font-weight: 900;
+            box-shadow: 0 3px 10px rgba(109,76,65,0.35);
+        }
+        .ency-step-content .ency-step-title {
+            font-size: 15px; font-weight: 800; color: #3e2723; margin-bottom: 3px;
+            display: flex; gap: 6px; align-items: baseline;
+        }
+        .ency-step-content .ency-step-desc {
+            font-size: 13.5px; color: #6d4c41; line-height: 1.65;
+        }
+
+        /* 美味 tips */
+        .ency-tips { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
+        .ency-tip {
+            background: linear-gradient(135deg, #fff8e1 0%, #fff3e0 100%);
+            border-left: 4px solid #ff9800; padding: 14px 16px;
+            border-radius: 0 12px 12px 0;
+        }
+        .ency-tip-icon { font-size: 22px; margin-bottom: 4px; }
+        .ency-tip-title { font-size: 14.5px; font-weight: 800; color: #e65100; margin-bottom: 4px; }
+        .ency-tip-desc { font-size: 13px; color: #5d4037; line-height: 1.65; }
+
+        /* 規格表格 */
+        .ency-specs {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 0; background: #fff; border-radius: 12px; overflow: hidden;
+            border: 1.5px solid #efe5d3;
+        }
+        .ency-spec-cell {
+            padding: 12px 16px; border-right: 1px solid #f0e6d2; border-bottom: 1px solid #f0e6d2;
+        }
+        .ency-spec-cell:last-child { border-right: none; }
+        .ency-spec-k { font-size: 12px; color: #8d6e63; font-weight: 700; margin-bottom: 4px; }
+        .ency-spec-v { font-size: 14.5px; color: #3e2723; font-weight: 800; }
+
+        @media (max-width: 800px) {
+            #encyclopedia-modal .ency-card { border-radius: 14px; }
+            .ency-header { padding: 14px 16px; gap: 8px; flex-wrap: wrap; }
+            .ency-title-text { font-size: 17px; flex-basis: 100%; order: -1; }
+            .ency-tabs { gap: 4px; }
+            .ency-tab { padding: 5px 10px; font-size: 12px; }
+            .ency-body { padding: 18px 16px 24px; }
+            .ency-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+            .ency-card-item { padding: 12px; }
+            .ency-card-item .ency-name { font-size: 14px; }
+            .ency-card-item .ency-tagline { font-size: 11.5px; min-height: 30px; }
+            .ency-detail-hero {
+                grid-template-columns: 1fr; padding: 18px; gap: 14px;
+            }
+            .ency-detail-hero .ency-meta h2 { font-size: 22px; }
+            .ency-step { grid-template-columns: 44px 1fr; padding: 12px; gap: 10px; }
+            .ency-step-num { width: 36px; height: 36px; font-size: 17px; }
+        }
+
         /* ========== 🎬 動畫效果 ========== */
         @keyframes viz-fade-up {
             from { opacity: 0; transform: translateY(18px); }
@@ -1440,6 +1648,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 <button class="preset-btn" id="blind-btn" onclick="toggleBlindMode()" style="background:#fff3e0; color:#e65100; border-color:#e65100;">🎲 盲測練習</button>
                 <button class="preset-btn" onclick="startFlashcard()" style="background:#e3f2fd; color:#1565c0; border-color:#1565c0;">🎴 學習卡</button>
                 <button class="preset-btn" onclick="openLearningDashboard()" style="background:#f3e5f5; color:#6a1b9a; border-color:#6a1b9a;" title="學習進度：掌握率/熱力圖/今日複習">📊 學習進度</button>
+                <button class="preset-btn" onclick="openEncyclopedia()" style="background:#e8f5e9; color:#2e7d32; border-color:#2e7d32;" title="沖煮器材百科：歷史/特色/操作/小技巧">📚 沖煮百科</button>
             </div>
             <div class="config-grid">
                 <div class="config-group">
@@ -1801,6 +2010,23 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 <div class="av-content" id="av-content"></div>
             </div>
             <div class="av-footer" id="av-footer"></div>
+        </div>
+    </div>
+
+    <!-- 📚 沖煮百科 Modal -->
+    <div id="encyclopedia-modal" role="dialog" aria-modal="true" aria-labelledby="ency-title">
+        <div class="ency-card">
+            <div class="ency-header">
+                <button class="ency-back" id="ency-back-btn" onclick="encyBack()" style="display:none">← 返回</button>
+                <span class="ency-title-text" id="ency-title">📚 沖煮百科</span>
+                <div class="ency-tabs" id="ency-tabs">
+                    <button class="ency-tab active" data-cat="dripper" onclick="encySwitchCat('dripper')">濾杯</button>
+                    <button class="ency-tab" data-cat="brew" onclick="encySwitchCat('brew')">沖煮方式</button>
+                    <button class="ency-tab" data-cat="method" onclick="encySwitchCat('method')">手沖手法</button>
+                </div>
+                <button class="ency-close" onclick="closeEncyclopedia()" aria-label="關閉百科">✕</button>
+            </div>
+            <div class="ency-body" id="ency-body"></div>
         </div>
     </div>
 
@@ -5340,6 +5566,318 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 document.body.style.overflow = '';
                 _stopViewerReplayLoop();
             };
+
+            // ========== 📚 沖煮百科 ==========
+
+            // V60 詳情大圖（剖面 + 內部結構 + 標註）
+            const ENCY_SVG_V60 = `<svg viewBox="0 0 480 420" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="v60h-red" x1="0" y1="0" x2="1" y2="0">
+                        <stop offset="0%" stop-color="#7d0000"/>
+                        <stop offset="35%" stop-color="#d32f2f"/>
+                        <stop offset="55%" stop-color="#ef5350"/>
+                        <stop offset="80%" stop-color="#c62828"/>
+                        <stop offset="100%" stop-color="#7d0000"/>
+                    </linearGradient>
+                    <linearGradient id="v60h-coffee" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#5d4037"/>
+                        <stop offset="100%" stop-color="#2e1a0e"/>
+                    </linearGradient>
+                    <radialGradient id="v60h-drop">
+                        <stop offset="0%" stop-color="#a1887f"/>
+                        <stop offset="100%" stop-color="#3e2723"/>
+                    </radialGradient>
+                    <radialGradient id="v60h-shadow" cx="0.5" cy="0.5" r="0.5">
+                        <stop offset="0%" stop-color="rgba(0,0,0,0.28)"/>
+                        <stop offset="100%" stop-color="rgba(0,0,0,0)"/>
+                    </radialGradient>
+                </defs>
+                <ellipse cx="240" cy="372" rx="130" ry="14" fill="url(#v60h-shadow)"/>
+                <!-- 剖面後牆 -->
+                <path d="M 80 110 L 400 110 L 244 306 L 236 306 Z" fill="#5d0000"/>
+                <!-- 內部空腔（剖面看到內部）-->
+                <path d="M 88 116 L 392 116 L 244 300 L 236 300 Z" fill="#2a1414"/>
+                <!-- 內部濾紙（V 形）-->
+                <path d="M 96 118 L 384 118 L 246 298 L 234 298 Z" fill="rgba(255,250,240,0.92)" stroke="#e0d4b8" stroke-width="1"/>
+                <path d="M 96 118 L 234 298" stroke="#d4c5a8" stroke-width="1.5"/>
+                <!-- 咖啡粉床 -->
+                <path d="M 168 226 L 312 226 L 247 294 L 233 294 Z" fill="url(#v60h-coffee)"/>
+                <ellipse cx="240" cy="228" rx="72" ry="3.5" fill="#8d6e63" opacity="0.45"/>
+                <!-- 外殼（前 3/4 視角，不剖開）-->
+                <path d="M 80 110 L 400 110 L 312 226 L 168 226 Z" fill="url(#v60h-red)" opacity="0.94"/>
+                <!-- 螺旋肋紋 -->
+                <g stroke="#3a0808" stroke-width="1.2" opacity="0.5" fill="none">
+                    <path d="M 100 122 Q 160 170 192 224"/>
+                    <path d="M 140 118 Q 180 170 207 224"/>
+                    <path d="M 180 115 Q 202 170 222 224"/>
+                    <path d="M 220 113 Q 228 170 237 224"/>
+                    <path d="M 260 113 Q 252 170 243 224"/>
+                    <path d="M 300 115 Q 278 170 258 224"/>
+                    <path d="M 340 118 Q 300 170 273 224"/>
+                    <path d="M 380 122 Q 320 170 288 224"/>
+                </g>
+                <!-- 上緣厚環 -->
+                <ellipse cx="240" cy="110" rx="160" ry="6" fill="#a01818"/>
+                <ellipse cx="240" cy="110" rx="156" ry="3.5" fill="#3a0c0c"/>
+                <ellipse cx="240" cy="110" rx="156" ry="2" fill="rgba(255,255,255,0.45)"/>
+                <!-- 整體高光 -->
+                <path d="M 100 120 Q 130 175 175 222" stroke="rgba(255,205,205,0.55)" stroke-width="3" fill="none"/>
+                <!-- 把手 -->
+                <path d="M 400 130 Q 434 144 434 175 Q 434 206 400 220" fill="none" stroke="#7d0000" stroke-width="7" stroke-linecap="round"/>
+                <path d="M 402 132 Q 430 146 430 175 Q 430 204 402 218" fill="none" stroke="#c62828" stroke-width="2" stroke-linecap="round"/>
+                <!-- 底座 -->
+                <path d="M 232 226 L 248 226 L 252 270 L 228 270 Z" fill="#5d0000"/>
+                <ellipse cx="240" cy="270" rx="14" ry="3" fill="#3a0c0c"/>
+                <!-- 大單孔 -->
+                <ellipse cx="240" cy="228" rx="6.5" ry="2" fill="#0a0404"/>
+                <!-- 咖啡水珠 -->
+                <ellipse cx="240" cy="290" rx="5" ry="7" fill="url(#v60h-drop)"/>
+                <ellipse cx="240" cy="320" rx="3.5" ry="5" fill="url(#v60h-drop)" opacity="0.75"/>
+                <ellipse cx="240" cy="345" rx="2.2" ry="3.2" fill="url(#v60h-drop)" opacity="0.5"/>
+                <!-- 60° 標註 -->
+                <path d="M 220 142 Q 232 152 244 142" stroke="#1565c0" stroke-width="1.2" fill="none"/>
+                <text x="232" y="174" font-size="13" font-weight="700" fill="#1565c0" text-anchor="middle">60°</text>
+                <!-- 螺旋肋標註 -->
+                <line x1="120" y1="172" x2="58" y2="190" stroke="#e65100" stroke-width="1.2" stroke-dasharray="3 2"/>
+                <text x="55" y="206" font-size="12" font-weight="700" fill="#e65100" text-anchor="end">螺旋肋</text>
+                <text x="55" y="220" font-size="10.5" fill="#e65100" text-anchor="end">引導空氣排出</text>
+                <!-- 大單孔標註 -->
+                <line x1="248" y1="230" x2="338" y2="248" stroke="#2e7d32" stroke-width="1.2" stroke-dasharray="3 2"/>
+                <text x="342" y="252" font-size="12" font-weight="700" fill="#2e7d32">大單孔</text>
+                <text x="342" y="266" font-size="10.5" fill="#2e7d32">流速由你決定</text>
+                <!-- 把手標註 -->
+                <line x1="436" y1="175" x2="466" y2="158" stroke="#6a1b9a" stroke-width="1.2" stroke-dasharray="3 2"/>
+                <text x="475" y="156" font-size="12" font-weight="700" fill="#6a1b9a" text-anchor="end">把手</text>
+                <!-- 咖啡粉床標註 -->
+                <line x1="170" y1="232" x2="20" y2="262" stroke="#5d4037" stroke-width="1.2" stroke-dasharray="3 2"/>
+                <text x="20" y="280" font-size="12" font-weight="700" fill="#5d4037">咖啡粉床</text>
+                <text x="20" y="294" font-size="10.5" fill="#5d4037">中粉、20-25g</text>
+            </svg>`;
+
+            const ENCYCLOPEDIA = {
+                dripper: {
+                    title: '☕ 手沖濾杯',
+                    icon: '🔻',
+                    items: {
+                        v60: {
+                            name: 'Hario V60',
+                            tagline: '日本流體力學的藝術品，全球最普及的錐形濾杯',
+                            thumb: () => DRIPPER_SVG.v60,
+                            status: 'ready',
+                            heroSvg: ENCY_SVG_V60,
+                            subtitle: '60° 圓錐 × 螺旋導流肋 × 大單孔，給你最大的萃取控制權。每一注水溫、節奏、水柱粗細，都會直接體現在杯中。',
+                            chips: [
+                                { text: '60° 圓錐', class: '' },
+                                { text: '螺旋導流肋', class: 'warm' },
+                                { text: '大單孔', class: 'green' },
+                                { text: '高流速', class: 'cool' },
+                                { text: '對手法敏感', class: 'purple' },
+                                { text: '材質：陶瓷/玻璃/塑膠/金屬/銅' }
+                            ],
+                            specs: [
+                                { k: '研發者', v: 'Hario 株式会社（日本）' },
+                                { k: '發售年', v: '2005' },
+                                { k: '濾杯角度', v: '60° 圓錐' },
+                                { k: '出水孔', v: '大單孔（直徑約 18mm）' },
+                                { k: '建議粉量', v: '15-25g（單杯）/ 30-40g（雙杯）' },
+                                { k: '建議粉水比', v: '1:15 ~ 1:17' }
+                            ],
+                            origin: [
+                                { year: '2004', text: 'Hario 工程師團隊以「給沖煮者最大的控制空間」為目標展開研發，靈感來自日本傳統手工陶瓷與流體力學。' },
+                                { year: '2005', text: '正式發售。「V60」名字 = V 形 + 60° 角度。最初推出陶瓷與玻璃版本，定價親民。' },
+                                { year: '2010', text: 'World Brewers Cup 開賽後，V60 成為冠軍最常使用的器材之一，全球咖啡圈瘋狂追捧。' },
+                                { year: '2016', text: '日本選手粕谷哲以四六法 + V60 拿下 WBrC 冠軍，公開沖煮法引爆全球家用 V60 風潮。' },
+                                { year: '至今', text: '陶瓷、玻璃、塑膠、金屬、銅版本齊全，從家用到精品咖啡店、世界賽都看得到。' }
+                            ],
+                            steps: [
+                                { title: '折濾紙 + 燙紙', desc: '沿濾紙縫邊摺好，貼合 V60 內壁。沖一輪熱水把濾紙紙味洗掉、同時預熱濾杯與下壺，再倒掉熱身水。' },
+                                { title: '研磨 + 量粉', desc: '中粉（小富士 3.5、Comandante 22-25 click），1:15 ~ 1:16 粉水比。粉量 15-20g 是單杯甜蜜點。' },
+                                { title: 'Bloom 悶蒸', desc: '第一注 2 倍粉重的水（約 30-40g）從中心向外螺旋沾濕全粉，等 30-45 秒讓 CO₂ 釋放、粉床膨脹。' },
+                                { title: '分段注水', desc: '從中心向外、再回中心的同心圓注水，避免碰到濾紙邊緣。新手可分 2-3 段，每段間隔 30 秒讓水位下降一半再續。' },
+                                { title: '控時 2:30-3:30', desc: '太快（<2 分）粗化、太慢（>4 分）過萃。完成後輕轉杯讓粉床平整、聞乾香、再喝。' }
+                            ],
+                            tips: [
+                                { icon: '💧', title: '細水柱 vs 粗水柱', desc: '細水柱（鶴嘴壺）萃取均勻、酸質乾淨；粗水柱攪拌力強、body 厚實。同一支豆兩種水柱會喝到完全不同的杯感。' },
+                                { icon: '🌡️', title: '水溫決定酸甜走向', desc: '水溫 94°C 拉酸度與香氣、92°C 平衡、88-90°C 收斂酸感放大甜感。淺焙建議高一點、深焙降下來避免苦。' },
+                                { icon: '🚫', title: '別碰濾紙邊緣', desc: '注到濾紙會繞過粉床直接流下（channeling），萃取不均、味道偏淡。永遠把水柱留在粉床中央 70% 範圍內。' },
+                                { icon: '⚖️', title: '悶蒸看 bloom', desc: 'Bloom 不膨脹 = 豆子太老或溫度太低；過度膨脹爆掉 = 豆子太新（建議養豆 7-14 天再沖）。' },
+                                { icon: '🌀', title: '第一注決定一切', desc: '前 60 秒的萃取濃度約決定整杯 70% 走向。第一注水溫、水量、節奏沒做好，後面再怎麼補救都有限。' },
+                                { icon: '🎯', title: '不滿意先動研磨', desc: '味道偏酸 → 細一點延長萃取；偏苦澀 → 粗一點縮短時間。研磨變一檔比改水溫更有感。' }
+                            ]
+                        },
+                        kalita:  { name: 'Kalita Wave',    tagline: '不鏽鋼平底 + 3 小孔 + 波浪濾紙，新手最容錯的選擇', thumb: () => DRIPPER_SVG.kalita,  status: 'soon' },
+                        origami: { name: 'Origami',        tagline: '日本陶瓷 20 摺，可換 V60 / Kalita 兩種濾紙', thumb: () => DRIPPER_SVG.origami, status: 'soon' },
+                        chemex:  { name: 'Chemex',         tagline: '玻璃沙漏身 + 厚濾紙，1941 年的茶感經典', thumb: () => DRIPPER_SVG.chemex,  status: 'soon' },
+                        clever:  { name: 'Clever Dripper', tagline: '閥門式浸泡 + 過濾雙模，新手與穩定派最愛', thumb: () => DRIPPER_SVG.clever,  status: 'soon' },
+                        switch:  { name: 'Hario Switch',   tagline: 'V60 + 閥門，純濾紙 / 浸泡兩種喝法切換', thumb: () => DRIPPER_SVG.switch,  status: 'soon' },
+                        orea:    { name: 'Orea V3 / V4',   tagline: '英國設計平底大單孔，世界賽常見的極快流速', thumb: () => DRIPPER_SVG.orea,    status: 'soon' },
+                        april:   { name: 'April Brewer',   tagline: 'Patrik Rolf 設計，平底寬肋的甜感快流', thumb: () => DRIPPER_SVG.april,   status: 'soon' },
+                        melitta: { name: 'Melitta 經典',   tagline: '1908 年發明濾紙手沖法，扎實 body 的早餐杯', thumb: () => DRIPPER_SVG.melitta, status: 'soon' },
+                        stagg:   { name: 'Fellow Stagg X', tagline: '雙層保溫 + 穩定流速，現代設計感濾杯', thumb: () => DRIPPER_SVG.stagg,   status: 'soon' }
+                    }
+                },
+                brew: {
+                    title: '🍯 沖煮方式',
+                    icon: '☕',
+                    items: {
+                        pour_over:    { name: '手沖濾紙',  tagline: '手動控制每一注，最能呈現產區與處理法層次', emoji: '☕', status: 'soon' },
+                        espresso:     { name: '義式濃縮',  tagline: '9 bar 高壓 25-30 秒，濃縮油脂與甜感的精華', emoji: '⚡', status: 'soon' },
+                        french_press: { name: '法式濾壓',  tagline: '完全浸泡 4 分鐘，body 最厚、保留全油脂', emoji: '🫖', status: 'soon' },
+                        aeropress:    { name: '愛樂壓',    tagline: 'Alan Adler 2005 發明，浸泡 + 加壓的混合萃取', emoji: '💨', status: 'soon' },
+                        moka:         { name: '摩卡壺',    tagline: '1933 年義大利家家戶戶的爐火濃縮', emoji: '🔥', status: 'soon' },
+                        siphon:       { name: '虹吸壺',    tagline: '蒸氣壓 + 浸泡 + 過濾的科學儀器美學', emoji: '🧪', status: 'soon' },
+                        cold_brew:    { name: '冷萃',      tagline: '冷水 8-24 小時慢萃，極低酸、巧克力甜感', emoji: '🧊', status: 'soon' }
+                    }
+                },
+                method: {
+                    title: '🥇 手沖手法',
+                    icon: '🌀',
+                    items: {
+                        classic_3:    { name: '三段式',         tagline: '悶蒸 → 中段 → 後段，新手最友善', emoji: '3️⃣', status: 'soon' },
+                        single_pour:  { name: '一刀流',         tagline: '悶蒸後一次注滿，保留 body 與甜感', emoji: '🔪', status: 'soon' },
+                        kasuya_46:    { name: '四六法',         tagline: '粕谷哲 2016 WBrC 冠軍配方，5 段控酸甜濃淡', emoji: '4️⃣', status: 'soon' },
+                        matt_winton:  { name: 'Matt Winton',    tagline: '2015 WBrC 冠軍，高溫短時大水量', emoji: '🥇', status: 'soon' },
+                        lance_hi:     { name: 'Lance Hedrick',  tagline: '極細研磨 + 低溫 + 強攪拌，淺焙堅硬豆解法', emoji: '❄️', status: 'soon' },
+                        hoffmann_ult: { name: 'Hoffmann Ultimate V60', tagline: 'James Hoffmann 推薦，乾淨度極高', emoji: '🌀', status: 'soon' },
+                        scott_rao:    { name: 'Scott Rao 連續注水', tagline: '不斷流維持水位，技術門檻較高', emoji: '🎯', status: 'soon' },
+                        tetsu_ice:    { name: '冰手沖',         tagline: '40% 冰塊 + 60% 熱水急冷，鮮香爆炸', emoji: '🧊', status: 'soon' },
+                        strong_conc:  { name: '濃縮式 1:10',    tagline: '小水量放大濃度，適合做冰美式底', emoji: '💪', status: 'soon' }
+                    }
+                }
+            };
+
+            let _encyCurrentCat = 'dripper';
+
+            window.openEncyclopedia = function(cat) {
+                _encyCurrentCat = cat || 'dripper';
+                document.querySelectorAll('.ency-tab').forEach(t => t.classList.toggle('active', t.dataset.cat === _encyCurrentCat));
+                _encyRenderList();
+                document.getElementById('ency-back-btn').style.display = 'none';
+                document.getElementById('ency-tabs').style.display = 'flex';
+                const m = document.getElementById('encyclopedia-modal');
+                m.style.display = 'block';
+                requestAnimationFrame(() => m.classList.add('open'));
+                document.body.style.overflow = 'hidden';
+            };
+            window.closeEncyclopedia = function() {
+                const m = document.getElementById('encyclopedia-modal');
+                m.classList.remove('open');
+                setTimeout(() => { m.style.display = 'none'; }, 250);
+                document.body.style.overflow = '';
+            };
+            window.encySwitchCat = function(cat) {
+                _encyCurrentCat = cat;
+                document.querySelectorAll('.ency-tab').forEach(t => t.classList.toggle('active', t.dataset.cat === cat));
+                _encyRenderList();
+                document.getElementById('ency-back-btn').style.display = 'none';
+            };
+            window.encyBack = function() {
+                _encyRenderList();
+                document.getElementById('ency-back-btn').style.display = 'none';
+                document.getElementById('ency-tabs').style.display = 'flex';
+            };
+
+            function _encyRenderList() {
+                const cat = ENCYCLOPEDIA[_encyCurrentCat];
+                const items = cat.items;
+                const cards = Object.entries(items).map(([key, it]) => {
+                    const thumb = it.thumb ? it.thumb() : `<div style="font-size:64px">${it.emoji || '☕'}</div>`;
+                    const ready = it.status === 'ready';
+                    const soonBadge = ready ? '' : '<span class="ency-soon-badge">敬請期待</span>';
+                    const onclick = ready ? `onclick="showEncyDetail('${_encyCurrentCat}','${key}')"` : '';
+                    const cls = ready ? '' : 'coming-soon';
+                    return `<div class="ency-card-item ${cls}" ${onclick}>
+                        ${soonBadge}
+                        <div class="ency-thumb">${thumb}</div>
+                        <div class="ency-name">${_escHtml(it.name)}</div>
+                        <div class="ency-tagline">${_escHtml(it.tagline)}</div>
+                    </div>`;
+                }).join('');
+                const readyCount = Object.values(items).filter(i => i.status === 'ready').length;
+                const totalCount = Object.keys(items).length;
+                document.getElementById('ency-body').innerHTML = `
+                    <div class="ency-section">
+                        <h3 class="ency-section-title">${cat.icon} ${cat.title}
+                            <span style="font-size:13px; font-weight:600; color:#8d6e63; margin-left:auto;">
+                                ${readyCount} / ${totalCount} 已上線
+                            </span>
+                        </h3>
+                        <div class="ency-grid">${cards}</div>
+                    </div>`;
+            }
+
+            window.showEncyDetail = function(cat, key) {
+                const it = ENCYCLOPEDIA[cat].items[key];
+                if (!it || it.status !== 'ready') return;
+                document.getElementById('ency-back-btn').style.display = 'inline-block';
+                document.getElementById('ency-tabs').style.display = 'none';
+
+                const chips = (it.chips || []).map(c =>
+                    `<span class="ency-chip ${c.class || ''}">${_escHtml(c.text)}</span>`).join('');
+                const specs = (it.specs || []).map(s =>
+                    `<div class="ency-spec-cell">
+                        <div class="ency-spec-k">${_escHtml(s.k)}</div>
+                        <div class="ency-spec-v">${_escHtml(s.v)}</div>
+                    </div>`).join('');
+                const origin = (it.origin || []).map(o =>
+                    `<div class="ency-tl-item">
+                        <div class="ency-tl-year">${_escHtml(o.year)}</div>
+                        <div class="ency-tl-text">${_escHtml(o.text)}</div>
+                    </div>`).join('');
+                const steps = (it.steps || []).map((s, i) =>
+                    `<div class="ency-step">
+                        <div class="ency-step-num">${i+1}</div>
+                        <div class="ency-step-content">
+                            <div class="ency-step-title">${_escHtml(s.title)}</div>
+                            <div class="ency-step-desc">${_escHtml(s.desc)}</div>
+                        </div>
+                    </div>`).join('');
+                const tips = (it.tips || []).map(t =>
+                    `<div class="ency-tip">
+                        <div class="ency-tip-icon">${t.icon}</div>
+                        <div class="ency-tip-title">${_escHtml(t.title)}</div>
+                        <div class="ency-tip-desc">${_escHtml(t.desc)}</div>
+                    </div>`).join('');
+
+                document.getElementById('ency-body').innerHTML = `
+                    <div class="ency-detail-hero">
+                        <div class="ency-hero-svg">${it.heroSvg || ''}</div>
+                        <div class="ency-meta">
+                            <h2>${_escHtml(it.name)}</h2>
+                            <div class="ency-subtitle">${_escHtml(it.subtitle || it.tagline)}</div>
+                            <div class="ency-chip-row">${chips}</div>
+                        </div>
+                    </div>
+                    ${specs ? `<div class="ency-block">
+                        <h3 class="ency-block-title">📋 規格一覽</h3>
+                        <div class="ency-specs">${specs}</div>
+                    </div>` : ''}
+                    ${origin ? `<div class="ency-block">
+                        <h3 class="ency-block-title">📜 發明起源</h3>
+                        <div class="ency-timeline">${origin}</div>
+                    </div>` : ''}
+                    ${steps ? `<div class="ency-block">
+                        <h3 class="ency-block-title">🛠️ 操作步驟</h3>
+                        <div class="ency-steps">${steps}</div>
+                    </div>` : ''}
+                    ${tips ? `<div class="ency-block">
+                        <h3 class="ency-block-title">💡 美味小方法</h3>
+                        <div class="ency-tips">${tips}</div>
+                    </div>` : ''}
+                `;
+                document.getElementById('ency-body').scrollTop = 0;
+                const card = document.querySelector('#encyclopedia-modal .ency-card');
+                if (card) card.scrollTop = 0;
+                document.getElementById('encyclopedia-modal').scrollTop = 0;
+            };
+
+            // ESC 關閉
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    const m = document.getElementById('encyclopedia-modal');
+                    if (m && m.classList.contains('open')) closeEncyclopedia();
+                }
+            });
 
             // ========== 📊 儀表板 / 洞察分析 / 學習進度 共用視覺化元件 ==========
 
