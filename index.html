@@ -1819,6 +1819,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
         .lh-tile.tile-ency:hover { border-color: #2e7d32; }
         .lh-tile.tile-flash:hover { border-color: #1565c0; }
         .lh-tile.tile-dash:hover { border-color: #6a1b9a; }
+        .lh-tile.tile-roast:hover { border-color: #e64a19; }
         .lh-tile-icon { font-size: 56px; line-height: 1; margin-bottom: 4px; }
         .lh-tile-title { font-size: 17px; font-weight: 900; color: #3e2723; margin-bottom: 4px; }
         .lh-tile-desc { font-size: 12.5px; color: #6d4c41; line-height: 1.6; flex: 1; }
@@ -1826,6 +1827,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
         .lh-tile.tile-ency .lh-tile-cta { background: #e8f5e9; color: #2e7d32; }
         .lh-tile.tile-flash .lh-tile-cta { background: #e3f2fd; color: #1565c0; }
         .lh-tile.tile-dash .lh-tile-cta { background: #f3e5f5; color: #6a1b9a; }
+        .lh-tile.tile-roast .lh-tile-cta { background: #fbe9e7; color: #e64a19; }
 
         /* 📊 XLSX 預覽表格樣式 */
         .xlsx-preview-table { width: 100%; border-collapse: collapse; font-size: 11px; margin-bottom: 10px; }
@@ -2405,7 +2407,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
         <div class="lv-container">
             <div class="lv-header">
                 <h1 id="lv-title">🎓 學 習 中 心</h1>
-                <p class="lh-subtitle">把咖啡知識、自我練習、學習進度都收在這裡。從這三個入口開始你的精進之路。</p>
+                <p class="lh-subtitle">把咖啡知識、自我練習、學習進度都收在這裡。從這四個入口開始你的精進之路。</p>
             </div>
             <div class="lh-grid">
                 <div class="lh-tile tile-ency" onclick="openEncyclopedia()">
@@ -2417,13 +2419,19 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 <div class="lh-tile tile-flash" onclick="startFlashcard()">
                     <div class="lh-tile-icon">🎴</div>
                     <div class="lh-tile-title">學習卡</div>
-                    <div class="lh-tile-desc">4 選 1 風味辨識練習，間隔重複（SRS）幫助記憶 83 個 SCA 風味，每天複習答錯重來。</div>
+                    <div class="lh-tile-desc">4 選 1 多題型練習，涵蓋風味輪、百科七大類、烘豆流程，SRS 間隔重複幫助長期記憶。</div>
                     <span class="lh-tile-cta">🎯 開始練習 →</span>
+                </div>
+                <div class="lh-tile tile-roast" onclick="openRoastingKB()">
+                    <div class="lh-tile-icon">🔥</div>
+                    <div class="lh-tile-title">烘豆流程知識庫</div>
+                    <div class="lh-tile-desc">挑豆、預熱、入豆、回溫點、乾燥段、梅納反應、一爆、ROR、DTR、二爆、風門、養豆 — 15 個核心概念詳解。</div>
+                    <span class="lh-tile-cta">🔥 閱讀知識庫 →</span>
                 </div>
                 <div class="lh-tile tile-dash" onclick="openLearningDashboard()">
                     <div class="lh-tile-icon">📊</div>
                     <div class="lh-tile-title">學習進度</div>
-                    <div class="lh-tile-desc">學習卡的覆蓋進度、答對率、L1 分類掌握、最常答錯 Top 10、今日複習配額。</div>
+                    <div class="lh-tile-desc">學習卡的覆蓋進度、答對率、分類掌握、最常答錯 Top 10、到期複習與未學新題統計。</div>
                     <span class="lh-tile-cta">📈 查看進度 →</span>
                 </div>
             </div>
@@ -2474,6 +2482,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                     <button class="ency-tab" data-cat="dripper" onclick="encySwitchCat('dripper')">🔻 濾杯</button>
                     <button class="ency-tab" data-cat="brew" onclick="encySwitchCat('brew')">☕ 沖煮</button>
                     <button class="ency-tab" data-cat="method" onclick="encySwitchCat('method')">🌀 手法</button>
+                    <button class="ency-tab" data-cat="roasting_process" onclick="encySwitchCat('roasting_process')">🔥 烘豆</button>
                 </div>
                 <button class="ency-close" onclick="closeEncyclopedia()" aria-label="關閉百科">✕</button>
             </div>
@@ -14888,6 +14897,34 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 ]
               }
             ];
+
+            // 注入 ROASTING_KB 進 ENCYCLOPEDIA，讓百科 UI 可直接複用
+            (function() {
+                const items = {};
+                for (const item of ROASTING_KB) {
+                    items[item.key] = {
+                        name: item.name,
+                        tagline: item.tagline,
+                        emoji: item.emoji,
+                        status: 'ready',
+                        heroSvg: '<svg viewBox="0 0 260 180" xmlns="http://www.w3.org/2000/svg"><rect width="260" height="180" rx="16" fill="#fff3e0"/><text x="130" y="122" font-size="100" text-anchor="middle">' + item.emoji + '</text></svg>',
+                        subtitle: item.subtitle || '',
+                        chips: [],
+                        specs: item.specs || [],
+                        origin: [],
+                        originTitle: '',
+                        tipsTitle: '💡 重點提示',
+                        tips: item.tips || []
+                    };
+                }
+                ENCYCLOPEDIA.roasting_process = {
+                    title: '🔥 烘豆流程',
+                    icon: '🔥',
+                    items: items
+                };
+            })();
+
+            window.openRoastingKB = function() { openEncyclopedia('roasting_process'); };
 
             let _fcAllCards = null;
             let _fcState = null;
