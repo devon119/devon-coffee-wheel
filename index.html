@@ -12130,7 +12130,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 if (stageEl && currentStage) stageEl.textContent = currentStage.text;
                 const stageText = currentStage ? currentStage.text : '';
                 const isBloom = /Bloom|悶蒸|燙紙/.test(stageText);
-                const isPour = /注|段|刀|連續|spin|Spin|搖/.test(stageText);
+                const isPour = /注|段|刀|連續|spin|Spin|搖|水|大|^#\d/.test(stageText);
                 const isWait = /流|完|靜|待/.test(stageText);
 
                 // 計算注水點位置（依 motionType 與當前階段）
@@ -12257,7 +12257,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                     let pourProgress = 0, drainProgress = 0;
                     timeline.forEach(t => {
                         const tEnd = t.start_pct + t.width_pct;
-                        const isP = /注|Bloom|悶蒸|刀|連續|搖/.test(t.text);
+                        const isP = /注|Bloom|悶蒸|刀|連續|搖|水|大|^#\d/.test(t.text);
                         const isD = /流|完|靜|待/.test(t.text);
                         if (pct >= tEnd) {
                             if (isP) pourProgress += t.width_pct;
