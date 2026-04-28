@@ -11381,40 +11381,156 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
 
             function _renderVarietyTreeFamily() {
                 const items = ENCYCLOPEDIA.variety.items;
-                let staggerIdx = 0;
-                const speciesHtml = VARIETY_TREE.map(sp => {
-                    const branchesHtml = sp.branches.map(br => {
-                        const leavesHtml = br.items.map(it => {
+                const LEAF_W = 108, LEAF_H = 26;
+                const LEAF_GAP_X = 6, BRANCH_GAP = 28, SPECIES_GAP = 50;
+                const Y_ROOT = 70;
+                const Y_SP = 200;
+                const Y_BR_BASE = 360;
+                const Y_BR_OFFSETS = [-30, 25, -20, 35, -25, 30];  // 譜系 y 起伏
+                const Y_LF_BASE = 530;
+                const Y_LF_OFFSETS = [-22, 12, -10, 22, -18];      // 葉子 y 起伏（譜系內 mod）
+
+                let cursorX = 60;
+                const leafItems = [];
+                const branchNodes = [];
+                const speciesNodes = [];
+                let globalBranchIdx = 0;
+
+                VARIETY_TREE.forEach(sp => {
+                    const spStartX = cursorX;
+                    const spBranches = [];
+                    sp.branches.forEach(br => {
+                        const brStartX = cursorX;
+                        const brLeaves = [];
+                        br.items.forEach((it, leafIdx) => {
                             const ent = items[it.id];
-                            const name = ent ? ent.name : it.id;
-                            const tagline = ent ? (ent.tagline || '').replace(/"/g, '&quot;').replace(/'/g, '&#39;') : '';
-                            const delay = (staggerIdx++ * 0.02 + 0.3).toFixed(2);
-                            return `<div class="vd-item" style="animation-delay:${delay}s">
-                                <span class="vd-leaf" style="border-color:${br.stroke};"
-                                      onclick="closeVarietyTree(); setTimeout(()=>showEncyDetail('variety','${it.id}'), 250);"
-                                      title="${tagline}">
-                                    <span class="tl-em">${it.em}</span>${name}
-                                </span>
-                            </div>`;
-                        }).join('');
-                        const brDelay = (staggerIdx * 0.02 + 0.2).toFixed(2);
-                        return `<div class="vd-item" style="animation-delay:${brDelay}s">
-                            <span class="vd-branch" style="border-color:${br.stroke}; color:${br.stroke};">${br.emoji} ${br.name}</span>
-                            <div class="vd-children" style="border-left-color:${br.stroke};">${leavesHtml}</div>
-                        </div>`;
-                    }).join('');
-                    const spDelay = (staggerIdx * 0.02 + 0.1).toFixed(2);
-                    return `<div class="vd-item" style="animation-delay:${spDelay}s">
-                        <span class="vd-species sp-${sp.species}">${sp.title}</span>
-                        <div class="vd-children">${branchesHtml}</div>
-                    </div>`;
+                            const offset = Y_LF_OFFSETS[leafIdx % Y_LF_OFFSETS.length];
+                            const ly = Y_LF_BASE + offset;
+                            leafItems.push({
+                                id: it.id, em: it.em,
+                                name: ent ? ent.name : it.id,
+                                tagline: ent ? ent.tagline : '',
+                                x: cursorX, y: ly,
+                                branchStroke: br.stroke
+                            });
+                            brLeaves.push(leafItems[leafItems.length - 1]);
+                            cursorX += LEAF_W + LEAF_GAP_X;
+                        });
+                        const brEndX = cursorX - LEAF_GAP_X;
+                        const brCenterX = (brStartX + brEndX) / 2 + LEAF_W / 2 - LEAF_W / 2;
+                        const brCenter = (brStartX + brEndX - LEAF_W) / 2 + LEAF_W;  // 葉子組中心
+                        const offsetIdx = globalBranchIdx % Y_BR_OFFSETS.length;
+                        const by = Y_BR_BASE + Y_BR_OFFSETS[offsetIdx];
+                        const brNode = {
+                            x: brCenter, y: by,
+                            name: br.name, emoji: br.emoji,
+                            stroke: br.stroke, leaves: brLeaves,
+                            species: sp.species
+                        };
+                        branchNodes.push(brNode);
+                        spBranches.push(brNode);
+                        brLeaves.forEach(l => { l.branchX = brNode.x; l.branchY = by; });
+                        globalBranchIdx++;
+                        cursorX += BRANCH_GAP - LEAF_GAP_X;
+                    });
+                    const spEndX = cursorX - BRANCH_GAP;
+                    const spCenter = (spStartX + spEndX - LEAF_W) / 2 + LEAF_W;
+                    const color = sp.species === 'arabica' ? '#2e7d32'
+                                : sp.species === 'canephora' ? '#5d4037'
+                                : '#558b2f';
+                    speciesNodes.push({
+                        x: spCenter, y: Y_SP,
+                        title: sp.title, color, species: sp.species, branches: spBranches
+                    });
+                    spBranches.forEach(b => { b.spX = spCenter; b.spY = Y_SP; });
+                    cursorX += SPECIES_GAP - BRANCH_GAP;
+                });
+
+                const totalW = cursorX + 60;
+                const maxOff = Math.max(...Y_BR_OFFSETS, ...Y_LF_OFFSETS);
+                const totalH = Y_LF_BASE + maxOff + LEAF_H + 60;
+                const rootX = totalW / 2;
+
+                // 連線：根 → 物種
+                const rootToSp = speciesNodes.map(sp => {
+                    const x1 = rootX, y1 = Y_ROOT + 30;
+                    const x2 = sp.x, y2 = sp.y - 32;
+                    const midY = (y1 + y2) / 2;
+                    return `<path d="M ${x1} ${y1} C ${x1} ${midY}, ${x2} ${midY}, ${x2} ${y2}" stroke="#6d4c41" stroke-width="3" fill="none" opacity="0.6" stroke-linecap="round"/>`;
                 }).join('');
-                return `<div class="vd-tree" id="vtm-tree">
-                    <div class="vd-item">
-                        <span class="vd-root">🌱 Coffea（咖啡屬）</span>
-                        <div class="vd-children">${speciesHtml}</div>
-                    </div>
-                </div>`;
+                // 連線：物種 → 譜系
+                const spToBr = branchNodes.map(br => {
+                    const x1 = br.spX, y1 = br.spY + 32;
+                    const x2 = br.x, y2 = br.y - 14;
+                    const midY = (y1 + y2) / 2;
+                    return `<path d="M ${x1} ${y1} C ${x1} ${midY}, ${x2} ${midY}, ${x2} ${y2}" stroke="${br.stroke}" stroke-width="2.4" fill="none" opacity="0.55" stroke-linecap="round"/>`;
+                }).join('');
+                // 連線：譜系 → 葉子
+                const brToLeaf = leafItems.map(l => {
+                    const x1 = l.branchX, y1 = l.branchY + 14;
+                    const x2 = l.x + LEAF_W / 2, y2 = l.y;
+                    const midY = (y1 + y2) / 2;
+                    return `<path d="M ${x1} ${y1} C ${x1} ${midY}, ${x2} ${midY}, ${x2} ${y2}" stroke="${l.branchStroke}" stroke-width="1.8" fill="none" opacity="0.55" stroke-linecap="round"/>`;
+                }).join('');
+
+                // 葉子
+                const leavesHtml = leafItems.map((l, idx) => {
+                    const delay = (idx * 0.02 + 0.4).toFixed(2);
+                    const safeTagline = (l.tagline || '').replace(/"/g, '&quot;').replace(/'/g, '&apos;');
+                    return `<g class="vt-leaf-svg" style="animation-delay:${delay}s; cursor:pointer"
+                              onclick="closeVarietyTree(); setTimeout(()=>showEncyDetail('variety','${l.id}'), 250);">
+                        <title>${safeTagline}</title>
+                        <rect x="${l.x}" y="${l.y}" width="${LEAF_W}" height="${LEAF_H}" rx="13" ry="13"
+                              fill="#fff" stroke="${l.branchStroke}" stroke-width="1.5"
+                              filter="url(#vtm-shadow)"/>
+                        <text x="${l.x + 12}" y="${l.y + 18}" font-size="14" pointer-events="none">${l.em}</text>
+                        <text x="${l.x + 32}" y="${l.y + 18}" font-size="11" font-weight="700" fill="#3e2723" pointer-events="none">${l.name}</text>
+                    </g>`;
+                }).join('');
+
+                // 譜系
+                const branchesHtml = branchNodes.map((br, idx) => {
+                    const delay = (idx * 0.04 + 0.2).toFixed(2);
+                    const w = 140;
+                    return `<g class="vt-br-svg" style="animation-delay:${delay}s">
+                        <rect x="${br.x - w/2}" y="${br.y - 14}" width="${w}" height="28" rx="14" ry="14"
+                              fill="${br.stroke}" opacity="0.18"/>
+                        <rect x="${br.x - w/2}" y="${br.y - 14}" width="${w}" height="28" rx="14" ry="14"
+                              fill="none" stroke="${br.stroke}" stroke-width="2"/>
+                        <text x="${br.x}" y="${br.y + 5}" font-size="11.5" font-weight="800"
+                              fill="${br.stroke}" text-anchor="middle" pointer-events="none">${br.emoji} ${br.name}</text>
+                    </g>`;
+                }).join('');
+
+                // 物種
+                const speciesHtml = speciesNodes.map((sp, idx) => {
+                    const delay = (idx * 0.08 + 0.1).toFixed(2);
+                    const emoji = sp.title.match(/^[^\s]+/)[0];
+                    return `<g class="vt-sp-svg" style="animation-delay:${delay}s">
+                        <circle cx="${sp.x}" cy="${sp.y}" r="32" fill="${sp.color}" opacity="0.95" filter="url(#vtm-shadow)"/>
+                        <circle cx="${sp.x}" cy="${sp.y}" r="32" fill="none" stroke="#fff" stroke-width="3"/>
+                        <text x="${sp.x}" y="${sp.y - 4}" font-size="20" text-anchor="middle">${emoji}</text>
+                        <text x="${sp.x}" y="${sp.y + 13}" font-size="9" font-weight="800" fill="#fff" text-anchor="middle">${sp.species}</text>
+                    </g>`;
+                }).join('');
+
+                // 根
+                const rootHtml = `<g class="vt-root-svg">
+                    <circle cx="${rootX}" cy="${Y_ROOT}" r="28" fill="#3e2723" filter="url(#vtm-shadow)"/>
+                    <circle cx="${rootX}" cy="${Y_ROOT}" r="28" fill="none" stroke="#a1887f" stroke-width="2"/>
+                    <text x="${rootX}" y="${Y_ROOT - 2}" font-size="18" text-anchor="middle">🌱</text>
+                    <text x="${rootX}" y="${Y_ROOT + 14}" font-size="9" font-weight="800" fill="#fff" text-anchor="middle">Coffea</text>
+                </g>`;
+
+                return `<svg id="vtm-tree" viewBox="0 0 ${totalW} ${totalH}" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:auto; max-width:${totalW}px;">
+                    <defs>
+                        <filter id="vtm-shadow" x="-30%" y="-30%" width="160%" height="160%">
+                            <feDropShadow dx="0" dy="2" stdDeviation="2.5" flood-color="rgba(93,64,55,0.3)"/>
+                        </filter>
+                    </defs>
+                    ${rootToSp}${spToBr}${brToLeaf}
+                    ${rootHtml}${speciesHtml}${branchesHtml}${leavesHtml}
+                </svg>`;
             }
 
             // ========== 🎯 主視圖切換（工作台 / 學習中心） ==========
