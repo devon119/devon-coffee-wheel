@@ -484,37 +484,71 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             transform: translateY(-2px);
             box-shadow: 0 8px 22px rgba(46,125,50,0.45);
         }
-        /* 🌳 譜系演化圖獨立 modal */
+        /* 🌳 譜系演化圖獨立 modal · 滿版輻射版 */
         #variety-tree-modal {
             position: fixed; inset: 0; z-index: 2200;
-            background: linear-gradient(180deg, #fdf9f3 0%, #f5ede0 100%);
+            background:
+                radial-gradient(circle at 50% 45%, #fffbf2 0%, #f5ede0 50%, #ebe0c9 100%);
             display: none;
-            opacity: 0; transition: opacity 0.25s ease;
+            opacity: 0; transition: opacity 0.3s ease;
             display: flex; flex-direction: column;
         }
-        #variety-tree-modal.open {
-            display: flex; opacity: 1;
-        }
+        #variety-tree-modal.open { display: flex; opacity: 1; }
         .vtm-header {
-            background: linear-gradient(180deg, #6d4c41 0%, #5d4037 100%);
-            color: #fff; padding: 14px 22px;
+            background: linear-gradient(180deg, #6d4c41 0%, #4e342e 100%);
+            color: #fff; padding: 12px 22px;
             display: flex; align-items: center; justify-content: space-between;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-            flex-shrink: 0;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.18);
+            flex-shrink: 0; z-index: 10;
         }
-        .vtm-header h2 { margin: 0; font-size: 18px; font-weight: 900; letter-spacing: 1px; }
+        .vtm-header h2 { margin: 0; font-size: 17px; font-weight: 900; letter-spacing: 1.5px; }
         .vtm-controls { display: flex; gap: 8px; align-items: center; }
         .vtm-controls button {
-            background: rgba(255,255,255,0.15); border: none; color: #fff;
-            padding: 7px 14px; border-radius: 14px; font-size: 13px; font-weight: 700;
-            cursor: pointer; transition: background 0.15s;
+            background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.2);
+            color: #fff; padding: 7px 14px; border-radius: 14px; font-size: 13px; font-weight: 700;
+            cursor: pointer; transition: background 0.15s, transform 0.12s;
         }
-        .vtm-controls button:hover { background: rgba(255,255,255,0.3); }
+        .vtm-controls button:hover { background: rgba(255,255,255,0.32); transform: translateY(-1px); }
         .vtm-controls .vtm-close { width: 36px; height: 36px; padding: 0; border-radius: 50%; }
-        #vtm-zoom-label { color: #fff; font-weight: 800; font-size: 13px; min-width: 50px; text-align: center; }
+        #vtm-zoom-label { color: #fff; font-weight: 800; font-size: 13px; min-width: 54px; text-align: center; }
         .vtm-body {
-            flex: 1; overflow: auto; padding: 24px 20px 60px;
-            display: flex; justify-content: center; align-items: flex-start;
+            flex: 1; overflow: hidden; position: relative;
+            display: flex; justify-content: center; align-items: center;
+            padding: 0;
+        }
+        #vtm-tree-wrap {
+            width: 100%; height: 100%;
+            display: flex; align-items: center; justify-content: center;
+            transition: transform 0.25s cubic-bezier(.22,.8,.33,1);
+        }
+        #vtm-tree { display: block; max-width: 100%; max-height: 100%; }
+        /* 輻射圓環元素入場動畫 */
+        .vt-sp-arc, .vt-br-arc, .vt-leaf-arc {
+            animation: vtArcFade 0.55s cubic-bezier(.22,.8,.33,1) backwards;
+            transform-origin: 700px 500px;
+            transform-box: fill-box;
+        }
+        @keyframes vtArcFade {
+            from { opacity: 0; transform: scale(0.6); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .vt-leaf-arc:hover .vt-leaf-circle {
+            fill: #fff8e1; stroke-width: 3.5; r: 24;
+            filter: drop-shadow(0 4px 8px rgba(230,80,0,0.35));
+        }
+        .vt-leaf-arc:hover .vt-leaf-name { font-size: 14px; fill: #bf360c; }
+        .vt-root-arc { animation: vtRootGrow 0.6s cubic-bezier(.22,.8,.33,1) backwards; transform-origin: 700px 500px; transform-box: fill-box; }
+        @keyframes vtRootGrow {
+            from { opacity: 0; transform: scale(0.3) rotate(-90deg); }
+            to { opacity: 1; transform: scale(1) rotate(0deg); }
+        }
+        .vt-sp-arc path, .vt-br-arc path { transition: opacity 0.2s, filter 0.2s; }
+        .vt-sp-arc:hover path { opacity: 1 !important; filter: brightness(1.1); }
+        .vt-br-arc:hover path { opacity: 0.95 !important; filter: brightness(1.08); }
+        @media (max-width: 768px) {
+            .vtm-header h2 { font-size: 13px; letter-spacing: 0.5px; }
+            .vtm-controls button { padding: 5px 9px; font-size: 11px; }
+            #vtm-zoom-label { font-size: 11px; min-width: 40px; }
         }
         /* 譜系演化圖 viewer 內部 - 純垂直縮排樹 */
         .vd-tree {
@@ -8172,6 +8206,86 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 midLabel: '半乾即剝殼'
             });
 
+
+            const ENCY_PROC_DOUBLE_ANAEROBIC = _encyProcessSvg({
+                id: 'double_anaerobic', name: '雙重厭氧 Double Anaerobic', subtitle: '兩段密封發酵 · 更複雜酒香',
+                bg1: '#ede7f6', bg2: '#4527a0', tcolor: '#fff',
+                scene: `<!-- 第一桶 -->
+                    <rect x="80" y="130" width="100" height="130" fill="#311b92" rx="8"/>
+                    <ellipse cx="130" cy="130" rx="50" ry="10" fill="#4527a0"/>
+                    <rect x="70" y="115" width="120" height="20" fill="#1a0050" rx="3"/>
+                    <circle cx="130" cy="125" r="5" fill="#fff"/>
+                    <text x="130" y="205" font-size="28" text-anchor="middle">🫐</text>
+                    <text x="80" y="100" font-size="13" fill="#ce93d8" font-weight="800" text-anchor="middle">第一次</text>
+                    <!-- 箭頭 -->
+                    <path d="M 195 195 L 260 195" stroke="#ce93d8" stroke-width="3" marker-end="url(#arr)"/>
+                    <defs><marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#ce93d8"/></marker></defs>
+                    <!-- 第二桶 -->
+                    <rect x="270" y="130" width="100" height="130" fill="#1a237e" rx="8"/>
+                    <ellipse cx="320" cy="130" rx="50" ry="10" fill="#283593"/>
+                    <rect x="260" y="115" width="120" height="20" fill="#0d0050" rx="3"/>
+                    <circle cx="320" cy="125" r="5" fill="#fff"/>
+                    <text x="320" y="205" font-size="28" text-anchor="middle">🍷</text>
+                    <text x="320" y="100" font-size="13" fill="#9fa8da" font-weight="800" text-anchor="middle">第二次</text>
+                    <!-- 氣泡 -->
+                    <text x="90" y="110" font-size="16" fill="#fff" opacity="0.6">○</text>
+                    <text x="118" y="92" font-size="12" fill="#fff" opacity="0.6">○</text>
+                    <text x="300" y="108" font-size="18" fill="#fff" opacity="0.6">○</text>
+                    <text x="330" y="88" font-size="13" fill="#fff" opacity="0.6">○</text>`,
+                midIcon: `<rect x="-28" y="-22" width="56" height="44" fill="#311b92" rx="4"/>
+                    <text x="0" y="6" font-size="18" text-anchor="middle">🔮</text>`,
+                midLabel: '雙重密封 96-240h'
+            });
+
+            const ENCY_PROC_THERMAL_SHOCK = _encyProcessSvg({
+                id: 'thermal_shock', name: '熱衝擊發酵 Thermal Shock', subtitle: '高溫低溫交替 · 菌種壓力風味',
+                bg1: '#fff3e0', bg2: '#bf360c', tcolor: '#fff',
+                scene: `<!-- 高溫槽（左紅） -->
+                    <rect x="50" y="130" width="120" height="140" fill="#c62828" rx="8"/>
+                    <ellipse cx="110" cy="130" rx="60" ry="12" fill="#e53935"/>
+                    <text x="110" y="130" font-size="11" fill="#fff" font-weight="800" text-anchor="middle">60°C 熱槽</text>
+                    <text x="110" y="200" font-size="32" text-anchor="middle">♨️</text>
+                    <!-- 溫度計 -->
+                    <rect x="155" y="145" width="8" height="80" fill="#fff" rx="4"/>
+                    <circle cx="159" cy="232" r="9" fill="#f44336"/>
+                    <rect x="157" y="175" width="4" height="57" fill="#f44336" rx="2"/>
+                    <!-- 雙向箭頭 -->
+                    <path d="M 185 195 L 250 195" stroke="#fff" stroke-width="3"/>
+                    <text x="217" y="188" font-size="13" fill="#fff" font-weight="800">⇄</text>
+                    <!-- 低溫槽（右藍） -->
+                    <rect x="255" y="130" width="120" height="140" fill="#01579b" rx="8"/>
+                    <ellipse cx="315" cy="130" rx="60" ry="12" fill="#0277bd"/>
+                    <text x="315" y="130" font-size="11" fill="#fff" font-weight="800" text-anchor="middle">15°C 冷槽</text>
+                    <text x="315" y="200" font-size="32" text-anchor="middle">🧊</text>`,
+                midIcon: `<rect x="-28" y="-22" width="56" height="44" fill="#bf360c" rx="4"/>
+                    <text x="0" y="6" font-size="18" text-anchor="middle">🌡️</text>`,
+                midLabel: '熱衝 60°C ↔ 冷卻'
+            });
+
+            const ENCY_PROC_YEAST_INOCULATED = _encyProcessSvg({
+                id: 'yeast_inoculated', name: '酵母接種發酵 Yeast Inoculation', subtitle: '特定菌株接種 · 精準風味控制',
+                bg1: '#fffde7', bg2: '#f57f17', tcolor: '#fff',
+                scene: `<!-- 燒杯/酵母培養瓶 -->
+                    <rect x="160" y="90" width="60" height="80" fill="#fff176" rx="4" opacity="0.9"/>
+                    <ellipse cx="190" cy="90" rx="30" ry="7" fill="#ffee58"/>
+                    <text x="190" y="138" font-size="28" text-anchor="middle">🧫</text>
+                    <text x="190" y="82" font-size="11" fill="#f57f17" font-weight="800" text-anchor="middle">酵母菌株</text>
+                    <!-- 箭頭注入 -->
+                    <path d="M 190 170 L 190 215" stroke="#f9a825" stroke-width="3" stroke-dasharray="5,3"/>
+                    <text x="210" y="200" font-size="13" fill="#fff" font-weight="700">接種</text>
+                    <!-- 發酵桶 -->
+                    <rect x="120" y="220" width="140" height="110" fill="#e65100" rx="8"/>
+                    <ellipse cx="190" cy="220" rx="70" ry="13" fill="#f57c00"/>
+                    <text x="190" y="280" font-size="32" text-anchor="middle">🍊</text>
+                    <text x="190" y="318" font-size="11" fill="#fff" font-weight="800" text-anchor="middle">精準發酵 48-96h</text>
+                    <!-- 氣泡 -->
+                    <text x="100" y="200" font-size="20" fill="#ffcc02" opacity="0.7">○</text>
+                    <text x="280" y="185" font-size="15" fill="#ffcc02" opacity="0.7">○</text>`,
+                midIcon: `<rect x="-28" y="-22" width="56" height="44" fill="#e65100" rx="4"/>
+                    <text x="0" y="6" font-size="18" text-anchor="middle">🧬</text>`,
+                midLabel: '接種特定酵母菌'
+            });
+
             // ========== 烘焙度 hero SVG helper ==========
             function _encyRoastSvg(opts) {
                 const flavors = (opts.flavors || []).map((f, i) => {
@@ -8286,6 +8400,24 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 beanLight: '#0a0a0a', beanDark: '#000', crackColor: '#000',
                 oilGloss: true, cracks: true,
                 flavors: ['⚫', '🌑', '🔥', '🪵', '💀', '⚫']
+            });
+
+
+            const ENCY_RST_NEW_ENGLAND = _encyRoastSvg({
+                id: 'ne', name: 'New England Roast', subtitle: '準淺焙 · 一爆始末', tag: 'BT 204-207°C · Dev 11-14%',
+                btText: '一爆始', scalePos: 55,
+                bg1: '#fff9c4', bg2: '#ffd54f',
+                beanLight: '#c09060', beanDark: '#8a5f3a', crackColor: '#5d4037',
+                flavors: ['🍋', '🌸', '🍑', '🌿', '🍓', '🌾']
+            });
+
+            const ENCY_RST_NORTH_ITALIAN = _encyRoastSvg({
+                id: 'nit', name: 'North Italian Roast', subtitle: '深焙偏極 · 二爆末尾', tag: 'BT 234-239°C · Dev 25-28%',
+                btText: '二爆末', scalePos: 283,
+                bg1: '#6d4c41', bg2: '#1c0a04', tcolor: '#fff',
+                beanLight: '#150808', beanDark: '#080202', crackColor: '#000',
+                oilGloss: true, cracks: true,
+                flavors: ['🌑', '🔥', '⚫', '🥃', '🌰', '💨']
             });
 
             const ENCYCLOPEDIA = {
@@ -9752,6 +9884,111 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                                 { icon: '💪', title: 'body 厚實', desc: '濕剝豆 body 比水洗厚很多，喝起來有種「黏稠感」。配奶做拿鐵或卡布很適合。' },
                                 { icon: '🇮🇩', title: '經典產區', desc: '蘇門答臘 Lintong（最有名）、Mandheling、Aceh Gayo 是濕剝代表，喝印尼咖啡認這幾個地名。' }
                             ]
+                        },
+                        double_anaerobic: {
+                            name: '雙重厭氧 (Double Anaerobic)', tagline: '兩段密封發酵 · 更複雜猛烈的水果酒香',
+                            emoji: '🔮', status: 'ready', heroSvg: ENCY_PROC_DOUBLE_ANAEROBIC,
+                            subtitle: '在一般厭氧發酵的基礎上再加一輪：先去皮後在密封桶厭氧發酵 48-120 小時，取出後整果帶殼再進行第二次密封厭氧 48-120 小時，最後才日曬乾燥。兩段發酵讓風味層次比單次厭氧更豐富複雜，是目前世界咖啡師大賽的極端實驗方向。',
+                            chips: [
+                                { text: '兩段密封發酵', class: 'purple' },
+                                { text: '96-240 小時', class: 'warm' },
+                                { text: '更複雜水果調', class: 'green' },
+                                { text: '競賽豆代表', class: 'cool' },
+                                { text: '價格最高端' }
+                            ],
+                            specs: [
+                                { k: '步驟', v: '採收 → 去皮 → 第一次密封厭氧（帶果膠）48-120h → 取出整果 → 第二次密封厭氧 48-120h → 日曬乾燥' },
+                                { k: '總發酵時間', v: '96-240 小時（兩段加總）' },
+                                { k: '溫度控制', v: '全程低溫（16-22°C）以延長發酵時間' },
+                                { k: '招牌風味', v: '藍莓、覆盆子、熱帶水果、蘭姆酒、肉桂、發酵感層疊' },
+                                { k: '價格', v: '是水洗的 5-15 倍（頂級精品豆）' },
+                                { k: '主要產區', v: '哥倫比亞、衣索比亞、巴拿馬' }
+                            ],
+                            origin: [
+                                { year: '2016-2018', text: '在基礎厭氧普及後，少數實驗莊園開始嘗試「雙輪發酵」：把已發酵過的豆子再次放入密封桶進行第二次厭氧。' },
+                                { year: '2019', text: '哥倫比亞 La Palma y El Tucan 莊園將雙重厭氧系統化，並在精品圈獲得極高評價。' },
+                                { year: '2020-至今', text: '雙重厭氧成為世界咖啡師大賽（WBC）選手的常用武器，代表競賽豆的複雜度前沿。' }
+                            ],
+                            originTitle: '📜 處理法歷史',
+                            tipsTitle: '🍒 風味特性與沖煮建議',
+                            tips: [
+                                { icon: '🔮', title: '風味疊加', desc: '雙重厭氧 = 兩次發酵香氣疊加，喝起來像熱帶水果酒混紅酒，複雜度是一般厭氧的 2 倍。' },
+                                { icon: '⚗️', title: '最科學的處理法', desc: '可控溫度、時間、氣壓、菌種，是把咖啡當「精釀啤酒」來做的極端科學化處理。' },
+                                { icon: '☕', title: '沖煮：極淺焙 + 低溫', desc: '雙重厭氧豆幾乎只用淺焙保留風味。建議 89-91°C，研磨粗一點，避免過萃壓垮層次。' },
+                                { icon: '💰', title: '頂級價格', desc: '工序最複雜、風險最高、產量最低 → 價格最貴。一般是水洗的 5-15 倍。' },
+                                { icon: '⚠️', title: '不適合新手', desc: '風味太強、個性太鮮明，第一次喝咖啡的人可能覺得「不像咖啡」。建議有基礎後再嚐。' },
+                                { icon: '🆚', title: 'vs 單次厭氧', desc: '單次：藍莓酒香為主；雙重：多了熱帶水果、更深層發酵感、餘韻拉長 2-3 倍。' }
+                            ]
+                        },
+                        thermal_shock: {
+                            name: '熱衝擊發酵 (Thermal Shock)', tagline: '高低溫交替 · 菌種壓力下的風味革命',
+                            emoji: '🌡️', status: 'ready', heroSvg: ENCY_PROC_THERMAL_SHOCK,
+                            subtitle: '將咖啡豆（去皮或整果）在高溫（60°C 左右）熱水中短暫浸泡後迅速移入低溫（10-15°C）冷水，反覆交替數次，利用溫差對細胞膜造成壓力，使細胞內部的糖分與風味前驅物質加速釋放。再進入密封發酵桶。是目前最前衛的「物理+微生物雙重干預」處理法。',
+                            chips: [
+                                { text: '高低溫交替衝擊', class: 'warm' },
+                                { text: '60°C ↔ 15°C', class: 'cool' },
+                                { text: '細胞壓力釋放糖分', class: 'purple' },
+                                { text: '第四波極端實驗', class: 'green' },
+                                { text: '哥倫比亞 / 巴拿馬' }
+                            ],
+                            specs: [
+                                { k: '步驟', v: '採收 → 去皮 → 熱水浸泡（60°C，2-5 分鐘）→ 冷水冷卻（15°C）→ 重複 3-6 次 → 厭氧發酵 → 日曬' },
+                                { k: '溫差', v: '45°C 以上（60°C 高溫 vs 10-15°C 冷水）' },
+                                { k: '衝擊次數', v: '3-6 次（依目標風味調整）' },
+                                { k: '招牌風味', v: '強烈花香、百香果、鳳梨、芒果、蜂蜜前調，後段帶玫瑰或茉莉' },
+                                { k: '科學原理', v: '溫差使細胞膜通透性增加（Electroporation 類似原理），加速糖分與風味物質釋放' },
+                                { k: '主要產區', v: '哥倫比亞（發展中）、巴拿馬、巴西實驗農場' }
+                            ],
+                            origin: [
+                                { year: '2018-2019', text: '哥倫比亞研究機構 Cenicafé 開始實驗以物理熱衝擊預處理咖啡果，觀察對發酵風味的影響。' },
+                                { year: '2020', text: '巴拿馬競賽莊園將熱衝擊與厭氧結合，創造出前所未有的花香熱帶水果調。' },
+                                { year: '2022-至今', text: '熱衝擊發酵進入 WBC 賽場，被視為繼雙重厭氧之後「下一個顛覆性處理法」。' }
+                            ],
+                            originTitle: '📜 處理法歷史',
+                            tipsTitle: '🍒 風味特性與沖煮建議',
+                            tips: [
+                                { icon: '🌡️', title: '花香熱帶水果', desc: '熱衝擊豆招牌：強烈的茉莉、玫瑰、百香果、鳳梨、蜂蜜前調，後段餘韻長。' },
+                                { icon: '🔬', title: '物理+微生物雙重干預', desc: '溫差打開細胞膜，讓後續發酵菌種能更深入作用 → 比單純厭氧風味更複雜。' },
+                                { icon: '☕', title: '沖煮：必用淺焙', desc: '熱衝擊豆的花果香極易被烘焙蓋掉，只在淺焙（City 以下）才能保留。' },
+                                { icon: '🌊', title: '水溫 88-91°C', desc: '比一般淺焙略低，高溫會讓花香揮發太快，嘗試 88°C 長一點萃取時間。' },
+                                { icon: '💰', title: '稀有且昂貴', desc: '處理工序需精密溫控設備 + 大量水資源，成本比雙重厭氧更高，市場上極稀見。' },
+                                { icon: '⚠️', title: '風味極端', desc: '熱衝擊豆風味強烈到「不像咖啡」，最適合已熟悉特殊處理法的精品愛好者嚐試。' }
+                            ]
+                        },
+                        yeast_inoculated: {
+                            name: '酵母接種發酵 (Yeast Inoculation)', tagline: '特定菌株接種 · 精準設計風味的未來處理法',
+                            emoji: '🧬', status: 'ready', heroSvg: ENCY_PROC_YEAST_INOCULATED,
+                            subtitle: '在發酵槽中人工接種特定酵母菌株（如 Saccharomyces cerevisiae 或專利菌株），替代傳統依靠環境野生菌的自然發酵。由於酵母種類決定了代謝產物，釀酒師與咖啡農可以「設計」風味：接種葡萄酒酵母 → 果香；蜂蜜酵母 → 花蜜甜感；香檳酵母 → 氣泡感。',
+                            chips: [
+                                { text: '人工接種酵母', class: 'warm' },
+                                { text: '可設計風味方向', class: 'green' },
+                                { text: '48-96 小時', class: 'cool' },
+                                { text: '釀酒師 × 咖啡農', class: 'purple' },
+                                { text: '第四波精準農業' }
+                            ],
+                            specs: [
+                                { k: '步驟', v: '採收 → 去皮或帶皮 → 密封槽接種特定酵母 → 發酵 48-96h → 日曬乾燥' },
+                                { k: '常用菌株', v: 'S. cerevisiae（葡萄酒酵母）/ 蜂蜜酵母 / 香檳酵母 / 精品咖啡專利菌株' },
+                                { k: '發酵時間', v: '48-96 小時（比野生發酵更短、更可控）' },
+                                { k: '招牌風味', v: '依菌株不同：果香型 / 花蜜型 / 氣泡感型，一致性遠高於野生發酵' },
+                                { k: '優勢', v: '可重複性高、品質穩定、可依市場需求設計風味走向' },
+                                { k: '主要產區', v: '哥斯大黎加（最早商業化）、衣索比亞、哥倫比亞' }
+                            ],
+                            origin: [
+                                { year: '2014-2016', text: 'Saša Šestić 與 Dr. Mario Fernandez 等人開始研究特定酵母菌對咖啡風味的影響，與葡萄酒釀造師合作。' },
+                                { year: '2017', text: '哥斯大黎加 Las Lajas 莊園成功商業化酵母接種處理，推出「Yeast Series」產品線，獲得 CoE 高分。' },
+                                { year: '2019-至今', text: '多家精品咖啡公司（包含 Nescafé 研究部）投入酵母菌株研發，把「可設計風味」的概念推向主流精品市場。' }
+                            ],
+                            originTitle: '📜 處理法歷史',
+                            tipsTitle: '🍒 風味特性與沖煮建議',
+                            tips: [
+                                { icon: '🧬', title: '設計師咖啡', desc: '酵母接種是第一次讓人類精準「設計」咖啡風味的處理法，是咖啡農 + 釀酒師 + 科學家的合體。' },
+                                { icon: '🔄', title: '一致性最高', desc: '野生發酵每次結果都不同；酵母接種的同款豆可以重複到相同風味，適合大規模精品量產。' },
+                                { icon: '☕', title: '淺中焙最佳', desc: '酵母接種的細緻風味在深焙會被蓋掉，建議 City 到 City+ 之間（205-213°C），保留接種特色。' },
+                                { icon: '🍾', title: '配合菌株選沖法', desc: '果香型菌株 → 用高一點水溫 92-93°C；花蜜型菌株 → 低一點 90°C 讓甜感表現更完整。' },
+                                { icon: '⚠️', title: '爭議中的未來', desc: '部分精品界人士認為酵母接種「過度介入」、失去產地自然性。另一派認為這才是「精準品控」的未來。' },
+                                { icon: '🆚', title: 'vs 厭氧', desc: '厭氧 = 依靠已有的野生菌；酵母接種 = 引入特定外來菌株主導發酵。後者更精準、更可預測。' }
+                            ]
                         }
                     }
                 },
@@ -9792,6 +10029,41 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                                 { icon: '☕', title: '沖煮 細粉低溫', desc: 'Lance Hedrick 法（極細粉 + 低溫 88°C + 強攪拌）最能突破淺焙堅硬密度。' },
                                 { icon: '🚫', title: '不適合義式', desc: '極淺焙做 espresso 會超酸澀。極淺焙幾乎只用於手沖。' },
                                 { icon: '⏰', title: '養豆 14-21 天', desc: '極淺焙豆 CO₂ 排氣慢、剛烘好太活躍，建議養豆 14-21 天再喝。' }
+                            ]
+                        },
+                        new_england: {
+                            name: 'New England Roast', tagline: '準淺焙 · 一爆始末 · 花果與甜感交接點',
+                            emoji: '🍏', status: 'ready', heroSvg: ENCY_RST_NEW_ENGLAND,
+                            subtitle: '介於 Cinnamon 與 City 之間的過渡焙度，一爆剛開始到一爆中段停止。豆色淺褐、表面全乾無油光。花果香未完全消退、甜感開始浮現、生青感比 Cinnamon 輕微，是「北歐淺焙」的常用區間，也是最容易出現驚喜的焙度。',
+                            chips: [
+                                { text: '一爆始末', class: 'green' },
+                                { text: 'BT 204-207°C', class: 'cool' },
+                                { text: 'Dev 11-14%', class: 'warm' },
+                                { text: '花果 + 甜感交接', class: 'purple' },
+                                { text: '北歐流行' },
+                                { text: '無油光' }
+                            ],
+                            specs: [
+                                { k: '英文名', v: 'New England Roast / Light-Medium' },
+                                { k: '結束時機', v: '一爆剛開始到一爆中段（比 Cinnamon 深、比 City 淺）' },
+                                { k: 'BT 溫度', v: '204-207°C' },
+                                { k: 'Dev 比例', v: '11-14%' },
+                                { k: '豆色', v: '淺褐偏中（Agtron 85-95）' },
+                                { k: '適合品種', v: '衣索比亞、巴拿馬 Geisha、肯亞' }
+                            ],
+                            origin: [
+                                { year: '名字由來', text: 'New England 泛指美國東北部（波士頓、紐約）傳統淺焙風格，介於歐陸深焙與現代極淺焙之間。' },
+                                { year: '化學變化', text: '梅納反應開始、焦糖化幾乎未啟動、原豆的糖酸平衡點：酸質開始軟化、甜感初現。' },
+                                { year: '北歐影響', text: '2010s 北歐第三波烘焙師把這個區間定為「最適合呈現衣索比亞花果特性」的焙度之一。' }
+                            ],
+                            originTitle: '🔬 烘焙化學',
+                            tipsTitle: '☕ 風味與沖煮建議',
+                            tips: [
+                                { icon: '🍏', title: '花果接甜感', desc: 'New England 的特殊感：花香未退、甜感剛浮現、比 Cinnamon 更圓潤、比 City 更有活力。' },
+                                { icon: '✨', title: '生青感減輕', desc: '比 Cinnamon 深一點點 → 生青感顯著降低，花果香保留更完整，是「容錯版極淺焙」。' },
+                                { icon: '☕', title: '沖煮：Hoffmann 法最佳', desc: 'Hoffmann Ultimate V60 或 Lance Hedrick 高磨低溫（88-90°C）都能把這個焙度的甜感逼出來。' },
+                                { icon: '🌍', title: '適合衣索比亞', desc: 'Yirgacheffe、Guji 的茉莉花香在 New England 焙度比 City 更完整保留。' },
+                                { icon: '⏰', title: '養豆 10-18 天', desc: '比 Cinnamon 稍微快一點排氣，建議養 10-18 天再喝最甜蜜。' }
                             ]
                         },
                         city: {
@@ -9965,6 +10237,42 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                                 { icon: '🥛', title: '配奶天作之合', desc: '深焙 + 牛奶 + 糖 = 經典拿鐵 / 卡布奇諾。Vienna 的苦感被牛奶平衡剛好。' },
                                 { icon: '🚫', title: '不適合手沖', desc: 'Vienna 手沖會苦澀過萃。除非降水溫到 88°C 並粗研磨，否則不建議。' },
                                 { icon: '⚠️', title: '別買精品手沖', desc: '精品咖啡店買到 Vienna 焙度的「手沖豆」是浪費錢，深焙就買大眾義式豆即可。' }
+                            ]
+                        },
+                        north_italian: {
+                            name: 'North Italian Roast', tagline: '深焙偏極 · 二爆末段 · 濃郁煙燻義式',
+                            emoji: '🏔️', status: 'ready', heroSvg: ENCY_RST_NORTH_ITALIAN,
+                            subtitle: '介於 Vienna 與 French 之間，二爆尾聲。豆色深黑褐、表面油光豐厚。比 Vienna 更苦更煙燻，但比 French 稍微保留了一點焦糖尾韻。是北義（米蘭）傳統義式咖啡的標準焙度，也是現代「濃縮義式拼配」的主力焙度。',
+                            chips: [
+                                { text: '二爆末段', class: 'warm' },
+                                { text: 'BT 233-238°C', class: 'cool' },
+                                { text: 'Dev 25-28%', class: 'green' },
+                                { text: '煙燻深巧克力', class: 'purple' },
+                                { text: '豐厚油光' },
+                                { text: '北義傳統' }
+                            ],
+                            specs: [
+                                { k: '英文名', v: 'North Italian Roast / Extra Dark' },
+                                { k: '結束時機', v: '二爆尾聲（介於 Vienna 末 ~ French 前）' },
+                                { k: 'BT 溫度', v: '233-238°C' },
+                                { k: 'Dev 比例', v: '25-28%' },
+                                { k: '豆色', v: '深黑褐（Agtron 28-38）' },
+                                { k: '名字由來', v: '北義大利（米蘭為代表）的傳統 Espresso 焙度' }
+                            ],
+                            origin: [
+                                { year: '名字由來', text: '義大利咖啡文化南北分野：北義（米蘭）偏 North Italian 焙度（Deep but not charred）；南義（拿坡里）偏 Italian/Espresso（全黑炭化）。' },
+                                { year: '化學變化', text: '熱解反應進入後段、糖分幾乎碳化、油脂大量析出、苦感主導、焦糖尾韻仍殘留一絲。' },
+                                { year: '現代應用', text: '現代大規模義式拼配（如 illy、Lavazza 傳統款）的基底豆常落在這個焙度範圍。' }
+                            ],
+                            originTitle: '🔬 烘焙化學',
+                            tipsTitle: '☕ 風味與沖煮建議',
+                            tips: [
+                                { icon: '🏔️', title: '煙燻深巧克力', desc: 'North Italian 招牌：深巧克力、濃煙燻、橡木炭、焦糖殘影，比 Vienna 更沉穩有力。' },
+                                { icon: '☕', title: '義式 Espresso 最對味', desc: '是傳統北義 Espresso Bar 的標準焙度，拉出來的 Crema 厚實金棕色，略苦帶甘。' },
+                                { icon: '🥛', title: '大奶咖的靈魂', desc: '義式拿鐵 / Flat White / 卡布奇諾配 North Italian 焙度，咖啡味穿透奶味最完整。' },
+                                { icon: '🚫', title: '完全不適合手沖', desc: 'North Italian 手沖會產生大量苦澀、雜質。這個焙度只為義式機萃取設計。' },
+                                { icon: '⏰', title: '養豆 2-4 天', desc: '極深焙 CO₂ 排氣最快，2-4 天即可達最佳狀態，超過 2 週就快速劣化。' },
+                                { icon: '🆚', title: 'vs Vienna', desc: 'Vienna = 二爆中、還保有一點焦糖甜；North Italian = 二爆末、更苦更煙燻、甜感幾近消失。' }
                             ]
                         },
                         french: {
@@ -11331,205 +11639,294 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 }
                 modal.innerHTML = `
                     <div class="vtm-header">
-                        <h2>🌳 咖啡豆種譜系演化圖</h2>
+                        <h2>🌳 咖啡豆種譜系演化圖 · 輻射版</h2>
                         <div class="vtm-controls">
-                            <button onclick="vtZoom(-0.1)" title="縮小">➖</button>
+                            <button onclick="vtZoom(-0.15)" title="縮小">➖</button>
                             <span id="vtm-zoom-label">100%</span>
-                            <button onclick="vtZoom(0.1)" title="放大">➕</button>
-                            <button onclick="vtZoom(0)" title="自動 fit 寬度">📐 Fit</button>
+                            <button onclick="vtZoom(0.15)" title="放大">➕</button>
+                            <button onclick="vtZoom(0)" title="重置">📐 重置</button>
                             <button class="vtm-close" onclick="closeVarietyTree()">✕</button>
                         </div>
                     </div>
                     <div class="vtm-body" id="vtm-body">
-                        ${_renderVarietyTreeFamily()}
+                        <div id="vtm-tree-wrap">
+                            ${_renderVarietyTreeFamily()}
+                        </div>
                     </div>
                 `;
                 requestAnimationFrame(() => modal.classList.add('open'));
                 document.body.style.overflow = 'hidden';
-                setTimeout(() => vtZoom(0), 100);  // 預設 fit
+                _vtZoomScale = 1;
             };
             window.closeVarietyTree = function() {
                 const modal = document.getElementById('variety-tree-modal');
                 if (modal) {
                     modal.classList.remove('open');
-                    setTimeout(() => modal.remove(), 250);
+                    setTimeout(() => modal.remove(), 300);
                 }
                 document.body.style.overflow = '';
             };
             let _vtZoomScale = 1;
             window.vtZoom = function(delta) {
-                const tree = document.getElementById('vtm-tree');
-                const body = document.getElementById('vtm-body');
-                if (!tree || !body) return;
+                const wrap = document.getElementById('vtm-tree-wrap');
+                if (!wrap) return;
                 if (delta === 0) {
-                    // fit
-                    tree.style.transform = 'none';
-                    const containerW = body.clientWidth - 40;
-                    const treeW = tree.scrollWidth;
-                    if (treeW > containerW) {
-                        _vtZoomScale = (containerW / treeW);
-                    } else {
-                        _vtZoomScale = 1;
-                    }
+                    _vtZoomScale = 1;
                 } else {
-                    _vtZoomScale = Math.max(0.3, Math.min(2.0, _vtZoomScale + delta));
+                    _vtZoomScale = Math.max(0.5, Math.min(2.5, _vtZoomScale + delta));
                 }
-                tree.style.transform = `scale(${_vtZoomScale})`;
-                tree.style.transformOrigin = 'top center';
+                wrap.style.transform = `scale(${_vtZoomScale})`;
                 document.getElementById('vtm-zoom-label').textContent = Math.round(_vtZoomScale * 100) + '%';
             };
 
             function _renderVarietyTreeFamily() {
                 const items = ENCYCLOPEDIA.variety.items;
-                const LEAF_W = 108, LEAF_H = 26;
-                const LEAF_GAP_X = 6, BRANCH_GAP = 28, SPECIES_GAP = 50;
-                const Y_ROOT = 70;
-                const Y_SP = 200;
-                const Y_BR_BASE = 360;
-                const Y_BR_OFFSETS = [-30, 25, -20, 35, -25, 30];  // 譜系 y 起伏
-                const Y_LF_BASE = 530;
-                const Y_LF_OFFSETS = [-22, 12, -10, 22, -18];      // 葉子 y 起伏（譜系內 mod）
+                const totalLeaves = VARIETY_TREE.reduce((s, sp) =>
+                    s + sp.branches.reduce((b, br) => b + br.items.length, 0), 0);
 
-                let cursorX = 60;
-                const leafItems = [];
-                const branchNodes = [];
-                const speciesNodes = [];
-                let globalBranchIdx = 0;
+                // 中心與半徑（viewBox 1400x1000）
+                const cx = 700, cy = 500;
+                const rRoot = 62;
+                const rSpIn = 78,  rSpOut = 175;
+                const rBrIn = 178, rBrOut = 295;
+                const rLfStem = 300, rLfDot = 360;
 
+                const polar = (a, r) => {
+                    const rad = a * Math.PI / 180;
+                    return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) };
+                };
+                const arcPath = (innerR, outerR, sA, eA) => {
+                    const p1 = polar(sA, outerR), p2 = polar(eA, outerR);
+                    const p3 = polar(eA, innerR), p4 = polar(sA, innerR);
+                    const large = (eA - sA) > 180 ? 1 : 0;
+                    return `M ${p1.x.toFixed(2)} ${p1.y.toFixed(2)} A ${outerR} ${outerR} 0 ${large} 1 ${p2.x.toFixed(2)} ${p2.y.toFixed(2)} L ${p3.x.toFixed(2)} ${p3.y.toFixed(2)} A ${innerR} ${innerR} 0 ${large} 0 ${p4.x.toFixed(2)} ${p4.y.toFixed(2)} Z`;
+                };
+                const arcOnly = (r, sA, eA) => {
+                    const p1 = polar(sA, r), p2 = polar(eA, r);
+                    const large = (eA - sA) > 180 ? 1 : 0;
+                    return `M ${p1.x.toFixed(2)} ${p1.y.toFixed(2)} A ${r} ${r} 0 ${large} 1 ${p2.x.toFixed(2)} ${p2.y.toFixed(2)}`;
+                };
+
+                // 配置每個節點的角度範圍（從 12 點方向順時針推進）
+                let curA = -90;
+                const speciesArcs = [], branchArcs = [], leafNodes = [];
                 VARIETY_TREE.forEach(sp => {
-                    const spStartX = cursorX;
-                    const spBranches = [];
+                    const spLeafs = sp.branches.reduce((s, b) => s + b.items.length, 0);
+                    const spStart = curA;
                     sp.branches.forEach(br => {
-                        const brStartX = cursorX;
-                        const brLeaves = [];
-                        br.items.forEach((it, leafIdx) => {
+                        const brStart = curA;
+                        br.items.forEach(it => {
+                            const span = 360 / totalLeaves;
                             const ent = items[it.id];
-                            const offset = Y_LF_OFFSETS[leafIdx % Y_LF_OFFSETS.length];
-                            const ly = Y_LF_BASE + offset;
-                            leafItems.push({
+                            leafNodes.push({
                                 id: it.id, em: it.em,
                                 name: ent ? ent.name : it.id,
                                 tagline: ent ? ent.tagline : '',
-                                x: cursorX, y: ly,
-                                branchStroke: br.stroke
+                                angle: curA + span / 2,
+                                stroke: br.stroke, brName: br.name, spName: sp.title
                             });
-                            brLeaves.push(leafItems[leafItems.length - 1]);
-                            cursorX += LEAF_W + LEAF_GAP_X;
+                            curA += span;
                         });
-                        const brEndX = cursorX - LEAF_GAP_X;
-                        const brCenterX = (brStartX + brEndX) / 2 + LEAF_W / 2 - LEAF_W / 2;
-                        const brCenter = (brStartX + brEndX - LEAF_W) / 2 + LEAF_W;  // 葉子組中心
-                        const offsetIdx = globalBranchIdx % Y_BR_OFFSETS.length;
-                        const by = Y_BR_BASE + Y_BR_OFFSETS[offsetIdx];
-                        const brNode = {
-                            x: brCenter, y: by,
-                            name: br.name, emoji: br.emoji,
-                            stroke: br.stroke, leaves: brLeaves,
-                            species: sp.species
-                        };
-                        branchNodes.push(brNode);
-                        spBranches.push(brNode);
-                        brLeaves.forEach(l => { l.branchX = brNode.x; l.branchY = by; });
-                        globalBranchIdx++;
-                        cursorX += BRANCH_GAP - LEAF_GAP_X;
+                        branchArcs.push({
+                            startA: brStart, endA: curA, midA: (brStart + curA) / 2,
+                            name: br.name, emoji: br.emoji, stroke: br.stroke,
+                            leafCount: br.items.length
+                        });
                     });
-                    const spEndX = cursorX - BRANCH_GAP;
-                    const spCenter = (spStartX + spEndX - LEAF_W) / 2 + LEAF_W;
-                    const color = sp.species === 'arabica' ? '#2e7d32'
+                    const color = sp.species === 'arabica'   ? '#2e7d32'
                                 : sp.species === 'canephora' ? '#5d4037'
-                                : '#558b2f';
-                    speciesNodes.push({
-                        x: spCenter, y: Y_SP,
-                        title: sp.title, color, species: sp.species, branches: spBranches
+                                                              : '#558b2f';
+                    const lighter = sp.species === 'arabica'   ? '#66bb6a'
+                                  : sp.species === 'canephora' ? '#8d6e63'
+                                                                : '#9ccc65';
+                    speciesArcs.push({
+                        startA: spStart, endA: curA, midA: (spStart + curA) / 2,
+                        title: sp.title, species: sp.species, color, lighter,
+                        leafCount: spLeafs
                     });
-                    spBranches.forEach(b => { b.spX = spCenter; b.spY = Y_SP; });
-                    cursorX += SPECIES_GAP - BRANCH_GAP;
                 });
 
-                const totalW = cursorX + 60;
-                const maxOff = Math.max(...Y_BR_OFFSETS, ...Y_LF_OFFSETS);
-                const totalH = Y_LF_BASE + maxOff + LEAF_H + 60;
-                const rootX = totalW / 2;
-
-                // 連線：根 → 物種
-                const rootToSp = speciesNodes.map(sp => {
-                    const x1 = rootX, y1 = Y_ROOT + 30;
-                    const x2 = sp.x, y2 = sp.y - 32;
-                    const midY = (y1 + y2) / 2;
-                    return `<path d="M ${x1} ${y1} C ${x1} ${midY}, ${x2} ${midY}, ${x2} ${y2}" stroke="#6d4c41" stroke-width="3" fill="none" opacity="0.6" stroke-linecap="round"/>`;
-                }).join('');
-                // 連線：物種 → 譜系
-                const spToBr = branchNodes.map(br => {
-                    const x1 = br.spX, y1 = br.spY + 32;
-                    const x2 = br.x, y2 = br.y - 14;
-                    const midY = (y1 + y2) / 2;
-                    return `<path d="M ${x1} ${y1} C ${x1} ${midY}, ${x2} ${midY}, ${x2} ${y2}" stroke="${br.stroke}" stroke-width="2.4" fill="none" opacity="0.55" stroke-linecap="round"/>`;
-                }).join('');
-                // 連線：譜系 → 葉子
-                const brToLeaf = leafItems.map(l => {
-                    const x1 = l.branchX, y1 = l.branchY + 14;
-                    const x2 = l.x + LEAF_W / 2, y2 = l.y;
-                    const midY = (y1 + y2) / 2;
-                    return `<path d="M ${x1} ${y1} C ${x1} ${midY}, ${x2} ${midY}, ${x2} ${y2}" stroke="${l.branchStroke}" stroke-width="1.8" fill="none" opacity="0.55" stroke-linecap="round"/>`;
-                }).join('');
-
-                // 葉子
-                const leavesHtml = leafItems.map((l, idx) => {
-                    const delay = (idx * 0.02 + 0.4).toFixed(2);
-                    const safeTagline = (l.tagline || '').replace(/"/g, '&quot;').replace(/'/g, '&apos;');
-                    return `<g class="vt-leaf-svg" style="animation-delay:${delay}s; cursor:pointer"
-                              onclick="closeVarietyTree(); setTimeout(()=>showEncyDetail('variety','${l.id}'), 250);">
-                        <title>${safeTagline}</title>
-                        <rect x="${l.x}" y="${l.y}" width="${LEAF_W}" height="${LEAF_H}" rx="13" ry="13"
-                              fill="#fff" stroke="${l.branchStroke}" stroke-width="1.5"
-                              filter="url(#vtm-shadow)"/>
-                        <text x="${l.x + 12}" y="${l.y + 18}" font-size="14" pointer-events="none">${l.em}</text>
-                        <text x="${l.x + 32}" y="${l.y + 18}" font-size="11" font-weight="700" fill="#3e2723" pointer-events="none">${l.name}</text>
-                    </g>`;
-                }).join('');
-
-                // 譜系
-                const branchesHtml = branchNodes.map((br, idx) => {
-                    const delay = (idx * 0.04 + 0.2).toFixed(2);
-                    const w = 140;
-                    return `<g class="vt-br-svg" style="animation-delay:${delay}s">
-                        <rect x="${br.x - w/2}" y="${br.y - 14}" width="${w}" height="28" rx="14" ry="14"
-                              fill="${br.stroke}" opacity="0.18"/>
-                        <rect x="${br.x - w/2}" y="${br.y - 14}" width="${w}" height="28" rx="14" ry="14"
-                              fill="none" stroke="${br.stroke}" stroke-width="2"/>
-                        <text x="${br.x}" y="${br.y + 5}" font-size="11.5" font-weight="800"
-                              fill="${br.stroke}" text-anchor="middle" pointer-events="none">${br.emoji} ${br.name}</text>
-                    </g>`;
-                }).join('');
-
-                // 物種
-                const speciesHtml = speciesNodes.map((sp, idx) => {
-                    const delay = (idx * 0.08 + 0.1).toFixed(2);
+                // 物種扇形（彎曲文字 along 中線）
+                const speciesHtml = speciesArcs.map((sp, idx) => {
+                    const path = arcPath(rSpIn, rSpOut, sp.startA, sp.endA);
+                    const textR = (rSpIn + rSpOut) / 2 + 6;
+                    const arcLen = (sp.endA - sp.startA) * Math.PI / 180 * textR;
+                    const tpId = `vt-sp-tp-${idx}`;
                     const emoji = sp.title.match(/^[^\s]+/)[0];
-                    return `<g class="vt-sp-svg" style="animation-delay:${delay}s">
-                        <circle cx="${sp.x}" cy="${sp.y}" r="32" fill="${sp.color}" opacity="0.95" filter="url(#vtm-shadow)"/>
-                        <circle cx="${sp.x}" cy="${sp.y}" r="32" fill="none" stroke="#fff" stroke-width="3"/>
-                        <text x="${sp.x}" y="${sp.y - 4}" font-size="20" text-anchor="middle">${emoji}</text>
-                        <text x="${sp.x}" y="${sp.y + 13}" font-size="9" font-weight="800" fill="#fff" text-anchor="middle">${sp.species}</text>
+                    let labelHtml = '';
+                    if (arcLen > 100) {
+                        // 彎曲文字
+                        const tp = arcOnly(textR, sp.startA + 2, sp.endA - 2);
+                        labelHtml = `
+                            <path id="${tpId}" d="${tp}" fill="none" stroke="none"/>
+                            <text font-size="20" font-weight="900" fill="#fff" letter-spacing="2">
+                                <textPath href="#${tpId}" startOffset="50%" text-anchor="middle">
+                                    ${emoji} ${sp.species.toUpperCase()}
+                                </textPath>
+                            </text>`;
+                        // 葉子數副標
+                        const tp2Id = tpId + '-2';
+                        const tp2 = arcOnly((rSpIn + rSpOut) / 2 - 14, sp.startA + 2, sp.endA - 2);
+                        labelHtml += `
+                            <path id="${tp2Id}" d="${tp2}" fill="none" stroke="none"/>
+                            <text font-size="11" font-weight="700" fill="#fff" opacity="0.85" letter-spacing="1">
+                                <textPath href="#${tp2Id}" startOffset="50%" text-anchor="middle">
+                                    ${sp.leafCount} 個品種
+                                </textPath>
+                            </text>`;
+                    } else {
+                        const lp = polar(sp.midA, (rSpIn + rSpOut) / 2);
+                        const r = (sp.midA + 90) % 360;
+                        const flip = (sp.midA > 0 && sp.midA < 180);
+                        labelHtml = `
+                            <g transform="translate(${lp.x.toFixed(2)} ${lp.y.toFixed(2)}) rotate(${(r + (flip ? 180 : 0)) % 360})">
+                                <text text-anchor="middle" font-size="22" fill="#fff" dy="-2">${emoji}</text>
+                                <text text-anchor="middle" font-size="10" font-weight="800" fill="#fff" dy="14">${sp.species.toUpperCase()}</text>
+                            </g>`;
+                    }
+                    return `<g class="vt-sp-arc" style="animation-delay:${(idx * 0.08 + 0.15).toFixed(2)}s">
+                        <path d="${path}" fill="${sp.color}" opacity="0.92"
+                              stroke="#fff" stroke-width="3.5" filter="url(#vtm-shadow)"/>
+                        <path d="${path}" fill="url(#vt-sp-grad-${sp.species})" opacity="0.4" pointer-events="none"/>
+                        ${labelHtml}
                     </g>`;
                 }).join('');
 
-                // 根
-                const rootHtml = `<g class="vt-root-svg">
-                    <circle cx="${rootX}" cy="${Y_ROOT}" r="28" fill="#3e2723" filter="url(#vtm-shadow)"/>
-                    <circle cx="${rootX}" cy="${Y_ROOT}" r="28" fill="none" stroke="#a1887f" stroke-width="2"/>
-                    <text x="${rootX}" y="${Y_ROOT - 2}" font-size="18" text-anchor="middle">🌱</text>
-                    <text x="${rootX}" y="${Y_ROOT + 14}" font-size="9" font-weight="800" fill="#fff" text-anchor="middle">Coffea</text>
+                // 譜系扇形（短弧用 emoji + 角度旋轉，長弧用彎曲文字）
+                const branchesHtml = branchArcs.map((br, idx) => {
+                    const path = arcPath(rBrIn, rBrOut, br.startA, br.endA);
+                    const textR = (rBrIn + rBrOut) / 2 + 4;
+                    const arcLen = (br.endA - br.startA) * Math.PI / 180 * textR;
+                    const tpId = `vt-br-tp-${idx}`;
+                    let labelHtml = '';
+                    if (arcLen > 80) {
+                        const tp = arcOnly(textR, br.startA + 1, br.endA - 1);
+                        // 短名（去掉括弧內容）
+                        const shortName = br.name.replace(/（[^）]*）/g, '').trim();
+                        labelHtml = `
+                            <path id="${tpId}" d="${tp}" fill="none" stroke="none"/>
+                            <text font-size="12.5" font-weight="800" fill="#fff" letter-spacing="0.5">
+                                <textPath href="#${tpId}" startOffset="50%" text-anchor="middle">
+                                    ${br.emoji} ${shortName}
+                                </textPath>
+                            </text>`;
+                    } else {
+                        // 短弧只放 emoji
+                        const lp = polar(br.midA, (rBrIn + rBrOut) / 2);
+                        labelHtml = `
+                            <g transform="translate(${lp.x.toFixed(2)} ${lp.y.toFixed(2)})">
+                                <title>${br.emoji} ${br.name}</title>
+                                <text text-anchor="middle" font-size="18" fill="#fff" dy="6">${br.emoji}</text>
+                            </g>`;
+                    }
+                    return `<g class="vt-br-arc" style="animation-delay:${(idx * 0.05 + 0.35).toFixed(2)}s">
+                        <path d="${path}" fill="${br.stroke}" opacity="0.8"
+                              stroke="#fff" stroke-width="2"/>
+                        <path d="${path}" fill="rgba(255,255,255,0.18)" pointer-events="none"/>
+                        ${labelHtml}
+                    </g>`;
+                }).join('');
+
+                // 葉子（外圈圓點 + 旋轉文字 along 半徑）
+                const leavesHtml = leafNodes.map((l, idx) => {
+                    const stem = polar(l.angle, rLfStem);
+                    const dot  = polar(l.angle, rLfDot);
+                    // 文字方向：右半邊正寫，左半邊翻轉
+                    const angNorm = ((l.angle % 360) + 360) % 360;
+                    const flip = (angNorm > 90 && angNorm < 270);
+                    const textRot = flip ? l.angle + 180 : l.angle;
+                    const textOffset = flip ? -34 : 34;
+                    const textAnchor = flip ? 'end' : 'start';
+                    const safeTagline = (l.tagline || '').replace(/"/g, '&quot;').replace(/'/g, '&apos;');
+                    return `<g class="vt-leaf-arc" style="animation-delay:${(idx * 0.025 + 0.55).toFixed(2)}s; cursor:pointer"
+                              onclick="closeVarietyTree(); setTimeout(()=>showEncyDetail('variety','${l.id}'), 280);">
+                        <title>${l.name}　|　${safeTagline}</title>
+                        <line x1="${stem.x.toFixed(2)}" y1="${stem.y.toFixed(2)}"
+                              x2="${dot.x.toFixed(2)}" y2="${dot.y.toFixed(2)}"
+                              stroke="${l.stroke}" stroke-width="2" opacity="0.55" stroke-linecap="round"/>
+                        <circle class="vt-leaf-circle" cx="${dot.x.toFixed(2)}" cy="${dot.y.toFixed(2)}" r="22"
+                                fill="#fff" stroke="${l.stroke}" stroke-width="2.5" filter="url(#vtm-shadow)"/>
+                        <text x="${dot.x.toFixed(2)}" y="${(dot.y + 2).toFixed(2)}"
+                              text-anchor="middle" font-size="18" pointer-events="none">${l.em}</text>
+                        <g transform="translate(${dot.x.toFixed(2)} ${dot.y.toFixed(2)}) rotate(${textRot.toFixed(2)})">
+                            <text class="vt-leaf-name" x="${textOffset}" y="4" text-anchor="${textAnchor}"
+                                  font-size="13" font-weight="700" fill="#3e2723" pointer-events="none">${l.name}</text>
+                        </g>
+                    </g>`;
+                }).join('');
+
+                // 中心根
+                const rootHtml = `<g class="vt-root-arc">
+                    <circle cx="${cx}" cy="${cy}" r="${rRoot + 4}" fill="#fff" opacity="0.6"/>
+                    <circle cx="${cx}" cy="${cy}" r="${rRoot}" fill="url(#vt-root-grad)" filter="url(#vtm-shadow)"/>
+                    <circle cx="${cx}" cy="${cy}" r="${rRoot}" fill="none" stroke="#fff" stroke-width="4"/>
+                    <text x="${cx}" y="${cy - 8}" font-size="34" text-anchor="middle">🌱</text>
+                    <text x="${cx}" y="${cy + 22}" font-size="13" font-weight="900"
+                          fill="#fff" text-anchor="middle" letter-spacing="2.5">Coffea</text>
                 </g>`;
 
-                return `<svg id="vtm-tree" viewBox="0 0 ${totalW} ${totalH}" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:auto; max-width:${totalW}px;">
+                // 裝飾：背景輻射光環 + 同心虛線參考
+                const decorHtml = `
+                    <circle cx="${cx}" cy="${cy}" r="${rLfDot + 80}" fill="url(#vt-bg-glow)" opacity="0.55"/>
+                    <circle cx="${cx}" cy="${cy}" r="${rLfDot + 6}" fill="none" stroke="#a1887f" stroke-width="1" opacity="0.25" stroke-dasharray="2,5"/>
+                    <circle cx="${cx}" cy="${cy}" r="${rRoot + 8}" fill="none" stroke="#fff" stroke-width="2" opacity="0.45"/>
+                `;
+
+                // 標題（上方）
+                const titleHtml = `
+                    <g class="vt-title-svg" transform="translate(${cx}, 60)">
+                        <text text-anchor="middle" font-size="26" font-weight="900" fill="#3e2723" letter-spacing="3">🌳 咖啡豆種譜系演化圖</text>
+                        <text text-anchor="middle" font-size="13" font-weight="600" fill="#6d4c41" y="28" letter-spacing="1.5">3 物種 · 8 譜系 · 25 個品種　·　點葉子進詳情頁</text>
+                    </g>`;
+
+                // 圖例（左下角）
+                const legendHtml = `
+                    <g transform="translate(40, 870)" class="vt-legend">
+                        <rect x="0" y="0" width="240" height="100" rx="12" fill="#fff" opacity="0.92" stroke="#a1887f" stroke-width="1"/>
+                        <text x="14" y="22" font-size="13" font-weight="900" fill="#3e2723">📖 圖例</text>
+                        <g transform="translate(14, 36)">
+                            <circle cx="6" cy="8" r="6" fill="#2e7d32"/><text x="20" y="12" font-size="11.5" font-weight="700" fill="#3e2723">Arabica　22 品種（風味多樣）</text>
+                            <circle cx="6" cy="28" r="6" fill="#5d4037"/><text x="20" y="32" font-size="11.5" font-weight="700" fill="#3e2723">Canephora（Robusta）強苦高咖啡因</text>
+                            <circle cx="6" cy="48" r="6" fill="#558b2f"/><text x="20" y="52" font-size="11.5" font-weight="700" fill="#3e2723">Liberica　稀有第三大物種</text>
+                        </g>
+                    </g>`;
+
+                return `<svg id="vtm-tree" viewBox="0 0 1400 1000" xmlns="http://www.w3.org/2000/svg"
+                             preserveAspectRatio="xMidYMid meet"
+                             style="width:100%; height:100%; max-width:none;">
                     <defs>
                         <filter id="vtm-shadow" x="-30%" y="-30%" width="160%" height="160%">
                             <feDropShadow dx="0" dy="2" stdDeviation="2.5" flood-color="rgba(93,64,55,0.3)"/>
                         </filter>
+                        <radialGradient id="vt-root-grad">
+                            <stop offset="0%" stop-color="#6d4c41"/>
+                            <stop offset="100%" stop-color="#3e2723"/>
+                        </radialGradient>
+                        <radialGradient id="vt-bg-glow">
+                            <stop offset="0%" stop-color="#fff8e1" stop-opacity="0.85"/>
+                            <stop offset="60%" stop-color="#fdf9f3" stop-opacity="0.3"/>
+                            <stop offset="100%" stop-color="#fdf9f3" stop-opacity="0"/>
+                        </radialGradient>
+                        <radialGradient id="vt-sp-grad-arabica" cx="50%" cy="50%" r="60%" fx="50%" fy="0%">
+                            <stop offset="0%" stop-color="#fff" stop-opacity="0.5"/>
+                            <stop offset="100%" stop-color="#fff" stop-opacity="0"/>
+                        </radialGradient>
+                        <radialGradient id="vt-sp-grad-canephora" cx="50%" cy="50%" r="60%" fx="50%" fy="0%">
+                            <stop offset="0%" stop-color="#fff" stop-opacity="0.5"/>
+                            <stop offset="100%" stop-color="#fff" stop-opacity="0"/>
+                        </radialGradient>
+                        <radialGradient id="vt-sp-grad-liberica" cx="50%" cy="50%" r="60%" fx="50%" fy="0%">
+                            <stop offset="0%" stop-color="#fff" stop-opacity="0.5"/>
+                            <stop offset="100%" stop-color="#fff" stop-opacity="0"/>
+                        </radialGradient>
                     </defs>
-                    ${rootToSp}${spToBr}${brToLeaf}
-                    ${rootHtml}${speciesHtml}${branchesHtml}${leavesHtml}
+                    ${decorHtml}
+                    ${titleHtml}
+                    ${speciesHtml}
+                    ${branchesHtml}
+                    ${leavesHtml}
+                    ${rootHtml}
+                    ${legendHtml}
                 </svg>`;
             }
 
@@ -12901,6 +13298,202 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                     }
                 }
 
+                // ============ 7-14：20+ 杯進階 pattern mining ============
+                if (j.length >= 20) {
+                    // 7. 黃金組合（variety × proc × roast 三軸最高分）
+                    const tripleStats = {};
+                    j.filter(r => r.rating).forEach(r => {
+                        const v = r.label?.variety || r.config?.variety || '—';
+                        const p = r.config?.proc || '—';
+                        const ro = r.label?.roast || r.config?.roast || '—';
+                        const k = `${v}｜${p}｜${ro}`;
+                        if (!tripleStats[k]) tripleStats[k] = [];
+                        tripleStats[k].push(r.rating);
+                    });
+                    const goldCombos = Object.entries(tripleStats)
+                        .filter(([k, arr]) => arr.length >= 2)
+                        .map(([k, arr]) => ({
+                            k, n: arr.length, avg: arr.reduce((a,b)=>a+b,0) / arr.length
+                        }))
+                        .sort((a,b) => b.avg - a.avg)
+                        .slice(0, 3);
+                    if (goldCombos.length && goldCombos[0].avg >= 7.5) {
+                        insights.push({
+                            emoji: '💎', cls: 'good',
+                            title: `黃金組合 Top ${goldCombos.length}（品種×處理×焙度）`,
+                            body: goldCombos.map((c, i) => `<b>${i+1}. ${c.k}</b>　平均 ${c.avg.toFixed(1)} 分（${c.n} 杯）`).join('<br>')
+                        });
+                    }
+
+                    // 8. 水溫甜蜜點（2 度為一組）
+                    const tempBuckets = {};
+                    j.filter(r => r.rating && r.actualBrew?.temp).forEach(r => {
+                        const t = parseFloat(r.actualBrew.temp);
+                        if (!t || t < 70 || t > 100) return;
+                        const bucket = Math.floor(t / 2) * 2;
+                        if (!tempBuckets[bucket]) tempBuckets[bucket] = [];
+                        tempBuckets[bucket].push(r.rating);
+                    });
+                    const tempRanked = Object.entries(tempBuckets)
+                        .filter(([k, arr]) => arr.length >= 2)
+                        .map(([k, arr]) => ({ k: parseFloat(k), n: arr.length, avg: arr.reduce((a,b)=>a+b,0)/arr.length }))
+                        .sort((a,b) => b.avg - a.avg);
+                    if (tempRanked.length >= 2) {
+                        const top = tempRanked[0];
+                        insights.push({
+                            emoji: '🌡️', cls: 'good',
+                            title: `最佳水溫帶：${top.k}-${top.k+2}°C`,
+                            body: `${top.n} 杯落在此區間、平均 <b>${top.avg.toFixed(1)}</b> 分（其他溫度區平均 ${(tempRanked.slice(1).reduce((s,x)=>s+x.avg*x.n,0) / tempRanked.slice(1).reduce((s,x)=>s+x.n,0) || 0).toFixed(1)} 分）。下次同類豆優先試這個溫度。`
+                        });
+                    }
+
+                    // 9. 粉水比甜蜜點（解析 1:N 格式）
+                    const ratioBuckets = {};
+                    j.filter(r => r.rating && r.actualBrew?.ratio).forEach(r => {
+                        const m = (r.actualBrew.ratio || '').match(/1[\s:：]*([\d.]+)/);
+                        if (!m) return;
+                        const ratio = parseFloat(m[1]);
+                        if (!ratio || ratio < 5 || ratio > 25) return;
+                        const bucket = Math.round(ratio);
+                        if (!ratioBuckets[bucket]) ratioBuckets[bucket] = [];
+                        ratioBuckets[bucket].push(r.rating);
+                    });
+                    const ratioRanked = Object.entries(ratioBuckets)
+                        .filter(([k, arr]) => arr.length >= 2)
+                        .map(([k, arr]) => ({ k: parseInt(k), n: arr.length, avg: arr.reduce((a,b)=>a+b,0)/arr.length }))
+                        .sort((a,b) => b.avg - a.avg);
+                    if (ratioRanked.length >= 2) {
+                        const top = ratioRanked[0];
+                        insights.push({
+                            emoji: '⚖️', cls: 'good',
+                            title: `粉水比甜蜜點：1:${top.k}`,
+                            body: `${top.n} 杯使用 1:${top.k} 上下、平均 <b>${top.avg.toFixed(1)}</b> 分。其他比例試過：${ratioRanked.slice(1, 4).map(x => `1:${x.k} (${x.avg.toFixed(1)})`).join('、')}`
+                        });
+                    }
+
+                    // 10. 時段偏好（早/中/晚）
+                    const timeOfDay = j.filter(r => r.rating).reduce((m, r) => {
+                        const h = new Date(r.ts).getHours();
+                        const period = h < 11 ? 'morning' : h < 16 ? 'afternoon' : 'evening';
+                        if (!m[period]) m[period] = [];
+                        m[period].push(r.rating);
+                        return m;
+                    }, {});
+                    const timeStats = Object.entries(timeOfDay).map(([k, arr]) => ({
+                        period: k, n: arr.length, avg: arr.reduce((a,b)=>a+b,0)/arr.length
+                    })).filter(x => x.n >= 3).sort((a,b) => b.avg - a.avg);
+                    if (timeStats.length >= 2 && (timeStats[0].avg - timeStats[timeStats.length-1].avg) >= 1) {
+                        const periodLabel = { morning: '☀️ 早晨', afternoon: '🌤️ 下午', evening: '🌙 晚上' };
+                        insights.push({
+                            emoji: '⏰', cls: 'info',
+                            title: `時段差異：${periodLabel[timeStats[0].period]} 表現最好`,
+                            body: timeStats.map(s => `${periodLabel[s.period]} 平均 ${s.avg.toFixed(1)} 分（${s.n} 杯）`).join('　·　') + '。可能跟感官清晰度或心境有關。'
+                        });
+                    }
+
+                    // 11. 非典型偏好（高分低吻合 → 個人化口味）
+                    const heart = j.filter(r => r.rating >= 8 && r.score > 0 && r.score < 60);
+                    if (heart.length >= 3) {
+                        const flavorBias = {};
+                        heart.forEach(r => (r.selected || []).forEach(f => flavorBias[f] = (flavorBias[f] || 0) + 1));
+                        const topBias = Object.entries(flavorBias).sort((a,b)=>b[1]-a[1]).slice(0, 3);
+                        if (topBias.length) {
+                            insights.push({
+                                emoji: '🎭', cls: 'info',
+                                title: `非典型口味：${heart.length} 杯高分但吻合度 <60%`,
+                                body: `你給高分的咖啡常含「${topBias.map(([f,c])=>`<b>${f}</b>×${c}`).join('、')}」，但跟「典型風味矩陣」不符 → 你的偏好有獨特方向，不一定是錯誤辨識。`
+                            });
+                        }
+                    }
+
+                    // 12. 風味認知慣性警示（單一風味出現率 > 50%）
+                    const allFlavors = {};
+                    j.forEach(r => (r.selected || []).forEach(f => allFlavors[f] = (allFlavors[f] || 0) + 1));
+                    const flavorRanked = Object.entries(allFlavors).sort((a,b)=>b[1]-a[1]);
+                    if (flavorRanked.length >= 5) {
+                        const top1 = flavorRanked[0];
+                        const ratio = top1[1] / j.length;
+                        if (ratio > 0.5) {
+                            insights.push({
+                                emoji: '⚠️', cls: 'warn',
+                                title: `辨識慣性警示：「${top1[0]}」出現於 ${(ratio*100).toFixed(0)}% 杯`,
+                                body: `${top1[0]} 在你 ${j.length} 杯中出現 ${top1[1]} 次。可能是真心愛、也可能是辨識慣性。下次刻意關注其他風味驗證一下感官。`
+                            });
+                        }
+                    }
+
+                    // 13. 沖煮一致性（top scoring cups 水溫變異）
+                    const topCups = j.filter(r => r.rating >= 8 && r.actualBrew?.temp);
+                    const temps = topCups.map(r => parseFloat(r.actualBrew.temp)).filter(x => !isNaN(x) && x > 70 && x < 100);
+                    if (temps.length >= 4) {
+                        const mean = temps.reduce((a,b)=>a+b,0) / temps.length;
+                        const stdDev = Math.sqrt(temps.reduce((s,t) => s + (t-mean)*(t-mean), 0) / temps.length);
+                        const isConsistent = stdDev < 1.5;
+                        insights.push({
+                            emoji: isConsistent ? '🎯' : '🌪️', cls: isConsistent ? 'good' : 'info',
+                            title: isConsistent
+                                ? `穩定型沖煮：${temps.length} 杯高分水溫 ${mean.toFixed(0)}±${stdDev.toFixed(1)}°C`
+                                : `探索型沖煮：${temps.length} 杯高分水溫 ${Math.min(...temps).toFixed(0)}-${Math.max(...temps).toFixed(0)}°C`,
+                            body: isConsistent
+                                ? '你已找到固定沖煮 SOP、值得保持。下次刻意微調 ±1°C 找新甜蜜點。'
+                                : '你樂於變化、能接受多種風格。把成功組合記下來、逐步縮小變數驗證。'
+                        });
+                    }
+
+                    // 14. 預測準確度差距（哪個產區你最熟）
+                    const scoreByCountry = {};
+                    j.filter(r => r.score > 0).forEach(r => {
+                        const k = r.label?.country || r.config?.country;
+                        if (!k) return;
+                        if (!scoreByCountry[k]) scoreByCountry[k] = [];
+                        scoreByCountry[k].push(r.score);
+                    });
+                    const countryAcc = Object.entries(scoreByCountry)
+                        .filter(([k, arr]) => arr.length >= 3)
+                        .map(([k, arr]) => ({ k, n: arr.length, avg: arr.reduce((a,b)=>a+b,0)/arr.length }))
+                        .sort((a,b) => b.avg - a.avg);
+                    if (countryAcc.length >= 2 && (countryAcc[0].avg - countryAcc[countryAcc.length-1].avg) >= 15) {
+                        const top = countryAcc[0], bot = countryAcc[countryAcc.length-1];
+                        insights.push({
+                            emoji: '🧭', cls: 'info',
+                            title: `預測能力差距：${top.k} 最熟、${bot.k} 最陌生`,
+                            body: `${top.k} 平均吻合 <b>${top.avg.toFixed(0)}%</b>（${top.n} 杯）·　${bot.k} 平均吻合 <b>${bot.avg.toFixed(0)}%</b>（${bot.n} 杯）。後者用「🎴 學習卡」+ 該產區典型風味加強。`
+                        });
+                    }
+
+                    // 15. 焙度 × 沖法 配對冠軍
+                    const matrix = {};
+                    j.filter(r => r.rating).forEach(r => {
+                        const k = (r.label?.roast || r.config?.roast || '—') + '｜' + (r.label?.brew || r.config?.brew || '—');
+                        if (!matrix[k]) matrix[k] = [];
+                        matrix[k].push(r.rating);
+                    });
+                    const matrixRanked = Object.entries(matrix)
+                        .filter(([k, arr]) => arr.length >= 2)
+                        .map(([k, arr]) => ({ k, n: arr.length, avg: arr.reduce((a,b)=>a+b,0)/arr.length }))
+                        .sort((a,b) => b.avg - a.avg);
+                    if (matrixRanked.length >= 3 && matrixRanked[0].avg >= 7.5) {
+                        insights.push({
+                            emoji: '🧪', cls: 'good',
+                            title: `焙度 × 沖法 配對冠軍`,
+                            body: matrixRanked.slice(0, 3).map((m, i) => `<b>${i+1}. ${m.k}</b>　平均 ${m.avg.toFixed(1)} 分（${m.n} 杯）`).join('<br>')
+                        });
+                    }
+
+                    // 16. 投入度：近 30 天活躍度
+                    const recent30 = j.filter(r => (Date.now() - r.ts) < 30 * 86400000);
+                    const uniqueDays30 = new Set(recent30.map(r => new Date(r.ts).toDateString())).size;
+                    if (uniqueDays30 >= 5) {
+                        insights.push({
+                            emoji: uniqueDays30 >= 15 ? '🔥' : '📅', cls: 'info',
+                            title: `近 30 天投入度：${uniqueDays30} 天有杯測（${recent30.length} 杯）`,
+                            body: uniqueDays30 >= 15
+                                ? '高頻練習中、感官會持續精進。注意感官疲勞 → 適度休息更有效率。'
+                                : `平均每 ${(30/uniqueDays30).toFixed(1)} 天一次。穩定節奏、繼續累積資料。`
+                        });
+                    }
+                }
+
                 if (!insights.length) {
                     insights.push({
                         emoji: '🔍', cls: 'info',
@@ -12915,20 +13508,23 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                         <div class="viz-advice-body">${i.body}</div>
                     </div>`).join('');
 
+                const isAdvanced = j.length >= 20;
                 openAnalysisViewer({
                     icon: '💡',
-                    title: '洞察分析',
+                    title: isAdvanced ? '洞察分析 · 進階 Pattern Mining' : '洞察分析',
                     badgeClass: 'ai',
-                    badgeText: `${j.length} 杯資料 · ${insights.length} 條洞察`,
+                    badgeText: `${j.length} 杯 · ${insights.length} 條洞察${isAdvanced ? ' · 進階模式' : ''}`,
                     summaryItems: [
                         { k: '📝 累計', v: j.length + ' 杯' },
                         { k: '💡 洞察數', v: insights.length },
-                        { k: '📅 最早', v: new Date(sorted[0].ts).toLocaleDateString('zh-TW') },
-                        { k: '📅 最近', v: new Date(sorted[sorted.length-1].ts).toLocaleDateString('zh-TW') }
+                        { k: '🎚️ 模式', v: isAdvanced ? '進階（≥20 杯）' : '基礎（<20 杯）' },
+                        { k: '📅 期間', v: `${new Date(sorted[0].ts).toLocaleDateString('zh-TW')}　→　${new Date(sorted[sorted.length-1].ts).toLocaleDateString('zh-TW')}` }
                     ],
                     contentHtml: `
-                        <div style="font-size: 13.5px; color: #8d6e63; padding: 12px 15px; background: #f5f2ec; border-radius: 8px; margin-bottom: 16px; line-height: 1.8;">
-                            💡 以下洞察是從你的杯測日誌自動挖掘。資料越多越準——<b>${j.length >= 20 ? '你已達 20 杯門檻，洞察可信度高' : '建議累積 20 杯後再看會更準'}</b>。
+                        <div style="font-size: 13.5px; color: #8d6e63; padding: 12px 15px; background: ${isAdvanced ? 'linear-gradient(135deg, #fff8e1 0%, #ffe0b2 100%)' : '#f5f2ec'}; border-radius: 8px; margin-bottom: 16px; line-height: 1.8; border-left: 4px solid ${isAdvanced ? '#ff8f00' : '#a1887f'};">
+                            ${isAdvanced
+                                ? `🚀 <b>進階模式啟動</b>：你已累積 ${j.length} 杯，挖出 ${insights.length} 條 pattern。包含黃金組合、水溫/粉水比甜蜜點、時段差異、非典型偏好、辨識慣性、預測能力差距等。`
+                                : `💡 以下洞察是從你的杯測日誌自動挖掘。資料越多越準 —— 累積到 <b>20 杯</b>會解鎖進階 pattern mining（黃金組合、甜蜜點、時段、慣性偵測等）。`}
                         </div>
                         ${html}`,
                     footerHtml: `<button class="btn btn-accent btn-sm" onclick="closeAnalysisViewer(); openJournalDashboard();">📊 儀表板</button>
