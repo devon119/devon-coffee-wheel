@@ -14708,6 +14708,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 ],
                 tips: [
                   { icon: '📊', title: '入豆溫高低影響', desc: '入豆溫高：回溫點高、前段短；入豆溫低：回溫點低，整體烘焙時間拉長，適合想拉長乾燥段的烘法。' },
+                  { icon: '📖', title: 'Scott Rao 的入豆溫觀點', desc: 'Scott Rao 主張使用較高的入豆溫（充分蓄熱），讓鍋爐在入豆後仍有足夠熱能推動乾燥段，避免 ROR 過早趨平導致 Baking 缺陷。他認為入豆溫是建立正確 ROR 起始坡度的關鍵。' },
                   { icon: '🔊', title: '入豆聲音', desc: '入豆後滾筒聲音變悶代表豆子已接觸熱壁開始吸熱，是正常現象，無需調整。' }
                 ]
               },
@@ -14738,6 +14739,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 ],
                 tips: [
                   { icon: '⏳', title: '乾燥段不能省略', desc: '乾燥段過短（升溫太快跳過）→ 豆芯水分未充分蒸發，後段容易出現烘焙不均與澀感。' },
+                  { icon: '📖', title: 'Scott Rao：乾燥段決定後段品質', desc: 'Scott Rao 指出乾燥段若 ROR 下降太快趨近於 0，就會在豆芯水分尚未充分散逸時進入梅納段，導致發展不均。他建議乾燥段維持穩定但適度的熱能輸入，讓 ROR 平緩下降而非驟降。' },
                   { icon: '👁️', title: '顏色判斷乾燥進度', desc: '豆色從草綠轉黃是最直觀的觀察方式，顏色均勻代表每顆豆子受熱一致。' },
                   { icon: '💨', title: '風門配合', desc: '乾燥段風門半開，協助水蒸氣排出，避免水氣在鍋爐內循環重新吸附至豆表。' }
                 ]
@@ -14755,7 +14757,8 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 tips: [
                   { icon: '🍞', title: '不只烘焙有梅納', desc: '麵包烤焦、牛排煎香、啤酒烘麥都是梅納反應，與焦糖化並列食物風味兩大褐變機制。' },
                   { icon: '⚖️', title: '與焦糖化的區別', desc: '梅納反應需要胺基酸參與，焦糖化是純糖類裂解，兩者溫度區間重疊但機制不同。' },
-                  { icon: '🎯', title: '烘焙師的操控', desc: '拉長 140–165°C 段時間 → 更多梅納反應 → 堅果巧克力調豐富；縮短 → 花果酸質更凸顯。' }
+                  { icon: '🎯', title: '烘焙師的操控', desc: '拉長 140–165°C 段時間 → 更多梅納反應 → 堅果巧克力調豐富；縮短 → 花果酸質更凸顯。' },
+                  { icon: '📖', title: 'Scott Rao：梅納段是 ROR 最難維持的階段', desc: 'Scott Rao 指出梅納段（約 150–180°C）是最容易發生 ROR 驟降的時機——豆子從吸熱轉為放熱（梅納反應放出能量），若烘焙師不及時微降火力，ROR 會在此段急衝後 Crash。他建議在豆色剛轉黃時就提前小幅降火。' }
                 ]
               },
               { key: 'caramelization',
@@ -14809,16 +14812,18 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
               },
               { key: 'dtr',
                 name: '發展段 DTR（Development Time Ratio）', tagline: '一爆到下豆的時間佔比，決定風味發展深度', emoji: '⏱️',
-                subtitle: 'DTR 是一爆開始到下豆這段時間除以總烘焙時間的百分比。20–25% 是多數精品烘焙的目標區間，過短風味青澀、過長苦澀過重。需用比例而非絕對秒數溝通。',
+                subtitle: 'DTR 是一爆開始到下豆這段時間除以總烘焙時間的百分比。Scott Rao 在《The Coffee Roaster\'s Companion》中系統化定義並推廣此指標，建議 20–25% 為精品烘焙目標，需用比例而非絕對秒數溝通。',
                 specs: [
                   { k: '公式', v: 'DTR = 發展時間（一爆→下豆）÷ 總烘焙時間 × 100%' },
-                  { k: '理想範圍', v: '20–25%（依豆種密度與目標風味調整）' },
-                  { k: 'DTR 偏短影響', v: '<15%：草腥、青澀、酸感尖銳不圓潤' },
+                  { k: 'Scott Rao 建議範圍', v: '20–25%（依豆種密度與目標風味調整）' },
+                  { k: 'DTR 偏短影響', v: '<15%：草腥、青澀、酸感尖銳不圓潤（Underdevelopment）' },
                   { k: 'DTR 偏長影響', v: '>30%：苦澀、烘焙調過重、香氣平板' },
                   { k: '換算範例', v: '8 分鐘烘焙 DTR 20% = 96 秒發展；12 分鐘烘焙 DTR 20% = 144 秒' }
                 ],
                 tips: [
+                  { icon: '📖', title: 'Scott Rao 對 DTR 的強調', desc: 'Scott Rao 指出在他推廣 DTR 概念之前，多數烘焙師只記錄「一爆後幾秒下豆」，無法跨批次比較。用比例而非秒數，才能在不同總時間的烘焙中做有意義的比較。' },
                   { icon: '🎯', title: '不要只看秒數', desc: '發展 90 秒在 8 分鐘批次與 12 分鐘批次代表截然不同的能量密度，必須用 DTR% 溝通才有意義。' },
+                  { icon: '💡', title: 'Scott Rao 對淺焙的警告', desc: 'Scott Rao 強調追求「超淺焙」卻讓 DTR 低於 15% 是最常見錯誤。豆表顏色淡不等於風味乾淨，發展不足（Underdevelopment）帶來的草腥、花生味比「烘深一點」更難入口。' },
                   { icon: '🫘', title: '豆種差異', desc: '密度高的衣索比亞豆需更長 DTR 讓豆芯充分發展；密度低或老豆則需縮短 DTR 避免過烘。' }
                 ]
               },
@@ -14864,6 +14869,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 ],
                 tips: [
                   { icon: '📐', title: '火力過大的缺陷', desc: '火力過大在乾燥段造成外熟內生（Tipping / Scorching）：豆尖或豆面焦化但豆芯水分未散逸。' },
+                  { icon: '📖', title: 'Scott Rao：預判優於補救', desc: 'Scott Rao 在《The Coffee Roaster\'s Companion》中明確指出：看到 ROR 趨平再加火，永遠慢半拍。他建議烘焙師熟記各階段 ROR 的正常走勢，在即將趨平前 20–30 秒就預先微調，而非被動跟隨。補救性的大幅加火幾乎都會引入 Crash & Flick 複合缺陷。' },
                   { icon: '🎯', title: '預判而非被動跟隨', desc: '有經驗的烘焙師能預測 ROR 走勢，提前 30 秒調整火力，而非被動跟著溫度計數字反應。' }
                 ]
               },
@@ -14880,24 +14886,6 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 tips: [
                   { icon: '🌡️', title: '餘熱是隱藏風險', desc: '離開滾筒的豆子若堆在冷卻盤不攪拌，中央豆散熱慢，可能比目標深上半個烘焙度。' },
                   { icon: '🚿', title: '禁止加水冷卻', desc: '加水霧冷卻會讓豆子含水率升高，縮短賞味期並影響研磨均勻度，是嚴重的品質缺陷。' }
-                ]
-              },
-              { key: 'scott_rao',
-                name: 'Scott Rao 烘焙學', tagline: '以數據與可重複性為核心，建立現代精品烘焙的分析語言', emoji: '📖',
-                subtitle: 'Scott Rao 是當代最具影響力的咖啡烘焙理論家。他的著作《The Coffee Roaster\'s Companion》（2014）系統化定義了 Declining ROR、DTR、Crash & Flick、Baking 等概念，將烘焙從經驗直覺轉型為可量化、可重複的科學。',
-                specs: [
-                  { k: '代表著作', v: 'The Coffee Roaster\'s Companion（2014）' },
-                  { k: '核心主張', v: '全程 Declining ROR（持續下降升溫率）是精品烘焙的標準曲線' },
-                  { k: 'DTR 建議範圍', v: '20–25%（發展時間 ÷ 總烘焙時間）' },
-                  { k: '命名的主要缺陷', v: 'Crash & Flick / Baking / Scorching / Tipping / Underdevelopment' },
-                  { k: '烘焙哲學', v: '數據驅動、可重複性優先：每批紀錄 BT/ET/ROR/火力/風門，排除憑感覺的操作' },
-                  { k: '對入豆溫的看法', v: '主張使用較高入豆溫（高蓄熱）以縮短乾燥段、讓梅納反應更充分展開' }
-                ],
-                tips: [
-                  { icon: '📊', title: '數據驅動烘焙', desc: 'Scott Rao 強調每鍋都要記錄完整曲線（BT、ET、ROR、火力、風門調整時間點），透過數據比對找出可重複的最佳曲線，而非依賴記憶或感覺。' },
-                  { icon: '🔁', title: '可重複性是最高標準', desc: '在 Rao 的體系中，一鍋好豆不算成功；能穩定重複同一條曲線才叫真正掌握。這也是為何他推崇烘焙軟體（如 Cropster、Artisan）的紀錄功能。' },
-                  { icon: '🌡️', title: '環境溫度（ET）的重要性', desc: 'Scott Rao 提醒烘焙師不只看豆溫（BT），環境溫度（ET）也反映鍋爐的熱平衡狀態。ET 過高代表熱空氣過剩，易造成 Baking；ET 過低代表能量不足。' },
-                  { icon: '💡', title: 'Rao 對「輕焙」的警告', desc: 'Scott Rao 指出許多號稱「輕焙淺烘」的豆子其實是 Underdevelopment（發展不足），有草腥、花生、未熟穀物味，他認為適當的發展比「淺色豆表」更重要。' }
                 ]
               },
               { key: 'roast_defects',
