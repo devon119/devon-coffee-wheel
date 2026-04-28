@@ -16349,9 +16349,15 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                     }
                     wasOverWheel = over;
                 }, { passive: true });
-                // 觸控 / 點擊保險
+                // 原始 v35 listener 全部保留
                 pane.addEventListener('mousedown', stepAside, { passive: true, capture: true });
                 pane.addEventListener('touchstart', stepAside, { passive: true, capture: true });
+                pane.addEventListener('click', stepAside, { passive: true, capture: true });
+                pane.addEventListener('wheel', stepAside, { passive: true, capture: true });
+                if (typeof myChart !== 'undefined' && myChart && typeof myChart.on === 'function') {
+                    myChart.on('click', stepAside);
+                    myChart.on('mouseover', stepAside);
+                }
                 // 額外保險：document 級別也聽（避免任何 stopPropagation 影響）
                 document.addEventListener('click', (e) => {
                     if (e.target.closest && e.target.closest('#wheel-pane')) stepAside(e);
