@@ -1902,12 +1902,14 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
 
         /* 🐭 實驗鼠：踩在風味輪頂端、四腳奔跑（SVG 側面圖） */
         #idle-mouse-wrap {
-            position: fixed;
+            position: absolute;
             top: 30px; left: 50%;  /* 初值，JS 會 override */
-            pointer-events: none; z-index: 9999;
+            pointer-events: none; z-index: 999;
             opacity: 0; transition: opacity 0.25s ease-out;
             transform: translateX(-50%);
         }
+        /* 游標在輪子區域時立刻隱藏老鼠，不依賴 JS event */
+        #wheel-pane:hover #idle-mouse-wrap.active { opacity: 0; }
         #idle-mouse-wrap.active {
             opacity: 1;
             /* 淡色背景圈、讓老鼠從風味輪底色中跳出來 */
@@ -16220,13 +16222,16 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 const wrap = document.getElementById('idle-mouse-wrap');
                 const mouseEl = document.getElementById('idle-mouse');
                 const mainEl = document.getElementById('main');
-                if (!wrap || !mainEl) return;
-                // 直接用 #main（ECharts 容器）的 bounding rect，最準確
+                const pane = document.getElementById('wheel-pane');
+                if (!wrap || !mainEl || !pane) return;
+                // #main bounding rect → 轉成 position:absolute 相對 pane 的座標
                 const cr = mainEl.getBoundingClientRect();
-                const wheelCenterX = cr.left + cr.width / 2;
+                const pr = pane.getBoundingClientRect();
+                const wheelCenterX = cr.left - pr.left + cr.width / 2;
+                const wheelTop = cr.top - pr.top;
                 const mouseH = (mouseEl && mouseEl.getBoundingClientRect().height) || 100;
-                const idealTop = cr.top - mouseH - 8;
-                const top = Math.max(10, idealTop >= 10 ? idealTop : cr.top - mouseH * 0.6);
+                const idealTop = wheelTop - mouseH - 8;
+                const top = Math.max(10, idealTop >= 10 ? idealTop : wheelTop - mouseH * 0.6);
                 wrap.style.top = top + 'px';
                 wrap.style.left = wheelCenterX + 'px';
             }
