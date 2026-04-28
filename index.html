@@ -16330,18 +16330,25 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                     if (timer) clearTimeout(timer);
                     timer = setTimeout(() => { _positionIdleMouse(); show(); }, IDLE_RETURN_MS);
                 };
-                // 游標進入風味輪圖表容器 → 老鼠退場＋停轉；離開後 30 秒再回來
-                const mainEl = document.getElementById('main');
-                if (mainEl) {
-                    mainEl.addEventListener('mouseenter', () => {
+                // document mousemove：比對游標座標與 #main bounding rect
+                // 比 mouseenter/mouseleave 更可靠（不受 ECharts canvas 事件影響）
+                let wasOverWheel = false;
+                document.addEventListener('mousemove', (e) => {
+                    const mainEl = document.getElementById('main');
+                    if (!mainEl) return;
+                    const cr = mainEl.getBoundingClientRect();
+                    const over = e.clientX >= cr.left && e.clientX <= cr.right &&
+                                 e.clientY >= cr.top  && e.clientY <= cr.bottom;
+                    if (over && !wasOverWheel) {
                         hide();
                         if (timer) clearTimeout(timer);
-                    });
-                    mainEl.addEventListener('mouseleave', () => {
+                        timer = null;
+                    } else if (!over && wasOverWheel) {
                         if (timer) clearTimeout(timer);
                         timer = setTimeout(() => { _positionIdleMouse(); show(); }, IDLE_RETURN_MS);
-                    });
-                }
+                    }
+                    wasOverWheel = over;
+                }, { passive: true });
                 // 觸控 / 點擊保險
                 pane.addEventListener('mousedown', stepAside, { passive: true, capture: true });
                 pane.addEventListener('touchstart', stepAside, { passive: true, capture: true });
