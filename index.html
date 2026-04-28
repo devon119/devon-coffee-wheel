@@ -16219,24 +16219,14 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             function _positionIdleMouse() {
                 const wrap = document.getElementById('idle-mouse-wrap');
                 const mouseEl = document.getElementById('idle-mouse');
-                const viewport = document.getElementById('viewport');
-                if (!wrap || !viewport) return;
-                const vr = viewport.getBoundingClientRect();
-                const vh = window.innerHeight;
-                const isMobile = window.innerWidth <= 900;
-                // 配合 CSS 的 #main 大小：桌面 min(94vh, 92%)；手機 min(82vw, 75vh)
-                const wheelSize = isMobile
-                    ? Math.min(0.82 * vr.width, 0.75 * vh)
-                    : Math.min(0.94 * vh, 0.92 * vr.width);
-                // position:fixed → 直接用 viewport 座標，不扣 pane offset
-                const wheelCenterY = vr.top + vr.height / 2;
-                const wheelCenterX = vr.left + vr.width / 2;
-                const mr = mouseEl ? mouseEl.getBoundingClientRect() : null;
-                const mouseH = (mr && mr.height) ? mr.height : 100;
-                const wheelTop = wheelCenterY - wheelSize / 2;
-                const idealTop = wheelTop - mouseH - 8;
-                // 空間不夠時半疊風味輪外圈頂端
-                const top = Math.max(10, idealTop >= 10 ? idealTop : wheelTop - mouseH * 0.6);
+                const mainEl = document.getElementById('main');
+                if (!wrap || !mainEl) return;
+                // 直接用 #main（ECharts 容器）的 bounding rect，最準確
+                const cr = mainEl.getBoundingClientRect();
+                const wheelCenterX = cr.left + cr.width / 2;
+                const mouseH = (mouseEl && mouseEl.getBoundingClientRect().height) || 100;
+                const idealTop = cr.top - mouseH - 8;
+                const top = Math.max(10, idealTop >= 10 ? idealTop : cr.top - mouseH * 0.6);
                 wrap.style.top = top + 'px';
                 wrap.style.left = wheelCenterX + 'px';
             }
@@ -16339,6 +16329,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 };
                 // capture phase 確保事件先觸發、不被 ECharts 內部 listener 攔截
                 pane.addEventListener('mousedown', stepAside, { passive: true, capture: true });
+                pane.addEventListener('mousemove', stepAside, { passive: true, capture: true });
                 pane.addEventListener('touchstart', stepAside, { passive: true, capture: true });
                 pane.addEventListener('click', stepAside, { passive: true, capture: true });
                 pane.addEventListener('wheel', stepAside, { passive: true, capture: true });
