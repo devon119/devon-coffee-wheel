@@ -13042,57 +13042,57 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
 
             // ========== C · 📊 學習卡進度儀表板 ==========
             window.openLearningDashboard = function() {
-                const leaves = (typeof _fcFlattenLeaves === 'function') ? _fcFlattenLeaves() : [];
+                const cards = (typeof _fcBuildAllCards === 'function') ? _fcBuildAllCards() : [];
                 const stats = (typeof _fcLoadStats === 'function') ? _fcLoadStats() : {};
-                const total = leaves.length;
-                const seen = Object.keys(stats).length;
+                const total = cards.length;
+                const seen = cards.filter(c => stats[c.id]).length;
                 let totalShown = 0, totalCorrect = 0, maxStreak = 0;
-                const byL1 = {};  // 分類 -> { shown, correct, names: [] }
+                const byL1 = {};
                 const now = Date.now();
                 let dueCount = 0;
-                leaves.forEach(l => {
-                    const st = stats[l.name];
-                    byL1[l.categoryL1] = byL1[l.categoryL1] || { shown: 0, correct: 0, n: 0 };
-                    byL1[l.categoryL1].n++;
+                cards.forEach(card => {
+                    const st = stats[card.id];
+                    byL1[card.catLabel] = byL1[card.catLabel] || { shown: 0, correct: 0, n: 0 };
+                    byL1[card.catLabel].n++;
                     if (st) {
                         totalShown += st.shown || 0;
                         totalCorrect += st.correct || 0;
                         maxStreak = Math.max(maxStreak, st.streak || 0);
-                        byL1[l.categoryL1].shown += st.shown || 0;
-                        byL1[l.categoryL1].correct += st.correct || 0;
+                        byL1[card.catLabel].shown += st.shown || 0;
+                        byL1[card.catLabel].correct += st.correct || 0;
                         if (st.nextDue && st.nextDue <= now) dueCount++;
                     } else {
-                        // 沒見過視為「今日可學」
                         dueCount++;
                     }
                 });
                 const overallAcc = totalShown > 0 ? (totalCorrect / totalShown * 100) : 0;
                 const seenPct = total > 0 ? (seen / total * 100) : 0;
 
-                // L1 類別掌握率長條
+                // 類別掌握率長條
                 const l1Bars = Object.entries(byL1).map(([k, v]) => {
                     const acc = v.shown > 0 ? (v.correct / v.shown * 100) : 0;
                     const color = acc >= 80 ? '#2e7d32' : acc >= 60 ? '#fbc02d' : acc >= 30 ? '#ef6c00' : '#c62828';
                     return {
-                        label: `${k} (${v.n})`,
+                        label: k + ' (' + v.n + ')',
                         value: v.shown > 0 ? acc : 0,
-                        display: v.shown > 0 ? `${acc.toFixed(0)}% (${v.correct}/${v.shown})` : '未練習',
+                        display: v.shown > 0 ? acc.toFixed(0) + '% (' + v.correct + '/' + v.shown + ')' : '未練習',
                         color
                     };
                 }).sort((a,b) => b.value - a.value);
 
-                // 最常答錯 top 10
-                const weakest = leaves.map(l => {
-                    const st = stats[l.name] || { shown: 0, correct: 0 };
+                // 最常答錯 top 10（每題獨立統計）
+                const weakest = cards.map(card => {
+                    const st = stats[card.id] || { shown: 0, correct: 0 };
                     return {
-                        name: l.name, shown: st.shown, correct: st.correct,
+                        name: card.answer + (card.cat !== 'flavor' ? ' [' + card.catLabel.replace(/^\S+\s*/, '') + ']' : ''),
+                        shown: st.shown, correct: st.correct,
                         acc: st.shown > 0 ? st.correct / st.shown : null,
                         wrongs: (st.shown || 0) - (st.correct || 0)
                     };
                 }).filter(x => x.shown >= 2).sort((a,b) => b.wrongs - a.wrongs || a.acc - b.acc).slice(0, 10);
                 const weakBars = weakest.map(w => ({
                     label: w.name, value: w.wrongs,
-                    display: `錯 ${w.wrongs} / ${w.shown}（${(w.acc*100).toFixed(0)}%）`,
+                    display: '錯 ' + w.wrongs + ' / ' + w.shown + '（' + (w.acc*100).toFixed(0) + '%）',
                     color: '#c62828'
                 }));
 
@@ -13117,9 +13117,9 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                     icon: '📊',
                     title: '學習卡進度',
                     badgeClass: 'ai',
-                    badgeText: `${seen} / ${total} 片已學`,
+                    badgeText: seen + ' / ' + total + ' 題已練',
                     summaryItems: [
-                        { k: '🎴 已練過', v: `${seen} / ${total} 片` },
+                        { k: '🎴 已練過', v: seen + ' / ' + total + ' 題' },
                         { k: '🎯 答對率', v: totalShown > 0 ? overallAcc.toFixed(0) + '%' : '—' },
                         { k: '🔥 最長連勝', v: maxStreak },
                         { k: '📅 今日可學', v: dueCount + ' 張' }
@@ -13128,7 +13128,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                         <div class="viz-grid" style="grid-template-columns: 1fr 1fr 1fr;">
                             <div class="viz-card">
                                 <div class="viz-card-title">📘 學習覆蓋</div>
-                                ${progressRing(seenPct, 'SEEN', `${seen} / ${total} 片`, '#1565c0')}
+                                ${progressRing(seenPct, 'SEEN', seen + ' / ' + total + ' 題', '#1565c0')}
                             </div>
                             <div class="viz-card">
                                 <div class="viz-card-title">🎯 整體答對率</div>
@@ -14646,80 +14646,171 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             // --- 🎲 盲測模式 ---
             let blindMode = false;
             // ============================================================
-            // 🎴 學習卡模式（間隔重複）
+            // 🎴 學習卡模式（擴充版：風味輪 + 百科全題型 SRS）
             // ============================================================
-            // 4 選 1 題型：顯示風味描述 → 猜風味名；帶 SRS、記錄答對率
             const FC_KEY = 'COFFEE_FLASHCARD_STATS';
-            let _fcAllLeaves = null;
+            let _fcAllCards = null;
             let _fcState = null;
 
-            function _fcFlattenLeaves() {
-                if (_fcAllLeaves) return _fcAllLeaves;
-                const out = [];
-                function walk(nodes, l1) {
+            // 通用遮罩：把 itemName 的關鍵詞在 text 裡替換為 ▓▓
+            function _fcMaskText(text, itemName) {
+                if (!text || !itemName) return text || '';
+                let result = text;
+                const clean = String(itemName).replace(/^\d+\.\s*/, '').trim();
+                const tokens = clean.split(/[\s·\/（）【】\(\)]+/).filter(t => t.length >= 2);
+                for (const tok of tokens) {
+                    const esc = tok.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                    result = result.replace(new RegExp(esc, 'g'), '▓▓');
+                }
+                return result;
+            }
+
+            // 建立全題庫（風味輪 + 百科各類，每個百科項目最多 4 種題型）
+            function _fcBuildAllCards() {
+                if (_fcAllCards) return _fcAllCards;
+                const cards = [];
+
+                // 1. 風味輪葉片（題型：感官描述 → 風味名）
+                (function walkFlavor(nodes, l1) {
                     for (const n of nodes) {
                         if (n.children && n.children.length) {
-                            walk(n.children, l1 || n.name);
-                        } else if (/^\d+\./.test(n.name)) {
-                            out.push({
-                                name: n.name,
-                                desc: n.desc || '',
-                                ref: n.ref || '',
+                            walkFlavor(n.children, l1 || n.name);
+                        } else if (/^\d+\./.test(n.name) && (n.desc || '').length >= 8) {
+                            cards.push({
+                                id: 'f:' + n.name,
+                                cat: 'flavor',
+                                catLabel: '🍃 風味輪',
+                                qHint: '以下感官描述對應哪個風味？',
+                                qText: _fcMaskText(n.desc || '', n.name),
+                                answer: n.name,
+                                emoji: '',
                                 color: (n.itemStyle && n.itemStyle.color) || '#999',
+                                detail: n.desc || '',
+                                extra: n.ref ? '📌 ' + n.ref : '',
                                 categoryL1: l1 || ''
                             });
                         }
                     }
+                })(rawData, null);
+
+                // 2. 百科各類別（history / variety / process / roast / dripper / brew / method）
+                const CAT_LABEL = {
+                    history: '📜 起源歷史', variety: '🌱 豆種品系',
+                    process: '🔄 處理法',   roast:   '🔥 烘焙度',
+                    dripper: '🔻 濾杯',      brew:    '☕ 沖煮',
+                    method:  '🌀 手沖手法'
+                };
+                for (const [catKey, catObj] of Object.entries(ENCYCLOPEDIA)) {
+                    const catLabel = CAT_LABEL[catKey] || catKey;
+                    for (const [itemKey, item] of Object.entries(catObj.items || {})) {
+                        if (item.status !== 'ready') continue;
+                        const name = item.name;
+                        const emoji = item.emoji || '';
+                        const base = {
+                            cat: catKey, catLabel, answer: name, emoji, color: null,
+                            detail: item.subtitle || '', extra: '', categoryL1: catLabel
+                        };
+                        // Type A：標語 → 名稱
+                        if ((item.tagline || '').length >= 5) {
+                            cards.push(Object.assign({}, base, {
+                                id: 'e:' + catKey + ':' + itemKey + ':A',
+                                qHint: '以下標語描述的是哪個項目？',
+                                qText: item.tagline
+                            }));
+                        }
+                        // Type B：subtitle 節錄（遮蔽名字）→ 名稱
+                        if ((item.subtitle || '').length >= 50) {
+                            const excerpt = item.subtitle.length > 110
+                                ? item.subtitle.slice(0, 110) + '…' : item.subtitle;
+                            cards.push(Object.assign({}, base, {
+                                id: 'e:' + catKey + ':' + itemKey + ':B',
+                                qHint: '以下段落描述的是哪個項目？',
+                                qText: _fcMaskText(excerpt, name)
+                            }));
+                        }
+                        // Type C：第一條規格 → 名稱
+                        if ((item.specs || []).length >= 1) {
+                            const sp = item.specs[0];
+                            cards.push(Object.assign({}, base, {
+                                id: 'e:' + catKey + ':' + itemKey + ':C',
+                                qHint: '以下規格 / 數據對應哪個項目？',
+                                qText: sp.k + '：' + sp.v
+                            }));
+                        }
+                        // Type D：第一條 tip.desc（遮蔽名字）→ 名稱
+                        const tip0 = (item.tips || [])[0];
+                        if (tip0 && (tip0.desc || '').length >= 20) {
+                            cards.push(Object.assign({}, base, {
+                                id: 'e:' + catKey + ':' + itemKey + ':D',
+                                qHint: '以下知識點提示的是哪個項目？',
+                                qText: _fcMaskText(tip0.desc, name),
+                                extra: tip0.icon ? tip0.icon + ' ' + (tip0.title || '') : ''
+                            }));
+                        }
+                    }
                 }
-                walk(rawData, null);
-                _fcAllLeaves = out;
-                return out;
+                _fcAllCards = cards;
+                return cards;
             }
 
-            function _fcLoadStats() { try { return JSON.parse(localStorage.getItem(FC_KEY) || '{}'); } catch(e) { return {}; } }
+            function _fcLoadStats() {
+                try {
+                    const raw = JSON.parse(localStorage.getItem(FC_KEY) || '{}');
+                    // 舊版 key 遷移：「1. 紅茶」→「f:1. 紅茶」
+                    let migrated = false;
+                    for (const k of Object.keys(raw)) {
+                        if (!k.startsWith('f:') && !k.startsWith('e:') && /^\d+\./.test(k)) {
+                            raw['f:' + k] = raw[k]; delete raw[k]; migrated = true;
+                        }
+                    }
+                    if (migrated) { try { localStorage.setItem(FC_KEY, JSON.stringify(raw)); } catch(e2) {} }
+                    return raw;
+                } catch(e) { return {}; }
+            }
             function _fcSaveStats(s) { try { localStorage.setItem(FC_KEY, JSON.stringify(s)); } catch(e) {} }
 
-            // 依 SRS 挑出下一題：優先 nextDue 到期的、其次錯誤率高的、其次沒見過的
-            function _fcPickNextCard(stats, excludeNames) {
-                const leaves = _fcFlattenLeaves();
+            // SRS 選題：優先 nextDue 到期的、其次錯誤率高的、其次沒見過的
+            function _fcPickNextCard(stats, excludeIds) {
+                const cards = _fcBuildAllCards();
                 const now = Date.now();
-                const candidates = leaves.filter(l => !excludeNames.has(l.name));
-                // 計算每片的「該出現分數」
-                const scored = candidates.map(l => {
-                    const st = stats[l.name];
+                const candidates = cards.filter(c => !excludeIds.has(c.id));
+                if (!candidates.length) return cards[Math.floor(Math.random() * cards.length)];
+                const scored = candidates.map(c => {
+                    const st = stats[c.id];
                     let priority;
-                    if (!st) priority = 100;  // 沒見過 → 高優先
+                    if (!st) priority = 100;
                     else if (st.nextDue && st.nextDue <= now) priority = 80 + Math.random() * 10;
-                    else {
-                        const acc = st.shown > 0 ? st.correct / st.shown : 0.5;
-                        priority = 30 + (1 - acc) * 50 + Math.random() * 10;
-                    }
-                    return { leaf: l, priority };
+                    else { const acc = st.shown > 0 ? st.correct / st.shown : 0.5; priority = 30 + (1 - acc) * 50 + Math.random() * 10; }
+                    return { card: c, priority };
                 });
                 scored.sort((a, b) => b.priority - a.priority);
-                // 從 top 20 隨機抽（避免總是同樣順序）
                 const topK = scored.slice(0, Math.min(20, scored.length));
-                return topK[Math.floor(Math.random() * topK.length)].leaf;
+                return topK[Math.floor(Math.random() * topK.length)].card;
             }
 
-            // 從同 L1 類別挑 3 個干擾選項
-            function _fcPickDistractors(correctLeaf, count = 3) {
-                const leaves = _fcFlattenLeaves();
-                const sameCategory = leaves.filter(l => l.categoryL1 === correctLeaf.categoryL1 && l.name !== correctLeaf.name);
-                const pool = sameCategory.length >= count ? sameCategory : leaves.filter(l => l.name !== correctLeaf.name);
-                // 洗牌取前 count
-                const shuffled = [...pool].sort(() => Math.random() - 0.5);
-                return shuffled.slice(0, count);
+            // 干擾選項：優先同類別的不同答案，不足才跨類別補
+            function _fcPickDistractors(correctCard, count) {
+                count = count || 3;
+                const cards = _fcBuildAllCards();
+                const seen = new Set([correctCard.answer]);
+                const pool = [];
+                for (const c of cards) {
+                    if (c.cat === correctCard.cat && !seen.has(c.answer)) { seen.add(c.answer); pool.push(c.answer); }
+                }
+                for (const c of cards) {
+                    if (pool.length >= count * 4) break;
+                    if (!seen.has(c.answer)) { seen.add(c.answer); pool.push(c.answer); }
+                }
+                return pool.sort(() => Math.random() - 0.5).slice(0, count);
             }
 
             window.startFlashcard = function() {
                 _fcState = {
                     stats: _fcLoadStats(),
-                    sessionAnswered: 0,
-                    sessionCorrect: 0,
-                    seenThisSession: new Set(),
-                    currentLeaf: null,
-                    currentOptions: []
+                    sessionAnswered: 0, sessionCorrect: 0,
+                    seenIds: new Set(),
+                    currentCard: null,
+                    currentOptions: []  // answer-name strings, index 0 = correct (shuffled later)
                 };
                 document.getElementById('flashcard-modal').style.display = 'block';
                 _fcNextQuestion();
@@ -14733,120 +14824,100 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
 
             function _fcNextQuestion() {
                 if (!_fcState) return;
-                // 避免一個 session 重複出題（若已見完所有葉才重置）
-                if (_fcState.seenThisSession.size >= _fcFlattenLeaves().length) {
-                    _fcState.seenThisSession.clear();
-                }
-                const leaf = _fcPickNextCard(_fcState.stats, _fcState.seenThisSession);
-                _fcState.currentLeaf = leaf;
-                _fcState.seenThisSession.add(leaf.name);
-                const distractors = _fcPickDistractors(leaf, 3);
-                const options = [leaf, ...distractors].sort(() => Math.random() - 0.5);
-                _fcState.currentOptions = options;
+                const all = _fcBuildAllCards();
+                if (_fcState.seenIds.size >= all.length) _fcState.seenIds.clear();
+                const card = _fcPickNextCard(_fcState.stats, _fcState.seenIds);
+                _fcState.currentCard = card;
+                _fcState.seenIds.add(card.id);
+                const distractors = _fcPickDistractors(card, 3);
+                _fcState.currentOptions = [card.answer, ...distractors].sort(() => Math.random() - 0.5);
                 _fcRender('question');
             }
 
-            function _fcHandleAnswer(chosenName) {
-                if (!_fcState || !_fcState.currentLeaf) return;
-                const correctName = _fcState.currentLeaf.name;
-                const isCorrect = chosenName === correctName;
+            // idx = 0-3，對應 _fcState.currentOptions[idx]
+            function _fcHandleAnswer(idx) {
+                if (!_fcState || !_fcState.currentCard) return;
+                const chosenName = _fcState.currentOptions[idx];
+                const card = _fcState.currentCard;
+                const isCorrect = chosenName === card.answer;
                 _fcState.sessionAnswered++;
                 if (isCorrect) _fcState.sessionCorrect++;
-                // 更新 SRS
-                const st = _fcState.stats[correctName] || { shown: 0, correct: 0, streak: 0, lastShown: null, nextDue: null };
+                const st = _fcState.stats[card.id] || { shown: 0, correct: 0, streak: 0, lastShown: null, nextDue: null };
                 st.shown++;
                 if (isCorrect) {
-                    st.correct++;
-                    st.streak = (st.streak || 0) + 1;
-                    // 間隔：1 → 3 → 7 → 14 → 30 天（最多 30）
-                    const intervals = [1, 3, 7, 14, 30];
-                    const days = intervals[Math.min(st.streak - 1, intervals.length - 1)];
+                    st.correct++; st.streak = (st.streak || 0) + 1;
+                    const days = [1, 3, 7, 14, 30][Math.min(st.streak - 1, 4)];
                     st.nextDue = Date.now() + days * 86400000;
                 } else {
                     st.streak = 0;
-                    st.nextDue = Date.now() + 86400000;  // 答錯 → 明天再見
+                    st.nextDue = Date.now() + 86400000;
                 }
                 st.lastShown = Date.now();
-                _fcState.stats[correctName] = st;
+                _fcState.stats[card.id] = st;
                 _fcSaveStats(_fcState.stats);
                 _fcRender('reveal', isCorrect, chosenName);
             }
 
             function _fcFormatProgress() {
                 if (!_fcState) return '';
-                const acc = _fcState.sessionAnswered > 0 ? Math.round(_fcState.sessionCorrect / _fcState.sessionAnswered * 100) : 0;
-                return `第 ${_fcState.sessionAnswered + 1} 題 · 本次正確 ${_fcState.sessionCorrect}/${_fcState.sessionAnswered}${_fcState.sessionAnswered ? ` (${acc}%)` : ''}`;
+                const ans = _fcState.sessionAnswered, cor = _fcState.sessionCorrect;
+                const acc = ans > 0 ? Math.round(cor / ans * 100) : 0;
+                return '第 ' + (ans + 1) + ' 題 · 本次正確 ' + cor + '/' + ans + (ans ? ' (' + acc + '%)' : '');
             }
 
-            function _fcEscape(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+            function _fcEscape(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
-            // 遮罩 desc 中的葉片自身名字（避免洩題）
-            // 例：「午後錫蘭紅茶剛泡開...」→「午後錫蘭▓▓剛泡開...」
-            function _fcMaskDesc(leaf) {
-                let desc = leaf.desc || '';
-                if (!desc) return desc;
-                // 取出「1. 紅茶」中的「紅茶」；多詞如「葡萄 Raisin」拆成 ["葡萄","Raisin"]
-                const cleanName = leaf.name.replace(/^\d+\.\s*/, '').trim();
-                const tokens = cleanName.split(/\s+/).filter(t => t.length > 0);
-                for (const tok of tokens) {
-                    if (tok.length < 2) continue;  // 單字過短（例如英文縮寫）跳過
-                    const escaped = tok.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-                    desc = desc.replace(new RegExp(escaped, 'g'), '▓▓');
-                }
-                return desc;
-            }
+            const _fcTypeLabel = { A: '標語題', B: '段落題', C: '規格題', D: '知識點' };
 
             function _fcRender(phase, isCorrect, chosenName) {
                 const progEl = document.getElementById('fc-progress');
                 const contentEl = document.getElementById('fc-content');
                 progEl.innerText = _fcFormatProgress();
-                const leaf = _fcState.currentLeaf;
+                const card = _fcState.currentCard;
 
                 if (phase === 'question') {
-                    const opts = _fcState.currentOptions.map((o, i) => `
-                        <button onclick="_fcAnswer('${o.name.replace(/'/g, "\\'")}')" style="width:100%; text-align:left; padding: 12px 14px; margin-bottom: 8px; background:#f5f5f5; border: 2px solid #ddd; border-radius: 10px; font-size: 14px; cursor:pointer; transition: 0.15s;" onmouseover="this.style.background='#e3f2fd'; this.style.borderColor='#1976d2'" onmouseout="this.style.background='#f5f5f5'; this.style.borderColor='#ddd'">
-                            <b style="color: #1565c0;">${String.fromCharCode(65 + i)}.</b> ${_fcEscape(o.name)}
-                        </button>
-                    `).join('');
-                    contentEl.innerHTML = `
-                        <p style="color: #555; margin: 0 0 8px 0; font-size: 12px;">🍃 以下描述對應哪個風味？</p>
-                        <div style="padding: 14px 16px; background: #fffde7; border-left: 4px solid #fbc02d; border-radius: 8px; font-size: 14px; line-height: 1.7; color: #3e2723; margin-bottom: 16px;">
-                            「${_fcEscape(_fcMaskDesc(leaf))}」
-                        </div>
-                        <p style="font-size: 10px; color: #999; margin: 0 0 10px 0;">💡 ▓▓ 是被遮蔽的答案關鍵字</p>
-                        ${opts}
-                    `;
+                    const typeCode = card.id.slice(-1);
+                    const typeHint = card.cat === 'flavor' ? '風味描述' : (_fcTypeLabel[typeCode] || '');
+                    const catBadge = '<span style="display:inline-block;padding:2px 9px;border-radius:12px;background:#e3f2fd;color:#1565c0;font-size:11px;font-weight:600;margin-bottom:8px;">'
+                        + _fcEscape(card.catLabel) + (typeHint ? '  ·  ' + typeHint : '') + '</span>';
+                    const opts = _fcState.currentOptions.map(function(name, i) {
+                        return '<button onclick="_fcAnswer(' + i + ')" style="width:100%;text-align:left;padding:12px 14px;margin-bottom:8px;background:#f5f5f5;border:2px solid #ddd;border-radius:10px;font-size:14px;cursor:pointer;transition:0.15s;" onmouseover="this.style.background=\'#e3f2fd\';this.style.borderColor=\'#1976d2\'" onmouseout="this.style.background=\'#f5f5f5\';this.style.borderColor=\'#ddd\'"><b style="color:#1565c0;">' + String.fromCharCode(65 + i) + '.</b> ' + _fcEscape(name) + '</button>';
+                    }).join('');
+                    const hasBlocks = card.qText !== card.detail;
+                    contentEl.innerHTML = catBadge
+                        + '<p style="color:#555;margin:0 0 8px;font-size:12px;">' + _fcEscape(card.qHint) + '</p>'
+                        + '<div style="padding:14px 16px;background:#fffde7;border-left:4px solid #fbc02d;border-radius:8px;font-size:14px;line-height:1.7;color:#3e2723;margin-bottom:16px;">「' + _fcEscape(card.qText) + '」</div>'
+                        + (hasBlocks ? '<p style="font-size:10px;color:#999;margin:0 0 10px;">💡 ▓▓ 是被遮蔽的關鍵字</p>' : '')
+                        + opts;
                 } else if (phase === 'reveal') {
-                    const st = _fcState.stats[leaf.name];
+                    const st = _fcState.stats[card.id];
                     const acc = st && st.shown ? Math.round(st.correct / st.shown * 100) : 0;
-                    const dueText = st && st.nextDue ? `${Math.max(1, Math.round((st.nextDue - Date.now()) / 86400000))} 天後` : '—';
+                    const dueText = st && st.nextDue ? Math.max(1, Math.round((st.nextDue - Date.now()) / 86400000)) + ' 天後' : '—';
                     const resultColor = isCorrect ? '#2e7d32' : '#c62828';
-                    const resultBg = isCorrect ? '#e8f5e9' : '#ffebee';
-                    const resultIcon = isCorrect ? '✅ 正確！' : `❌ 錯了，正確答案是：${leaf.name}`;
-                    contentEl.innerHTML = `
-                        <div style="padding: 12px 14px; background: ${resultBg}; border: 2px solid ${resultColor}; border-radius: 10px; margin-bottom: 14px;">
-                            <strong style="color: ${resultColor}; font-size: 15px;">${_fcEscape(resultIcon)}</strong>
-                            ${!isCorrect ? `<div style="font-size: 12px; color: #555; margin-top: 6px;">你選了：${_fcEscape(chosenName)}</div>` : ''}
-                        </div>
-                        <div style="padding: 14px; border: 1px solid #eee; border-radius: 10px; background: #fff;">
-                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
-                                <div style="width: 40px; height: 40px; border-radius: 8px; background: ${leaf.color}; flex-shrink: 0; border: 1px solid rgba(0,0,0,0.1);"></div>
-                                <div>
-                                    <b style="font-size: 16px;">${_fcEscape(leaf.name)}</b>
-                                    <div style="font-size: 11px; color: #666;">屬於「${_fcEscape(leaf.categoryL1)}」</div>
-                                </div>
-                            </div>
-                            <p style="font-size: 12px; line-height: 1.7; color: #444; margin: 8px 0;">${_fcEscape(leaf.desc)}</p>
-                            ${leaf.ref ? `<p style="font-size: 11px; color: #888; margin: 4px 0;">📌 現實參考：${_fcEscape(leaf.ref)}</p>` : ''}
-                        </div>
-                        <div style="font-size: 11px; color: #777; margin-top: 10px; padding: 8px; background: #f5f5f5; border-radius: 6px;">
-                            📊 這片你答對過 ${st.correct}/${st.shown} 次 (${acc}%) · 下次複習：${dueText}
-                        </div>
-                        <div style="display: flex; gap: 8px; margin-top: 14px;">
-                            <button onclick="_fcNext()" style="flex: 2; padding: 12px; background: #1565c0; color: #fff; border: none; border-radius: 10px; font-size: 14px; font-weight: bold; cursor: pointer;">下一題 →</button>
-                            <button onclick="exitFlashcard()" style="flex: 1; padding: 12px; background: #eee; color: #555; border: none; border-radius: 10px; font-size: 13px; cursor: pointer;">結束</button>
-                        </div>
-                    `;
+                    const resultBg   = isCorrect ? '#e8f5e9' : '#ffebee';
+                    const resultIcon = isCorrect ? '✅ 正確！' : '❌ 錯了，正確答案是：' + card.answer;
+                    const iconEl = card.emoji
+                        ? '<div style="font-size:36px;line-height:1.1;flex-shrink:0;">' + card.emoji + '</div>'
+                        : '<div style="width:40px;height:40px;border-radius:8px;background:' + (card.color || '#999') + ';border:1px solid rgba(0,0,0,0.1);flex-shrink:0;"></div>';
+                    contentEl.innerHTML =
+                        '<div style="padding:12px 14px;background:' + resultBg + ';border:2px solid ' + resultColor + ';border-radius:10px;margin-bottom:14px;">'
+                        + '<strong style="color:' + resultColor + ';font-size:15px;">' + _fcEscape(resultIcon) + '</strong>'
+                        + (!isCorrect ? '<div style="font-size:12px;color:#555;margin-top:6px;">你選了：' + _fcEscape(chosenName || '') + '</div>' : '')
+                        + '</div>'
+                        + '<div style="padding:14px;border:1px solid #eee;border-radius:10px;background:#fff;">'
+                        + '<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">' + iconEl
+                        + '<div><b style="font-size:16px;">' + _fcEscape(card.answer) + '</b>'
+                        + '<div style="font-size:11px;color:#666;">屬於「' + _fcEscape(card.catLabel) + '」</div></div></div>'
+                        + '<p style="font-size:12px;line-height:1.7;color:#444;margin:8px 0;">' + _fcEscape(card.detail) + '</p>'
+                        + (card.extra ? '<p style="font-size:11px;color:#888;margin:4px 0;">' + _fcEscape(card.extra) + '</p>' : '')
+                        + '</div>'
+                        + '<div style="font-size:11px;color:#777;margin-top:10px;padding:8px;background:#f5f5f5;border-radius:6px;">'
+                        + '📊 這張你答對過 ' + (st ? st.correct : 0) + '/' + (st ? st.shown : 0) + ' 次 (' + acc + '%) · 下次複習：' + dueText
+                        + '</div>'
+                        + '<div style="display:flex;gap:8px;margin-top:14px;">'
+                        + '<button onclick="_fcNext()" style="flex:2;padding:12px;background:#1565c0;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:bold;cursor:pointer;">下一題 →</button>'
+                        + '<button onclick="exitFlashcard()" style="flex:1;padding:12px;background:#eee;color:#555;border:none;border-radius:10px;font-size:13px;cursor:pointer;">結束</button>'
+                        + '</div>';
                 }
             }
 
