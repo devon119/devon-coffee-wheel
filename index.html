@@ -15742,12 +15742,19 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                     if (timer) clearTimeout(timer);
                     timer = setTimeout(() => { _positionIdleMouse(); show(); }, IDLE_RETURN_MS);
                 };
-                pane.addEventListener('mousedown', stepAside, { passive: true });
-                pane.addEventListener('touchstart', stepAside, { passive: true });
-                pane.addEventListener('wheel', stepAside, { passive: true });
+                // capture phase 確保事件先觸發、不被 ECharts 內部 listener 攔截
+                pane.addEventListener('mousedown', stepAside, { passive: true, capture: true });
+                pane.addEventListener('touchstart', stepAside, { passive: true, capture: true });
+                pane.addEventListener('click', stepAside, { passive: true, capture: true });
+                pane.addEventListener('wheel', stepAside, { passive: true, capture: true });
                 if (typeof myChart !== 'undefined' && myChart && typeof myChart.on === 'function') {
                     myChart.on('click', stepAside);
+                    myChart.on('mouseover', stepAside);
                 }
+                // 額外保險：document 級別也聽（避免任何 stopPropagation 影響）
+                document.addEventListener('click', (e) => {
+                    if (e.target.closest && e.target.closest('#wheel-pane')) stepAside(e);
+                }, true);
                 const obs = new MutationObserver(() => {
                     const v = document.getElementById('analysis-viewer');
                     if (v && v.classList.contains('open')) hide();
