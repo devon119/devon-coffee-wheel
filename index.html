@@ -14728,25 +14728,38 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                                 qText: _fcMaskText(excerpt, name)
                             }));
                         }
-                        // Type C：第一條規格 → 名稱
-                        if ((item.specs || []).length >= 1) {
-                            const sp = item.specs[0];
-                            cards.push(Object.assign({}, base, {
-                                id: 'e:' + catKey + ':' + itemKey + ':C',
-                                qHint: '以下規格 / 數據對應哪個項目？',
-                                qText: sp.k + '：' + sp.v
-                            }));
-                        }
-                        // Type D：第一條 tip.desc（遮蔽名字）→ 名稱
-                        const tip0 = (item.tips || [])[0];
-                        if (tip0 && (tip0.desc || '').length >= 20) {
-                            cards.push(Object.assign({}, base, {
-                                id: 'e:' + catKey + ':' + itemKey + ':D',
-                                qHint: '以下知識點提示的是哪個項目？',
-                                qText: _fcMaskText(tip0.desc, name),
-                                extra: tip0.icon ? tip0.icon + ' ' + (tip0.title || '') : ''
-                            }));
-                        }
+                        // Type C：逐條規格 → 名稱（每條規格獨立一題）
+                        (item.specs || []).forEach(function(sp, si) {
+                            if ((sp.k || '').length >= 1 && (sp.v || '').length >= 1) {
+                                cards.push(Object.assign({}, base, {
+                                    id: 'e:' + catKey + ':' + itemKey + ':C' + si,
+                                    qHint: '以下規格 / 數據對應哪個項目？',
+                                    qText: sp.k + '：' + sp.v
+                                }));
+                            }
+                        });
+                        // Type D：逐條 tip.desc（遮蔽名字）→ 名稱
+                        (item.tips || []).forEach(function(tip, ti) {
+                            if ((tip.desc || '').length >= 20) {
+                                cards.push(Object.assign({}, base, {
+                                    id: 'e:' + catKey + ':' + itemKey + ':D' + ti,
+                                    qHint: '以下知識點提示的是哪個項目？',
+                                    qText: _fcMaskText(tip.desc, name),
+                                    extra: tip.icon ? tip.icon + ' ' + (tip.title || '') : ''
+                                }));
+                            }
+                        });
+                        // Type G：歷史沿革條目（年份＋事件，遮蔽名字）→ 名稱
+                        (item.origin || []).forEach(function(oe, gi) {
+                            if ((oe.text || '').length >= 15) {
+                                cards.push(Object.assign({}, base, {
+                                    id: 'e:' + catKey + ':' + itemKey + ':G' + gi,
+                                    qHint: '以下歷史事件 / 時間點屬於哪個主題？',
+                                    qText: _fcMaskText((oe.year ? oe.year + '：' : '') + oe.text, name),
+                                    extra: ''
+                                }));
+                            }
+                        });
                     }
                 }
                 _fcAllCards = cards;
@@ -14867,7 +14880,14 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
 
             function _fcEscape(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
-            const _fcTypeLabel = { A: '標語題', B: '段落題', C: '規格題', D: '知識點' };
+            function _fcGetTypeLabel(code) {
+                if (code === 'A') return '標語題';
+                if (code === 'B') return '段落題';
+                if (code[0] === 'C') return '規格題';
+                if (code[0] === 'D') return '知識點';
+                if (code[0] === 'G') return '歷史沿革';
+                return '';
+            }
 
             function _fcRender(phase, isCorrect, chosenName) {
                 const progEl = document.getElementById('fc-progress');
@@ -14876,8 +14896,8 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 const card = _fcState.currentCard;
 
                 if (phase === 'question') {
-                    const typeCode = card.id.slice(-1);
-                    const typeHint = card.cat === 'flavor' ? '風味描述' : (_fcTypeLabel[typeCode] || '');
+                    const typeCode = card.id.split(':').pop();
+                    const typeHint = card.cat === 'flavor' ? '風味描述' : _fcGetTypeLabel(typeCode);
                     const catBadge = '<span style="display:inline-block;padding:2px 9px;border-radius:12px;background:#e3f2fd;color:#1565c0;font-size:11px;font-weight:600;margin-bottom:8px;">'
                         + _fcEscape(card.catLabel) + (typeHint ? '  ·  ' + typeHint : '') + '</span>';
                     const opts = _fcState.currentOptions.map(function(name, i) {
