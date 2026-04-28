@@ -2482,7 +2482,6 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                     <button class="ency-tab" data-cat="dripper" onclick="encySwitchCat('dripper')">🔻 濾杯</button>
                     <button class="ency-tab" data-cat="brew" onclick="encySwitchCat('brew')">☕ 沖煮</button>
                     <button class="ency-tab" data-cat="method" onclick="encySwitchCat('method')">🌀 手法</button>
-                    <button class="ency-tab" data-cat="roasting_process" onclick="encySwitchCat('roasting_process')">🔥 烘豆</button>
                 </div>
                 <button class="ency-close" onclick="closeEncyclopedia()" aria-label="關閉百科">✕</button>
             </div>
@@ -11577,15 +11576,10 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
 
             let _encyCurrentCat = 'history';
 
-            function _encyUpdateTitle() {
-                const cat = ENCYCLOPEDIA[_encyCurrentCat];
-                const titleEl = document.getElementById('ency-title');
-                if (titleEl && cat) titleEl.textContent = cat.icon + ' ' + cat.title;
-            }
             window.openEncyclopedia = function(cat) {
                 _encyCurrentCat = cat || 'history';
+                document.getElementById('ency-title').textContent = '📚 沖煮百科';
                 document.querySelectorAll('.ency-tab').forEach(t => t.classList.toggle('active', t.dataset.cat === _encyCurrentCat));
-                _encyUpdateTitle();
                 _encyRenderList();
                 document.getElementById('ency-back-btn').style.display = 'none';
                 document.getElementById('ency-tabs').style.display = 'flex';
@@ -11604,7 +11598,6 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             window.encySwitchCat = function(cat) {
                 _encyCurrentCat = cat;
                 document.querySelectorAll('.ency-tab').forEach(t => t.classList.toggle('active', t.dataset.cat === cat));
-                _encyUpdateTitle();
                 _encyRenderList();
                 document.getElementById('ency-back-btn').style.display = 'none';
             };
@@ -14931,7 +14924,17 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 };
             })();
 
-            window.openRoastingKB = function() { openEncyclopedia('roasting_process'); };
+            window.openRoastingKB = function() {
+                _encyCurrentCat = 'roasting_process';
+                document.getElementById('ency-title').textContent = '🔥 烘豆流程知識庫';
+                document.getElementById('ency-tabs').style.display = 'none';
+                document.getElementById('ency-back-btn').style.display = 'none';
+                _encyRenderList();
+                const m = document.getElementById('encyclopedia-modal');
+                m.style.display = 'block';
+                requestAnimationFrame(() => m.classList.add('open'));
+                document.body.style.overflow = 'hidden';
+            };
 
             let _fcAllCards = null;
             let _fcState = null;
