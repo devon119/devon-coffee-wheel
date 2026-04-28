@@ -13049,7 +13049,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 let totalShown = 0, totalCorrect = 0, maxStreak = 0;
                 const byL1 = {};
                 const now = Date.now();
-                let dueCount = 0;
+                let reviewDue = 0, newCount = 0;
                 cards.forEach(card => {
                     const st = stats[card.id];
                     byL1[card.catLabel] = byL1[card.catLabel] || { shown: 0, correct: 0, n: 0 };
@@ -13060,9 +13060,9 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                         maxStreak = Math.max(maxStreak, st.streak || 0);
                         byL1[card.catLabel].shown += st.shown || 0;
                         byL1[card.catLabel].correct += st.correct || 0;
-                        if (st.nextDue && st.nextDue <= now) dueCount++;
+                        if (st.nextDue && st.nextDue <= now) reviewDue++;
                     } else {
-                        dueCount++;
+                        newCount++;
                     }
                 });
                 const overallAcc = totalShown > 0 ? (totalCorrect / totalShown * 100) : 0;
@@ -13122,7 +13122,8 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                         { k: '🎴 已練過', v: seen + ' / ' + total + ' 題' },
                         { k: '🎯 答對率', v: totalShown > 0 ? overallAcc.toFixed(0) + '%' : '—' },
                         { k: '🔥 最長連勝', v: maxStreak },
-                        { k: '📅 今日可學', v: dueCount + ' 張' }
+                        { k: '🔁 到期複習', v: reviewDue + ' 題' },
+                        { k: '🆕 未學新題', v: newCount + ' 題' }
                     ],
                     contentHtml: `
                         <div class="viz-grid" style="grid-template-columns: 1fr 1fr 1fr;">
@@ -13135,16 +13136,19 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                                 ${progressRing(overallAcc, 'ACC', `${totalCorrect} / ${totalShown} 次`, overallAcc >= 70 ? '#2e7d32' : overallAcc >= 40 ? '#ef6c00' : '#c62828')}
                             </div>
                             <div class="viz-card">
-                                <div class="viz-card-title">📅 今日複習</div>
-                                <div style="text-align:center; padding: 16px 0 8px;">
-                                    <div style="font-size: 48px; font-weight: 900; color: #e65100;" data-count-to="${dueCount}">${dueCount}</div>
-                                    <div style="font-size: 13px; color: #888;">張到期 / 未學</div>
-                                    <button class="btn btn-accent btn-full" style="margin-top:12px;" onclick="closeAnalysisViewer(); startFlashcard();">🎴 開始今日學習</button>
+                                <div class="viz-card-title">📅 今日學習</div>
+                                <div style="text-align:center; padding: 10px 0 8px;">
+                                    <div style="display:flex; justify-content:center; gap:16px; margin-bottom:8px;">
+                                        <div><div style="font-size:32px;font-weight:900;color:#e65100;" data-count-to="${reviewDue}">${reviewDue}</div><div style="font-size:11px;color:#888;">到期複習</div></div>
+                                        <div style="width:1px;background:#eee;"></div>
+                                        <div><div style="font-size:32px;font-weight:900;color:#1565c0;" data-count-to="${newCount}">${newCount}</div><div style="font-size:11px;color:#888;">未學新題</div></div>
+                                    </div>
+                                    <button class="btn btn-accent btn-full" style="margin-top:8px;" onclick="closeAnalysisViewer(); startFlashcard();">🎴 開始學習</button>
                                 </div>
                             </div>
                         </div>
                         <div class="viz-card" style="margin-bottom: 14px;">
-                            <div class="viz-card-title">🗂️ 分類掌握率（依大類 L1）</div>
+                            <div class="viz-card-title">🗂️ 分類掌握率</div>
                             ${l1Bars.length ? _renderBarChart(l1Bars) : '<div style="text-align:center; padding:24px; color:#888; font-size:14px;">尚未練習任何卡</div>'}
                         </div>
                         <div class="viz-card">
