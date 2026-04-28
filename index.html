@@ -11577,9 +11577,15 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
 
             let _encyCurrentCat = 'history';
 
+            function _encyUpdateTitle() {
+                const cat = ENCYCLOPEDIA[_encyCurrentCat];
+                const titleEl = document.getElementById('ency-title');
+                if (titleEl && cat) titleEl.textContent = cat.icon + ' ' + cat.title;
+            }
             window.openEncyclopedia = function(cat) {
                 _encyCurrentCat = cat || 'history';
                 document.querySelectorAll('.ency-tab').forEach(t => t.classList.toggle('active', t.dataset.cat === _encyCurrentCat));
+                _encyUpdateTitle();
                 _encyRenderList();
                 document.getElementById('ency-back-btn').style.display = 'none';
                 document.getElementById('ency-tabs').style.display = 'flex';
@@ -11598,6 +11604,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             window.encySwitchCat = function(cat) {
                 _encyCurrentCat = cat;
                 document.querySelectorAll('.ency-tab').forEach(t => t.classList.toggle('active', t.dataset.cat === cat));
+                _encyUpdateTitle();
                 _encyRenderList();
                 document.getElementById('ency-back-btn').style.display = 'none';
             };
