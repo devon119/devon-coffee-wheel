@@ -14790,19 +14790,21 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 ]
               },
               { key: 'ror',
-                name: '升溫率（ROR / Rate of Rise）', tagline: '每分鐘豆溫爬升速度，烘焙曲線品質的核心指標', emoji: '📈',
-                subtitle: 'ROR（Rate of Rise）是每分鐘豆溫上升的度數（°C/min），理想走勢是全程持續平滑下降。ROR 突然歸零或回升（Crash & Flick）是常見缺陷，造成草腥味或烘焙不均。',
+                name: '升溫率（ROR / Rate of Rise）', tagline: 'Scott Rao 確立的核心指標：持續下降的 ROR 才是精品烘焙的標準', emoji: '📈',
+                subtitle: 'ROR 是每分鐘豆溫上升的度數（°C/min）。Scott Rao 在《The Coffee Roaster’s Companion》中確立「全程持續下降 ROR」為精品烘焙標準，並系統定義了 Crash & Flick、Baking 等缺陷名稱，為現代烘焙建立分析語言。',
                 specs: [
                   { k: '定義', v: '每分鐘豆溫變化量（°C/min）' },
-                  { k: '理想走勢', v: '入豆後全程持續平滑下降至下豆（Declining ROR）' },
+                  { k: 'Scott Rao 理想走勢', v: '全程持續平滑下降（Continuously Declining ROR）至下豆' },
                   { k: '入豆後初始值', v: '通常 15–25°C/min' },
                   { k: '一爆前典型值', v: '約 5–10°C/min' },
-                  { k: 'Crash & Flick 定義', v: 'ROR 下降至接近 0 後又反彈回升，造成草腥或穀物味缺陷' }
+                  { k: 'Crash & Flick 定義', v: 'ROR 下降至接近 0 後又反彈回升，Scott Rao 命名此缺陷，造成草腥或穀物味' },
+                  { k: 'Baking 定義', v: 'ROR 長時間趨近於 0 但未歸零（「烤乾」），Scott Rao 定義為導致風味平板乏味的缺陷' }
                 ],
                 tips: [
-                  { icon: '📉', title: 'Declining ROR 最理想', desc: 'ROR 曲線平滑下降代表熱能輸入穩定、風味前驅物發展均勻，是精品烘焙師追求的曲線形態。' },
-                  { icon: '⚠️', title: 'Crash 的問題', desc: 'ROR 歸零代表豆子表面持續受熱但內部未同步，導致外熟內生、草腥味明顯增加。' },
-                  { icon: '🎛️', title: 'Flick 的成因', desc: 'Crash 後急加火力造成 Flick（ROR 反彈），是新手最常見失誤，容易帶來過烘的穀物味缺陷。' }
+                  { icon: '📖', title: 'Scott Rao 的貢獻', desc: 'Scott Rao 在 2014 年著作中首度系統化定義 Declining ROR 準則，此後成為全球精品烘焙師的標準語言，Cropster 等烘焙軟體的 ROR 曲線顯示也因此普及。' },
+                  { icon: '📉', title: 'Declining ROR 為何重要', desc: 'Rao 的論點：ROR 持續下降代表熱能輸入穩定減少，豆子在不同化學反應階段各自獲得適量能量，風味複雜度最高。任何 ROR 回升都代表「補過頭」，強迫終止某個階段。' },
+                  { icon: '⚠️', title: 'Crash 後的問題', desc: 'Scott Rao 指出 Crash（ROR 歸零）導致豆表持續受熱而豆芯未同步，造成 Baking 或外熟內生；接著 Flick（急加火補救）又帶來過烘的穀物缺陷，是兩層傷害。' },
+                  { icon: '🎯', title: 'Rao 的實踐建議', desc: 'Scott Rao 建議：提前預判 ROR 走勢，在曲線開始「趨平」前就微調火力與風門，而不是等 Crash 後再拉回，被動反應永遠慢半拍。' }
                 ]
               },
               { key: 'dtr',
@@ -14878,6 +14880,41 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 tips: [
                   { icon: '🌡️', title: '餘熱是隱藏風險', desc: '離開滾筒的豆子若堆在冷卻盤不攪拌，中央豆散熱慢，可能比目標深上半個烘焙度。' },
                   { icon: '🚿', title: '禁止加水冷卻', desc: '加水霧冷卻會讓豆子含水率升高，縮短賞味期並影響研磨均勻度，是嚴重的品質缺陷。' }
+                ]
+              },
+              { key: 'scott_rao',
+                name: 'Scott Rao 烘焙學', tagline: '以數據與可重複性為核心，建立現代精品烘焙的分析語言', emoji: '📖',
+                subtitle: 'Scott Rao 是當代最具影響力的咖啡烘焙理論家。他的著作《The Coffee Roaster\'s Companion》（2014）系統化定義了 Declining ROR、DTR、Crash & Flick、Baking 等概念，將烘焙從經驗直覺轉型為可量化、可重複的科學。',
+                specs: [
+                  { k: '代表著作', v: 'The Coffee Roaster\'s Companion（2014）' },
+                  { k: '核心主張', v: '全程 Declining ROR（持續下降升溫率）是精品烘焙的標準曲線' },
+                  { k: 'DTR 建議範圍', v: '20–25%（發展時間 ÷ 總烘焙時間）' },
+                  { k: '命名的主要缺陷', v: 'Crash & Flick / Baking / Scorching / Tipping / Underdevelopment' },
+                  { k: '烘焙哲學', v: '數據驅動、可重複性優先：每批紀錄 BT/ET/ROR/火力/風門，排除憑感覺的操作' },
+                  { k: '對入豆溫的看法', v: '主張使用較高入豆溫（高蓄熱）以縮短乾燥段、讓梅納反應更充分展開' }
+                ],
+                tips: [
+                  { icon: '📊', title: '數據驅動烘焙', desc: 'Scott Rao 強調每鍋都要記錄完整曲線（BT、ET、ROR、火力、風門調整時間點），透過數據比對找出可重複的最佳曲線，而非依賴記憶或感覺。' },
+                  { icon: '🔁', title: '可重複性是最高標準', desc: '在 Rao 的體系中，一鍋好豆不算成功；能穩定重複同一條曲線才叫真正掌握。這也是為何他推崇烘焙軟體（如 Cropster、Artisan）的紀錄功能。' },
+                  { icon: '🌡️', title: '環境溫度（ET）的重要性', desc: 'Scott Rao 提醒烘焙師不只看豆溫（BT），環境溫度（ET）也反映鍋爐的熱平衡狀態。ET 過高代表熱空氣過剩，易造成 Baking；ET 過低代表能量不足。' },
+                  { icon: '💡', title: 'Rao 對「輕焙」的警告', desc: 'Scott Rao 指出許多號稱「輕焙淺烘」的豆子其實是 Underdevelopment（發展不足），有草腥、花生、未熟穀物味，他認為適當的發展比「淺色豆表」更重要。' }
+                ]
+              },
+              { key: 'roast_defects',
+                name: '烘焙缺陷（Roast Defects）', tagline: '五種常見烘焙失誤：從 Baking 到 Underdevelopment', emoji: '⚠️',
+                subtitle: 'Scott Rao 在《The Coffee Roaster\'s Companion》中系統分類烘焙缺陷。理解每種缺陷的成因與風味特徵，是調整烘焙曲線的基礎診斷能力。',
+                specs: [
+                  { k: 'Baking（烤乾）', v: 'ROR 長期趨近 0 → 風味平板乏味、缺乏甜感與酸質，喝起來像白麵包' },
+                  { k: 'Crash & Flick', v: 'ROR 先歸零後反彈 → 草腥 + 穀物味，是 Baking 與過烘的複合缺陷' },
+                  { k: 'Scorching（表面焦化）', v: '入豆溫過高或火力過猛 → 豆表出現黑色焦斑，帶苦澀燒焦味' },
+                  { k: 'Tipping（豆尖焦化）', v: '豆尖接觸高熱點 → 豆尖焦黑，帶點狀苦味，常見於滾筒轉速不足' },
+                  { k: 'Underdevelopment（發展不足）', v: 'DTR 過短（<15%） → 草腥、花生、未熟豆腥味，酸質尖銳不圓潤' }
+                ],
+                tips: [
+                  { icon: '🍞', title: 'Baking 最難察覺', desc: 'Scott Rao 認為 Baking 是最被低估的缺陷，因為豆色看起來正常，杯測時只覺得「平淡無趣」，不像焦化那樣明顯。成因是乾燥段後火力太小或風門太大讓 ROR 停滯。' },
+                  { icon: '🔍', title: '診斷缺陷的方法', desc: '看曲線找問題：Baking 看 ROR 是否長期趨平；Crash & Flick 看 ROR 是否歸零後回升；Scorching / Tipping 看豆表是否有物理損傷斑點。' },
+                  { icon: '🌱', title: 'Underdevelopment 的誤解', desc: '許多人追求「超淺焙」時發生 Underdevelopment，Scott Rao 強調：適當的 DTR（20–25%）才能讓糖類充分焦糖化，淺焙不等於發展不足。' },
+                  { icon: '🛠️', title: '預防優於補救', desc: 'Scott Rao 建議在每段關鍵溫度（150°C / 梅納前 / 一爆前）提前微調，避免被動補火造成 Crash。補救性操作幾乎都會引入複合缺陷。' }
                 ]
               },
               { key: 'degassing',
