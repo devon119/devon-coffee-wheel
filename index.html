@@ -1902,10 +1902,10 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
 
         /* 🐭 實驗鼠：踩在風味輪頂端、四腳奔跑（SVG 側面圖） */
         #idle-mouse-wrap {
-            position: absolute;
+            position: fixed;
             top: 30px; left: 50%;  /* 初值，JS 會 override */
-            pointer-events: none; z-index: 999;
-            opacity: 0; transition: opacity 0.6s ease-out;
+            pointer-events: none; z-index: 9999;
+            opacity: 0; transition: opacity 0.25s ease-out;
             transform: translateX(-50%);
         }
         #idle-mouse-wrap.active {
@@ -2791,7 +2791,8 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                     tooltip: {
                         // 手機版關掉 ECharts tooltip（改用 #flavor-info-bar 顯示完整描述）
                         show: !window.matchMedia('(max-width: 768px)').matches,
-                        trigger: "item", confine: true, enterable: false,
+                        appendToBody: true,
+                        trigger: "item", confine: false, enterable: false,
                         backgroundColor: 'rgba(255,255,255,0.98)', padding: 14, textStyle: { color: '#333' },
                         extraCssText: 'box-shadow: 0 10px 30px rgba(0,0,0,0.3); border-radius: 16px; border: 1px solid #ddd; max-width: min(340px, 88vw); max-height: 70vh; overflow-y: auto; pointer-events: none;',
                         formatter: function (p) {
@@ -16216,21 +16217,20 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             // 🐭 閒置 10 秒 → 老鼠出現踩風味輪頂端、風味輪跟著轉
             //    任何風味輪互動 → 老鼠立即退場、輪子停轉
             function _positionIdleMouse() {
-                const pane = document.getElementById('wheel-pane');
                 const wrap = document.getElementById('idle-mouse-wrap');
                 const mouseEl = document.getElementById('idle-mouse');
                 const viewport = document.getElementById('viewport');
-                if (!pane || !wrap || !viewport) return;
+                if (!wrap || !viewport) return;
                 const vr = viewport.getBoundingClientRect();
-                const pr = pane.getBoundingClientRect();
                 const vh = window.innerHeight;
                 const isMobile = window.innerWidth <= 900;
                 // 配合 CSS 的 #main 大小：桌面 min(94vh, 92%)；手機 min(82vw, 75vh)
                 const wheelSize = isMobile
                     ? Math.min(0.82 * vr.width, 0.75 * vh)
                     : Math.min(0.94 * vh, 0.92 * vr.width);
-                const wheelCenterY = vr.top - pr.top + vr.height / 2;
-                const wheelCenterX = vr.left - pr.left + vr.width / 2;
+                // position:fixed → 直接用 viewport 座標，不扣 pane offset
+                const wheelCenterY = vr.top + vr.height / 2;
+                const wheelCenterX = vr.left + vr.width / 2;
                 const mr = mouseEl ? mouseEl.getBoundingClientRect() : null;
                 const mouseH = (mr && mr.height) ? mr.height : 100;
                 const wheelTop = wheelCenterY - wheelSize / 2;
@@ -16252,7 +16252,6 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 }
                 _positionIdleMouse();
                 window.addEventListener('resize', _positionIdleMouse);
-                const RESUME_DELAY = 3000;
                 let timer = null;
                 // active 初始 = true，因為 HTML 已帶 .active class
                 let active = wrap.classList.contains('active');
