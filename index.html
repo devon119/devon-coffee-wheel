@@ -1908,6 +1908,9 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             opacity: 0; transition: opacity 0.25s ease-out;
             transform: translateX(-50%);
         }
+        /* 游標在風味輪圖表上時：老鼠消失＋停轉 */
+        #wheel-pane:has(#main:hover) #idle-mouse-wrap.active { opacity: 0; }
+        #wheel-pane:has(#main:hover) #wheel-spinner.idle-spin { animation-play-state: paused; }
         #idle-mouse-wrap.active {
             opacity: 1;
             /* 淡色背景圈、讓老鼠從風味輪底色中跳出來 */
@@ -16330,25 +16333,6 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                     if (timer) clearTimeout(timer);
                     timer = setTimeout(() => { _positionIdleMouse(); show(); }, IDLE_RETURN_MS);
                 };
-                // document mousemove：比對游標座標與 #main bounding rect
-                // 比 mouseenter/mouseleave 更可靠（不受 ECharts canvas 事件影響）
-                let wasOverWheel = false;
-                document.addEventListener('mousemove', (e) => {
-                    const mainEl = document.getElementById('main');
-                    if (!mainEl) return;
-                    const cr = mainEl.getBoundingClientRect();
-                    const over = e.clientX >= cr.left && e.clientX <= cr.right &&
-                                 e.clientY >= cr.top  && e.clientY <= cr.bottom;
-                    if (over && !wasOverWheel) {
-                        hide();
-                        if (timer) clearTimeout(timer);
-                        timer = null;
-                    } else if (!over && wasOverWheel) {
-                        if (timer) clearTimeout(timer);
-                        timer = setTimeout(() => { _positionIdleMouse(); show(); }, IDLE_RETURN_MS);
-                    }
-                    wasOverWheel = over;
-                }, { passive: true });
                 // 原始 v35 listener 全部保留
                 pane.addEventListener('mousedown', stepAside, { passive: true, capture: true });
                 pane.addEventListener('touchstart', stepAside, { passive: true, capture: true });
