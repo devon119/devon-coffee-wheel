@@ -1908,8 +1908,9 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             opacity: 0; transition: opacity 0.25s ease-out;
             transform: translateX(-50%);
         }
-        /* 游標在輪子區域時立刻隱藏老鼠，不依賴 JS event */
+        /* 游標在輪子區域時立刻隱藏老鼠 + 停止旋轉，不依賴 JS event */
         #wheel-pane:hover #idle-mouse-wrap.active { opacity: 0; }
+        #wheel-pane:hover #wheel-spinner.idle-spin { animation-play-state: paused; }
         #idle-mouse-wrap.active {
             opacity: 1;
             /* 淡色背景圈、讓老鼠從風味輪底色中跳出來 */
