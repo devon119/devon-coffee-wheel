@@ -1908,9 +1908,6 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             opacity: 0; transition: opacity 0.25s ease-out;
             transform: translateX(-50%);
         }
-        /* 游標在輪子區域時立刻隱藏老鼠 + 停止旋轉，不依賴 JS event */
-        #wheel-pane:hover #idle-mouse-wrap.active { opacity: 0; }
-        #wheel-pane:hover #wheel-spinner.idle-spin { animation-play-state: paused; }
         #idle-mouse-wrap.active {
             opacity: 1;
             /* 淡色背景圈、讓老鼠從風味輪底色中跳出來 */
@@ -16333,16 +16330,21 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                     if (timer) clearTimeout(timer);
                     timer = setTimeout(() => { _positionIdleMouse(); show(); }, IDLE_RETURN_MS);
                 };
-                // capture phase 確保事件先觸發、不被 ECharts 內部 listener 攔截
-                pane.addEventListener('mousedown', stepAside, { passive: true, capture: true });
-                pane.addEventListener('mousemove', stepAside, { passive: true, capture: true });
-                pane.addEventListener('touchstart', stepAside, { passive: true, capture: true });
-                pane.addEventListener('click', stepAside, { passive: true, capture: true });
-                pane.addEventListener('wheel', stepAside, { passive: true, capture: true });
-                if (typeof myChart !== 'undefined' && myChart && typeof myChart.on === 'function') {
-                    myChart.on('click', stepAside);
-                    myChart.on('mouseover', stepAside);
+                // 游標進入風味輪圖表容器 → 老鼠退場＋停轉；離開後 30 秒再回來
+                const mainEl = document.getElementById('main');
+                if (mainEl) {
+                    mainEl.addEventListener('mouseenter', () => {
+                        hide();
+                        if (timer) clearTimeout(timer);
+                    });
+                    mainEl.addEventListener('mouseleave', () => {
+                        if (timer) clearTimeout(timer);
+                        timer = setTimeout(() => { _positionIdleMouse(); show(); }, IDLE_RETURN_MS);
+                    });
                 }
+                // 觸控 / 點擊保險
+                pane.addEventListener('mousedown', stepAside, { passive: true, capture: true });
+                pane.addEventListener('touchstart', stepAside, { passive: true, capture: true });
                 // 額外保險：document 級別也聽（避免任何 stopPropagation 影響）
                 document.addEventListener('click', (e) => {
                     if (e.target.closest && e.target.closest('#wheel-pane')) stepAside(e);
