@@ -11907,7 +11907,9 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 if (typeof _stopMethodAnim === 'function') _stopMethodAnim();
                 _encyRenderList();
                 document.getElementById('ency-back-btn').style.display = 'none';
-                document.getElementById('ency-tabs').style.display = 'flex';
+                if (_encyCurrentCat !== 'roasting_process') {
+                    document.getElementById('ency-tabs').style.display = 'flex';
+                }
             };
 
             function _encyRenderList() {
