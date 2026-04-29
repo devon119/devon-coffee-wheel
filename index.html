@@ -8298,6 +8298,124 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 midLabel: '接種特定酵母菌'
             });
 
+            const ENCY_PROC_BARREL_AGED = _encyProcessSvg({
+                id: 'barrel_aged', name: '酒桶熟成 Barrel Aged', subtitle: '橡木桶 / 酒桶浸漬 · 複雜酒香',
+                bg1: '#efebe9', bg2: '#6d4c41', tcolor: '#fff',
+                scene: `<!-- 橡木桶 -->
+                    <rect x="120" y="130" width="200" height="160" fill="#8d6e63" rx="20"/>
+                    <rect x="130" y="130" width="180" height="160" fill="#a1887f" rx="18"/>
+                    <!-- 桶箍 -->
+                    <rect x="118" y="168" width="204" height="14" fill="#5d4037" rx="3"/>
+                    <rect x="118" y="248" width="204" height="14" fill="#5d4037" rx="3"/>
+                    <ellipse cx="220" cy="130" rx="90" ry="18" fill="#8d6e63"/>
+                    <ellipse cx="220" cy="290" rx="90" ry="18" fill="#6d4c41"/>
+                    <!-- 桶蓋文字 -->
+                    <text x="220" y="136" font-size="11" fill="#fff" font-weight="800" text-anchor="middle">橡木桶 / 酒桶</text>
+                    <!-- 咖啡豆 in barrel -->
+                    <text x="220" y="225" font-size="32" text-anchor="middle">☕</text>
+                    <text x="220" y="272" font-size="11" fill="#fff" font-weight="700" text-anchor="middle">熟成 2–12 週</text>
+                    <!-- 酒瓶 -->
+                    <text x="80" y="180" font-size="36">🍷</text>
+                    <text x="330" y="180" font-size="36">🥃</text>`,
+                midIcon: `<rect x="-28" y="-22" width="56" height="44" fill="#6d4c41" rx="4"/>
+                    <text x="0" y="6" font-size="18" text-anchor="middle">🛢️</text>`,
+                midLabel: '酒桶熟成 2-12 週'
+            });
+
+            const ENCY_PROC_LACTIC = _encyProcessSvg({
+                id: 'lactic', name: '乳酸發酵 Lactic Fermentation', subtitle: '乳酸菌主導 · 白酒花香',
+                bg1: '#fce4ec', bg2: '#e91e63', tcolor: '#fff',
+                scene: `<!-- 乳酸菌泡泡 -->
+                    <circle cx="220" cy="160" r="70" fill="#f48fb1" opacity="0.4"/>
+                    <circle cx="220" cy="160" r="50" fill="#f06292" opacity="0.5"/>
+                    <!-- 乳酸菌示意（小橢圓鏈） -->
+                    <ellipse cx="180" cy="150" rx="12" ry="8" fill="#fff" opacity="0.8"/>
+                    <ellipse cx="205" cy="150" rx="12" ry="8" fill="#fff" opacity="0.8"/>
+                    <ellipse cx="230" cy="150" rx="12" ry="8" fill="#fff" opacity="0.8"/>
+                    <ellipse cx="255" cy="150" rx="12" ry="8" fill="#fff" opacity="0.8"/>
+                    <text x="100" y="130" font-size="11" fill="#c2185b" font-weight="800">乳酸菌</text>
+                    <!-- 密封桶（低氧環境） -->
+                    <rect x="130" y="215" width="180" height="110" fill="#e91e63" rx="8"/>
+                    <ellipse cx="220" cy="215" rx="90" ry="13" fill="#c2185b"/>
+                    <text x="220" y="278" font-size="32" text-anchor="middle">🌸</text>
+                    <text x="220" y="314" font-size="11" fill="#fff" font-weight="800" text-anchor="middle">低氧 · 低溫 · 48-120h</text>`,
+                midIcon: `<rect x="-28" y="-22" width="56" height="44" fill="#e91e63" rx="4"/>
+                    <text x="0" y="6" font-size="18" text-anchor="middle">🥛</text>`,
+                midLabel: '乳酸菌厭氧發酵'
+            });
+
+            const ENCY_PROC_PULPED_NATURAL = _encyProcessSvg({
+                id: 'pulped_natural', name: '去果皮日曬 Pulped Natural', subtitle: '巴西半水洗 · 甜感與乾淨並存',
+                bg1: '#fff8e1', bg2: '#f57c00', tcolor: '#fff',
+                scene: `<!-- 脫皮機 -->
+                    <rect x="130" y="100" width="80" height="80" fill="#bf360c" rx="6"/>
+                    <text x="170" y="150" font-size="28" text-anchor="middle">⚙️</text>
+                    <text x="170" y="100" font-size="11" fill="#fff" font-weight="800" text-anchor="middle">去果皮機</text>
+                    <!-- 箭頭 -->
+                    <path d="M 210 140 L 270 140" stroke="#f57c00" stroke-width="3" marker-end="url(#arr)"/>
+                    <!-- 帶果膠豆（橙黃色） -->
+                    <g fill="#ff8f00">
+                        <circle cx="290" cy="132" r="7"/><circle cx="310" cy="132" r="7"/>
+                        <circle cx="330" cy="132" r="7"/><circle cx="350" cy="132" r="7"/>
+                    </g>
+                    <text x="320" y="120" font-size="11" fill="#bf360c" font-weight="800" text-anchor="middle">保留果膠</text>
+                    <!-- 曬豆床 -->
+                    <rect x="80" y="230" width="280" height="35" fill="#8d6e63"/>
+                    <rect x="80" y="230" width="280" height="6" fill="#5d4037"/>
+                    <g fill="#ff8f00">
+                        <circle cx="110" cy="248" r="6"/><circle cx="140" cy="248" r="6"/>
+                        <circle cx="170" cy="248" r="6"/><circle cx="200" cy="248" r="6"/>
+                        <circle cx="230" cy="248" r="6"/><circle cx="260" cy="248" r="6"/>
+                        <circle cx="290" cy="248" r="6"/><circle cx="320" cy="248" r="6"/>
+                    </g>
+                    <text x="220" y="300" font-size="13" fill="#bf360c" font-weight="700" text-anchor="middle">帶果膠日曬 8-15 天</text>
+                    <text x="80" y="185" font-size="36">☀️</text>`,
+                midIcon: `<rect x="-28" y="-22" width="56" height="44" fill="#f57c00" rx="4"/>
+                    <text x="0" y="6" font-size="18" text-anchor="middle">🇧🇷</text>`,
+                midLabel: '去皮保膠 + 日曬'
+            });
+
+            const ENCY_PROC_MONSOONED = _encyProcessSvg({
+                id: 'monsooned', name: '季風處理 Monsooned Malabar', subtitle: '印度季風吹拂 · 土壤低酸木質調',
+                bg1: '#e8f5e9', bg2: '#2e7d32', tcolor: '#fff',
+                scene: `<!-- 季風雲 -->
+                    <text x="220" y="120" font-size="50" text-anchor="middle">☁️</text>
+                    <!-- 風線 -->
+                    <path d="M 60 140 Q 120 120 180 145 Q 240 170 300 145 Q 360 120 420 140" stroke="#81c784" stroke-width="3" fill="none" opacity="0.8"/>
+                    <path d="M 60 165 Q 120 145 180 170 Q 240 195 300 170 Q 360 145 420 165" stroke="#81c784" stroke-width="2" fill="none" opacity="0.6"/>
+                    <path d="M 60 190 Q 120 170 180 195 Q 240 220 300 195 Q 360 170 420 190" stroke="#a5d6a7" stroke-width="2" fill="none" opacity="0.5"/>
+                    <!-- 麻袋中的咖啡豆（膨脹吸濕） -->
+                    <rect x="140" y="230" width="160" height="120" fill="#a5d6a7" rx="12"/>
+                    <rect x="148" y="238" width="144" height="104" fill="#c8e6c9" rx="10"/>
+                    <text x="220" y="305" font-size="32" text-anchor="middle">🌿</text>
+                    <text x="220" y="342" font-size="11" fill="#1b5e20" font-weight="800" text-anchor="middle">開放倉庫 季風吹 6-8 週</text>`,
+                midIcon: `<rect x="-28" y="-22" width="56" height="44" fill="#2e7d32" rx="4"/>
+                    <text x="0" y="6" font-size="18" text-anchor="middle">💨</text>`,
+                midLabel: '季風倉庫吹拂熟成'
+            });
+
+            const ENCY_PROC_EXTENDED_FERMENT = _encyProcessSvg({
+                id: 'extended_ferment', name: '延長發酵 Extended Fermentation', subtitle: '72h 以上慢發酵 · 複雜層次',
+                bg1: '#f3e5f5', bg2: '#6a1b9a', tcolor: '#fff',
+                scene: `<!-- 時鐘 -->
+                    <circle cx="220" cy="140" r="55" fill="#ce93d8" opacity="0.5"/>
+                    <circle cx="220" cy="140" r="45" fill="#9c27b0" opacity="0.6"/>
+                    <text x="220" y="155" font-size="34" text-anchor="middle">⏰</text>
+                    <text x="220" y="112" font-size="11" fill="#fff" font-weight="800" text-anchor="middle">72 – 240 h</text>
+                    <!-- 發酵桶 -->
+                    <rect x="130" y="225" width="180" height="120" fill="#7b1fa2" rx="8"/>
+                    <ellipse cx="220" cy="225" rx="90" ry="13" fill="#6a1b9a"/>
+                    <text x="220" y="288" font-size="32" text-anchor="middle">🍇</text>
+                    <text x="220" y="334" font-size="11" fill="#fff" font-weight="800" text-anchor="middle">慢發酵 → 複雜有機酸</text>
+                    <!-- 氣泡 -->
+                    <text x="90" y="260" font-size="18" fill="#ce93d8" opacity="0.8">○</text>
+                    <text x="330" y="275" font-size="14" fill="#ce93d8" opacity="0.8">○</text>
+                    <text x="100" y="310" font-size="12" fill="#ce93d8" opacity="0.6">○</text>`,
+                midIcon: `<rect x="-28" y="-22" width="56" height="44" fill="#6a1b9a" rx="4"/>
+                    <text x="0" y="6" font-size="18" text-anchor="middle">⏳</text>`,
+                midLabel: '慢發酵 72-240 小時'
+            });
+
             // ========== 烘焙度 hero SVG helper ==========
             function _encyRoastSvg(opts) {
                 const flavors = (opts.flavors || []).map((f, i) => {
@@ -10000,6 +10118,183 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                                 { icon: '🍾', title: '配合菌株選沖法', desc: '果香型菌株 → 用高一點水溫 92-93°C；花蜜型菌株 → 低一點 90°C 讓甜感表現更完整。' },
                                 { icon: '⚠️', title: '爭議中的未來', desc: '部分精品界人士認為酵母接種「過度介入」、失去產地自然性。另一派認為這才是「精準品控」的未來。' },
                                 { icon: '🆚', title: 'vs 厭氧', desc: '厭氧 = 依靠已有的野生菌；酵母接種 = 引入特定外來菌株主導發酵。後者更精準、更可預測。' }
+                            ]
+                        },
+                        barrel_aged: {
+                            name: '酒桶熟成 (Barrel Aged)', tagline: '橡木桶 / 酒桶浸漬 · 複雜酒香',
+                            emoji: '🛢️', status: 'ready', heroSvg: ENCY_PROC_BARREL_AGED,
+                            subtitle: '咖啡生豆或帶殼豆（parchment）放入曾盛裝葡萄酒、威士忌、波本或蘭姆酒的木桶中，靜置 2–12 週，讓豆子吸收桶內殘存的酒液與木質揮發物。最終杯感帶有明顯的酒香、煙燻橡木與水果蜜餞調，是精品市場最受矚目的「加值型處理法」。',
+                            chips: [
+                                { text: '橡木桶熟成', class: 'warm' },
+                                { text: '2–12 週', class: 'cool' },
+                                { text: '葡萄酒/威士忌桶', class: 'purple' },
+                                { text: '酒香木質調', class: 'green' },
+                                { text: '高單價精品' }
+                            ],
+                            specs: [
+                                { k: '步驟', v: '生豆或帶殼豆 → 置入酒桶 → 靜置熟成 2-12 週 → 取出烘焙' },
+                                { k: '常見桶型', v: '紅葡萄酒桶 / 波本威士忌桶 / 蘭姆酒桶 / 白蘭地桶' },
+                                { k: '熟成時間', v: '2-12 週（時間越長酒香越強，但有過頭風險）' },
+                                { k: '招牌風味', v: '紅酒單寧、威士忌煙燻、香草橡木、水果蜜餞、焦糖' },
+                                { k: '優勢', v: '可疊加品種或處理法的基礎風味，創造更多維度' },
+                                { k: '主要產區', v: '哥倫比亞、哥斯大黎加、巴拿馬、衣索比亞（頂級莊園）' }
+                            ],
+                            origin: [
+                                { year: '2010s 初', text: '少數精品莊園開始實驗把咖啡放入廢酒桶，初期被視為噱頭。' },
+                                { year: '2015', text: '巴拿馬 Esmeralda 莊園、哥倫比亞 Inmaculada 莊園桶陳批次在 CoE 高分出現，業界開始嚴肅看待。' },
+                                { year: '2017-2020', text: 'World Barista Championship 參賽者開始使用桶陳豆，波本桶衣索比亞成為常勝配方。' },
+                                { year: '至今', text: '桶陳豆已從「實驗性」變成「高端精品標配」，售價通常是同莊園普通批次的 3-5 倍。' }
+                            ],
+                            originTitle: '📜 處理法歷史',
+                            tipsTitle: '🍒 風味特性與沖煮建議',
+                            tips: [
+                                { icon: '🍷', title: '選對桶型', desc: '紅酒桶 → 酸質莓果；波本桶 → 香草焦糖；蘭姆桶 → 熱帶甜感。買豆前確認桶型，才能預期風味方向。' },
+                                { icon: '☕', title: '沖煮：低溫保留酒香', desc: '建議水溫 90-92°C（略低），避免把細緻的木質揮發物萃取成苦澀。研磨比同焙度略粗一檔。' },
+                                { icon: '🌡️', title: '焙度：City 到 City+', desc: '桶陳豆深焙會把酒香壓死。City（中淺焙）到 City+（中焙）之間是最佳焙度，保留酒香又有足夠甜感。' },
+                                { icon: '⏰', title: '養豆更久', desc: '桶陳豆因多了木質化合物，CO₂ 釋放較不規則，建議養豆 10-14 天。' },
+                                { icon: '⚠️', title: '真假鑑別', desc: '市場上有「桶陳香精」豆（噴人工香料）vs 真實桶陳。真正桶陳香氣持久且有層次；香精豆開袋香濃但消散極快。' },
+                                { icon: '💰', title: '值不值得', desc: '桶陳豆的「酒香」源自外部環境，不是豆子本身風土，精品界對此有爭議。但風味體驗確實獨特，適合偶爾嚐試。' }
+                            ]
+                        },
+                        lactic: {
+                            name: '乳酸發酵 (Lactic Fermentation)', tagline: '乳酸菌主導 · 白酒花香質感',
+                            emoji: '🥛', status: 'ready', heroSvg: ENCY_PROC_LACTIC,
+                            subtitle: '在無氧（厭氧）環境中刻意壓低溫度（15-20°C）、低溫抑制醋酸菌、讓乳酸菌（Lactobacillus）成為主導菌群。乳酸菌代謝糖分產生乳酸，而非醋酸，杯感呈現「白酒、優格、茉莉花、清爽奶油」的獨特質感。俗稱「白色厭氧」或「粉紅厭氧」。',
+                            chips: [
+                                { text: '乳酸菌主導', class: 'green' },
+                                { text: '低溫 15-20°C', class: 'cool' },
+                                { text: '厭氧密封', class: 'purple' },
+                                { text: '白酒/優格調', class: 'warm' },
+                                { text: '48-120 小時' }
+                            ],
+                            specs: [
+                                { k: '步驟', v: '採收 → 去皮 → 低溫密封槽 → 乳酸菌主導發酵 48-120h → 日曬或棚架乾燥' },
+                                { k: '關鍵條件', v: '溫度 15-20°C（抑制醋酸菌）+ 完全無氧 + pH 監控' },
+                                { k: '發酵時間', v: '48-120 小時（比一般厭氧更長、溫度更低）' },
+                                { k: '招牌風味', v: '白酒、優格、茉莉、奶油糖果、清爽酸感（乳酸 vs 醋酸）' },
+                                { k: '與厭氧差異', v: '普通厭氧容易偏醋酸（尖銳）；乳酸發酵產生更柔和的乳酸' },
+                                { k: '主要產區', v: '哥倫比亞（Finca El Paraiso 等）、衣索比亞、哥斯大黎加' }
+                            ],
+                            origin: [
+                                { year: '2016-2018', text: '哥倫比亞 Finca El Paraiso 莊園主 Diego Bermúdez 開始研究乳酸菌主導發酵的精確溫控方法。' },
+                                { year: '2019', text: 'WBC 選手開始用乳酸發酵批次參賽，「白酒質感」杯感讓評審驚豔，Lactic 詞彙進入精品圈。' },
+                                { year: '2020-至今', text: '「Pink Process」或「White Anaerobic」成為社群媒體熱詞，多個產區開始商業化生產乳酸發酵批次。' }
+                            ],
+                            originTitle: '📜 處理法歷史',
+                            tipsTitle: '🍒 風味特性與沖煮建議',
+                            tips: [
+                                { icon: '🥂', title: '白酒感來源', desc: '乳酸（Lactic Acid）比醋酸（Acetic Acid）更柔和、更圓潤，是產生「白酒/優格」質感的關鍵，不是尖銳發酵感。' },
+                                { icon: '❄️', title: '低溫是核心', desc: '溫度高就是普通厭氧；低到 15-20°C 才能壓制醋酸菌、讓乳酸菌主導。買豆要確認標示「低溫乳酸發酵」。' },
+                                { icon: '☕', title: '沖煮：突顯花香奶感', desc: '建議水溫 91-93°C、四六法或 Hoffmann 法，放大乳酸帶來的花香甜感與奶油質地。' },
+                                { icon: '🆚', title: 'vs 一般厭氧', desc: '一般厭氧 = 室溫密封（20-30°C）→ 偏酒精果香；乳酸發酵 = 低溫密封（15-20°C）→ 白酒優格感。' },
+                                { icon: '📋', title: '標示確認', desc: '市場上「厭氧」標示很氾濫，真正乳酸發酵通常標示 "Lactic" / "White Anaerobic" / "Pink Process"，並說明溫度。' },
+                                { icon: '🔬', title: '最科學的溫控', desc: '乳酸發酵需要精確溫控設備，成本高於一般厭氧。能穩定生產的莊園通常有工業冷藏設備。' }
+                            ]
+                        },
+                        pulped_natural: {
+                            name: '去果皮日曬 (Pulped Natural)', tagline: '巴西半水洗 · 甜感乾淨並存',
+                            emoji: '🇧🇷', status: 'ready', heroSvg: ENCY_PROC_PULPED_NATURAL,
+                            subtitle: '1990 年代巴西因缺水發展的處理法：機器去除果皮，但保留果膠（黏液層）不水洗，直接帶著果膠上曬豆床日曬 8-15 天。介於水洗（乾淨）與蜜處理（甜）之間，是巴西「平衡甜感 + 乾淨度」的主力處理法，也是 CoE 巴西常見選手。',
+                            chips: [
+                                { text: '去皮保留果膠', class: 'warm' },
+                                { text: '日曬 8-15 天', class: 'green' },
+                                { text: '巴西主力處理', class: 'cool' },
+                                { text: '蜜 vs 水洗中間', class: 'purple' },
+                                { text: '省水' }
+                            ],
+                            specs: [
+                                { k: '步驟', v: '採收 → 機器去果皮（保留果膠）→ 直接上曬豆床日曬 8-15 天' },
+                                { k: '果膠保留量', v: '全保留（比黑蜜還多）→ 甜感強但發酵風險需控管' },
+                                { k: '乾燥時間', v: '8-15 天（含水率從 60% 降到 11%）' },
+                                { k: '招牌風味', v: '牛奶巧克力、焦糖、堅果、圓潤甜感、乾淨酸底' },
+                                { k: '與蜜處理差異', v: '蜜處理源自中美洲、有不同果膠分級；去果皮日曬源自巴西、幾乎全膠' },
+                                { k: '主要產區', v: '巴西（Minas Gerais、Cerrado、Sul de Minas）' }
+                            ],
+                            origin: [
+                                { year: '1990s', text: '巴西農業研究機構 IAPAR 因應乾旱缺水問題，發展「半乾式」（Semi-Dry）去果皮日曬法，替代耗水量大的水洗處理。' },
+                                { year: '2000s', text: '巴西精品咖啡協會（BSCA）將此處理法標準化，在國際推廣，同期 CoE 巴西比賽中 Pulped Natural 批次成為常勝軍。' },
+                                { year: '至今', text: '是巴西精品咖啡的代表處理法之一，在歐美市場以「Cerrado 去果皮日曬」標示售出。' }
+                            ],
+                            originTitle: '📜 處理法歷史',
+                            tipsTitle: '🍒 風味特性與沖煮建議',
+                            tips: [
+                                { icon: '🍫', title: '巧克力甜感天花板', desc: '去果皮日曬的果膠全保留 → 曬乾後豆子充分吸收糖分 → 牛奶巧克力 / 焦糖 / 紅糖是標準輸出。' },
+                                { icon: '🆚', title: 'vs 蜜處理', desc: '蜜處理（Honey）有黃/紅/黑分級；去果皮日曬（Pulped Natural）幾乎都是全膠，接近黑蜜但術語不同，通常特指巴西。' },
+                                { icon: '☕', title: '沖煮：一刀流或四六法', desc: '建議一刀流或四六法、92-93°C，把焦糖甜感最大化。這類豆子特別適合拿來練「重後段」。' },
+                                { icon: '🌡️', title: '焙度：中焙最對', desc: '中焙（Full City 附近）最能呈現牛奶巧克力調。太淺會有草青；太深（FC+）把甜感蓋成苦感。' },
+                                { icon: '🇧🇷', title: '看產區標示', desc: '巴西豆「Minas Gerais 去果皮日曬」或「Cerrado PN」通常是可靠選擇，注意標示「Natural」vs「Pulped Natural」不同。' },
+                                { icon: '💧', title: '環保優勢', desc: '比水洗省 80% 水、比日曬更快乾，是兼顧風味與環境的「巴西方案」。' }
+                            ]
+                        },
+                        monsooned: {
+                            name: '季風處理 (Monsooned Malabar)', tagline: '印度季風吹拂 · 低酸土壤木質調',
+                            emoji: '💨', status: 'ready', heroSvg: ENCY_PROC_MONSOONED,
+                            subtitle: '印度馬拉巴爾（Malabar）海岸特有的古老處理法：咖啡生豆放入開放通風的倉庫，讓印度洋季風（6-8 月）吹拂 6-8 週。豆子大量吸收潮濕空氣，含水率從 12% 升到 17%，顏色從綠變成稻草黃，體積膨脹 50%，酸質幾乎完全消失，取而代之的是獨特的土壤、穀物、香草、木質風味。',
+                            chips: [
+                                { text: '印度馬拉巴爾', class: 'green' },
+                                { text: '季風吹拂 6-8 週', class: 'cool' },
+                                { text: '低酸重 Body', class: 'warm' },
+                                { text: '稻草黃豆色', class: 'purple' },
+                                { text: '義式拼配常用' }
+                            ],
+                            specs: [
+                                { k: '步驟', v: '採收水洗 → 置入開放倉庫 → 季風吹拂 6-8 週 → 再曬乾 → 再分選' },
+                                { k: '時間', v: '6-8 週（印度西南季風季：6-9 月）' },
+                                { k: '豆子變化', v: '含水率升到 17%，顏色變稻草黃，體積膨脹約 50%，密度降低' },
+                                { k: '招牌風味', v: '土壤、香草、穀物、木質、香料，幾乎零酸感，Body 極厚重' },
+                                { k: '主要用途', v: '義式拼配（提供厚實 Body）+ 特殊單品（土壤型愛好者）' },
+                                { k: '主要產區', v: '印度 Karnataka 州 Malabar 海岸（卡納塔克邦）' }
+                            ],
+                            origin: [
+                                { year: '18-19 世紀', text: '殖民時代英國船從印度運咖啡到歐洲，航程長達 6 個月，豆子在船艙中長期受海洋潮濕空氣影響，歐洲人反而喜歡這種「舊世界」風味。' },
+                                { year: '蘇伊士運河開通後', text: '1869 年蘇伊士運河開通縮短航程，豆子不再自然「季風化」，歐洲客戶抱怨口感改變。' },
+                                { year: '人工重現', text: '印度農民開始在馬拉巴爾海岸蓋開放倉庫，人工重現季風條件，保留這種獨特風味。' },
+                                { year: '至今', text: 'Monsooned Malabar AA 是最知名版本，GI 地理標示保護，是印度少數在精品市場有國際知名度的單品豆。' }
+                            ],
+                            originTitle: '📜 處理法歷史',
+                            tipsTitle: '🍒 風味特性與沖煮建議',
+                            tips: [
+                                { icon: '🌍', title: '最特殊的風味輪廓', desc: '季風豆的「土壤、香草、穀物、木質」調是其他處理法無法複製的。如果你覺得非洲豆太酸、巴西豆太平，季風豆可能是你的解答。' },
+                                { icon: '☕', title: '沖煮：義式最佳', desc: 'Monsooned 是義式拼配的核秘武器：加 10-20% 進配方，可以大幅提升 Crema 厚實度與 Body 感。單品手沖也可嚐試。' },
+                                { icon: '🌡️', title: '焙度：中深焙', desc: '建議 Full City 到 Vienna（215-225°C），放大土壤香草調。淺焙會顯得空洞，深焙才能結合烘焙風味。' },
+                                { icon: '⚙️', title: '研磨注意', desc: '豆子密度低（吸水膨脹後），比同重量的一般豆子研磨更快，磨盤建議粗一檔。' },
+                                { icon: '📅', title: '季節性供應', desc: '季風吹拂只在 6-9 月，每年只有一次季風豆批次。新豆通常在 10-11 月上市，越新越有活力。' },
+                                { icon: '🥛', title: '配牛奶超搭', desc: '低酸 + 重 Body + 土壤香草調 = 做拿鐵、卡布奇諾、摩卡的絕佳基底。不推薦黑咖啡初嚐者直接喝。' }
+                            ]
+                        },
+                        extended_ferment: {
+                            name: '延長發酵 (Extended Fermentation)', tagline: '72h 以上慢發酵 · 有機酸複雜層次',
+                            emoji: '⏳', status: 'ready', heroSvg: ENCY_PROC_EXTENDED_FERMENT,
+                            subtitle: '傳統水洗發酵只需 24-48 小時去除果膠；延長發酵刻意把發酵時間拉到 72 小時甚至更長（最極端可達 240 小時）。更長時間讓微生物產生更多種類的有機酸（蘋果酸、檸檬酸、乳酸、醋酸），以及複雜的酯類風味前驅物。結果是明顯更高的複雜度與更長的餘韻，代價是風險也更高。',
+                            chips: [
+                                { text: '72h 以上', class: 'purple' },
+                                { text: '多種有機酸', class: 'cool' },
+                                { text: '複雜長餘韻', class: 'green' },
+                                { text: '高風險高回報', class: 'warm' },
+                                { text: '水洗或厭氧均可' }
+                            ],
+                            specs: [
+                                { k: '步驟', v: '採收 → 去皮 → 水槽或密封桶發酵 72-240h → pH 監控 → 水洗 → 曬乾' },
+                                { k: '發酵時間', v: '72-240 小時（傳統水洗只需 24-48h）' },
+                                { k: '關鍵監控', v: 'pH（通常 4.0-4.5 為目標）+ 溫度 + 發酵氣體' },
+                                { k: '招牌風味', v: '多層次有機酸、藍莓覆盆子、發酵蜜感、長餘韻，複雜度遠超普通水洗' },
+                                { k: '風險', v: '超過 pH 4.0 臨界點容易過度發酵 → 醋酸刺激感 / 腐敗味' },
+                                { k: '主要產區', v: '衣索比亞 Yirgacheffe、哥倫比亞、巴拿馬（頂級莊園為主）' }
+                            ],
+                            origin: [
+                                { year: '傳統問題', text: '非洲產區因氣溫高，傳統水洗有時因時間管理不當意外延長發酵，被視為瑕疵豆。' },
+                                { year: '2010s 轉念', text: '部分精品烘焙師發現某些「延長發酵」批次有更豐富的風味，開始有意識地做可控延長發酵實驗。' },
+                                { year: '2018-至今', text: 'World Brewers Cup / WBC 參賽者開始特別指定使用 120h+ 延長發酵批次，複雜層次被評審肯定。' }
+                            ],
+                            originTitle: '📜 處理法歷史',
+                            tipsTitle: '🍒 風味特性與沖煮建議',
+                            tips: [
+                                { icon: '🧪', title: '複雜度來源', desc: '延長發酵讓更多微生物參與代謝，產生多種有機酸（蘋果酸讓酸感清爽、乳酸讓質感圓潤）+ 酯類（提供花果香）。' },
+                                { icon: '⚠️', title: '過頭的徵兆', desc: '好的延長發酵 = 複雜有機酸 + 層次感；壞的 = 尖銳醋酸 / 腐臭 / 酒精過重。買豆要確認莊園有 pH 監控能力。' },
+                                { icon: '☕', title: '沖煮：低溫慢萃', desc: '建議 90-92°C（略低），研磨略粗，放慢萃取節奏，讓複雜有機酸逐層展開。四六法或 Hoffmann 法佳。' },
+                                { icon: '🔢', title: '時間越長≠越好', desc: '業界共識：72-120h 延長發酵通常有最佳複雜度 vs 風險比；超過 150h 需要嚴格監控才能避免過頭。' },
+                                { icon: '🌡️', title: '溫度影響大', desc: '同樣 100h，25°C 發酵 vs 18°C 發酵，結果完全不同。低溫延長 = 更可控；高溫延長 = 高風險。' },
+                                { icon: '🆚', title: 'vs 乳酸發酵', desc: '乳酸發酵 = 特定菌群主導（低溫控制）；延長發酵 = 讓所有菌群更長時間作用，結果更複雜但方向較難預測。' }
                             ]
                         }
                     }
