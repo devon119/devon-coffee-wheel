@@ -2062,7 +2062,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             </div>
             <div class="config-grid">
                 <div class="config-group">
-                    <label>1. 產區國家 (24 國)</label>
+                    <label>1. 產區國家 (25 國)</label>
                     <select id="sel-country" onchange="updateExpected()" aria-label="選擇咖啡產區國家">
                         <option value="none">-- 選擇國家 --</option>
                         <optgroup label="非洲/中東">
@@ -2096,6 +2096,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                             <option value="hwi">夏威夷 (Kona)</option>
                             <option value="png">巴布亞紐幾內亞 (PNG)</option>
                             <option value="vnm">越南 (Vietnam)</option>
+                            <option value="tha">泰國 (Thailand)</option>
                         </optgroup>
                     </select>
                 </div>
@@ -2984,7 +2985,8 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 chn: "🇨🇳 <b>雲南</b>：卡蒂姆/卡杜拉，中等海拔。蘋果、花生、草本調。",
                 hwi: "🇺🇸 <b>夏威夷 Kona</b>：火山土 + 海島氣候，鐵比卡種。紅茶、花生、香草、溫潤甜感。",
                 png: "🇵🇬 <b>巴布亞紐幾內亞</b>：高地阿拉比卡，蘋果、焦糖、草本層次。",
-                vnm: "🇻🇳 <b>越南</b>：全球第二大產國，羅豆為主。穀粒、黑巧、苦味重。"
+                vnm: "🇻🇳 <b>越南</b>：全球第二大產國，羅豆為主。穀粒、黑巧、苦味重。",
+                tha: "🇹🇭 <b>泰國</b>：清邁/清萊 Doi Chaang、Doi Inthanon 高山莊園（1000-1600m），Typica/卡杜艾為主。榛果、焦糖、蜂蜜甜感，帶溫潤桃果香，body 柔順。"
             };
 
             // --- 🔹 V2.8 推演引擎 (修正數據同步) ---
@@ -3023,6 +3025,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 "twn": ["1. 紅茶", "77. 焦糖", "41. 草本"], "chn": ["20. 蘋果", "72. 花生", "41. 草本"],
                 "hwi": ["1. 紅茶", "72. 花生", "81. 香草"], "png": ["20. 蘋果", "77. 焦糖", "41. 草本"],
                 "vnm": ["64. 穀粒", "76. 黑巧克力", "53. 苦味"],
+                "tha": ["73. 榛果", "77. 焦糖", "78. 蜂蜜"],
                 "yem": ["29. 酒味", "13. 葡萄 Raisin", "75. 巧克力", "14. 梅乾"]
             };
 
@@ -3041,7 +3044,8 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 idn: { wet_hulled: ["46. 木質","49. 泥土","59. 菸草","62. 煙燻"], washed: ["75. 巧克力","20. 蘋果"] },
                 twn: { washed: ["1. 紅茶","78. 蜂蜜"], natural: ["16. 櫻桃","77. 焦糖","41. 草本"] },
                 yem: { natural: ["14. 梅乾","29. 酒味","13. 葡萄 Raisin"] },
-                hwi: { natural: ["16. 櫻桃","81. 香草"] }
+                hwi: { natural: ["16. 櫻桃","81. 香草"] },
+                tha: { natural: ["21. 桃子","77. 焦糖","13. 葡萄 Raisin"], washed: ["20. 蘋果","41. 草本"], honey_light: ["78. 蜂蜜","21. 桃子"] }
             };
 
             const MX_DARK_DESTROY_ACID_FLORAL = new Set([1,2,3,4,23,24,25,26,27,28]);
