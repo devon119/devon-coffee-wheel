@@ -3980,7 +3980,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                     espresso: {
                         dose: '18g 粉 → 36-45g 液',
                         ratio: light ? '1:2.5（淺焙降澀）' : dark ? '1:1.8（深焙防過萃）' : '1:2 平衡',
-                        temp: light ? '93-95°C（淺焙需高溫打開密度）' : dark ? '88-90°C（深焙低溫保甜）' : '91-93°C',
+                        temp: light ? '93-95°C（淺焙需高溫打開密度）' : dark ? '88-90°C（深焙低溫保甜）' : '92-94°C',
                         grind: pickGrind(1) + '（下秒預浸 5-8s 看水流狀態微調）',
                         time: light ? '28-35s（可接受長到 40s，取得甜感）' : dark ? '22-26s（超過 28s 易苦化）' : '25-30s',
                         schedule: [
@@ -11344,8 +11344,9 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                                 { k: '發售年', v: '1933' },
                                 { k: '結構', v: '下水室 + 中粉籃 + 上咖啡室' },
                                 { k: '壓力', v: '3-5 bar（介於手沖與義式之間）' },
+                                { k: '起始水溫', v: '淺焙 88°C / 中焙 80-82°C / 深焙 74-77°C（焙度越深起始溫越低，防焦苦油）' },
                                 { k: '容量', v: '1 / 3 / 6 / 9 / 12 杯版本' },
-                                { k: '粉度', v: '中細粉（比手沖細、比義式粗）' }
+                                { k: '粉度', v: '中細粉（比手沖細、比義式粗，500-700μm）' }
                             ],
                             origin: [
                                 { year: '1933', text: 'Alfonso Bialetti 在義大利 Crusinallo 鋁工廠發明摩卡壺，名字 "Moka" 取自葉門 Mocha 港。' },
@@ -11388,7 +11389,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                             ],
                             specs: [
                                 { k: '萃取原理', v: '蒸氣壓推上 + 浸泡 + 真空回流' },
-                                { k: '水溫', v: '90-95°C（沸騰後降溫）' },
+                                { k: '水溫', v: '85-95°C（沸騰後降溫；淺焙→高溫 93-95°C，深焙→低溫 85-88°C）' },
                                 { k: '粉度', v: '中粉' },
                                 { k: '粉水比', v: '1:13 ~ 1:15' },
                                 { k: '浸泡時間', v: '60-90 秒' },
@@ -11438,7 +11439,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                                 { k: '水溫', v: '室溫或冰水' },
                                 { k: '粉度', v: '粗粉（比法壓略細）' },
                                 { k: '粉水比', v: '1:8（濃縮，喝時加水）' },
-                                { k: '時間', v: '8-24 小時' },
+                                { k: '時間', v: '淺焙 18-22h / 中焙 14-18h / 深焙 12-14h（焙度越深萃取越快）' },
                                 { k: '保存', v: '冰箱 5-7 天' }
                             ],
                             origin: [
@@ -12627,7 +12628,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             const GRIND_REFERENCE = [
                 { id: 'extra_fine',    name: '極細',  um: '100-200μm',  ref: '麵粉 / 糖粉',     refEmoji: '🌾', uses: 'Ibrik 土耳其',  dotR: 0.7, dotN: 24, color: '#5d4037' },
                 { id: 'fine',          name: '細',    um: '300-500μm',  ref: '細砂糖 / 食鹽',   refEmoji: '🧂', uses: 'Espresso 義式', dotR: 1.4, dotN: 18, color: '#5d4037' },
-                { id: 'medium_fine',   name: '中細',  um: '500-700μm',  ref: '細海鹽',           refEmoji: '🧂', uses: 'AeroPress',     dotR: 2.2, dotN: 14, color: '#5d4037' },
+                { id: 'medium_fine',   name: '中細',  um: '500-700μm',  ref: '細海鹽',           refEmoji: '🧂', uses: 'AeroPress / 摩卡壺', dotR: 2.2, dotN: 14, color: '#5d4037' },
                 { id: 'medium',        name: '中',    um: '700-900μm',  ref: '二砂糖 / 粗鹽',   refEmoji: '🍯', uses: 'V60 手沖',      dotR: 3.0, dotN: 11, color: '#5d4037' },
                 { id: 'medium_coarse', name: '中粗',  um: '900-1100μm', ref: '粗砂糖 / 黑胡椒粒', refEmoji: '🌶️', uses: 'Chemex / 一刀流', dotR: 4.0, dotN: 9,  color: '#5d4037' },
                 { id: 'coarse',        name: '粗',    um: '1100-1400μm', ref: '粗海鹽 / 黃豆粒', refEmoji: '🌰', uses: '法壓 / 冷萃',  dotR: 5.5, dotN: 7,  color: '#5d4037' },
