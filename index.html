@@ -3045,7 +3045,10 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 twn: { washed: ["1. 紅茶","78. 蜂蜜"], natural: ["16. 櫻桃","77. 焦糖","41. 草本"] },
                 yem: { natural: ["14. 梅乾","29. 酒味","13. 葡萄 Raisin"] },
                 hwi: { natural: ["16. 櫻桃","81. 香草"] },
-                tha: { natural: ["21. 桃子","77. 焦糖","13. 葡萄 Raisin"], washed: ["20. 蘋果","41. 草本"], honey_light: ["78. 蜂蜜","21. 桃子"] }
+                tha: { natural: ["21. 桃子","77. 焦糖","13. 葡萄 Raisin"], washed: ["20. 蘋果","41. 草本"], honey_light: ["78. 蜂蜜","21. 桃子"] },
+                mex: { natural: ["16. 櫻桃","77. 焦糖"], washed: ["75. 巧克力","20. 蘋果"] },
+                png: { natural: ["16. 櫻桃","13. 葡萄 Raisin"], washed: ["20. 蘋果","41. 草本"] },
+                chn: { natural: ["16. 櫻桃","78. 蜂蜜"], washed: ["75. 巧克力","20. 蘋果"], honey_light: ["78. 蜂蜜","77. 焦糖"] }
             };
 
             const MX_DARK_DESTROY_ACID_FLORAL = new Set([1,2,3,4,23,24,25,26,27,28]);
@@ -4145,7 +4148,8 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                     chn: '雲南：卡蒂姆系為主，甜感與 body 較佳。',
                     hwi: '夏威夷 Kona：高價位，溫和甜感 + 紅茶調。',
                     png: '巴布亞紐幾內亞：高地阿拉比卡，蘋果 + 焦糖，層次中等。',
-                    vnm: '越南：羅豆為主，苦味重、body 厚。做義式/煉乳咖啡是強項。'
+                    vnm: '越南：羅豆為主，苦味重、body 厚。做義式/煉乳咖啡是強項。',
+                    tha: '泰國 Doi Chaang/Doi Inthanon：榛果、焦糖、蜂蜜甜感為招牌，帶溫潤桃果香。中淺焙最能保留細緻甜感；焙度超過 Full City 香氣收斂明顯。'
                 };
                 const code = ctx.countryCode;
                 return hints[code] || '';
@@ -7572,7 +7576,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                     left1: '總水 250g · 1:16',
                     left2: '不分段、水位維持穩定',
                     right1: '水溫 93°C',
-                    right2: '研磨：中粗（維持流速）'
+                    right2: '研磨：中（標準，不斷流維持水位）'
                 },
                 extra: `<text x="240" y="392" font-size="10.5" font-style="italic" fill="#8d6e63" text-anchor="middle">「不斷流 = 濾床均勻、水位穩 = 萃取一致」</text>`
             });
@@ -11519,7 +11523,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                         single_pour: {
                             name: '一刀流（Single Pour）',
                             tagline: '悶蒸後一次注滿，保留 body 與甜感',
-                            grindLevel: 'medium_coarse',
+                            grindLevel: 'medium',
                             emoji: '🔪',
                             status: 'ready',
                             heroSvg: ENCY_SVG_M_SINGLE,
@@ -11535,7 +11539,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                             specs: [
                                 { k: '注水段數', v: '1 段（Bloom + 一次注完）' },
                                 { k: '水溫', v: '92-93°C' },
-                                { k: '粉度', v: '中粗粉（比三段式粗 1 檔）' },
+                                { k: '粉度', v: '中粉（比三段式粗 1 檔，偏中以保留流速）' },
                                 { k: '粉水比', v: '1:16（17.5g 粉 / 280g 水）' },
                                 { k: '總時間', v: '3:00 ~ 4:00（本身較慢）' },
                                 { k: '難度', v: '★★☆☆☆' }
@@ -11746,7 +11750,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                         scott_rao: {
                             name: 'Scott Rao 連續注水',
                             tagline: '不斷流維持水位，技術門檻較高',
-                            grindLevel: 'medium_coarse',
+                            grindLevel: 'medium',
                             emoji: '🎯',
                             status: 'ready',
                             heroSvg: ENCY_SVG_M_RAO,
@@ -11763,7 +11767,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                                 { k: '推廣者', v: 'Scott Rao（美國咖啡作家）' },
                                 { k: '注水段數', v: '1 段（連續不停）' },
                                 { k: '水溫', v: '93°C' },
-                                { k: '粉度', v: '中粗（維持流速）' },
+                                { k: '粉度', v: '中（標準粒徑；連續注水本身即維持流速）' },
                                 { k: '粉水比', v: '1:16（17g 粉 / 270g 水）' },
                                 { k: '總時間', v: '2:30 ~ 3:00' }
                             ],
