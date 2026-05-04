@@ -8080,6 +8080,39 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 <text x="60" y="270" font-size="22">🌸</text>`
             });
 
+            const ENCY_VAR_RED_BOURBON = _encyVarietySvg({
+                id: 'redbourbon', name: 'Red Bourbon', scientific: 'Coffea arabica var. Bourbon（紅果成熟型）',
+                subtext: '甜感圓潤 · 糖蜜焦糖 · 中焙甜蜜點',
+                bg1: '#fff3e0', bg2: '#c62828',
+                beanW: 73, beanH: 100, curve: 'straight',
+                tcolor: '#b71c1c', tsub: '#c62828',
+                deco: `<text x="80" y="105" font-size="30">🍎</text>
+                <text x="400" y="105" font-size="30">🍯</text>
+                <text x="60" y="270" font-size="22">🫐</text>`
+            });
+
+            const ENCY_VAR_YELLOW_BOURBON = _encyVarietySvg({
+                id: 'yellowbourbon', name: 'Yellow Bourbon', scientific: 'Coffea arabica var. Bourbon（黃果成熟型）',
+                subtext: '巴西精品主力 · 桃子蜂蜜 · 果酸更低',
+                bg1: '#fffde7', bg2: '#f9a825',
+                beanW: 73, beanH: 100, curve: 'straight',
+                tcolor: '#f57f17', tsub: '#f9a825',
+                deco: `<text x="80" y="105" font-size="30">🍑</text>
+                <text x="400" y="105" font-size="30">🇧🇷</text>
+                <text x="60" y="270" font-size="22">🌕</text>`
+            });
+
+            const ENCY_VAR_PINK_BOURBON = _encyVarietySvg({
+                id: 'pinkbourbon', name: 'Pink Bourbon', scientific: 'Coffea arabica var. Bourbon（粉果變種，哥倫比亞）',
+                subtext: '哥倫比亞近年發現 · 花香甜感雙面特性',
+                bg1: '#fce4ec', bg2: '#e91e63',
+                beanW: 70, beanH: 105, curve: 's',
+                tcolor: '#880e4f', tsub: '#c2185b',
+                deco: `<text x="80" y="105" font-size="30">🌹</text>
+                <text x="400" y="105" font-size="30">🇨🇴</text>
+                <text x="60" y="270" font-size="22">🌸</text>`
+            });
+
             // ========== 處理法 hero SVG helper（流程圖式）==========
             function _encyProcessSvg(opts) {
                 return `<svg viewBox="0 0 480 420" xmlns="http://www.w3.org/2000/svg">
@@ -10062,6 +10095,113 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                                 { icon: '☕', title: '沖煮：低溫保花香', desc: '90-92°C 輕柔萃取，Hoffmann 法或三段式最適合，避免高溫 + 高頻萃取破壞纖細香氣。' },
                                 { icon: '💎', title: '稀有度', desc: '留尼旺年產 Laurina 不到 2 噸，台灣市面上幾乎買不到真品。' },
                                 { icon: '🆚', title: 'vs 低因處理豆', desc: 'Swiss Water / CO₂ 脫因豆會失去香氣；Laurina 天生低因、風味完整，是低因咖啡的最高境界。' }
+                            ]
+                        },
+                        red_bourbon: {
+                            name: 'Red Bourbon', tagline: '紅波旁 · 甜感圓潤的焦糖王',
+                            emoji: '🍎', status: 'ready', heroSvg: ENCY_VAR_RED_BOURBON,
+                            subtitle: '波旁種（Bourbon）是阿拉比卡的兩大祖先之一，紅波旁（Red Bourbon）指果實成熟呈深紅色的原型波旁。以圓潤飽滿的甜感、糖蜜/焦糖/紅蘋果調性聞名。中焙（Full City）是發揮最佳甜感的黃金焙度，淺焙帶明亮蘋果酸，深焙則消磨花香與層次。',
+                            chips: [
+                                { text: 'Bourbon 原型', class: 'warm' },
+                                { text: '甜感圓潤', class: 'green' },
+                                { text: '糖蜜焦糖調', class: 'purple' },
+                                { text: '中美洲 / 非洲主力' },
+                                { text: '中焙最佳', class: 'cool' }
+                            ],
+                            specs: [
+                                { k: '學名', v: 'Coffea arabica var. Bourbon（紅果成熟型）' },
+                                { k: '起源', v: '葉門 → 1715 法屬 Bourbon 島（今留尼旺）→ 全球' },
+                                { k: '果實顏色', v: '成熟時深紅色（區別於黃/粉波旁）' },
+                                { k: '主要產區', v: '盧安達、蒲隆地、薩爾瓦多、瓜地馬拉、宏都拉斯' },
+                                { k: '招牌風味', v: '焦糖、糖蜜、紅蘋果、蜂蜜、輕微花香' },
+                                { k: '最佳焙度', v: 'Full City（中焙）甜感最完整' }
+                            ],
+                            origin: [
+                                { year: '1715', text: '法國東印度公司將咖啡苗從葉門引進 Bourbon 島（今留尼旺），波旁種在此獨立演化。' },
+                                { year: '1860s', text: '波旁種傳入巴西、中美洲，成為全球最廣泛種植的阿拉比卡品種。' },
+                                { year: '20 世紀初', text: '農業學家發現波旁有紅果（Red）、黃果（Yellow）兩種成熟色，開始分類命名。' },
+                                { year: '2000s 精品浪潮', text: '肯亞 SL 系列和中美洲精品莊園重新挖掘紅波旁的甜感潛力，CoE 多次奪冠。' },
+                                { year: '至今', text: '盧安達、蒲隆地的紅波旁是非洲精品咖啡的代表，常出現在國際拍賣。' }
+                            ],
+                            originTitle: '📜 品種歷史與傳播',
+                            tipsTitle: '🍒 風味特性與沖煮建議',
+                            tips: [
+                                { icon: '🍯', title: '甜感是靈魂', desc: '紅波旁最大特色是飽滿圓潤的甜感：焦糖、糖蜜、紅蘋果。甜感比酸感更突出，是很多人的「入門精品」。' },
+                                { icon: '🔥', title: '中焙最佳焙度', desc: 'Full City（約 200-205°C Drop）是紅波旁甜蜜點：甜感完整展現，又保留輕微果酸層次。' },
+                                { icon: '🍏', title: '淺焙帶酸', desc: '淺焙（City）紅波旁會有明亮蘋果酸，略帶青澀感，喜歡酸質的人可嘗試。' },
+                                { icon: '🌑', title: '深焙扼殺層次', desc: '過深（Vienna/French）會把波旁的花香與果酸層次都壓掉，只剩苦甜——不推薦精品豆深焙。' },
+                                { icon: '☕', title: '沖煮建議', desc: '四六法或 Kalita 均勻萃取最能展現甜感，93-94°C，中研磨，粉水比 1:15-16。' }
+                            ]
+                        },
+                        yellow_bourbon: {
+                            name: 'Yellow Bourbon', tagline: '黃波旁 · 巴西精品的桃蜜靈魂',
+                            emoji: '🌕', status: 'ready', heroSvg: ENCY_VAR_YELLOW_BOURBON,
+                            subtitle: '黃波旁（Yellow Bourbon / Bourbon Amarelo）是波旁種的色彩突變型，果實成熟呈金黃色而非紅色。因外觀難以判斷成熟度（紅色更明顯），採收比率稍差，但甜感比紅波旁更高、果酸更低、桃子/蜂蜜感突出。巴西精品咖啡的主力品種。',
+                            chips: [
+                                { text: '巴西精品主力', class: 'warm' },
+                                { text: '甜感高於紅波旁', class: 'green' },
+                                { text: '桃子蜂蜜調', class: 'purple' },
+                                { text: '黃色果實成熟' },
+                                { text: '果酸更低', class: 'cool' }
+                            ],
+                            specs: [
+                                { k: '學名', v: 'Coffea arabica var. Bourbon Amarelo（黃果突變型）' },
+                                { k: '起源', v: '巴西 1930s 發現（Red Bourbon 自然突變）' },
+                                { k: '果實顏色', v: '成熟時金黃色（非紅色，採收難度略高）' },
+                                { k: '主要產區', v: '巴西 Minas Gerais / São Paulo、部分中美洲' },
+                                { k: '招牌風味', v: '桃子、蜂蜜、焦糖、牛奶巧克力、低酸甜感' },
+                                { k: '最佳焙度', v: 'City+ 至 Full City（中淺至中焙）' }
+                            ],
+                            origin: [
+                                { year: '1930s', text: '巴西農業研究人員在紅波旁田間發現果實呈黃色的突變株，開始系統研究。' },
+                                { year: '1950s-70s', text: '黃波旁在巴西聖保羅州大量種植，成為巴西商業咖啡的重要品種之一。' },
+                                { year: '2000s', text: '精品咖啡浪潮中，巴西黃波旁以「低酸、高甜感」的特性重新受到重視。' },
+                                { year: '2012', text: 'Brazil Cup of Excellence 冠軍由黃波旁豆奪得，確立其精品地位。' },
+                                { year: '至今', text: '是巴西精品咖啡的主力輸出品種，與 Catuai 並列為巴西自然處理豆的代表。' }
+                            ],
+                            originTitle: '📜 品種歷史與傳播',
+                            tipsTitle: '🍒 風味特性與沖煮建議',
+                            tips: [
+                                { icon: '🍑', title: '桃蜜是最大特色', desc: '黃波旁比紅波旁更甜、酸更低：桃子、蜂蜜、牛奶巧克力是核心調性，極適合喜歡低酸甜感的人。' },
+                                { icon: '🇧🇷', title: '巴西自然處理最佳表現', desc: '黃波旁 × 日曬處理（Pulped Natural）= 巴西精品代表，焦糖/糖蜜感更突出。' },
+                                { icon: '🔥', title: '中淺焙保留最多甜感', desc: 'City+ 至 Full City 是甜蜜點，輕微的蘋果酸平衡焦糖甜感。比中焙再淺則酸質偏高、略失平衡。' },
+                                { icon: '🥛', title: '奶咖絕配', desc: '低酸 + 高甜感 + 牛奶巧克力調性，是 Flat White、Latte 的天然好夥伴。' },
+                                { icon: '☕', title: '沖煮建議', desc: '93°C、中研磨、粉水比 1:15，Kalita Wave 或 French Press 最能突顯圓潤甜感。' }
+                            ]
+                        },
+                        pink_bourbon: {
+                            name: 'Pink Bourbon', tagline: '粉紅波旁 · 哥倫比亞花香甜感雙面奇蹟',
+                            emoji: '🌹', status: 'ready', heroSvg: ENCY_VAR_PINK_BOURBON,
+                            subtitle: '粉紅波旁（Pink Bourbon）是近年在哥倫比亞 Huila 產區發現的波旁色彩變種，果實成熟呈粉橙色。與紅/黃波旁不同，粉紅波旁同時具備花香（茉莉、玫瑰）與甜感（焦糖、蜂蜜）雙重特性，常被形容為「喝起來像香水」。近年在國際精品咖啡圈聲名大噪，拍賣高價屢見不鮮。',
+                            chips: [
+                                { text: '哥倫比亞 Huila', class: 'purple' },
+                                { text: '花香甜感雙面', class: 'warm' },
+                                { text: '近年精品新星', class: 'green' },
+                                { text: '粉橙色果實' },
+                                { text: '拍賣高價品種', class: 'cool' }
+                            ],
+                            specs: [
+                                { k: '學名', v: 'Coffea arabica var. Bourbon（粉果色彩變種）' },
+                                { k: '起源', v: '哥倫比亞 Huila 產區（近年發現，確切起源仍有爭議）' },
+                                { k: '果實顏色', v: '成熟時粉橙色（介於紅/黃之間）' },
+                                { k: '主要產區', v: '哥倫比亞 Huila / Nariño（正在向其他國擴散）' },
+                                { k: '招牌風味', v: '茉莉、玫瑰、焦糖、蜂蜜、熱帶水果' },
+                                { k: '最佳焙度', v: 'City 至 City+（淺中焙保留花香）' }
+                            ],
+                            origin: [
+                                { year: '2010s', text: '哥倫比亞 Huila 農民在田間發現果實呈粉橙色的波旁突變株，初期被認為是不成熟果實。' },
+                                { year: '2015-2018', text: '精品買手開始注意到粉紅波旁的獨特風味，杯測顯示出異於一般波旁的高分花香調性。' },
+                                { year: '2019-2020', text: '哥倫比亞 Cup of Excellence 中，粉紅波旁豆開始出現並創下高分紀錄。' },
+                                { year: '2021-至今', text: '全球精品圈掀起粉紅波旁熱潮，拍賣高達每磅數百美元，目前正向巴拿馬、衣索比亞擴散種植。' }
+                            ],
+                            originTitle: '📜 品種歷史與傳播',
+                            tipsTitle: '🍒 風味特性與沖煮建議',
+                            tips: [
+                                { icon: '🌹', title: '花香是靈魂', desc: '粉紅波旁最大特色是「喝起來像香水」：茉莉、玫瑰花香極為突出，同時又有焦糖/蜂蜜的甜感支撐。' },
+                                { icon: '🍷', title: '厭氧特別搭', desc: '粉紅波旁 × 厭氧水洗（Anaerobic Washed）= 近年最受追捧的組合，花香 + 酒感 + 熱帶水果三重爆炸。' },
+                                { icon: '🌡️', title: '淺焙保花香', desc: 'City 至 City+ 最佳。超過 Full City 會快速損失茉莉/玫瑰的細膩花香，得不償失。' },
+                                { icon: '💧', title: '沖煮：低溫輕萃', desc: '90-92°C、四六法或 Matt Winton 法，突顯花香層次；避免過度萃取壓掉細膩調性。' },
+                                { icon: '💰', title: '價格提醒', desc: '正宗哥倫比亞粉紅波旁價格昂貴，市面上有不少以其他品種或處理法冒充，購買時要留意產地認證。' }
                             ]
                         }
                     }
@@ -12574,10 +12714,13 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                             name: 'Bourbon 譜系（祖先）', emoji: '🍯', stroke: '#e65100',
                             meta: '葉門 → Bourbon 島 → 全球',
                             items: [
-                                { id: 'bourbon', em: '🍯' },
-                                { id: 'caturra', em: '🌳' },
-                                { id: 'pacas',   em: '🌳' },
-                                { id: 'laurina', em: '🌺' }
+                                { id: 'bourbon',       em: '🍯' },
+                                { id: 'red_bourbon',   em: '🍎' },
+                                { id: 'yellow_bourbon',em: '🌕' },
+                                { id: 'pink_bourbon',  em: '🌹' },
+                                { id: 'caturra',       em: '🌳' },
+                                { id: 'pacas',         em: '🌳' },
+                                { id: 'laurina',       em: '🌺' }
                             ]
                         },
                         {
