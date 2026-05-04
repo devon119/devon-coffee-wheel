@@ -14971,6 +14971,322 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             // ============================================================
             const FC_KEY = 'COFFEE_FLASHCARD_STATS';
 
+            // ─── 烘豆視覺化 hero SVG 常數 ─────────────────────────────────────────────
+            const ROAST_SVG_DRYING = `<svg viewBox="0 0 480 420" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="dry-bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fffaf0"/><stop offset="100%" stop-color="#f5ede0"/></linearGradient>
+    <marker id="dry-arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#C47820"/></marker>
+  </defs>
+  <rect width="480" height="420" rx="16" fill="url(#dry-bg)"/>
+  <text x="240" y="28" font-size="14" text-anchor="middle" fill="#5A3A00" font-weight="900">乾燥段：豆色外觀三階段</text>
+  <text x="240" y="46" font-size="10" text-anchor="middle" fill="#8B5820" font-style="italic">回溫點（TP）→ 約 150°C · 水分 10–12% 降至 1–2%</text>
+  <ellipse cx="90" cy="188" rx="44" ry="64" fill="#6B9A32"/>
+  <path d="M90 124 Q81 188 90 252" stroke="#3A6010" stroke-width="2.5" fill="none"/>
+  <ellipse cx="90" cy="188" rx="44" ry="64" fill="none" stroke="#C8E888" stroke-width="3" opacity="0.5"/>
+  <text x="90" y="273" font-size="11" text-anchor="middle" fill="#3A6018" font-weight="bold">① 入豆至回溫</text>
+  <text x="90" y="290" font-size="10" text-anchor="middle" fill="#6B9A32">草綠色</text>
+  <text x="90" y="307" font-size="9" text-anchor="middle" fill="#555">硬實 · 銀皮緊附豆表</text>
+  <text x="90" y="322" font-size="9" text-anchor="middle" fill="#777">香：青草 / 植物香</text>
+  <text x="90" y="337" font-size="8.5" text-anchor="middle" fill="#8B7030">含水率 10–12%</text>
+  <line x1="148" y1="188" x2="186" y2="188" stroke="#C47820" stroke-width="2" marker-end="url(#dry-arr)"/>
+  <text x="167" y="180" font-size="8.5" text-anchor="middle" fill="#A06020">100–130°C</text>
+  <text x="167" y="200" font-size="8.5" text-anchor="middle" fill="#A06020">水分蒸發</text>
+  <ellipse cx="245" cy="188" rx="44" ry="64" fill="#A09828"/>
+  <path d="M245 124 Q236 188 245 252" stroke="#7A7820" stroke-width="2.5" fill="none"/>
+  <path d="M215 153 Q206 188 215 223" stroke="#D8CC68" stroke-width="2" fill="none" opacity="0.5"/>
+  <text x="245" y="273" font-size="11" text-anchor="middle" fill="#6A6515" font-weight="bold">② 乾燥中段</text>
+  <text x="245" y="290" font-size="10" text-anchor="middle" fill="#A09828">黃綠 → 金黃</text>
+  <text x="245" y="307" font-size="9" text-anchor="middle" fill="#555">銀皮開始鬆動脫離</text>
+  <text x="245" y="322" font-size="9" text-anchor="middle" fill="#777">香：穀物 / 乾草香</text>
+  <text x="245" y="337" font-size="8.5" text-anchor="middle" fill="#8B7030">約 120–145°C</text>
+  <line x1="303" y1="188" x2="341" y2="188" stroke="#C47820" stroke-width="2" marker-end="url(#dry-arr)"/>
+  <text x="322" y="180" font-size="8.5" text-anchor="middle" fill="#A06020">145→155°C</text>
+  <text x="322" y="200" font-size="8.5" text-anchor="middle" fill="#A06020">梅納即將啟</text>
+  <ellipse cx="400" cy="188" rx="44" ry="64" fill="#C4852A"/>
+  <path d="M400 124 Q391 188 400 252" stroke="#A06518" stroke-width="2.5" fill="none"/>
+  <line x1="437" y1="142" x2="458" y2="125" stroke="#E8D880" stroke-width="1.8"/>
+  <line x1="441" y1="168" x2="465" y2="160" stroke="#E8D880" stroke-width="1.5"/>
+  <line x1="440" y1="194" x2="466" y2="191" stroke="#E8D880" stroke-width="1.3"/>
+  <line x1="438" y1="220" x2="463" y2="223" stroke="#E8D880" stroke-width="1.2"/>
+  <circle cx="460" cy="122" r="3.5" fill="#E0CC60" opacity="0.9"/>
+  <circle cx="467" cy="157" r="3" fill="#E0CC60" opacity="0.8"/>
+  <circle cx="468" cy="189" r="2.5" fill="#E0CC60" opacity="0.7"/>
+  <circle cx="465" cy="222" r="2" fill="#E0CC60" opacity="0.6"/>
+  <text x="400" y="273" font-size="11" text-anchor="middle" fill="#7A4A10" font-weight="bold">③ 乾燥末段</text>
+  <text x="400" y="290" font-size="10" text-anchor="middle" fill="#C4852A">金黃麥桿色</text>
+  <text x="400" y="307" font-size="9" text-anchor="middle" fill="#555">銀皮大量脫落飄飛 ↗</text>
+  <text x="400" y="322" font-size="9" text-anchor="middle" fill="#777">香：烤麵包 / 微甜</text>
+  <text x="400" y="337" font-size="8.5" text-anchor="middle" fill="#8B7030">145–155°C · 梅納即將啟動</text>
+  <rect x="15" y="358" width="450" height="48" rx="10" fill="#FFF0E0" opacity="0.85"/>
+  <text x="240" y="375" font-size="9" text-anchor="middle" fill="#7A4A10" font-weight="bold">銀皮（Silver Skin / Chaff）= 生豆外層薄膜，乾燥末段大量飄落</text>
+  <text x="240" y="390" font-size="8.5" text-anchor="middle" fill="#8B5020">顏色三段均勻過渡 = 每顆豆受熱一致，是烘焙品質的早期視覺指標</text>
+  <text x="240" y="405" font-size="8" text-anchor="middle" fill="#9A5820">T0：豆表軟化（玻璃態→橡膠態）· T1：全豆橡膠態均勻軟化</text>
+</svg>`;
+
+            const ROAST_SVG_MAILLARD = `<svg viewBox="0 0 480 420" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="mai-bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fffaf0"/><stop offset="100%" stop-color="#f5e5d0"/></linearGradient>
+  </defs>
+  <rect width="480" height="420" rx="16" fill="url(#mai-bg)"/>
+  <text x="240" y="28" font-size="14" text-anchor="middle" fill="#5A3A00" font-weight="900">梅納反應：豆色從金黃轉淺棕</text>
+  <text x="240" y="46" font-size="10" text-anchor="middle" fill="#8B5020" font-style="italic">約 140–165°C 啟動 · 胺基酸 × 還原糖 → 850+ 種香氣物質</text>
+  <ellipse cx="120" cy="188" rx="55" ry="80" fill="#C4852A"/>
+  <path d="M120 108 Q109 188 120 268" stroke="#A06518" stroke-width="3" fill="none"/>
+  <text x="120" y="288" font-size="11" text-anchor="middle" fill="#7A4A10" font-weight="bold">反應前</text>
+  <text x="120" y="305" font-size="10" text-anchor="middle" fill="#C4852A">金黃麥桿色</text>
+  <text x="120" y="320" font-size="9" text-anchor="middle" fill="#555">表面均勻光滑</text>
+  <text x="120" y="335" font-size="9" text-anchor="middle" fill="#777">銀皮已脫落</text>
+  <text x="240" y="182" font-size="38" text-anchor="middle" fill="#C47820">→</text>
+  <text x="240" y="205" font-size="9" text-anchor="middle" fill="#8B5020">140–165°C</text>
+  <text x="240" y="220" font-size="8.5" text-anchor="middle" fill="#A06020">胺基酸</text>
+  <text x="240" y="234" font-size="8.5" text-anchor="middle" fill="#A06020">+ 還原糖</text>
+  <ellipse cx="360" cy="188" rx="55" ry="80" fill="#A05028"/>
+  <path d="M360 108 Q349 188 360 268" stroke="#7A3818" stroke-width="3" fill="none"/>
+  <ellipse cx="344" cy="155" rx="16" ry="20" fill="#B86030" opacity="0.38"/>
+  <ellipse cx="371" cy="173" rx="13" ry="16" fill="#B86030" opacity="0.32"/>
+  <ellipse cx="352" cy="210" rx="10" ry="13" fill="#A85020" opacity="0.28"/>
+  <circle cx="336" cy="85" r="4.5" fill="#C06828" opacity="0.5"/>
+  <circle cx="353" cy="66" r="5.5" fill="#B85828" opacity="0.45"/>
+  <circle cx="372" cy="76" r="4" fill="#A85020" opacity="0.4"/>
+  <circle cx="386" cy="56" r="5" fill="#C06828" opacity="0.48"/>
+  <circle cx="396" cy="73" r="3.5" fill="#D07030" opacity="0.45"/>
+  <circle cx="347" cy="52" r="3.5" fill="#B85828" opacity="0.35"/>
+  <text x="370" y="32" font-size="8" text-anchor="middle" fill="#9A5020" font-style="italic">芳香分子揮發 ↑</text>
+  <text x="360" y="288" font-size="11" text-anchor="middle" fill="#6A3410" font-weight="bold">反應中</text>
+  <text x="360" y="305" font-size="10" text-anchor="middle" fill="#A05028">淺棕 / 肉桂色</text>
+  <text x="360" y="320" font-size="9" text-anchor="middle" fill="#555">褐變漸進，色差分化</text>
+  <text x="360" y="335" font-size="9" text-anchor="middle" fill="#777">表面微細紋路出現</text>
+  <rect x="15" y="355" width="450" height="54" rx="10" fill="#FFF0E0" opacity="0.85"/>
+  <text x="240" y="372" font-size="9" text-anchor="middle" fill="#7A3810" font-weight="bold">梅納反應 = 非甜香：吡嗪（堅果/可可）、吡咯（焦糖花香）、吡啶（煙燻）</text>
+  <text x="240" y="387" font-size="8.5" text-anchor="middle" fill="#8B4820">視覺信號：豆色由金黃轉淺棕，表面出現細微色差與不均勻褐化</text>
+  <text x="240" y="402" font-size="8" text-anchor="middle" fill="#9A5020">甜香（蜂蜜/奶油）來自焦糖化，不是梅納反應 — 兩者溫度區間重疊但機制不同</text>
+</svg>`;
+
+            const ROAST_SVG_CARAMELIZATION = `<svg viewBox="0 0 480 420" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="car-bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fffaf0"/><stop offset="100%" stop-color="#f5e5d0"/></linearGradient>
+  </defs>
+  <rect width="480" height="420" rx="16" fill="url(#car-bg)"/>
+  <text x="240" y="28" font-size="14" text-anchor="middle" fill="#5A3A00" font-weight="900">焦糖化：大理石紋（T2）視覺信號</text>
+  <text x="240" y="46" font-size="10" text-anchor="middle" fill="#8B5020" font-style="italic">約 175°C 啟動 · 蔗糖裂解 · 甜香呋喃類物質大量生成</text>
+  <ellipse cx="240" cy="195" rx="80" ry="118" fill="#9A4E1E"/>
+  <path d="M175 144 C188 151 196 147 206 153 C216 159 219 155 230 160 C241 165 241 162 253 166" stroke="#D07840" stroke-width="1.9" fill="none" opacity="0.88"/>
+  <path d="M168 168 C182 174 189 170 201 175 C213 180 216 176 228 181 C240 186 242 182 256 187 C269 192 270 188 281 192" stroke="#D07840" stroke-width="1.9" fill="none" opacity="0.88"/>
+  <path d="M165 191 C179 187 184 191 197 187 C210 183 214 187 226 184 C238 181 241 184 253 181 C265 178 268 181 281 178" stroke="#D07840" stroke-width="1.8" fill="none" opacity="0.82"/>
+  <path d="M166 214 C180 219 186 215 198 220 C210 225 213 221 225 225 C237 229 240 225 253 229 C266 233 269 229 281 231" stroke="#C07030" stroke-width="1.6" fill="none" opacity="0.78"/>
+  <path d="M170 237 C184 233 188 236 201 233 C214 230 217 233 229 230 C241 227 244 230 255 227 C266 224 269 227 279 225" stroke="#C07030" stroke-width="1.5" fill="none" opacity="0.72"/>
+  <path d="M177 258 C189 263 194 259 205 263 C216 267 219 263 230 266 C241 269 243 266 254 269" stroke="#B86828" stroke-width="1.4" fill="none" opacity="0.65"/>
+  <path d="M240 77 Q222 195 240 313" stroke="#7A3810" stroke-width="3.5" fill="none"/>
+  <line x1="336" y1="172" x2="295" y2="172" stroke="#E06020" stroke-width="1.8"/>
+  <circle cx="295" cy="172" r="3.5" fill="#E06020"/>
+  <rect x="336" y="155" width="130" height="40" rx="8" fill="#FFF0DC" opacity="0.96"/>
+  <text x="401" y="172" font-size="9.5" text-anchor="middle" fill="#8A3A10" font-weight="bold">大理石紋 = T2</text>
+  <text x="401" y="187" font-size="8.5" text-anchor="middle" fill="#A05020">蔗糖焦糖化啟動信號</text>
+  <rect x="18" y="132" width="112" height="98" rx="8" fill="#FFF8F0" opacity="0.92"/>
+  <text x="74" y="150" font-size="8" text-anchor="middle" fill="#7A4010" font-weight="bold">T2 前後對比</text>
+  <ellipse cx="46" cy="192" rx="20" ry="29" fill="#B86020" opacity="0.88"/>
+  <path d="M46 163 Q40 192 46 221" stroke="#8A4010" stroke-width="1.8" fill="none"/>
+  <text x="46" y="228" font-size="7.5" text-anchor="middle" fill="#666">T2 前</text>
+  <text x="46" y="238" font-size="7" text-anchor="middle" fill="#777">表面均勻</text>
+  <ellipse cx="102" cy="192" rx="20" ry="29" fill="#9A4818"/>
+  <path d="M89 178 C93 181 97 179 102 181 C107 183 109 181 115 182" stroke="#D07840" stroke-width="1.1" fill="none" opacity="0.85"/>
+  <path d="M88 192 C92 195 97 192 102 194 C107 196 110 194 115 195" stroke="#D07840" stroke-width="1.1" fill="none" opacity="0.8"/>
+  <path d="M102 163 Q96 192 102 221" stroke="#7A3810" stroke-width="1.8" fill="none"/>
+  <text x="102" y="228" font-size="7.5" text-anchor="middle" fill="#6A3810">T2 時</text>
+  <text x="102" y="238" font-size="7" text-anchor="middle" fill="#6A3810">紋路浮現</text>
+  <rect x="15" y="330" width="450" height="78" rx="10" fill="#FFF0E0" opacity="0.87"/>
+  <text x="240" y="348" font-size="9" text-anchor="middle" fill="#7A3810" font-weight="bold">大理石紋 = 豆表局部褐化速率差異，形成深淺交錯的自然流紋</text>
+  <text x="240" y="363" font-size="8.5" text-anchor="middle" fill="#8B4820">探針數字看不到 T2，必須直接觀察豆窗（sight glass）</text>
+  <text x="240" y="378" font-size="8.5" text-anchor="middle" fill="#9A5020">T2 前：梅納主導（堅果/可可）· T2 後：焦糖化主導（蜂蜜/奶油）</text>
+  <text x="240" y="393" font-size="8" text-anchor="middle" fill="#A05828">全息烘焙法：T2 = 第二烘焙段進入第三烘焙段的分水嶺</text>
+  <text x="240" y="407" font-size="8" text-anchor="middle" fill="#A55828">高海拔豆蔗糖含量更高（每升 300m 增約 10%），大理石紋後甜香更豐富</text>
+</svg>`;
+
+            const ROAST_SVG_FIRST_CRACK = `<svg viewBox="0 0 480 420" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="fc-bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fffaf0"/><stop offset="100%" stop-color="#f5e0d0"/></linearGradient>
+  </defs>
+  <rect width="480" height="420" rx="16" fill="url(#fc-bg)"/>
+  <text x="240" y="28" font-size="14" text-anchor="middle" fill="#5A2A00" font-weight="900">一爆：最大的視覺與聲音變化</text>
+  <text x="240" y="46" font-size="10" text-anchor="middle" fill="#8B4820" font-style="italic">195–205°C · CO₂ + 水蒸氣破壁 · 體積膨脹 50–80%</text>
+  <ellipse cx="110" cy="190" rx="48" ry="70" fill="#9A5220"/>
+  <path d="M110 120 Q100 190 110 260" stroke="#7A3A10" stroke-width="2.5" fill="none"/>
+  <text x="110" y="278" font-size="11" text-anchor="middle" fill="#6A3810" font-weight="bold">一爆前</text>
+  <text x="110" y="295" font-size="10" text-anchor="middle" fill="#9A5220">淺棕 / 密實</text>
+  <text x="110" y="310" font-size="9" text-anchor="middle" fill="#555">表面大理石紋已消</text>
+  <text x="110" y="325" font-size="9" text-anchor="middle" fill="#777">豆面光滑均勻</text>
+  <text x="110" y="340" font-size="8.5" text-anchor="middle" fill="#8B5020">約 190–195°C</text>
+  <line x1="63" y1="120" x2="63" y2="260" stroke="#999" stroke-width="1" stroke-dasharray="3,2"/>
+  <line x1="58" y1="120" x2="68" y2="120" stroke="#999" stroke-width="1"/>
+  <line x1="58" y1="260" x2="68" y2="260" stroke="#999" stroke-width="1"/>
+  <text x="50" y="192" font-size="9" fill="#999" text-anchor="middle">1×</text>
+  <text x="240" y="178" font-size="44" text-anchor="middle">💥</text>
+  <text x="240" y="218" font-size="12" text-anchor="middle" fill="#C04010" font-weight="bold">爆裂！</text>
+  <text x="240" y="236" font-size="9" text-anchor="middle" fill="#A05020">如爆米花聲</text>
+  <text x="240" y="252" font-size="9" text-anchor="middle" fill="#A05020">CO₂ 破壁釋出</text>
+  <ellipse cx="370" cy="186" rx="62" ry="91" fill="#7A3814"/>
+  <path d="M353 150 C360 160 358 168 364 178" stroke="#D07030" stroke-width="2.2" fill="none"/>
+  <path d="M364 178 C367 185 366 191 370 197" stroke="#C06020" stroke-width="2" fill="none"/>
+  <path d="M383 147 C377 162 381 170 375 181" stroke="#C86828" stroke-width="1.7" fill="none"/>
+  <path d="M357 208 C363 203 368 207 375 203" stroke="#B86020" stroke-width="1.4" fill="none"/>
+  <path d="M370 95 Q358 186 370 277" stroke="#5A2C10" stroke-width="3" fill="none"/>
+  <text x="370" y="295" font-size="11" text-anchor="middle" fill="#5A2C10" font-weight="bold">一爆後</text>
+  <text x="370" y="312" font-size="10" text-anchor="middle" fill="#7A3814">中棕 / 膨鬆</text>
+  <text x="370" y="327" font-size="9" text-anchor="middle" fill="#555">表面出現裂紋 / 溝槽</text>
+  <text x="370" y="342" font-size="9" text-anchor="middle" fill="#777">密度顯著下降</text>
+  <line x1="440" y1="95" x2="440" y2="277" stroke="#D07030" stroke-width="1.2" stroke-dasharray="3,2"/>
+  <line x1="435" y1="95" x2="445" y2="95" stroke="#D07030" stroke-width="1.2"/>
+  <line x1="435" y1="277" x2="445" y2="277" stroke="#D07030" stroke-width="1.2"/>
+  <text x="455" y="178" font-size="9" fill="#C06020" font-weight="bold">1.5–</text>
+  <text x="455" y="192" font-size="9" fill="#C06020" font-weight="bold">1.8×</text>
+  <rect x="15" y="358" width="450" height="50" rx="10" fill="#FFF0E0" opacity="0.85"/>
+  <text x="240" y="375" font-size="9" text-anchor="middle" fill="#8A3A10" font-weight="bold">一爆聲清脆分散 = 豆子品質均一 · 悶響混雜 = 大小豆混批或乾燥不均</text>
+  <text x="240" y="391" font-size="8.5" text-anchor="middle" fill="#9A4818">一爆第一聲 = DTR 計時起點 · 下豆時機：City（一爆初）→ Full City（一爆末）</text>
+  <text x="240" y="407" font-size="8" text-anchor="middle" fill="#A05020">一爆前微降火力，讓豆子平緩進入爆裂，避免 ROR 在一爆時急衝焦化</text>
+</svg>`;
+
+            const ROAST_SVG_SECOND_CRACK = `<svg viewBox="0 0 480 420" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="sc-bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fff5f0"/><stop offset="100%" stop-color="#f0ddd0"/></linearGradient>
+    <radialGradient id="sc-oil1" cx="38%" cy="32%" r="60%"><stop offset="0%" stop-color="#5A2C10" stop-opacity="0.65"/><stop offset="100%" stop-color="#2A1008" stop-opacity="0"/></radialGradient>
+    <radialGradient id="sc-oil2" cx="42%" cy="35%" r="55%"><stop offset="0%" stop-color="#4A2010" stop-opacity="0.6"/><stop offset="100%" stop-color="#200804" stop-opacity="0"/></radialGradient>
+  </defs>
+  <rect width="480" height="420" rx="16" fill="url(#sc-bg)"/>
+  <text x="240" y="28" font-size="14" text-anchor="middle" fill="#3A1800" font-weight="900">二爆：細胞壁崩解，油脂浮現</text>
+  <text x="240" y="46" font-size="10" text-anchor="middle" fill="#6B3010" font-style="italic">225–230°C · 油脂（Cafestol / Kahweol）移至豆表，消光轉油亮</text>
+  <ellipse cx="125" cy="190" rx="58" ry="85" fill="#3A1A08"/>
+  <path d="M125 105 Q114 190 125 275" stroke="#2A1006" stroke-width="3" fill="none"/>
+  <text x="125" y="295" font-size="11" text-anchor="middle" fill="#3A1808" font-weight="bold">二爆前 / Vienna</text>
+  <text x="125" y="313" font-size="10" text-anchor="middle" fill="#5A2A10">深棕色</text>
+  <text x="125" y="330" font-size="9" text-anchor="middle" fill="#555">表面消光（無光澤）</text>
+  <text x="125" y="346" font-size="9" text-anchor="middle" fill="#666">油脂尚在豆芯內部</text>
+  <text x="240" y="192" font-size="38" text-anchor="middle" fill="#8A3010">→</text>
+  <text x="240" y="215" font-size="9" text-anchor="middle" fill="#7A3010">225–230°C</text>
+  <text x="240" y="229" font-size="8.5" text-anchor="middle" fill="#7A3010">細胞壁崩解</text>
+  <text x="240" y="243" font-size="8.5" text-anchor="middle" fill="#7A3010">油脂移出</text>
+  <ellipse cx="370" cy="186" rx="60" ry="88" fill="#2A1206"/>
+  <ellipse cx="348" cy="158" rx="19" ry="23" fill="url(#sc-oil1)"/>
+  <ellipse cx="376" cy="173" rx="13" ry="17" fill="#4A2010" opacity="0.52"/>
+  <ellipse cx="389" cy="197" rx="11" ry="14" fill="url(#sc-oil2)"/>
+  <ellipse cx="358" cy="213" rx="9" ry="11" fill="#3A1808" opacity="0.45"/>
+  <ellipse cx="379" cy="228" rx="7" ry="9" fill="#3A1808" opacity="0.4"/>
+  <line x1="428" y1="150" x2="398" y2="162" stroke="#D06020" stroke-width="1.3"/>
+  <circle cx="398" cy="162" r="3" fill="#D06020"/>
+  <text x="445" y="146" font-size="8.5" fill="#8A3A10" font-weight="bold">油脂</text>
+  <text x="445" y="158" font-size="8" fill="#8A3A10">外滲</text>
+  <path d="M370 98 Q358 186 370 274" stroke="#1A0A04" stroke-width="3" fill="none"/>
+  <text x="370" y="293" font-size="11" text-anchor="middle" fill="#2A1206" font-weight="bold">二爆中 / French</text>
+  <text x="370" y="311" font-size="10" text-anchor="middle" fill="#702010">深棕 → 近黑</text>
+  <text x="370" y="328" font-size="9" text-anchor="middle" fill="#444">豆表油亮（油膜覆蓋）</text>
+  <text x="370" y="344" font-size="9" text-anchor="middle" fill="#555">消光 → 光澤感明顯</text>
+  <rect x="15" y="360" width="450" height="50" rx="10" fill="#FFF0E8" opacity="0.87"/>
+  <text x="240" y="378" font-size="9" text-anchor="middle" fill="#6A2808" font-weight="bold">判斷出油程度：無光澤=Full City前 · 微油=Vienna · 明顯油膜=French · 全面出油=Italian</text>
+  <text x="240" y="393" font-size="8.5" text-anchor="middle" fill="#7A3010">二爆聲連續細碎如撕紙，比一爆更密集短促 — 二爆後每多 10 秒風險急升</text>
+  <text x="240" y="408" font-size="8" text-anchor="middle" fill="#8A3818">深焙出油豆：氧化速度快，賞味期約 2 週（遠短於淺焙的 4–6 週）</text>
+</svg>`;
+
+            const ROAST_SVG_BEAN_VISUAL = `<svg viewBox="0 0 480 420" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bv-bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fffaf2"/><stop offset="100%" stop-color="#f5ede0"/></linearGradient>
+    <linearGradient id="bv-bar" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#6B9A32"/>
+      <stop offset="20%" stop-color="#C4852A"/>
+      <stop offset="42%" stop-color="#9A4E1E"/>
+      <stop offset="58%" stop-color="#7A3814"/>
+      <stop offset="76%" stop-color="#3A1808"/>
+      <stop offset="100%" stop-color="#120402"/>
+    </linearGradient>
+  </defs>
+  <rect width="480" height="420" rx="16" fill="url(#bv-bg)"/>
+  <text x="240" y="20" font-size="14" text-anchor="middle" fill="#5C2F00" font-weight="900">咖啡豆烘焙全程外觀演進</text>
+  <text x="240" y="36" font-size="9.5" text-anchor="middle" fill="#8B5020" font-style="italic">顏色 · 紋理 · 體積 · 銀皮 · 香氣完整對照</text>
+  <ellipse cx="34" cy="108" rx="20" ry="32" fill="#6B9A32"/>
+  <path d="M34 76 Q28 108 34 140" stroke="#4A7020" stroke-width="2" fill="none"/>
+  <ellipse cx="34" cy="108" rx="20" ry="32" fill="none" stroke="#C8E888" stroke-width="2" opacity="0.5"/>
+  <text x="34" y="153" font-size="8" text-anchor="middle" fill="#3A6018" font-weight="bold">生豆</text>
+  <text x="34" y="165" font-size="7" text-anchor="middle" fill="#6B9A32">草綠</text>
+  <text x="34" y="176" font-size="6.5" text-anchor="middle" fill="#777">硬·銀皮附</text>
+  <ellipse cx="103" cy="108" rx="20" ry="32" fill="#A09828"/>
+  <path d="M103 76 Q97 108 103 140" stroke="#7A7820" stroke-width="2" fill="none"/>
+  <text x="103" y="153" font-size="8" text-anchor="middle" fill="#6A6015" font-weight="bold">乾燥中</text>
+  <text x="103" y="165" font-size="7" text-anchor="middle" fill="#A09828">黃綠色</text>
+  <text x="103" y="176" font-size="6.5" text-anchor="middle" fill="#777">銀皮鬆動</text>
+  <ellipse cx="171" cy="108" rx="20" ry="32" fill="#C4852A"/>
+  <path d="M171 76 Q165 108 171 140" stroke="#A06518" stroke-width="2" fill="none"/>
+  <line x1="185" y1="88" x2="197" y2="80" stroke="#E8D880" stroke-width="1.2"/><line x1="187" y1="104" x2="201" y2="99" stroke="#E8D880" stroke-width="1"/><line x1="186" y1="120" x2="200" y2="118" stroke="#E8D880" stroke-width="0.9"/>
+  <circle cx="198" cy="78" r="2" fill="#E0C860" opacity="0.9"/><circle cx="203" cy="97" r="1.8" fill="#E0C860" opacity="0.8"/><circle cx="201" cy="117" r="1.5" fill="#E0C860" opacity="0.7"/>
+  <text x="171" y="153" font-size="8" text-anchor="middle" fill="#7A4810" font-weight="bold">梅納啟</text>
+  <text x="171" y="165" font-size="7" text-anchor="middle" fill="#C4852A">金黃色</text>
+  <text x="171" y="176" font-size="6.5" text-anchor="middle" fill="#777">銀皮脫落↗</text>
+  <ellipse cx="240" cy="108" rx="20" ry="32" fill="#9A4E1E"/>
+  <path d="M228 96 C232 99 235 97 240 100 C245 103 246 101 252 102" stroke="#D07840" stroke-width="0.9" fill="none" opacity="0.88"/>
+  <path d="M227 110 C231 113 235 111 240 113 C245 115 247 113 252 114" stroke="#D07840" stroke-width="0.9" fill="none" opacity="0.88"/>
+  <path d="M228 123 C232 120 235 122 240 120 C245 118 248 120 252 119" stroke="#D07840" stroke-width="0.9" fill="none" opacity="0.8"/>
+  <path d="M240 76 Q234 108 240 140" stroke="#7A3810" stroke-width="2" fill="none"/>
+  <text x="240" y="153" font-size="8" text-anchor="middle" fill="#6A3410" font-weight="bold">大理石紋</text>
+  <text x="240" y="165" font-size="7" text-anchor="middle" fill="#9A4E1E">淺棕褐</text>
+  <text x="240" y="176" font-size="6.5" text-anchor="middle" fill="#777">皺紋出現</text>
+  <ellipse cx="308" cy="106" rx="24" ry="37" fill="#7A3814"/>
+  <path d="M299 91 C303 97 306 95 309 101" stroke="#D07030" stroke-width="1.4" fill="none"/>
+  <path d="M309 101 Q308 107 310 112" stroke="#C06020" stroke-width="1.2" fill="none"/>
+  <path d="M308 69 Q301 106 308 143" stroke="#5A2C10" stroke-width="2" fill="none"/>
+  <text x="308" y="155" font-size="8" text-anchor="middle" fill="#5A2C10" font-weight="bold">一爆</text>
+  <text x="308" y="167" font-size="7" text-anchor="middle" fill="#7A3814">中棕色</text>
+  <text x="308" y="178" font-size="6.5" text-anchor="middle" fill="#777">膨脹+50~80%</text>
+  <ellipse cx="377" cy="106" rx="24" ry="37" fill="#3A1808"/>
+  <ellipse cx="369" cy="94" rx="7" ry="9" fill="#6A2E18" opacity="0.62"/>
+  <ellipse cx="382" cy="104" rx="5" ry="6" fill="#4A2010" opacity="0.5"/>
+  <path d="M377 69 Q370 106 377 143" stroke="#2A1206" stroke-width="2" fill="none"/>
+  <text x="377" y="155" font-size="8" text-anchor="middle" fill="#3A1808" font-weight="bold">二爆</text>
+  <text x="377" y="167" font-size="7" text-anchor="middle" fill="#703010">深棕近黑</text>
+  <text x="377" y="178" font-size="6.5" text-anchor="middle" fill="#777">油脂外滲</text>
+  <ellipse cx="446" cy="106" rx="24" ry="37" fill="#120402"/>
+  <ellipse cx="437" cy="93" rx="8" ry="10" fill="#3A1208" opacity="0.72"/>
+  <ellipse cx="453" cy="101" rx="5" ry="7" fill="#2A0E06" opacity="0.58"/>
+  <ellipse cx="443" cy="117" rx="3" ry="5" fill="#280C04" opacity="0.5"/>
+  <path d="M446 69 Q438 106 446 143" stroke="#0A0200" stroke-width="2" fill="none"/>
+  <text x="446" y="155" font-size="8" text-anchor="middle" fill="#2A1008" font-weight="bold">深焙</text>
+  <text x="446" y="167" font-size="7" text-anchor="middle" fill="#602010">近黑油亮</text>
+  <text x="446" y="178" font-size="6.5" text-anchor="middle" fill="#777">全面出油</text>
+  <line x1="12" y1="190" x2="464" y2="190" stroke="#D0884A" stroke-width="1.2"/>
+  <polygon points="464,187 473,190 464,193" fill="#D0884A"/>
+  <text x="7" y="186" font-size="6.5" fill="#C07820" font-weight="bold">烘</text>
+  <text x="7" y="196" font-size="6.5" fill="#C07820" font-weight="bold">焙</text>
+  <rect x="18" y="202" width="444" height="9" rx="4.5" fill="url(#bv-bar)"/>
+  <text x="240" y="224" font-size="7" text-anchor="middle" fill="#7A4010">草綠 ── 黃綠 ── 金黃 ── 淺棕 ── 中棕 ── 深棕 ── 近黑</text>
+  <text x="8" y="241" font-size="6.5" fill="#8A5010" font-weight="bold">溫度</text>
+  <text x="30" y="241" font-size="6.5" fill="#8A5018">TP↑</text>
+  <text x="90" y="241" font-size="6.5" fill="#8A5018">~120°C</text>
+  <text x="158" y="241" font-size="6.5" fill="#8A5018">~150°C</text>
+  <text x="224" y="241" font-size="6.5" fill="#8A5018">~175°C</text>
+  <text x="292" y="241" font-size="6.5" fill="#8A5018">200°C+</text>
+  <text x="360" y="241" font-size="6.5" fill="#8A5018">225°C+</text>
+  <text x="426" y="241" font-size="6.5" fill="#8A5018">&gt;230°C</text>
+  <text x="8" y="257" font-size="6.5" fill="#7A5028" font-weight="bold">香氣</text>
+  <text x="18" y="268" font-size="6" fill="#8A8030">草香</text>
+  <text x="78" y="268" font-size="6" fill="#9A7030">穀物香</text>
+  <text x="148" y="268" font-size="6" fill="#A86028">烤麵包</text>
+  <text x="214" y="268" font-size="6" fill="#9A5820">焦糖甜香</text>
+  <text x="284" y="268" font-size="6" fill="#804020">甜苦交融</text>
+  <text x="352" y="268" font-size="6" fill="#603018">濃苦香</text>
+  <text x="418" y="268" font-size="6" fill="#401808">煙燻苦</text>
+  <text x="8" y="283" font-size="6.5" fill="#6A4030" font-weight="bold">外觀</text>
+  <text x="18" y="294" font-size="6" fill="#6A6040">硬光滑</text>
+  <text x="78" y="294" font-size="6" fill="#7A6030">銀皮鬆</text>
+  <text x="144" y="294" font-size="6" fill="#8A5020">銀皮飛</text>
+  <text x="208" y="294" font-size="6" fill="#8A4818">大理石紋</text>
+  <text x="281" y="294" font-size="6" fill="#6A3818">爆裂膨脹</text>
+  <text x="350" y="294" font-size="6" fill="#501808">油膜出現</text>
+  <text x="416" y="294" font-size="6" fill="#380C04">全面出油</text>
+  <rect x="15" y="305" width="450" height="104" rx="10" fill="#FFF0E0" opacity="0.82"/>
+  <text x="240" y="322" font-size="9" text-anchor="middle" fill="#7A3810" font-weight="bold">三重驗證：探針溫度 × 豆色外觀 × 香氣</text>
+  <text x="240" y="337" font-size="8.5" text-anchor="middle" fill="#8B4820">銀皮（Chaff）≈ 145–155°C 大量脫落，觀察豆窗可見白色薄膜飄散</text>
+  <text x="240" y="352" font-size="8.5" text-anchor="middle" fill="#9A5020">一爆後體積膨脹 +50–80%，豆子變大變輕，密度顯著下降</text>
+  <text x="240" y="367" font-size="8.5" text-anchor="middle" fill="#9A5020">二爆後油脂移至豆表：可見油亮光澤，賞味期快速縮短至約 2 週</text>
+  <text x="240" y="382" font-size="8" text-anchor="middle" fill="#A05828">Agtron 色號：淺焙 &gt;70 · 中焙 50–70 · 深焙 &lt;50（研磨後測量）</text>
+  <text x="240" y="397" font-size="8" text-anchor="middle" fill="#A55820">RD 值 = 豆表 Agtron − 研磨 Agtron · 數值越小 = 烘焙越均勻</text>
+</svg>`;
+
             // 烘豆流程知識庫（全段概念 × 多欄位，供學習卡出題）
             const ROASTING_KB = [
               { key: 'green_selection',
@@ -15040,27 +15356,33 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
               },
               { key: 'drying_phase',
                 name: '乾燥段（Drying Phase）', tagline: '入豆到約 150°C，豆芯水分大量蒸發的準備階段', emoji: '💧',
+                heroSvg: ROAST_SVG_DRYING,
                 subtitle: '從入豆到約 150°C 是乾燥段，大量能量用於蒸發豆內水分而非升溫，豆色從草綠轉黃綠再到金黃，水分從 10–12% 降至 1–2%。此階段決定後段烘焙的均勻度。',
                 specs: [
                   { k: '溫度範圍', v: '入豆（約 TP 後）→ 約 150°C' },
-                  { k: '豆色變化', v: '草綠 → 黃綠 → 金黃（麥桿色）' },
+                  { k: '豆色演進', v: '草綠（入豆）→ 黃綠（~120°C）→ 金黃麥桿色（~145°C，梅納前夕）' },
+                  { k: '銀皮（Chaff）狀態', v: '入豆：銀皮緊附 → 乾燥中：鬆動 → 乾燥末（~145°C）：大量脫落飄散，豆窗可見白色薄膜' },
+                  { k: '豆表質地變化', v: 'T0（豆表軟化）→ T1（全豆橡膠態）：豆表由玻璃態硬實轉為橡膠態微軟，肉眼難辨但可從顏色均勻度判斷' },
                   { k: '水分變化', v: '10–12% → 約 1–2%' },
-                  { k: '氣味特徵', v: '草香 → 穀物香 → 微甜烤麵包香（進入梅納前）' },
+                  { k: '氣味演進', v: '青草香（入鍋）→ 穀物/乾草香（~120°C）→ 烤麵包微甜香（~145°C，梅納前）' },
                   { k: '典型占比', v: '約佔總烘焙時間的 35–50%' }
                 ],
                 tips: [
+                  { icon: '🍃', title: '銀皮（Chaff）飄出 = 乾燥末段信號', desc: '銀皮（Silver Skin）是生豆外層薄膜。乾燥段末期豆體因水分散逸而膨脹，銀皮與豆體分離，在豆窗可見白色薄膜飄飛（像雪花）。銀皮大量飛出代表乾燥段接近尾聲，梅納反應即將進入加速期。若幾乎無銀皮，可能是生豆已脫銀皮處理過（如部分巴西豆）。' },
                   { icon: '⏳', title: '乾燥段不能省略', desc: '乾燥段過短（升溫太快跳過）→ 豆芯水分未充分蒸發，後段容易出現烘焙不均與澀感。' },
                   { icon: '📖', title: 'Scott Rao：乾燥段決定後段品質', desc: 'Scott Rao 指出乾燥段若 ROR 下降太快趨近於 0，就會在豆芯水分尚未充分散逸時進入梅納段，導致發展不均。他建議乾燥段維持穩定但適度的熱能輸入，讓 ROR 平緩下降而非驟降。' },
-                  { icon: '👁️', title: '顏色判斷乾燥進度', desc: '豆色從草綠轉黃是最直觀的觀察方式，顏色均勻代表每顆豆子受熱一致。' },
+                  { icon: '👁️', title: '三步顏色判斷法', desc: '乾燥段有三個視覺里程碑可觀察：①草綠轉黃綠（回溫後不久）→ 代表豆表開始升溫反應；②黃綠轉金黃（~130°C）→ 乾燥段中段正常進行；③金黃轉麥桿色同時銀皮飄出（~145°C）→ 乾燥段末段，準備進入梅納。三段顏色均勻過渡，代表受熱一致，是烘焙品質的早期視覺指標。' },
                   { icon: '💨', title: '風門配合', desc: '乾燥段風門半開，協助水蒸氣排出，避免水氣在鍋爐內循環重新吸附至豆表。' },
                   { icon: '🌡️', title: '全息烘焙：T0 與 T1 玻璃轉化點', desc: '《全息烘焙法》以「玻璃轉化溫度（Tg）」描述乾燥段兩個觀察節點：T0 = 豆表開始軟化，外層由玻璃態轉為橡膠態；T1 = 整顆豆完全進入橡膠態，豆芯與豆表均勻軟化。這兩個節點不能從探針數字讀出，需觀察豆子顏色與質地變化判斷。含水率越高的豆子 Tg 越低，T0/T1 溫度點越早出現。' }
                 ]
               },
               { key: 'maillard',
                 name: '梅納反應（Maillard Reaction）', tagline: '胺基酸與還原糖在高溫下褐變，生成數百種風味前驅物', emoji: '🧪',
+                heroSvg: ROAST_SVG_MAILLARD,
                 subtitle: '梅納反應是咖啡風味複雜度的核心來源，約在 140–165°C 啟動，胺基酸與還原糖非酵素性褐變，生成數百種揮發性芳香物質，貢獻堅果、焦糖、麵包等調性。',
                 specs: [
                   { k: '啟動溫度', v: '約 140–165°C' },
+                  { k: '外觀視覺信號', v: '豆色由金黃轉淺棕；表面出現細微色差與不均勻褐化；進入梅納段後銀皮已大量脫落' },
                   { k: '反應物', v: '胺基酸 + 還原糖（葡萄糖、果糖）' },
                   { k: '主要產物', v: '揮發性芳香物（>850 種化合物）、褐色色素（類黑素）' },
                   { k: '調性貢獻', v: '堅果 / 焦糖 / 麵包 / 巧克力調' },
@@ -15076,9 +15398,11 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
               },
               { key: 'caramelization',
                 name: '焦糖化反應（Caramelization）', tagline: '糖類裂解帶來甜感、焦糖調與豆色加深', emoji: '🍬',
+                heroSvg: ROAST_SVG_CARAMELIZATION,
                 subtitle: '焦糖化是糖類在加熱後自行裂解重組的反應，約 160–180°C 啟動，生成焦糖醛等芳香物，賦予咖啡焦糖、奶油、楓糖調性，同時加深豆色。不需胺基酸參與。',
                 specs: [
                   { k: '啟動溫度', v: '約 160–180°C（蔗糖在約 160°C 開始裂解）' },
+                  { k: '大理石紋（T2）視覺信號', v: '約 175°C 豆表出現深淺交錯的流紋（如大理石花紋）= 蔗糖焦糖化啟動，甜香物質大量生成的起點' },
                   { k: '反應物', v: '蔗糖、葡萄糖、果糖等糖類' },
                   { k: '主要產物', v: '焦糖醛 / 雙乙醯（奶油香）/ 呋喃類化合物' },
                   { k: '調性貢獻', v: '焦糖 / 太妃糖 / 奶油 / 楓糖調' },
@@ -15094,12 +15418,15 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
               },
               { key: 'first_crack',
                 name: '一爆（First Crack / 1C）', tagline: '豆內水蒸氣與 CO₂ 破壁爆裂，中焙的起點信號', emoji: '💥',
+                heroSvg: ROAST_SVG_FIRST_CRACK,
                 subtitle: '約 195–205°C 時，豆內累積的水蒸氣與 CO₂ 超過細胞壁承受極限，發出清脆爆裂聲（類似爆米花）。一爆開始是中淺焙的起點，體積膨脹約 50–80%。',
                 specs: [
                   { k: '溫度範圍', v: '約 195–205°C（豆種密度不同差異大）' },
                   { k: '成因', v: '豆內水蒸氣 + CO₂ 壓力超過細胞壁強度而爆裂' },
-                  { k: '聲音特徵', v: '清脆短促爆裂聲，類似爆米花' },
-                  { k: '體積變化', v: '膨脹約 50–80%，密度下降' },
+                  { k: '聲音特徵', v: '清脆短促爆裂聲，類似爆米花；一爆前豆窗可先看到豆子微微顫動' },
+                  { k: '豆色變化', v: '一爆前：淺棕平滑 → 一爆後：中棕，豆表出現細小裂紋與溝槽（CO₂ 衝破豆表的痕跡）' },
+                  { k: '體積變化', v: '膨脹約 50–80%（烘焙全程最大的物理尺寸變化，有時肉眼明顯可見豆子變大一圈）' },
+                  { k: '密度變化', v: '膨脹後密度顯著下降，抓一把豆子重量感明顯變輕' },
                   { k: '烘焙進度對應', v: '一爆開始 = City；一爆密集 = City+；一爆結束 = Full City' }
                 ],
                 tips: [
@@ -15146,12 +15473,14 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
               },
               { key: 'second_crack',
                 name: '二爆（Second Crack / 2C）', tagline: '細胞壁徹底崩解、油脂外滲，深焙的分水嶺', emoji: '💣',
+                heroSvg: ROAST_SVG_SECOND_CRACK,
                 subtitle: '約 225–230°C 時發生二爆，細胞壁因高溫徹底崩解，CO₂ 大量釋出，聲音比一爆更連續密集（似撕紙）。油脂開始移至豆表，豆色轉深棕至近黑。',
                 specs: [
                   { k: '溫度範圍', v: '約 225–230°C' },
                   { k: '聲音特徵', v: '連續細碎聲（似撕紙），比一爆更密集短促' },
                   { k: '成因', v: '細胞壁徹底崩解，CO₂ 與水蒸氣大量釋出' },
-                  { k: '油脂表現', v: '二爆中段後豆表開始出油（Cafestol / Kahweol 外滲）' },
+                  { k: '豆色變化', v: '二爆前：深棕消光 → 二爆中：深棕轉近黑 → 二爆後：近黑油亮' },
+                  { k: '油脂外滲視覺', v: '二爆中段後豆表開始出現油亮光澤（Cafestol / Kahweol 移至豆表）；無光澤=Vienna前；微油=Vienna；明顯油膜=French；全面閃亮=Italian' },
                   { k: '烘焙進度對應', v: '二爆開始 = Vienna；二爆密集 = French；二爆後 = Italian / Espresso 深焙' }
                 ],
                 tips: [
@@ -15207,6 +15536,32 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                   { icon: '🚿', title: '禁止加水冷卻', desc: '加水霧冷卻會讓豆子含水率升高，縮短賞味期並影響研磨均勻度，是嚴重的品質缺陷。' }
                 ]
               },
+              { key: 'bean_visual',
+                name: '豆色視覺演進', tagline: '從草綠到近黑：完整烘焙外觀七階段全記錄', emoji: '🎨',
+                heroSvg: ROAST_SVG_BEAN_VISUAL,
+                subtitle: '咖啡豆在烘焙過程中歷經七個視覺階段：草綠→黃綠→金黃→淺棕→中棕→深棕→近黑。每個階段伴隨特定的紋理變化、銀皮狀態、體積膨脹與香氣轉換，是判斷烘焙進度最直觀的感官工具，與探針數字互為補充。',
+                specs: [
+                  { k: '① 生豆（入鍋前）', v: '草綠色·硬實·銀皮緊附·香：青草/植物·含水率 10–12%' },
+                  { k: '② 乾燥前段（TP→~120°C）', v: '黃綠色·銀皮開始鬆動·香：穀物/乾草' },
+                  { k: '③ 乾燥末段（~145°C）', v: '金黃麥桿色·銀皮大量脫落飄飛·香：烤麵包/微甜·梅納即將啟動' },
+                  { k: '④ 梅納/大理石紋（~175°C）', v: '淺棕褐色·豆表出現深淺交錯大理石紋（T2）·香：焦糖甜香啟動' },
+                  { k: '⑤ 一爆（195–205°C）', v: '中棕色·爆裂聲·體積膨脹 50–80%·豆表出現裂紋/溝槽·密度下降' },
+                  { k: '⑥ 二爆（225–230°C）', v: '深棕近黑·細胞壁崩解·油脂（Cafestol/Kahweol）移至豆表·油亮光澤出現' },
+                  { k: '⑦ 深焙（>230°C）', v: '近黑色·全面出油·強烈油亮閃光·煙燻苦香·賞味期縮短至約 2 週' },
+                  { k: '銀皮脫落時機', v: '約 145–155°C 梅納前大量飄落，觀察豆窗可見白色薄膜飛散（如雪花）' },
+                  { k: '一爆體積膨脹量', v: '+50–80%；烘後失重 15–20%（水蒸氣+CO₂+揮發物，非純失水）' },
+                  { k: 'Agtron 色號對照', v: '淺焙 >70 / 中焙 50–70 / 深焙 <50（研磨粉測量，非豆表）；RD 值越小烘焙越均勻' }
+                ],
+                tips: [
+                  { icon: '👁️', title: '三重驗證法：溫度 × 外觀 × 香氣', desc: '不要只看探針數字。完整的烘焙判斷需要：①探針溫度（告訴你「何時」）+ ②豆色外觀（告訴你「現況」）+ ③香氣轉換（告訴你「方向」）三重確認。當三者一致時，判斷最準確；若有衝突（如數字到了但顏色不對），以外觀和香氣為主要依據。' },
+                  { icon: '🍃', title: '銀皮（Chaff）觀察指南', desc: '銀皮（Silver Skin）是生豆外層薄膜。烘焙乾燥段末期豆體膨脹，銀皮脫離，在豆窗飄出如白色雪花（約 145–155°C）。這是乾燥段接近尾聲的視覺信號。部分豆種或產區銀皮量少（如部分巴西豆），不能以銀皮量多寡評判品質。' },
+                  { icon: '📐', title: '一爆體積膨脹：感官判斷法', desc: '一爆完成後豆子體積膨脹約 50–80%，是烘焙全程最大的物理尺寸變化。傳統無溫度計的烘焙中，觀察豆子「脹大一圈」是判斷一爆完成的依據。有經驗的師傅甚至可以從鍋中翻動聲（從沉悶轉輕盈）來判斷。膨脹不均表示豆子品質不一致。' },
+                  { icon: '🫙', title: '大理石紋（T2）識別技巧', desc: '焦糖化啟動時豆表不同部位褐變速率略有差異，形成深淺交錯流紋，如大理石花紋，這是 T2 的視覺信號。觀察方法：用取樣棒取一顆豆，在自然光下看豆表是否出現非均勻的棕色流紋，而非均勻一色。T2 後焦糖化主導，甜香物質大量生成。' },
+                  { icon: '💧', title: '油光判斷深焙程度四級', desc: '二爆後豆表油脂（Cafestol、Kahweol）開始浮現。判斷標準：①無光澤（消光）= Full City 前；②微光（若隱若現）= Vienna；③明顯油膜 = French；④全面出油閃亮 = Italian。油脂一旦出現接觸空氣即開始氧化，深焙豆建議 2 週內用完。' },
+                  { icon: '🎨', title: 'Agtron 色號與 RD 值', desc: 'Agtron 是標準化豆色測量（數值越高越淺）。重要：要研磨後測咖啡粉（反映豆芯），比測豆表顏色更準確。RD 值 = 豆表 Agtron − 研磨 Agtron：RD 越小（<5）= 烘焙越均勻；RD 過大（>10）= 外深內淺，豆芯發展不足，即使豆表顏色看起來正確，杯測也可能平板。' },
+                  { icon: '👃', title: '香氣演進時間軸（烘焙師的感官時鐘）', desc: '①草香/植物香（生豆入鍋）→ ②穀物/乾草香（乾燥段）→ ③烤麵包香（乾燥末）→ ④焦糖甜香（焦糖化段）→ ⑤甜苦交融（一爆後發展段）→ ⑥濃郁苦香（二爆段）→ ⑦煙燻苦香（深焙）。每次香氣轉換都是烘焙進度的天然感官時鐘，與探針溫度交叉驗證最有效。' }
+                ]
+              },
               { key: 'roast_defects',
                 name: '烘焙缺陷（Roast Defects）', tagline: '五種常見烘焙失誤：從 Baking 到 Underdevelopment', emoji: '⚠️',
                 subtitle: 'Scott Rao 在《The Coffee Roaster\'s Companion》中系統分類烘焙缺陷。理解每種缺陷的成因與風味特徵，是調整烘焙曲線的基礎診斷能力。',
@@ -15252,7 +15607,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                         tagline: item.tagline,
                         emoji: item.emoji,
                         status: 'ready',
-                        heroSvg: '<svg viewBox="0 0 260 180" xmlns="http://www.w3.org/2000/svg"><rect width="260" height="180" rx="16" fill="#fff3e0"/><text x="130" y="122" font-size="100" text-anchor="middle">' + item.emoji + '</text></svg>',
+                        heroSvg: item.heroSvg || '<svg viewBox="0 0 260 180" xmlns="http://www.w3.org/2000/svg"><rect width="260" height="180" rx="16" fill="#fff3e0"/><text x="130" y="122" font-size="100" text-anchor="middle">' + item.emoji + '</text></svg>',
                         subtitle: item.subtitle || '',
                         chips: [],
                         specs: item.specs || [],
