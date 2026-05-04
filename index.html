@@ -3687,7 +3687,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             const BREW_SIPHON_TEMP_MAP = { cinnamon:95, city:93, city_plus:92, full_city:91, full_city_plus:89, vienna:87, french:85 };
             const BREW_SIPHON_TIME_MAP = { cinnamon:70, city:65, city_plus:60, full_city:55, full_city_plus:50, vienna:45, french:40 };
             const BREW_COLD_H_MAP = { cinnamon:22, city:20, city_plus:18, full_city:16, full_city_plus:14, vienna:12, french:12 };
-            const BREW_GRIND_SCALE = ['極細(義式)', '細(摩卡/短縮)', '中細偏細', '中細', '中', '中粗', '粗(法壓/冷萃)'];
+            const BREW_GRIND_SCALE = ['極細(土耳其/Ibrik)', '細(義式)', '中細偏細', '中細', '中', '中粗', '粗(法壓/冷萃)'];
 
             // 手沖濾杯特性（影響流速、body、推薦手法）
             const DRIPPER_INFO = {
@@ -3981,7 +3981,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                         dose: '18g 粉 → 36-45g 液',
                         ratio: light ? '1:2.5（淺焙降澀）' : dark ? '1:1.8（深焙防過萃）' : '1:2 平衡',
                         temp: light ? '93-95°C（淺焙需高溫打開密度）' : dark ? '88-90°C（深焙低溫保甜）' : '91-93°C',
-                        grind: pickGrind(0) + '（下秒預浸 5-8s 看水流狀態微調）',
+                        grind: pickGrind(1) + '（下秒預浸 5-8s 看水流狀態微調）',
                         time: light ? '28-35s（可接受長到 40s，取得甜感）' : dark ? '22-26s（超過 28s 易苦化）' : '25-30s',
                         schedule: [
                             '預浸 5-8s（PID 機能設） → 主萃取',
@@ -4022,7 +4022,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                         dose: '填滿粉槽但不壓實（約 18-20g for 3 cup moka）',
                         ratio: '水加到洩壓閥下緣、粉滿即可',
                         temp: `熱水 ${mokaStart}°C 啟動（焙度越深越需降低起始溫以防焦苦油）+ ${dark ? '中小火' : light ? '中火' : '中小火'}`,
-                        grind: pickGrind(1) + '（比義式粗、比手沖細）',
+                        grind: pickGrind(2) + '（比義式粗、比手沖細）',
                         time: light ? '總時 4-5 分（中火提溫，聽到穩定噗噗聲 → 離火）' : '聽到穩定「噗噗」聲 → 離火、用濕布冷卻底壺',
                         schedule: [
                             '熱水啟動法（Hoffmann 建議）：',
@@ -4609,7 +4609,6 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 else if (grindStr.includes('中粗')) levelId = 'medium_coarse';
                 else if (grindStr.includes('中細偏細')) levelId = 'medium_fine';
                 else if (grindStr.includes('中細')) levelId = 'medium_fine';
-                else if (grindStr.includes('細(摩卡') || grindStr.includes('細 (摩卡')) levelId = 'fine';
                 else if (grindStr.includes('細')) levelId = 'fine';
                 else if (grindStr.includes('中')) levelId = 'medium';
                 const grindAdjs = (params.adjustments || []).filter(a => a.axis === 'grind');
