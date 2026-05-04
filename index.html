@@ -3721,7 +3721,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 hoffmann_ult: { name:'Hoffmann Ultimate V60', pulses:2, agitation:'med', tempAdj:0,  ratioAdj:0,  grindAdj:0,  note:'悶蒸後 60% 水兩大段+攪拌旋轉+小 Spin，乾淨度高。' },
                 scott_rao:    { name:'Scott Rao 連續注水', pulses:1, agitation:'low', tempAdj:0,  ratioAdj:0,  grindAdj:+1, note:'不斷流維持水位穩定、濾床均勻，技術門檻較高。' },
                 tetsu_ice:    { name:'冰手沖 (Iced)',    pulses:3, agitation:'med', tempAdj:+2, ratioAdj:-2, grindAdj:-1, note:'濾杯下方放總水量 40% 冰塊、熱萃快速急冷，保留酸鮮香氣。' },
-                strong_conc:  { name:'濃縮式 1:10',      pulses:2, agitation:'low', tempAdj:-1, ratioAdj:-3, grindAdj:0,  note:'刻意降水量放大濃度，適合做冰美式底或強 body 杯感。' }
+                strong_conc:  { name:'濃縮式 1:10',      pulses:2, agitation:'low', tempAdj:-1, ratioAdj:0,  grindAdj:0,  note:'刻意降水量放大濃度，適合做冰美式底或強 body 杯感。' }
             };
 
             function _br_create(cfg) {
@@ -3824,8 +3824,11 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 const dose = methodKey === 'tetsu_ice'
                     ? `${P.doseG}g 粉 → 熱水 ${water}g + 冰塊 ${Math.round(baseWater * P.iceMul)}g`
                     : methodKey === 'strong_conc'
-                    ? `${P.doseG}g 粉 → ${water}g 水（1:10 濃縮，比一般少約 90g）`
+                    ? `${P.doseG}g 粉 → ${water}g 水（1:${(water/P.doseG).toFixed(1)} 濃縮，比一般少約 ${240-water}g）`
                     : `${P.doseG}g 粉 → ${water}g 水`;
+                const displayRatioText = methodKey === 'strong_conc'
+                    ? `1:${(water/P.doseG).toFixed(1)}（濃縮式）`
+                    : ratioText;
 
                 // 依 method 產 schedule
                 const schedule = _makePourSchedule(methodKey, dripperKey, light, dark, water, tLo, tHi);
@@ -3839,7 +3842,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                     `🎯 ${M.name}（${P.style}）：${M.note}`
                 ];
                 return {
-                    dose, ratio: ratioText,
+                    dose, ratio: displayRatioText,
                     temp: `${tLo}-${tHi}°C`,
                     grind: grindText,
                     time: `總時 ${totalMin}（${M.pulses} 段注水）`,
@@ -3955,7 +3958,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                     // ═════ 濃縮式 1:10：小水量大濃度 ═════
                     case 'strong_conc': {
                         return [
-                            `💪 ═══ 本法採 1:10 粉水比 · 總水量僅 ${water}g（比一般 240g 少 90g） ═══`,
+                            `💪 ═══ 本法採 1:${Math.round(water/15*10)/10} 粉水比 · 總水量僅 ${water}g（比一般 240g 少 ${240-water}g） ═══`,
                             `0:00 → 🔸 悶蒸：注 ${BLOOM}g × 40s（比例濃、悶蒸略長讓水充分接觸）`,
                             `0:40 → 🌊 第 1 段：注到 ${Math.round(water*0.7)}g（70% 水量）`,
                             `1:30 → 🌊 第 2 段：注到 ${water}g 停注`,
