@@ -3992,7 +3992,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                     french_press: {
                         dose: '30g 粉 → 420g 水',
                         ratio: dark ? '1:13（深焙可濃萃）' : '1:14 ~ 1:15',
-                        temp: `${lo}°C（先注 1/3 → 等 30s → 再注滿）`,
+                        temp: `${lo}-${hi}°C（先注 1/3 → 等 30s → 再注滿）`,
                         grind: pickGrind(6) + '（太細會堵濾網 + 過萃）',
                         time: '4 分鐘浸泡 → 慢壓 10 秒 → 立即倒出',
                         schedule: [
@@ -4037,7 +4037,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                         dose: '20g 粉 → 300g 水',
                         ratio: '1:15',
                         temp: `下壺煮至 ${siphonHigh}°C 上升（上壺自然落至 ${siphonHigh - 5}°C 左右）`,
-                        grind: pickGrind(4) + '（中 to 中粗）',
+                        grind: pickGrind(4) + '（深焙可偏中粗以縮短萃取）',
                         time: `上壺浸泡 ${siphonSoak} 秒（焙度越深浸泡越短避免苦化）`,
                         schedule: [
                             `1. 下壺裝水、開火煮至 ${siphonHigh}°C`,
@@ -11247,9 +11247,9 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                             ],
                             specs: [
                                 { k: '萃取原理', v: '完全浸泡 + 金屬濾網分離' },
-                                { k: '水溫', v: '92-95°C' },
+                                { k: '水溫', v: '淺焙 92-95°C / 中焙 88-92°C / 深焙 83-86°C（浸泡法低溫防苦）' },
                                 { k: '粉度', v: '粗粉（海鹽顆粒）' },
-                                { k: '粉水比', v: '1:14 ~ 1:16（標準 1:15）' },
+                                { k: '粉水比', v: '1:14 ~ 1:15（深焙可濃至 1:13）' },
                                 { k: '浸泡時間', v: '4 分鐘標準' },
                                 { k: '裝備門檻', v: '極低（壺 + 熱水）' }
                             ],
@@ -11391,8 +11391,8 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                                 { k: '萃取原理', v: '蒸氣壓推上 + 浸泡 + 真空回流' },
                                 { k: '水溫', v: '85-95°C（沸騰後降溫；淺焙→高溫 93-95°C，深焙→低溫 85-88°C）' },
                                 { k: '粉度', v: '中粉' },
-                                { k: '粉水比', v: '1:13 ~ 1:15' },
-                                { k: '浸泡時間', v: '60-90 秒' },
+                                { k: '粉水比', v: '1:15（標準）；可調到 1:13 偏濃' },
+                                { k: '浸泡時間', v: '45-70 秒（淺焙較長、深焙較短）' },
                                 { k: '熱源', v: '酒精燈 / 鹵素燈 / 卡式爐' }
                             ],
                             origin: [
@@ -11420,15 +11420,15 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                         },
                         cold_brew: {
                             name: '冷萃 (Cold Brew)',
-                            tagline: '冷水 8-24 小時慢萃，極低酸、巧克力甜感',
+                            tagline: '冷水 12-22 小時慢萃，極低酸、巧克力甜感',
                             grindLevel: 'coarse',
                             emoji: '🧊',
                             status: 'ready',
                             heroSvg: ENCY_SVG_COLDBREW,
-                            subtitle: '完全用冷水（不加熱）長時間浸泡 8-24 小時。低溫慢萃只取出咖啡的甜感、巧克力、堅果調，幾乎不出酸。是夏天的清爽神器、保存性也最高。',
+                            subtitle: '完全用冷水（不加熱）長時間浸泡 12-22 小時（淺焙需長、深焙較短）。低溫慢萃只取出咖啡的甜感、巧克力、堅果調，幾乎不出酸。是夏天的清爽神器、保存性也最高。',
                             chips: [
                                 { text: '冷水萃取', class: 'cool' },
-                                { text: '8-24 小時', class: 'warm' },
+                                { text: '12-22 小時（焙度依賴）', class: 'warm' },
                                 { text: '極低酸', class: 'green' },
                                 { text: '高甜感' },
                                 { text: '可冰箱保存 7 天', class: 'purple' },
@@ -11438,7 +11438,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                                 { k: '萃取原理', v: '冷水長時間浸泡' },
                                 { k: '水溫', v: '室溫或冰水' },
                                 { k: '粉度', v: '粗粉（比法壓略細）' },
-                                { k: '粉水比', v: '1:8（濃縮，喝時加水）' },
+                                { k: '粉水比', v: '深焙 1:8（濃縮，稀釋後飲）/ 淺中焙 1:12~1:15（即飲）' },
                                 { k: '時間', v: '淺焙 18-22h / 中焙 14-18h / 深焙 12-14h（焙度越深萃取越快）' },
                                 { k: '保存', v: '冰箱 5-7 天' }
                             ],
