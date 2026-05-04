@@ -4608,7 +4608,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 else if (grindStr.includes('粗(法壓') || grindStr.includes('粗 (法壓') || grindStr.includes('極粗')) levelId = 'coarse';
                 else if (grindStr.includes('中粗')) levelId = 'medium_coarse';
                 else if (grindStr.includes('中細偏細')) levelId = 'medium_fine';
-                else if (grindStr.includes('中細')) levelId = 'medium_fine';
+                else if (grindStr.includes('中細')) levelId = 'medium';
                 else if (grindStr.includes('細')) levelId = 'fine';
                 else if (grindStr.includes('中')) levelId = 'medium';
                 const grindAdjs = (params.adjustments || []).filter(a => a.axis === 'grind');
@@ -11195,7 +11195,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                                 { text: '93°C 水溫' },
                                 { text: '1:2 比例 (18g/36g)', class: 'green' },
                                 { text: 'Crema 招牌', class: 'purple' },
-                                { text: '極細粉' }
+                                { text: '細粉（義式）' }
                             ],
                             specs: [
                                 { k: '壓力', v: '9 bar' },
@@ -11203,6 +11203,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                                 { k: '粉量', v: '18-22g（雙份）' },
                                 { k: '萃取量', v: '36-44g（1:2 比例）' },
                                 { k: '時間', v: '25-30 秒' },
+                                { k: '粉度', v: '細粉（接近細砂糖 / 食鹽，300-500μm）' },
                                 { k: '裝備門檻', v: '高（半自動義式機 + 磨豆機 + 配件）' }
                             ],
                             origin: [
@@ -11213,7 +11214,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                                 { year: '至今', text: '從義大利吧台文化擴散到全球，是現代咖啡店與奶咖的核心。' }
                             ],
                             steps: [
-                                { title: '極細研磨 + 量粉', desc: '極細粉（接近細砂糖），18-22g 進 portafilter 雙籃。' },
+                                { title: '細粉研磨 + 量粉', desc: '細粉（義式粒徑約 300-500μm，接近細砂糖至食鹽），18-22g 進 portafilter 雙籃。' },
                                 { title: '布粉 + 壓粉', desc: '撥粉均勻、壓粉器垂直 30 lb 壓力下壓，讓粉床平整密實。' },
                                 { title: '裝上 Group head', desc: '把 portafilter 鎖上機台水嘴。' },
                                 { title: '萃取 25-30 秒', desc: '按下萃取鈕，9 bar 壓力推熱水穿過粉床。前 5-8 秒 pre-infusion + 主萃取。' },
@@ -11248,7 +11249,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                                 { k: '萃取原理', v: '完全浸泡 + 金屬濾網分離' },
                                 { k: '水溫', v: '92-95°C' },
                                 { k: '粉度', v: '粗粉（海鹽顆粒）' },
-                                { k: '粉水比', v: '1:15 ~ 1:18' },
+                                { k: '粉水比', v: '1:14 ~ 1:16（標準 1:15）' },
                                 { k: '浸泡時間', v: '4 分鐘標準' },
                                 { k: '裝備門檻', v: '極低（壺 + 熱水）' }
                             ],
@@ -11261,7 +11262,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                             ],
                             steps: [
                                 { title: '預熱壺體', desc: '注熱水暖壺、倒掉。冷的玻璃壺會讓萃取溫度下降 5-10°C。' },
-                                { title: '粗粉 + 量粉', desc: '粗粉（海鹽大小、Comandante 30+ click），25-30g 配 400-500g 水（1:16）。' },
+                                { title: '粗粉 + 量粉', desc: '粗粉（海鹽大小、Comandante 30+ click），30g 配 420-450g 水（1:14~1:15）。' },
                                 { title: '注水 + 攪拌', desc: '一次性注熱水到 80% 滿，輕攪 1-2 圈讓粉床均勻沉降。' },
                                 { title: '蓋上濾網蓋 + 計時 4 分鐘', desc: '蓋子 + 壓桿放上但不下壓，等 4 分鐘讓粉完整浸泡。' },
                                 { title: '緩慢下壓 30 秒', desc: '壓桿用 30 秒慢慢下壓到底（速度太快會擾粉、出現粉感）。倒出後別讓壺內繼續泡。' }
@@ -11309,7 +11310,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                             steps: [
                                 { title: '組裝 + 燙紙', desc: '濾紙放濾蓋、注熱水沖紙味。倒置法則濾蓋先不裝。' },
                                 { title: '中細粉 + 量粉', desc: '中細粉（比 V60 細），15-18g 配 200-250g 水（1:13-1:15）。' },
-                                { title: '注水 + 攪拌', desc: '注熱水（85-90°C 偏低）到指定刻度，輕攪 5-10 秒讓粉浸潤。' },
+                                { title: '注水 + 攪拌', desc: '注熱水（80-90°C 偏低；淺焙可低至 80°C，深焙 88-90°C）到指定刻度，輕攪 5-10 秒讓粉浸潤。' },
                                 { title: '浸泡 1-2 分鐘', desc: '蓋上活塞但不下壓，浸泡時間依配方（1 分鐘出酸、2 分鐘出甜）。' },
                                 { title: '慢推 30 秒', desc: '活塞用 30 秒慢慢下推、聽到「噗」聲表示空氣到、停。' }
                             ],
