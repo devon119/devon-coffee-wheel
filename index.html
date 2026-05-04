@@ -4124,6 +4124,15 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 if (brew === 'siphon' && ['vienna', 'french'].includes(roast)) {
                     out.push('**深焙 × 虹吸** 容易過萃苦化：縮短浸泡時間至 40-50 秒，攪拌次數減少。');
                 }
+                if (brew === 'french_press' && ['cinnamon', 'city'].includes(roast)) {
+                    out.push('**淺焙 × 法壓** 粗粉 + 浸泡容易萃取不足偏薄：建議延長浸泡至 5 分鐘、研磨略細半檔（仍要粗，別細到堵濾網），可補強甜感與 body。');
+                }
+                if (brew === 'aeropress' && ['vienna', 'french'].includes(roast)) {
+                    out.push('**深焙 × 愛樂壓** 浸泡 + 加壓容易過萃：縮短浸泡至 1 分鐘以內、水溫降到 80-82°C，推壓動作放慢（30 秒）；避免一次壓到底出現尖嘯。');
+                }
+                if (brew === 'aeropress' && roast === 'cinnamon') {
+                    out.push('**極淺焙 × 愛樂壓** 建議高水溫萃透：使用 88-90°C（而非低溫配方），倒置法浸泡 90 秒，加強攪拌讓緊密豆體充分接觸熱水；或改用 Lance Hedrick 配方（細粉 + 80°C + Spin）。');
+                }
                 return out.length ? out.map(x => '• ' + x).join('\n\n') : '• 此組合合理，維持穩定操作並微調 1-2 個參數觀察風味變化。';
             }
 
