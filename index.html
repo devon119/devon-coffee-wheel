@@ -16415,7 +16415,9 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 // 大象豆顆粒大、體積鬆散，密度略低
                 if (['pacamara', 'maragogype'].includes(ctx.varietyCode)) base -= 30;
                 // 瑰夏/SL28 等高地品種通常較緊實
-                if (['geisha', 'sl28', 'wush_wush'].includes(ctx.varietyCode)) base += 15;
+                if (['geisha', 'sl28', 'wush_wush', 'blue_mt', 'sudan_rume'].includes(ctx.varietyCode)) base += 15;
+                // 葉門小粒種密實
+                if (ctx.varietyCode === 'mokka') base += 10;
                 // 印尼系豆質較鬆
                 if (['mandheling', 'java'].includes(ctx.varietyCode)) base -= 20;
                 // 日曬果肉附著過、密度略高
