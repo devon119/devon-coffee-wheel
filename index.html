@@ -3265,8 +3265,11 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 if (cfg.roast === 'cinnamon' && cfg.proc === 'wet_hulled') w.push('極淺焙 × 印尼濕剝：濕剝豆需要中深焙以上才能化開土木調');
                 if (cfg.variety === 'geisha' && cfg.alt === 'low') w.push('瑰夏 × 低海拔：瑰夏的花香層次需要高海拔慢熟才會完整');
                 if (cfg.variety === 'mandheling' && !['idn'].includes(cfg.country)) w.push('曼特寧品種不是來自印尼：品種地域對應異常');
+                if (cfg.variety === 'java' && cfg.country !== 'idn') w.push('爪哇種（Java）主要產自印尼爪哇島：其他產區少見');
+                if (cfg.variety === 'mokka' && cfg.country !== 'yem') w.push('摩卡種（Mokka）源於葉門古種：非葉門產地較罕見');
                 if (cfg.variety === 'sl28' && !['ken', 'tza', 'uga'].includes(cfg.country)) w.push('SL28/34 主要在肯亞/東非：其他產區少見');
                 if (cfg.variety === 'blue_mt' && cfg.country !== 'jam') w.push('藍山品種 × 非牙買加：可能不是真正的藍山');
+                if (cfg.variety === 'pink_bourbon' && cfg.country !== 'col') w.push('粉紅波旁主要發現於哥倫比亞 Huila：其他產區極少見');
                 if (cfg.proc === 'natural' && cfg.roast === 'cinnamon') w.push('日曬 × 極淺焙：果乾甜感未被烘透，容易尖酸不適');
                 return w;
             };
@@ -3752,6 +3755,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 }
                 if (v === 'pacamara' || v === 'maragogype') _br_adj(s, 'Variety', 'grind', -1, '大象豆顆粒大，研磨略細補足萃取率');
                 if (v === 'laurina') _br_adj(s, 'Variety', 'temp', -2, 'Laurina 低咖啡因風味細膩：刻意降溫避免苦感');
+                if (v === 'pink_bourbon') _br_adj(s, 'Variety', 'temp', -1, '粉紅波旁花香細膩：水溫略降保留茉莉/玫瑰頂香');
             }
 
             // --- Stage: Processing (處理法) ---
