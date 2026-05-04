@@ -8022,6 +8022,64 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 <text x="60" y="270" font-size="20">🍍</text>`
             });
 
+            const ENCY_VAR_BLUE_MT = _encyVarietySvg({
+                id: 'bluemt', name: 'Blue Mountain', scientific: 'Typica descendant · Jamaica Blue Mountains',
+                subtext: '牙買加藍山山脈 1800-2500m · 均衡細緻的王者',
+                bg1: '#e8eaf6', bg2: '#7986cb',
+                beanW: 72, beanH: 108, curve: 'straight',
+                tcolor: '#1a237e', tsub: '#3949ab',
+                deco: `<text x="80" y="105" font-size="30">🏔️</text>
+                <text x="400" y="105" font-size="30">🇯🇲</text>
+                <text x="60" y="270" font-size="22">☁️</text>`
+            });
+
+            const ENCY_VAR_MANDHELING = _encyVarietySvg({
+                id: 'mandheling', name: 'Mandheling', scientific: 'Typica × 蘇門答臘在地品系（Wet-Hulled）',
+                subtext: '蘇門答臘名品 · 濕剝法靈魂',
+                bg1: '#efebe9', bg2: '#5d4037',
+                beanW: 80, beanH: 102, curve: 'straight',
+                beanLight: '#6d4c41', beanMid: '#4e342e', beanDark: '#2e1a0e',
+                tcolor: '#3e2723', tsub: '#5d4037',
+                deco: `<text x="80" y="105" font-size="30">🌲</text>
+                <text x="400" y="105" font-size="30">🇮🇩</text>
+                <text x="60" y="270" font-size="22">🌿</text>`
+            });
+
+            const ENCY_VAR_JAVA = _encyVarietySvg({
+                id: 'java', name: 'Java（爪哇）', scientific: 'Typica（爪哇島，17世紀荷蘭引入）',
+                subtext: '印尼古老遺產 · 香料木質調',
+                bg1: '#fff8e1', bg2: '#e65100',
+                beanW: 70, beanH: 105, curve: 'straight',
+                beanLight: '#795548', beanMid: '#5d4037', beanDark: '#3e2723',
+                tcolor: '#bf360c', tsub: '#e64a19',
+                deco: `<text x="80" y="105" font-size="30">🌋</text>
+                <text x="400" y="105" font-size="30">🫚</text>
+                <text x="60" y="270" font-size="22">🌶️</text>`
+            });
+
+            const ENCY_VAR_MOKKA = _encyVarietySvg({
+                id: 'mokka', name: 'Mokka（摩卡種）', scientific: 'Coffea arabica var. Mokka（葉門千年古種）',
+                subtext: '葉門千年古種 · 濃縮黑巧克力小豆',
+                bg1: '#fbe9e7', bg2: '#4e342e',
+                beanW: 52, beanH: 78, curve: 'straight',
+                beanLight: '#4e342e', beanMid: '#2e1a0e', beanDark: '#1a0a00',
+                tcolor: '#bf360c', tsub: '#6d4c41',
+                deco: `<text x="80" y="105" font-size="30">🍫</text>
+                <text x="400" y="105" font-size="30">🇾🇪</text>
+                <text x="60" y="270" font-size="22">🫘</text>`
+            });
+
+            const ENCY_VAR_LAURINA = _encyVarietySvg({
+                id: 'laurina', name: 'Laurina (Bourbon Pointu)', scientific: 'Coffea arabica var. Laurina（Bourbon 尖頂突變）',
+                subtext: '低咖啡因 0.6% · 極稀有 · 波旁尖頂',
+                bg1: '#fff8e1', bg2: '#f8bbd0',
+                beanW: 58, beanH: 118, curve: 's',
+                tcolor: '#880e4f', tsub: '#c2185b',
+                deco: `<text x="80" y="105" font-size="30">🌺</text>
+                <text x="400" y="105" font-size="30">🍯</text>
+                <text x="60" y="270" font-size="22">🌸</text>`
+            });
+
             // ========== 處理法 hero SVG helper（流程圖式）==========
             function _encyProcessSvg(opts) {
                 return `<svg viewBox="0 0 480 420" xmlns="http://www.w3.org/2000/svg">
@@ -9830,7 +9888,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                         },
                         blue_mt: {
                             name: 'Blue Mountain', tagline: '牙買加藍山 · 均衡細緻的王者',
-                            emoji: '🏔️', status: 'ready',
+                            emoji: '🏔️', status: 'ready', heroSvg: ENCY_VAR_BLUE_MT,
                             subtitle: '牙買加藍山山脈（1800-2500m）的 Typica 後代，受霧氣、火山土壤與海洋濕度的獨特風土塑造。以極度均衡、無苦感、奶油般滑順口感聞名，是全球認知度最高的精品標竿之一。受牙買加政府嚴格產區認證，假冒品充斥。',
                             chips: [
                                 { text: '牙買加政府認證', class: 'purple' },
@@ -9866,7 +9924,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                         },
                         mandheling: {
                             name: 'Mandheling', tagline: '蘇門答臘名品 · 濕剝法的靈魂',
-                            emoji: '🌲', status: 'ready',
+                            emoji: '🌲', status: 'ready', heroSvg: ENCY_VAR_MANDHELING,
                             subtitle: '「曼特寧」並非單一植物品種，而是來自印尼蘇門答臘北部 Mandailing 族的地域品牌，主要涵蓋 Typica 後代及當地改良品系。最大特色是印尼特有的「濕剝處理法（Giling Basah）」——在含水率仍高時去殼、帶來獨特的木質、菸草、泥土、深沉巧克力。',
                             chips: [
                                 { text: '蘇門答臘北部', class: 'green' },
@@ -9901,7 +9959,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                         },
                         java: {
                             name: 'Java（爪哇）', tagline: '印尼古老遺產 · 香料木質調',
-                            emoji: '🌋', status: 'ready',
+                            emoji: '🌋', status: 'ready', heroSvg: ENCY_VAR_JAVA,
                             subtitle: '爪哇島上的咖啡以 17 世紀荷蘭殖民引進的 Typica 品系為主，歷史上是全球最早商業化的咖啡產地之一。風味偏向木質、香料（丁香/肉桂）、煙燻與中低酸，體感厚實。「Java」一詞甚至成為英語中「咖啡」的代名詞。',
                             chips: [
                                 { text: '17世紀荷蘭引入', class: 'purple' },
@@ -9937,7 +9995,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                         },
                         mokka: {
                             name: 'Mokka（摩卡種）', tagline: '葉門千年古種 · 濃縮黑巧克力小豆',
-                            emoji: '🍫', status: 'ready',
+                            emoji: '🍫', status: 'ready', heroSvg: ENCY_VAR_MOKKA,
                             subtitle: '「Mokka」品種指葉門原生的古老 Typica 變異，以極小豆型（正常豆的 1/3-1/2）與濃縮的深沉風味著稱。不同於「摩卡壺」或「摩卡港」——這是一個真實的植物品種，產自葉門，帶有強烈黑巧克力、煙燻、乾果與香料調。',
                             chips: [
                                 { text: '葉門古老品種', class: 'purple' },
@@ -9972,7 +10030,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                         },
                         laurina: {
                             name: 'Laurina（Bourbon Pointu）', tagline: '低咖啡因波旁變異 · 細膩蜂蜜花香',
-                            emoji: '🌺', status: 'ready',
+                            emoji: '🌺', status: 'ready', heroSvg: ENCY_VAR_LAURINA,
                             subtitle: '1715 年在 Bourbon 島（今留尼旺）發現的 Bourbon 自然變異，豆形尖銳細長（pointu = 尖的）。最大特色：咖啡因只有 0.6%（一般阿拉比卡的 1/3），風味卻極為細膩——蜂蜜、洋甘菊、輕薄花香、低酸甜感。是精品圈少見的「低因 + 高品質」組合。',
                             chips: [
                                 { text: '1715 Bourbon 島', class: 'purple' },
