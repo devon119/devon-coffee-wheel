@@ -3758,6 +3758,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             function _br_stageProcessing(s) {
                 const p = s.cfg.procCode;
                 if (p === 'anaerobic_wash' || p === 'anaerobic_nat') _br_adj(s, 'Processing', 'temp', -1, '厭氧發酵酯香敏感：水溫略降避免酒瘋過頭');
+                if (p === 'carbonic') _br_adj(s, 'Processing', 'temp', -1, '二氧化碳浸漬酯香濃郁：水溫略降平衡發酵調');
                 if (p === 'natural' && s.light) _br_adj(s, 'Processing', 'temp', -1, '日曬 × 淺焙 果香在稍低溫下更平衡');
                 if (p === 'wet_hulled') _br_adj(s, 'Processing', 'temp', +1, '印尼濕剝豆密度低，需高溫萃土木風味');
             }
