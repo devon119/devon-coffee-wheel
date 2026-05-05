@@ -85,6 +85,15 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             letter-spacing: -0.3px; display: flex; align-items: baseline; gap: 10px;
         }
         .app-title .app-subtitle { font-size: 11px; font-weight: 500; color: #8d6e63; letter-spacing: 0; }
+        .dl-banner {
+            display: flex; align-items: center; gap: 10px;
+            background: linear-gradient(135deg, #fff8f0, #fce8d0);
+            border: 1px solid #e0a878; border-radius: 10px;
+            padding: 8px 14px; margin-bottom: 14px; font-size: 12px; color: #5d3a1a;
+        }
+        .dl-banner a { color: #bf5700; font-weight: 700; text-decoration: none; }
+        .dl-banner a:hover { text-decoration: underline; }
+        .dl-banner .dl-icon { font-size: 20px; }
 
         /* Workbench 分區：<details class="wb-section"> */
         .wb-section {
@@ -2043,6 +2052,12 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
     <div id="app-layout">
     <aside id="workbench-pane">
         <h1 class="app-title">☕ 咖啡品鑑工作台 <span class="app-subtitle">豆源 × 烘焙 × 沖煮 × 品嚐</span></h1>
+        <div class="dl-banner">
+            <span class="dl-icon">🔥</span>
+            <span>烘豆軟體 <strong>Artisan for Mac</strong> 現已開放下載 —
+                <a href="https://github.com/devon119/atrisan_AI/releases/download/v1.0-mac/artisan-mac-dmg.zip" download>⬇️ 立即下載（macOS）</a>
+            </span>
+        </div>
         <!-- 📱 手機版專用：點風味扇形時、完整描述滑入此處（不擋風味輪） -->
         <div id="flavor-info-bar" aria-live="polite">
             <button type="button" class="fib-close" onclick="closeFlavorInfoBar()" aria-label="關閉">✕</button>
