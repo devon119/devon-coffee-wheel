@@ -7912,6 +7912,33 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 extra: `<text x="240" y="392" font-size="10.5" font-style="italic" fill="#8d6e63" text-anchor="middle">「小水量 = 強濃度、適合做冰美式底或加冰塊稀釋」</text>`
             });
 
+            const ENCY_SVG_M_STIRRING = _encyMethodSvg({
+                animKey: 'stirring', totalSec: 195,
+                streamWidth: 4, streamLabel: '中水柱 + 攪拌棒', motionType: 'spiral',
+                title: '攪拌法（Stirring · 均勻萃取）',
+                totalTime: '3:15',
+                pours: [
+                    { cx: 100, cy: 100, num: '1', color: '#ff9800', label: 'Bloom + 攪 3 圈' },
+                    { cx: 100, cy: 100, num: '2', color: '#1976d2', r: 12, label: '60% 水 + 攪 5 圈', lx: 100, ly: 140 },
+                    { cx: 100, cy: 100, num: '3', color: '#7b1fa2', r: 10, label: '100% + 攪 3 圈', lx: 100, ly: 158 }
+                ],
+                timeline: [
+                    { start_pct: 0,  width_pct: 18, fill: '#fff3e0', color: '#bf360c', text: 'Bloom + 🥄' },
+                    { start_pct: 18, width_pct: 25, fill: '#e3f2fd', color: '#0d47a1', text: '#2 注 + 🥄' },
+                    { start_pct: 43, width_pct: 25, fill: '#f3e5f5', color: '#6a1b9a', text: '#3 注 + 🥄' },
+                    { start_pct: 68, width_pct: 32, fill: '#f5f5f5', color: '#616161', text: '靜待流完' }
+                ],
+                info: {
+                    left1: '總水 225g · 粉 15g · 1:15',
+                    left2: '每段注水後攪拌 3–5 圈',
+                    right1: '水溫 88-95°C（依焙度）',
+                    right2: '研磨：中（小富士 3-3.5）'
+                },
+                extra: `<text x="240" y="392" font-size="10.5" font-style="italic" fill="#8d6e63" text-anchor="middle">「攪拌消除流道 = 每一粒粉均勻萃取 → 淺焙神器」</text>
+                <text x="50" y="235" font-size="18">🥄</text>
+                <text x="380" y="235" font-size="18">🥄</text>`
+            });
+
             // ========== 豆種 hero SVG helper ==========
             function _encyVarietySvg(opts) {
                 return `<svg viewBox="0 0 480 420" xmlns="http://www.w3.org/2000/svg">
@@ -12449,6 +12476,52 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                                 { icon: '🌡️', title: '水溫降一點', desc: '91°C 比一般低、因為小水量集中萃取、高溫易出苦澀。' },
                                 { icon: '🚫', title: '別直接當咖啡喝', desc: '1:10 太濃、直接喝舌頭會麻。設計就是要稀釋的、別省這一步。' },
                                 { icon: '☕', title: '深焙最對味', desc: '巧克力堅果調的深焙豆稀釋後最像店裡的美式、淺焙稀釋會變酸偏弱。' }
+                            ]
+                        },
+                        stirring: {
+                            name: '攪拌法（Stirring）',
+                            tagline: '每段注水後攪拌 3–5 圈，消除流道、萃取均勻度最高',
+                            grindLevel: 'medium',
+                            emoji: '🥄',
+                            status: 'ready',
+                            heroSvg: ENCY_SVG_M_STIRRING,
+                            subtitle: '在悶蒸與每段注水後，用攪拌棒輕攪 3–5 圈，強制讓粉粒均勻濕潤並打斷流道（Channeling）。是現有手法中萃取均勻度最高的一種，尤其適合淺焙、高密度或難萃取豆。',
+                            chips: [
+                                { text: '消除流道', class: 'green' },
+                                { text: '萃取最均勻', class: 'cool' },
+                                { text: '3 段注水', class: 'warm' },
+                                { text: '淺焙神器', class: 'purple' },
+                                { text: '中粉' },
+                                { text: '1:15' }
+                            ],
+                            specs: [
+                                { k: '注水段數', v: '3 段（Bloom + 第 1 段 + 第 2 段）' },
+                                { k: '水溫', v: '88-95°C（淺焙高、深焙低）' },
+                                { k: '粉度', v: '中粉（小富士 3-3.5）' },
+                                { k: '粉水比', v: '1:15（15g 粉 / 225g 水）' },
+                                { k: '總時間', v: '3:00 ~ 3:30' },
+                                { k: '難度', v: '★★☆☆☆ 入門進階' }
+                            ],
+                            origin: [
+                                { year: '科學背景', text: 'James Hoffmann 研究指出，手沖最常見的失敗原因是「流道」——水找阻力最小的路徑，導致部分粉過萃、部分不足。攪拌是最直接的物理修正。' },
+                                { year: '2020s 普及', text: 'Hoffmann 在 YouTube 發布攪拌法影片後迅速在精品咖啡社群蔓延，WBC/WBrC 選手在淺焙豆段常採用。' },
+                                { year: '學術驗證', text: '《Journal of Food Science》 2022 研究顯示，適當攪拌可提升萃取均勻度（TDS 標準差降低約 15%），甜感與乾淨度同步提升。' },
+                                { year: '至今', text: '攪拌法已成為「三段式 + 攪拌」「一刀流 + 攪拌」等變體的基礎，是現代手沖技巧的必學項目之一。' }
+                            ],
+                            steps: [
+                                { title: '悶蒸 + 第一攪', desc: '注 30-45g 水（2-3 倍粉重），立即用攪拌棒順時針輕攪 3 圈讓所有粉濕潤。等 35-40 秒。' },
+                                { title: '第 1 段注水 + 攪拌', desc: '注水至 60% 目標（約 135g），立即攪 3–5 圈。力道輕柔，讓粉層漂動而非打泡。' },
+                                { title: '第 2 段注水 + 攪拌', desc: '注滿至 225g，再攪 3 圈後停手，靜置讓濾杯自然滴完。' },
+                                { title: '等待滴完', desc: '目標 3:00-3:30。偏長（> 3:30）→ 粗一檔；偏短（< 2:45）→ 細一檔。' },
+                                { title: '試味微調', desc: '攪拌 3–5 圈是甜蜜點：太少粉不均（偏酸澀）、太多過度擾動（偏苦濁）。' }
+                            ],
+                            tips: [
+                                { icon: '🌀', title: '方向一致，力道輕', desc: '永遠順時針，棒底貼濾紙但別壓粉。你要讓粉「漂動」，不是把水攪亂。' },
+                                { icon: '🎯', title: '淺焙必試', desc: '淺焙密度高、CO₂ 多，靜態注水最容易出流道。攪拌直接解決，淺焙豆甜感立刻提升。' },
+                                { icon: '⏱️', title: '悶蒸一定要攪', desc: '悶蒸不攪拌，背面粉粒根本沒濕——後段風味基底就少了一塊。悶蒸攪 3 圈是最關鍵的一步。' },
+                                { icon: '🔬', title: '流道是什麼', desc: '水傾向走最少阻力路徑（孔洞、鬆散粉粒），跑過這段粉過萃、其他沒水的欠萃。攪拌強制打散路徑，讓水重新分配。' },
+                                { icon: '🥄', title: '搭配任何手法', desc: '攪拌法不是獨立手法——「三段式 + 攪拌」、「一刀流 + 攪拌」都行。在任何手法裡加攪拌都能提升均勻度。' },
+                                { icon: '💡', title: '和 Spin 的差異', desc: 'Spin（搖晃濾杯）作用在粉床底部，攪拌作用在粉層整體。淺焙難萃取推攪拌；乾淨感優先推 Spin。' }
                             ]
                         }
                     }
