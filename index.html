@@ -335,6 +335,18 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
             0%, 4%, 30%, 46%, 74%, 100% { opacity: 0; }
             5%, 29%, 47%, 73% { opacity: 1; }
         }
+        @keyframes im-kettle-stirring {
+            0%, 9%, 30%, 39%, 60%, 69%, 100% { transform: rotate(0); }
+            10%, 29%, 40%, 59%, 70%, 89% { transform: rotate(-18deg); }
+        }
+        @keyframes im-water-stirring {
+            0%, 9%, 30%, 39%, 60%, 69%, 100% { opacity: 0; }
+            10%, 29%, 40%, 59%, 70%, 89% { opacity: 1; }
+        }
+        @keyframes im-stir-rod {
+            0%, 100% { transform: rotate(-15deg); }
+            50%      { transform: rotate(15deg); }
+        }
         /* ------ 特殊元素動畫 ------ */
         @keyframes im-rao-spin {
             from { transform: rotate(0deg); }
@@ -2231,6 +2243,7 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                         <option value="scott_rao">🎯 Scott Rao 連續注水</option>
                         <option value="tetsu_ice">🧊 冰手沖 · Kasuya Iced（急冷）</option>
                         <option value="strong_conc">💪 濃縮式（1:10 小水量）</option>
+                        <option value="stirring">🥄 攪拌法（Stirring · 均勻萃取）</option>
                     </select>
                 </div>
                 <div id="dripper-preview" style="grid-column: span 2;"></div>
@@ -3741,7 +3754,8 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 hoffmann_ult: { name:'Hoffmann Ultimate V60', pulses:2, agitation:'med', tempAdj:0,  ratioAdj:0,  grindAdj:0,  note:'悶蒸後 60% 水兩大段+攪拌旋轉+小 Spin，乾淨度高。' },
                 scott_rao:    { name:'Scott Rao 連續注水', pulses:1, agitation:'low', tempAdj:0,  ratioAdj:0,  grindAdj:+1, note:'不斷流維持水位穩定、濾床均勻，技術門檻較高。' },
                 tetsu_ice:    { name:'冰手沖 (Iced)',    pulses:3, agitation:'med', tempAdj:+2, ratioAdj:-2, grindAdj:-1, note:'濾杯下方放總水量 40% 冰塊、熱萃快速急冷，保留酸鮮香氣。' },
-                strong_conc:  { name:'濃縮式 1:10',      pulses:2, agitation:'low', tempAdj:-1, ratioAdj:0,  grindAdj:0,  note:'刻意降水量放大濃度，適合做冰美式底或強 body 杯感。' }
+                strong_conc:  { name:'濃縮式 1:10',      pulses:2, agitation:'low', tempAdj:-1, ratioAdj:0,  grindAdj:0,  note:'刻意降水量放大濃度，適合做冰美式底或強 body 杯感。' },
+                stirring:     { name:'攪拌法 (Stirring)', pulses:2, agitation:'high', tempAdj:0, ratioAdj:0,  grindAdj:0,  note:'每段注水後用攪拌棒輕攪 3–5 圈，讓粉粒均勻濕潤、消除流道；萃取均勻度高，適合淺焙或難萃取豆。' }
             };
 
             function _br_create(cfg) {
@@ -3811,7 +3825,8 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 hoffmann_ult: { totalMin:{ light:'3:00-3:30', mid:'3:00-3:30', dark:'2:45-3:15' }, waterMul:1.00, doseG:15, style:'悶蒸 2x + Rao Spin' },
                 scott_rao:    { totalMin:{ light:'3:00-3:30', mid:'3:00-3:30', dark:'2:45-3:15' }, waterMul:1.00, doseG:15, style:'連續不斷流、水位穩定' },
                 tetsu_ice:    { totalMin:{ light:'2:30-3:00', mid:'2:30-3:00', dark:'2:20-2:50' }, waterMul:0.60, iceMul:0.40, doseG:15, style:'熱萃 60% + 急冷冰塊 40%' },
-                strong_conc:  { totalMin:{ light:'2:30-3:00', mid:'2:30-3:00', dark:'2:30-3:00' }, waterMul:0.63, doseG:15, style:'1:10 濃縮、用水量 150g' }
+                strong_conc:  { totalMin:{ light:'2:30-3:00', mid:'2:30-3:00', dark:'2:30-3:00' }, waterMul:0.63, doseG:15, style:'1:10 濃縮、用水量 150g' },
+                stirring:     { totalMin:{ light:'3:00-3:30', mid:'3:00-3:30', dark:'2:45-3:15' }, waterMul:1.00, doseG:15, style:'每注攪拌 3–5 圈、均勻萃取' }
             };
 
             function _pourOverRecipe(s, pickGrind) {
@@ -3986,6 +4001,17 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                             `1:30 → 🌊 第 2 段：注到 ${water}g 停注`,
                             `2:30-3:00 → ✅ 滴完（濃度高 · 可作冰美式底或加奶飲）`,
                             `💡 Tip：犧牲清爽 · 換濃郁 body；研磨中細偏粗避免過萃`
+                        ];
+                    }
+                    // ═════ 攪拌法：每段注水後攪拌 3–5 圈 ═════
+                    case 'stirring': {
+                        return [
+                            `🥄 ═══ 攪拌法：注水後立即攪拌 3–5 圈，讓粉粒完全濕潤、消除流道 ═══`,
+                            `0:00 → 🔸 悶蒸：注 ${BLOOM}g × 40s，🥄 輕攪 3 圈（確保全部粉濕潤）`,
+                            `0:40 → 🌊 第 1 段：注到 ${Math.round(water*0.6)}g，🥄 攪拌 3–5 圈`,
+                            `1:20 → 🌊 第 2 段：注到 ${water}g，🥄 攪拌 3 圈後靜置`,
+                            `${dark ? '2:45-3:15' : '3:00-3:30'} → ✅ 滴完`,
+                            `💡 Tip：攪拌方向一致（順時針），力道輕柔 — 目標是移動粉層，不是打泡`
                         ];
                     }
                     default:
@@ -5547,12 +5573,14 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                                    : method === 'single_pour' ? 10
                                    : method === 'strong_conc' ? 5
                                    : method === 'lance_hi' ? 6  // 細水流
+                                   : method === 'stirring' ? 8
                                    : 8;
-                    // 特殊元素：冰手沖要冰塊、Hoffmann 要 Rao Spin、Lance 細水流
+                    // 特殊元素：冰手沖要冰塊、Hoffmann 要 Rao Spin、Lance 細水流、Stirring 攪拌棒
                     const isIce = method === 'tetsu_ice';
                     const isHoffmann = method === 'hoffmann_ult';
                     const isScottRao = method === 'scott_rao';
                     const isLance = method === 'lance_hi';
+                    const isStirring = method === 'stirring';
                     // 水溫指示（Lance 低溫、冰手沖兩溫、冠軍高溫）
                     const tempHint = method === 'lance_hi' ? '🌡️ 88°C 低溫'
                                    : method === 'matt_winton' ? '🌡️ 94°C 高溫'
@@ -5594,6 +5622,12 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                                 ` : ''}
                             </g>
                             <path d="M 440 250 Q 480 260 478 290 L 460 290" fill="none" stroke="#b71c1c" stroke-width="6" stroke-linecap="round"/>
+                            ${isStirring ? `
+                                <g style="transform-origin: 360px 260px; animation: im-stir-rod 0.8s ease-in-out infinite;">
+                                    <rect x="357" y="210" width="6" height="110" rx="3" fill="#90a4ae"/>
+                                    <ellipse cx="360" cy="320" rx="10" ry="4" fill="#78909c"/>
+                                </g>
+                            ` : ''}
                         </g>
                         <!-- 下方容器：冰手沖底下是帶冰的咖啡杯 -->
                         ${isIce ? `
@@ -5646,7 +5680,8 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                             method === 'hoffmann_ult' ? '2 段 + Rao Spin' :
                             method === 'scott_rao' ? '連續不斷流' :
                             method === 'tetsu_ice' ? '3 段熱萃 + 急冷' :
-                            method === 'strong_conc' ? '2 段 · 1:10 濃縮' : ''
+                            method === 'strong_conc' ? '2 段 · 1:10 濃縮' :
+                            method === 'stirring' ? '2 段 + 攪拌 × 3 圈' : ''
                         }</text>
                     </svg>`
                     };
