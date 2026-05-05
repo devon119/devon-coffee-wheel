@@ -7424,6 +7424,71 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                 <text x="18" y="302" font-size="10.5" fill="#6a1b9a" text-anchor="start">巧克力 + 焦糖風</text>
             </svg>`;
 
+            const ENCY_SVG_STIRRING = `<svg viewBox="0 0 480 420" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="stir-cup" x1="0" y1="0" x2="1" y2="0">
+                        <stop offset="0%" stop-color="rgba(160,190,200,0.5)"/>
+                        <stop offset="50%" stop-color="rgba(225,240,245,0.75)"/>
+                        <stop offset="100%" stop-color="rgba(140,170,190,0.5)"/>
+                    </linearGradient>
+                    <linearGradient id="stir-coffee" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#4a2c18"/>
+                        <stop offset="100%" stop-color="#1c0a02"/>
+                    </linearGradient>
+                    <radialGradient id="stir-shadow" cx="0.5" cy="0.5" r="0.5">
+                        <stop offset="0%" stop-color="rgba(0,0,0,0.25)"/>
+                        <stop offset="100%" stop-color="rgba(0,0,0,0)"/>
+                    </radialGradient>
+                    <radialGradient id="stir-ripple" cx="0.5" cy="0.5" r="0.5">
+                        <stop offset="0%" stop-color="rgba(255,255,255,0.55)"/>
+                        <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+                    </radialGradient>
+                </defs>
+                <!-- 陰影 -->
+                <ellipse cx="240" cy="398" rx="115" ry="11" fill="url(#stir-shadow)"/>
+                <!-- 濾杯主體（V60 錐形） -->
+                <polygon points="155,100 325,100 285,310 195,310" fill="url(#stir-cup)" stroke="#78909c" stroke-width="1.5"/>
+                <!-- 咖啡液 -->
+                <polygon points="170,175 310,175 283,308 197,308" fill="url(#stir-coffee)" opacity="0.92"/>
+                <!-- 水面漣漪（攪拌效果） -->
+                <ellipse cx="240" cy="175" rx="70" ry="8" fill="url(#stir-ripple)"/>
+                <ellipse cx="240" cy="175" rx="50" ry="5" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="1.2"/>
+                <ellipse cx="240" cy="175" rx="30" ry="3" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+                <!-- 濾杯肋骨 -->
+                <line x1="195" y1="110" x2="207" y2="300" stroke="rgba(120,144,156,0.5)" stroke-width="1"/>
+                <line x1="213" y1="108" x2="220" y2="300" stroke="rgba(120,144,156,0.5)" stroke-width="1"/>
+                <line x1="267" y1="108" x2="260" y2="300" stroke="rgba(120,144,156,0.5)" stroke-width="1"/>
+                <line x1="285" y1="110" x2="273" y2="300" stroke="rgba(120,144,156,0.5)" stroke-width="1"/>
+                <!-- 濾杯頂緣 -->
+                <rect x="148" y="93" width="184" height="12" rx="4" fill="#b0bec5"/>
+                <!-- 攪拌棒（斜插入） -->
+                <g style="transform-origin:240px 175px; animation:im-stir-rod 1.1s ease-in-out infinite;">
+                    <rect x="237" y="60" width="7" height="220" rx="3.5" fill="#90a4ae"/>
+                    <ellipse cx="240.5" cy="278" rx="13" ry="5" fill="#78909c"/>
+                    <!-- 棒頂把手 -->
+                    <rect x="228" y="52" width="24" height="10" rx="5" fill="#607d8b"/>
+                </g>
+                <!-- 下壺 -->
+                <rect x="190" y="312" width="100" height="55" rx="6" fill="rgba(60,40,25,0.75)" stroke="#78909c" stroke-width="1.2"/>
+                <ellipse cx="240" cy="312" rx="50" ry="6" fill="#3e2723" opacity="0.7"/>
+                <!-- 咖啡液滴入下壺 -->
+                <line x1="240" y1="310" x2="240" y2="320" stroke="#bf360c" stroke-width="2" opacity="0.7"/>
+                <!-- 標題文字 -->
+                <text x="240" y="46" font-size="15" font-weight="800" fill="#3e2723" text-anchor="middle">攪拌法（Stirring）</text>
+                <!-- 說明標籤 -->
+                <text x="80" y="145" font-size="11" font-weight="700" fill="#bf5700">每段注水</text>
+                <text x="80" y="159" font-size="11" font-weight="700" fill="#bf5700">後攪拌 3–5 圈</text>
+                <line x1="145" y1="155" x2="185" y2="170" stroke="#bf5700" stroke-width="1.2" stroke-dasharray="3 2"/>
+                <text x="340" y="200" font-size="11" font-weight="700" fill="#1565c0">消除流道</text>
+                <text x="340" y="215" font-size="11" fill="#1565c0">萃取均勻</text>
+                <line x1="338" y1="208" x2="300" y2="200" stroke="#1565c0" stroke-width="1.2" stroke-dasharray="3 2"/>
+                <!-- 底部資訊 -->
+                <text x="40" y="385" font-size="11.5" font-weight="700" fill="#5d4037">🥄 2 段注水 + 攪拌</text>
+                <text x="40" y="400" font-size="11" fill="#5d4037">悶蒸攪 3 圈 → 注水攪 3–5 圈</text>
+                <text x="440" y="385" font-size="11.5" font-weight="700" fill="#5d4037" text-anchor="end">總時 3:00–3:30</text>
+                <text x="440" y="400" font-size="11" fill="#5d4037" text-anchor="end">粉水比 1:15 | 中粉</text>
+            </svg>`;
+
             // ========== 手沖手法 9 款 SVG（俯視注水軌跡 + 時間軸）==========
             // 全域動畫資料 map（key = method id 例如 'classic_3'，動畫播放時讀取）
             const METHOD_ANIM_DATA = {};
@@ -11926,6 +11991,52 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
                                 { icon: '🧊', title: '稀釋喝才對', desc: '1:8 是濃縮配方、直接喝太重。加冰水稀釋到 1:12-1:14 是正常飲用濃度。' },
                                 { icon: '🥛', title: '加奶超讚', desc: '冷萃 + 燕麥奶 / 鮮奶 = 夏天最強冰拿鐵。咖啡店的招牌品項。' },
                                 { icon: '🗓️', title: '一次做一週', desc: '冷藏可放 5-7 天。週末做一大壺、週間每天喝、超方便。' }
+                            ]
+                        },
+                        stirring: {
+                            name: '攪拌法 (Stirring)',
+                            tagline: '每段注水後輕攪 3–5 圈，消除流道、萃取最均勻',
+                            grindLevel: 'medium',
+                            emoji: '🥄',
+                            status: 'ready',
+                            heroSvg: ENCY_SVG_STIRRING,
+                            subtitle: '攪拌法是手沖手法的一種變體：在每段注水後立即用攪拌棒順時針輕攪 3–5 圈，確保全部粉粒均勻濕潤並消除流道（Channeling）。萃取均勻度是所有手法中最高的一種，特別適合淺焙或難以萃取的豆子。',
+                            chips: [
+                                { text: '消除流道', class: 'green' },
+                                { text: '萃取均勻', class: 'cool' },
+                                { text: '每段攪拌 3–5 圈', class: 'warm' },
+                                { text: '適合淺焙', class: 'purple' },
+                                { text: '中粉' },
+                                { text: '1:15' }
+                            ],
+                            specs: [
+                                { k: '萃取原理', v: '濾紙過濾 + 注水後機械攪拌' },
+                                { k: '水溫', v: '88-95°C（依焙度）' },
+                                { k: '粉度', v: '中粉（小富士 3-3.5）' },
+                                { k: '粉水比', v: '1:15（15g 粉 / 225g 水）' },
+                                { k: '萃取時間', v: '3:00 ~ 3:30' },
+                                { k: '難度', v: '★★☆☆☆ 入門進階' }
+                            ],
+                            origin: [
+                                { year: '手沖演化', text: '攪拌法源自 James Hoffmann 等人對手沖流道問題的研究：注水不均勻時，部分粉粒過萃、部分不足，攪拌是最直接的修正方式。' },
+                                { year: '學術驗證', text: '《Journal of Food Science》研究指出，機械攪拌可顯著提升萃取均勻度（TDS 分布更集中），是解決淺焙難萃問題的有效手法。' },
+                                { year: '普及化', text: 'Hoffmann 在 YouTube 推廣「Stirring Technique」後，成為精品咖啡社群常用技巧，尤其適合處理高密度淺焙豆。' },
+                                { year: '至今', text: '攪拌法與一刀流/三段式並列為主流手法，WBC/WBrC 選手在特殊豆種時常用。' }
+                            ],
+                            steps: [
+                                { title: '悶蒸 + 第一次攪拌', desc: '注入 30-45g 水（2-3 倍粉重），立即用攪拌棒順時針輕攪 3 圈，確保全部粉粒濕潤。等 30-40 秒。' },
+                                { title: '第 1 段注水 + 攪拌', desc: '注水到 60% 目標量（約 135g），立即輕攪 3–5 圈。方向一致（順時針），力道輕柔，目標是移動粉層而非打泡。' },
+                                { title: '第 2 段注水 + 攪拌', desc: '注滿至目標水量（225g），再輕攪 3 圈後靜置。讓濾杯自然滴完。' },
+                                { title: '等待滴完', desc: '3:00-3:30 滴完。滴完時間過長（> 3:30）→ 研磨粗一檔；過短（< 2:45）→ 細一檔。' },
+                                { title: '試味調整', desc: '攪拌強度影響萃取：攪太少不均勻（偏酸）、攪太多擾動過大（偏澀）。3–5 圈是甜蜜點。' }
+                            ],
+                            tips: [
+                                { icon: '🌀', title: '方向一致，力道輕', desc: '永遠順時針，棒頂別施力壓粉層 — 你要的是讓咖啡粉「漂動」，不是「攪動」水流。' },
+                                { icon: '🎯', title: '淺焙神器', desc: '淺焙豆密度高、CO₂ 多，靜態手法容易流道。攪拌直接解決這個問題，淺焙豆必試。' },
+                                { icon: '⏱️', title: '悶蒸一定要攪', desc: '悶蒸時不攪拌，背面粉粒根本沒沾到水 — 後段風味就差。悶蒸攪 3 圈是最重要的一步。' },
+                                { icon: '🔬', title: '均勻萃取的原理', desc: '手沖最大敵人是「流道（Channeling）」——水找到最少阻力路徑，繞過部分粉。攪拌打斷這條路，強迫水均勻通過粉床。' },
+                                { icon: '🥄', title: '用長棒或竹棒', desc: '日本茶道竹棒、吧台長湯匙都行。重點是夠長能碰到底部、且不會刮傷濾紙。' },
+                                { icon: '💡', title: '和一刀流搭配', desc: '攪拌法可以和「一刀流」結合：注水一次到位後立刻攪 5 圈，總時間更短、萃取也均勻。' }
                             ]
                         }
                     }
